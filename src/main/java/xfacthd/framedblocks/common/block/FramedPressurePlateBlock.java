@@ -24,12 +24,12 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedPressurePlateBlock extends PressurePlateBlock implements IFramedBlock
 {
-    public FramedPressurePlateBlock()
+    private final BlockType type;
+
+    private FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props)
     {
-        super(Sensitivity.EVERYTHING, IFramedBlock.createProperties(BlockType.FRAMED_PRESSURE_PLATE)
-                .noCollission()
-                .strength(0.5F)
-        );
+        super(sensitivity, props);
+        this.type = type;
     }
 
     @Override
@@ -84,5 +84,30 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_PRESSURE_PLATE; }
+    public BlockType getBlockType() { return type; }
+
+
+
+    public static FramedPressurePlateBlock wood()
+    {
+        return new FramedPressurePlateBlock(
+                BlockType.FRAMED_PRESSURE_PLATE,
+                Sensitivity.EVERYTHING,
+                IFramedBlock.createProperties(BlockType.FRAMED_PRESSURE_PLATE)
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
+
+    public static FramedPressurePlateBlock stone()
+    {
+        return new FramedPressurePlateBlock(
+                BlockType.FRAMED_STONE_PRESSURE_PLATE,
+                Sensitivity.MOBS,
+                IFramedBlock.createProperties(BlockType.FRAMED_STONE_PRESSURE_PLATE)
+                        .requiresCorrectToolForDrops()
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
 }
