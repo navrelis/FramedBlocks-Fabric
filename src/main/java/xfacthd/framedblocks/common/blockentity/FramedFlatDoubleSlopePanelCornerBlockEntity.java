@@ -32,9 +32,9 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         if (side == facing.getOpposite()) { return true; }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
-        Direction orientation = rotation.withFacing(facing);
-        Direction perpOrientation = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-        if (side == orientation.getOpposite() || side == perpOrientation.getOpposite())
+        Direction rotDir = rotation.withFacing(facing);
+        Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
+        if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
         {
             return false;
         }
@@ -51,9 +51,9 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
             hor -= .5D;
         }
 
-        Direction sideOrientation = side == orientation ? perpOrientation : orientation;
-        double vert = Utils.isY(sideOrientation) ? vec.y() : (Utils.isX(facing) ? vec.z() : vec.x());
-        if (sideOrientation == Direction.DOWN || (!Utils.isY(sideOrientation) && !Utils.isPositive(sideOrientation)))
+        Direction perpDir = side == rotDir ? perpRotDir : rotDir;
+        double vert = Utils.isY(perpDir) ? vec.y() : (Utils.isX(facing) ? vec.z() : vec.x());
+        if (perpDir == Direction.DOWN || (!Utils.isY(perpDir) && !Utils.isPositive(perpDir)))
         {
             vert = 1F - vert;
         }
@@ -79,13 +79,13 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         if (side == facing.getOpposite()) { return getCamoTwo(); }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
-        Direction orientation = rotation.withFacing(facing);
-        Direction perpOrientation = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-        if (side == orientation.getOpposite() || side == perpOrientation.getOpposite())
+        Direction rotDir = rotation.withFacing(facing);
+        Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
+        if (side == rotDir || side == perpRotDir)
         {
-            return getCamo();
+            return getCamoTwo();
         }
-        return getCamoTwo();
+        return getCamo();
     }
 
     @Override
