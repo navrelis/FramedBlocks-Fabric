@@ -22,9 +22,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -55,7 +57,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        RailShape shape = shapeFromDirection(context.getHorizontalDirection());
+        RailShape shape = FramedUtils.railShapeFromDirection(context.getHorizontalDirection());
 
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         boolean waterlogged = fluidState.getType() == Fluids.WATER;
@@ -92,30 +94,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
         {
             updateState(state, level, pos, block);
         }
-    }
-
-    public static RailShape shapeFromDirection(Direction dir)
-    {
-        return switch (dir)
-        {
-            case NORTH -> RailShape.ASCENDING_NORTH;
-            case EAST -> RailShape.ASCENDING_EAST;
-            case SOUTH -> RailShape.ASCENDING_SOUTH;
-            case WEST -> RailShape.ASCENDING_WEST;
-            default -> throw new IllegalArgumentException("Invalid facing " + dir);
-        };
-    }
-
-    public static Direction directionFromShape(RailShape shape)
-    {
-        return switch (shape)
-        {
-            case ASCENDING_NORTH -> Direction.NORTH;
-            case ASCENDING_EAST -> Direction.EAST;
-            case ASCENDING_SOUTH -> Direction.SOUTH;
-            case ASCENDING_WEST -> Direction.WEST;
-            default -> throw new IllegalArgumentException("Invalid shape " + shape);
-        };
     }
 
     @Override
@@ -215,9 +193,24 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     @Override
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        Direction dir = directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+        Direction dir = FramedUtils.directionFromRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         dir = rot.rotate(dir);
-        return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shapeFromDirection(dir));
+        return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.railShapeFromDirection(dir));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        if (mirror == Mirror.NONE) { return state; }
+
+        Direction dir = FramedUtils.directionFromRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+
+        if ((mirror == Mirror.FRONT_BACK && Utils.isZ(dir)) || (mirror == Mirror.LEFT_RIGHT && Utils.isX(dir)))
+        {
+            dir = dir.getOpposite();
+            return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.railShapeFromDirection(dir));
+        }
+        return state;
     }
 
     @Override
