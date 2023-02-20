@@ -9,18 +9,16 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedCube extends FramedBlock
 {
-    private FramedCube(BlockType type) { super(type); }
+    public FramedCube()
+    {
+        super(BlockType.FRAMED_CUBE);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.ALT, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID);
+        builder.add(FramedProperties.SOLID, FramedProperties.ALT);
     }
-
-
-
-    public static FramedCube cube() { return new FramedCube(BlockType.FRAMED_CUBE); }
-
-    public static FramedCube glowingCube() { return new FramedCube(BlockType.FRAMED_GLOWING_CUBE); }
 }
