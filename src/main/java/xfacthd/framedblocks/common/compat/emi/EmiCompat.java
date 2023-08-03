@@ -11,7 +11,6 @@ import xfacthd.framedblocks.api.util.Utils;
 public final class EmiCompat
 {
     public static final ResourceLocation SAW_ID = Utils.rl("framing_saw");
-    public static final String SAW_CATEGORY = "emi.category." + SAW_ID.toString().replace(":", ".");
 
     private static boolean loadedClient = false;
 
