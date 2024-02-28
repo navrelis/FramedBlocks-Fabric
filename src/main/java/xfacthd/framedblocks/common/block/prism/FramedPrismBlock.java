@@ -23,7 +23,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
-public class FramedPrismBlock extends FramedBlock
+public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
 {
     public FramedPrismBlock(BlockType type)
     {
@@ -110,6 +110,12 @@ public class FramedPrismBlock extends FramedBlock
         return defaultBlockState().setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }
 
+    @Override
+    public boolean isInnerPrism()
+    {
+        return getBlockType() != BlockType.FRAMED_PRISM;
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
@@ -173,7 +179,7 @@ public class FramedPrismBlock extends FramedBlock
         return ShapeProvider.of(builder.build());
     }
 
-    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
+    /*public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -240,5 +246,5 @@ public class FramedPrismBlock extends FramedBlock
         }
 
         return ShapeProvider.of(builder.build());
-    }
+    }*/
 }
