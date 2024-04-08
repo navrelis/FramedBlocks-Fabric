@@ -19,6 +19,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -87,7 +88,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     @Override
     public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide)
     {
-        if (!Utils.isY(adjSide) && adjState.getBlock() == this && adjState.getValue(FramedProperties.STATE_LOCKED))
+        if (!Utils.isY(adjSide) && DiagonalBlocksCompat.isFramedFence(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
         {
             BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
             if (!adjState.getValue(prop))
