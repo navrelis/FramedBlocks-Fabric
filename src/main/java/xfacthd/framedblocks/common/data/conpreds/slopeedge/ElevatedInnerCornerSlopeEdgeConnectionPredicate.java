@@ -24,6 +24,10 @@ public final class ElevatedInnerCornerSlopeEdgeConnectionPredicate implements Co
             {
                 return true;
             }
+            if (side == dir.getOpposite())
+            {
+                return edge == xBack || edge == yBack;
+            }
             if (side == xBack.getOpposite())
             {
                 return edge == dir || edge == yBack;
@@ -39,6 +43,10 @@ public final class ElevatedInnerCornerSlopeEdgeConnectionPredicate implements Co
             if (side == bottom || side == dir || side == dir.getCounterClockWise())
             {
                 return true;
+            }
+            if (side == bottom.getOpposite())
+            {
+                return edge == dir || edge == dir.getCounterClockWise();
             }
             if (side == dir.getClockWise())
             {
