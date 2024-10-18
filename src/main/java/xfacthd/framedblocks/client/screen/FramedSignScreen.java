@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.network.chat.CommonComponents;
@@ -251,7 +252,7 @@ public class FramedSignScreen extends Screen
 
     private void drawLines(Matrix4f matrix, MultiBufferSource.BufferSource buffer, String[] lines)
     {
-        int color = text.getColor().getTextColor();
+        int color = text.hasGlowingText() ? text.getColor().getTextColor() : SignRenderer.getDarkColor(text);
 
         for (int line = 0; line < lines.length; line++)
         {
@@ -271,7 +272,7 @@ public class FramedSignScreen extends Screen
     private void drawCursor(GuiGraphics graphics, MultiBufferSource.BufferSource buffer, String[] lines)
     {
         Matrix4f matrix = graphics.pose().last().pose();
-        int color = text.getColor().getTextColor();
+        int color = text.hasGlowingText() ? text.getColor().getTextColor() : SignRenderer.getDarkColor(text);
         boolean blink = blinkCounter / 6 % 2 == 0;
         int dir = font.isBidirectional() ? -1 : 1;
         int y = currLine * 10 - 20;
