@@ -25,6 +25,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
 import xfacthd.framedblocks.client.screen.widget.SearchEditBox;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
@@ -282,6 +283,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         if (recipeHolder != null && displayRecipeErrors())
         {
             appendRecipeFailure(components, recipeHolder);
+        }
+        if (recipeHolder != null && minecraft.getItemRenderer().getModel(stack, null, null, 0).usesBlockLight())
+        {
+            tooltip = Optional.of(new BlockPreviewTooltipComponent.Component(stack));
         }
 
         graphics.renderTooltip(font, components, tooltip, stack, mouseX, mouseY);

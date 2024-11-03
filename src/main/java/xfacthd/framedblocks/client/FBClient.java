@@ -71,6 +71,7 @@ import xfacthd.framedblocks.client.render.special.*;
 import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlayLayer;
+import xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
@@ -123,6 +124,7 @@ public final class FBClient
         modBus.addListener(FBClient::onTexturesStitched);
         modBus.addListener(FBClient::onRegisterParticleProviders);
         modBus.addListener(FBClient::onRegisterClientExtensions);
+        modBus.addListener(FBClient::onRegisterClientTooltipComponentFactories);
         modBus.addListener(BlockOutlineRenderers::onRegisterOutlineRenderers);
         modBus.addListener(GhostRenderBehaviours::onRegisterGhostRenderBehaviours);
 
@@ -538,6 +540,11 @@ public final class FBClient
                 .forEach(pair -> event.registerBlock(pair.getSecond(), pair.getFirst()));
 
         event.registerItem(new TankClientItemExtensions(), FBContent.BLOCK_FRAMED_TANK.value().asItem());
+    }
+
+    private static void onRegisterClientTooltipComponentFactories(RegisterClientTooltipComponentFactoriesEvent event)
+    {
+        event.register(BlockPreviewTooltipComponent.Component.class, BlockPreviewTooltipComponent::new);
     }
 
 
