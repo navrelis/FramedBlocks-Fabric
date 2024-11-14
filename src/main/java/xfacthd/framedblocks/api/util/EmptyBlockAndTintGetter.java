@@ -13,7 +13,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
-// TODO: 1.21.2: remove in favor of vanilla's EmptyBlockAndTintGetter
 public enum EmptyBlockAndTintGetter implements BlockAndTintGetter
 {
     INSTANCE;

@@ -16,7 +16,6 @@ import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.*;
 
-// TODO 1.21.2: store full CamoContainer in FramedBlockData and replace use of BEs with ModelData lookups
 public class FramedBlockColor implements BlockColor, ItemColor
 {
     public static final FramedBlockColor INSTANCE = new FramedBlockColor();

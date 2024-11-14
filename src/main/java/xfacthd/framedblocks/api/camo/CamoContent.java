@@ -115,7 +115,6 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
 
     /**
      * {@return the tint color corresponding to the given tint index for use with {@link ItemColor }}
-     * // TODO 1.21.2: make abstract
      */
     public int getTintColor(ItemStack stack, int tintIdx)
     {

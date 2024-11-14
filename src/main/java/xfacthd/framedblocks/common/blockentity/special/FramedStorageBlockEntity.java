@@ -29,7 +29,6 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     public static final int SLOTS = 9 * 3;
 
     private final StorageBlockItemStackHandler itemHandler = createItemHandler(this, false);
-    // TODO 1.21.2: remove overflow handling
     private List<ItemStack> overflow = null;
     private Component customName = null;
 
