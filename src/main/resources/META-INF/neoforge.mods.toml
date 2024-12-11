@@ -66,7 +66,7 @@ license="LGPL v3"
     modId="diagonalblocks"
     type="optional"
     versionRange="[${diag_blocks_version},)"
-    ordering="NONE"
+    ordering="AFTER"
     side="BOTH"
 
 [[dependencies.framedblocks]]
