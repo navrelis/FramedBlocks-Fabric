@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xfacthd.framedblocks.client.util.FramedClientUtils;
 
-@Debug(export = true)
 @Mixin(LevelRenderer.class)
 public class MixinLevelRenderer
 {
