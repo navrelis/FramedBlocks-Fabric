@@ -3,11 +3,13 @@ package xfacthd.framedblocks.common.item;
 import com.google.common.base.Preconditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.ModLoader;
 import xfacthd.framedblocks.api.blueprint.*;
@@ -108,10 +111,30 @@ public class FramedBlueprintItem extends FramedToolItem
         if (!level.isClientSide())
         {
             BlockState state = be.getBlockState();
-            BlueprintData data = getBehaviour(state.getBlock()).writeToBlueprint(level, pos, state, be);
+            BlueprintCopyBehaviour behaviour = getBehaviour(state.getBlock());
+            BlueprintData data = behaviour.writeToBlueprint(level, pos, state, be);
+            data = storeBlockStateProperties(behaviour, data, state);
             stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA, data);
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
+    }
+
+    private static BlueprintData storeBlockStateProperties(BlueprintCopyBehaviour behaviour, BlueprintData data, BlockState state)
+    {
+        List<Property<?>> properties = behaviour.getPropertiesToCopy(state);
+        if (!properties.isEmpty())
+        {
+            BlockItemStateProperties stateProps = BlockItemStateProperties.EMPTY;
+            for (Property<?> property : properties)
+            {
+                stateProps = stateProps.with(property, state);
+            }
+            if (!stateProps.isEmpty())
+            {
+                return data.withBlockState(stateProps);
+            }
+        }
+        return data;
     }
 
     private static InteractionResult readBlueprint(UseOnContext context, Player player, BlueprintData data)
@@ -214,6 +237,7 @@ public class FramedBlueprintItem extends FramedToolItem
     private static InteractionResult tryPlace(UseOnContext context, Player player, BlockItem item, BlueprintData data)
     {
         ItemStack dummyStack = new ItemStack(item, 1);
+        dummyStack.set(DataComponents.BLOCK_STATE, data.blockState());
 
         UseOnContext placeContext = new UseOnContext(
                 context.getLevel(),

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.client.data.ghost;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -57,7 +58,13 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
         {
             return null;
         }
-        return proxyBehaviour(proxiedStack).getRenderState(proxiedStack, null, hit, ctx, hitState, renderPass);
+        BlockState state = proxyBehaviour(proxiedStack).getRenderState(proxiedStack, null, hit, ctx, hitState, renderPass);
+        BlockItemStateProperties stateProps = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY).blockState();
+        if (state != null && !stateProps.isEmpty())
+        {
+            state = stateProps.apply(state);
+        }
+        return state;
     }
 
     @Override

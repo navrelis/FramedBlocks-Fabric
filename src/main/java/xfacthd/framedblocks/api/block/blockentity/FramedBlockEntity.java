@@ -16,6 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -963,6 +964,7 @@ public class FramedBlockEntity extends BlockEntity
                 glowing,
                 intangible,
                 reinforced,
+                BlockItemStateProperties.EMPTY,
                 collectAuxBlueprintData()
         );
     }

@@ -6,6 +6,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -42,6 +44,21 @@ public interface BlueprintCopyBehaviour
     default ItemStack getBlockItem(BlueprintData data)
     {
         return new ItemStack(data.block());
+    }
+
+    /**
+     * Provide a list of {@link Property}s to copy from the original block
+     *
+     * @param state The {@link BlockState} of the block being copied
+     * @return the list of blockstate properties to copy
+     */
+    default List<Property<?>> getPropertiesToCopy(BlockState state)
+    {
+        if (state.hasProperty(FramedProperties.Y_SLOPE))
+        {
+            return List.of(FramedProperties.Y_SLOPE);
+        }
+        return List.of();
     }
 
     /**
