@@ -1,22 +1,28 @@
 package xfacthd.framedblocks.api.util;
 
 import com.mojang.serialization.Codec;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.ObjectArrays;
+import it.unimi.dsi.fastutil.objects.ObjectIterators;
+import it.unimi.dsi.fastutil.objects.ObjectSpliterators;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public final class CamoList implements Iterable<CamoContainer<?, ?>>
 {
-    public static final Codec<CamoList> CODEC = CamoContainerHelper.CODEC.listOf().xmap(CamoList::of, list -> List.of(list.camos));
+    public static final Codec<CamoList> CODEC = CamoContainerHelper.CODEC.listOf().xmap(CamoList::of, list -> List.of(list.getCamosForSerialization()));
     public static final StreamCodec<RegistryFriendlyByteBuf, CamoList> STREAM_CODEC = FramedByteBufCodecs.<RegistryFriendlyByteBuf, CamoContainer<?, ?>>array(
             CamoContainerHelper.STREAM_CODEC, CamoContainer[]::new, Integer.MAX_VALUE
-    ).map(CamoList::new, list -> list.camos);
+    ).map(CamoList::new, CamoList::getCamosForSerialization);
     public static final CamoList EMPTY = new CamoList(new CamoContainer[0]);
 
     private final CamoContainer<?, ?>[] camos;
@@ -48,14 +54,15 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
 
     public boolean isEmpty()
     {
-        return camos.length == 0;
+        return size == 0;
     }
 
     public boolean isEmptyOrContentsEmpty()
     {
-        for (int i = 0; i < size; i++)
+        int end = offset + size;
+        for (int i = offset; i < end; i++)
         {
-            if (!camos[offset + i].isEmpty())
+            if (!camos[i].isEmpty())
             {
                 return false;
             }
@@ -86,6 +93,16 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
         return ObjectSpliterators.wrap(camos, offset, size);
     }
 
+    @Override
+    public void forEach(Consumer<? super CamoContainer<?, ?>> action)
+    {
+        int end = offset + size;
+        for (int i = offset; i < end; i++)
+        {
+            action.accept(camos[i]);
+        }
+    }
+
     public Stream<CamoContainer<?, ?>> stream()
     {
         return Arrays.stream(camos, offset, offset + size);
@@ -111,27 +128,58 @@ public final class CamoList implements Iterable<CamoContainer<?, ?>>
         {
             return EMPTY;
         }
-        return new CamoList(camos, fromIndex, Math.min(toIndex, size));
+        return new CamoList(camos, fromIndex + offset, Math.min(toIndex, size) + offset);
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        return Arrays.equals(camos, ((CamoList) obj).camos);
+        return this == obj || (obj instanceof CamoList otherList && Arrays.equals(
+                camos, offset, offset + size,
+                otherList.camos, otherList.offset, otherList.offset + otherList.size
+        ));
     }
 
     @Override
     public int hashCode()
     {
-        return Arrays.hashCode(camos);
+        int result = 1;
+        int end = offset + size;
+        for (int i = offset; i < end; i++)
+        {
+            result = 31 * result + camos[i].hashCode();
+        }
+        return result;
     }
 
     @Override
     public String toString()
     {
-        return "CamoList" + Arrays.toString(camos);
+        if (isEmpty())
+        {
+            return "CamoList[]";
+        }
+
+        StringBuilder builder = new StringBuilder("CamoList[");
+        int end = offset + size;
+        for (int i = offset; i < end; i++)
+        {
+            if (i > offset)
+            {
+                builder.append(", ");
+            }
+            builder.append(camos[i]);
+        }
+        return builder.append("]").toString();
+    }
+
+    private CamoContainer<?, ?>[] getCamosForSerialization()
+    {
+        if (offset > 0 || size < camos.length)
+        {
+            return Arrays.copyOfRange(camos, offset, offset + size);
+        }
+        return camos;
     }
 
 
