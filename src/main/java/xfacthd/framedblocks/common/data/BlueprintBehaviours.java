@@ -24,7 +24,10 @@ public final class BlueprintBehaviours
                         AdjustableDoubleBlockData.EMPTY
                 ),
                 List.of(
-                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB
+                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB,
+                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB,
+                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_PANEL,
+                        FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
                 )
         );
         event.register(new TubeCopyBehaviour(), FBContent.BLOCK_FRAMED_TUBE);
