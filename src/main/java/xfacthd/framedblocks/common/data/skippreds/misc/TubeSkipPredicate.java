@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
 @CullTest(BlockType.FRAMED_TUBE)
@@ -18,7 +19,8 @@ public final class TubeSkipPredicate implements SideSkipPredicate
     {
         if (state.getBlock() == adjState.getBlock())
         {
-            return state.getValue(BlockStateProperties.AXIS) == adjState.getValue(BlockStateProperties.AXIS);
+            return state.getValue(BlockStateProperties.AXIS) == adjState.getValue(BlockStateProperties.AXIS) &&
+                   state.getValue(PropertyHolder.THICK) == adjState.getValue(PropertyHolder.THICK);
         }
         return false;
     }

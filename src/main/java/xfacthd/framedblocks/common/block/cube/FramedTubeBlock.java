@@ -3,7 +3,9 @@ package xfacthd.framedblocks.common.block.cube;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,21 +13,24 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedTubeBlock extends FramedBlock
 {
     public FramedTubeBlock()
     {
         super(BlockType.FRAMED_TUBE);
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.THICK, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.AXIS, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.AXIS, FramedProperties.SOLID, PropertyHolder.THICK, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -35,6 +40,21 @@ public class FramedTubeBlock extends FramedBlock
                 .withClickedAxis()
                 .withWater()
                 .build();
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        if (player.getMainHandItem().is(Utils.FRAMED_HAMMER.value()))
+        {
+            if (!level.isClientSide())
+            {
+                state = state.setValue(PropertyHolder.THICK, !state.getValue(PropertyHolder.THICK));
+                level.setBlock(pos, state, Block.UPDATE_ALL);
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
