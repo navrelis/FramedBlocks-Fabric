@@ -30,7 +30,7 @@ public final class AthenaCompat
     {
         public static void init()
         {
-            ConTexDataHandler.addConTexProperty(AthenaBakedModel.DATA);
+            ConTexDataHandler.addConTexProperty("athena", AthenaBakedModel.DATA);
         }
     }
 

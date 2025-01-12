@@ -477,6 +477,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_DETAILED_CULLING, "Detailed culling");
         add(ClientConfig.TRANSLATION_USE_DISCRETE_UV_STEPS, "Use discrete UV steps");
         add(ClientConfig.TRANSLATION_CON_TEX_MODE, "Connected textures mode");
+        add(ClientConfig.TRANSLATION_CON_TEX_DISABLE_LIST, "Disable connected textures support");
         add(ClientConfig.TRANSLATION_CAMO_MESSAGE_VERBOSITY, "Disallowed camo message verbosity");
         add(ClientConfig.TRANSLATION_FORCE_AO_ON_GLOWING_BLOCKS, "Force ambient occlusion on glowing framed blocks");
         add(ClientConfig.TRANSLATION_RENDER_ITEM_MODELS_WITH_CAMO, "Render item models with camo");

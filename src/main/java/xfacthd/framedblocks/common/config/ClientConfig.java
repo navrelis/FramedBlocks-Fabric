@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.config;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -9,6 +10,10 @@ import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.model.SolidFrameMode;
 import xfacthd.framedblocks.client.screen.overlay.OverlayDisplayMode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public final class ClientConfig
 {
@@ -22,6 +27,7 @@ public final class ClientConfig
     private static final String KEY_DETAILED_CULLING = "detailedCulling";
     private static final String KEY_USE_DISCRETE_UV_STEPS = "discreteUVSteps";
     private static final String KEY_CON_TEX_MODE = "conTexMode";
+    private static final String KEY_CON_TEX_DISABLE_LIST = "conTexDisabled";
     private static final String KEY_CAMO_MESSAGE_VERBOSITY = "camoMessageVerbosity";
     private static final String KEY_FORCE_AO_ON_GLOWING_BLOCKS = "forceAoOnGlowingBlocks";
     private static final String KEY_RENDER_ITEM_MODELS_WITH_CAMO = "renderItemModelsWithCamo";
@@ -48,6 +54,7 @@ public final class ClientConfig
     public static final String TRANSLATION_DETAILED_CULLING = translate(KEY_DETAILED_CULLING);
     public static final String TRANSLATION_USE_DISCRETE_UV_STEPS = translate(KEY_USE_DISCRETE_UV_STEPS);
     public static final String TRANSLATION_CON_TEX_MODE = translate(KEY_CON_TEX_MODE);
+    public static final String TRANSLATION_CON_TEX_DISABLE_LIST = translate(KEY_CON_TEX_DISABLE_LIST);
     public static final String TRANSLATION_CAMO_MESSAGE_VERBOSITY = translate(KEY_CAMO_MESSAGE_VERBOSITY);
     public static final String TRANSLATION_FORCE_AO_ON_GLOWING_BLOCKS = translate(KEY_FORCE_AO_ON_GLOWING_BLOCKS);
     public static final String TRANSLATION_RENDER_ITEM_MODELS_WITH_CAMO = translate(KEY_RENDER_ITEM_MODELS_WITH_CAMO);
@@ -78,6 +85,7 @@ public final class ClientConfig
     private static boolean detailedCulling = false;
     private static boolean useDiscreteUVSteps = false;
     private static ConTexMode conTexMode = ConTexMode.DETAILED;
+    private static Set<String> conTexDisabled = Set.of();
     private static CamoMessageVerbosity camoMessageVerbosity = CamoMessageVerbosity.DEFAULT;
     private static boolean forceAoOnGlowingBlocks = false;
     private static boolean renderItemModelsWithCamo = false;
@@ -104,6 +112,7 @@ public final class ClientConfig
     private static final ModConfigSpec.BooleanValue DETAILED_CULLING_VALUE;
     private static final ModConfigSpec.BooleanValue USE_DISCRETE_UV_STEPS_VALUE;
     private static final ModConfigSpec.EnumValue<ConTexMode> CON_TEX_MODE_VALUE;
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> CON_TEX_DISABLE_LIST_VALUE;
     private static final ModConfigSpec.EnumValue<CamoMessageVerbosity> CAMO_MESSAGE_VERBOSITY_VALUE;
     private static final ModConfigSpec.BooleanValue FORCE_AO_ON_GLOWING_BLOCKS_VALUE;
     private static final ModConfigSpec.BooleanValue RENDER_ITEM_MODELS_WITH_CAMO_VALUE;
@@ -172,6 +181,11 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_CON_TEX_MODE)
                 .defineEnum(KEY_CON_TEX_MODE, ConTexMode.DETAILED);
+        CON_TEX_DISABLE_LIST_VALUE = builder
+                .comment("Disable connected textures support for the listed mod IDs of connected textures mods")
+                .translation(TRANSLATION_CON_TEX_DISABLE_LIST)
+                .gameRestart()
+                .defineListAllowEmpty(KEY_CON_TEX_DISABLE_LIST, new ArrayList<>(), () -> "", ClientConfig::validateModId);
         CAMO_MESSAGE_VERBOSITY_VALUE = builder
                 .comment(
                         "Configures the verbosity of messages displayed when a block cannot be used as a camo",
@@ -299,6 +313,11 @@ public final class ClientConfig
         return Utils.translateConfig("client", key);
     }
 
+    private static boolean validateModId(Object val)
+    {
+        return val instanceof String string && ModList.get().isLoaded(string);
+    }
+
     private static void onConfigReloaded(ModConfigEvent event)
     {
         if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
@@ -310,6 +329,7 @@ public final class ClientConfig
             detailedCulling = DETAILED_CULLING_VALUE.get();
             useDiscreteUVSteps = USE_DISCRETE_UV_STEPS_VALUE.get();
             conTexMode = CON_TEX_MODE_VALUE.get();
+            conTexDisabled = Set.copyOf(CON_TEX_DISABLE_LIST_VALUE.get());
             camoMessageVerbosity = CAMO_MESSAGE_VERBOSITY_VALUE.get();
             forceAoOnGlowingBlocks = FORCE_AO_ON_GLOWING_BLOCKS_VALUE.get();
             renderItemModelsWithCamo = RENDER_ITEM_MODELS_WITH_CAMO_VALUE.get();
@@ -378,6 +398,12 @@ public final class ClientConfig
         public ConTexMode getConTexMode()
         {
             return conTexMode;
+        }
+
+        @Override
+        public boolean isConTexDisabledFor(String modId)
+        {
+            return conTexDisabled.contains(modId);
         }
 
         @Override

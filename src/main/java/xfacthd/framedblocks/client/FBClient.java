@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.*;
@@ -97,7 +96,6 @@ import xfacthd.framedblocks.common.data.doubleblock.NullCullPredicate;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
 
 @Mod(value = FramedConstants.MOD_ID, dist = Dist.CLIENT)
 public final class FBClient
@@ -154,13 +152,13 @@ public final class FBClient
 
     private static void onImcMessageReceived(final InterModProcessEvent event)
     {
-        event.getIMCStream()
-                .filter(msg -> msg.method().equals(FramedConstants.IMC_METHOD_ADD_PROPERTY))
-                .map(InterModComms.IMCMessage::messageSupplier)
-                .map(Supplier::get)
-                .filter(ModelProperty.class::isInstance)
-                .map(ModelProperty.class::cast)
-                .forEach(ConTexDataHandler::addConTexProperty);
+        event.getIMCStream(FramedConstants.IMC_METHOD_ADD_PROPERTY::equals).forEach(msg ->
+        {
+            if (msg.messageSupplier().get() instanceof ModelProperty<?> prop)
+            {
+                ConTexDataHandler.addConTexProperty(msg.senderModId(), prop);
+            }
+        });
     }
 
     private static void onLoadComplete(final FMLLoadCompleteEvent event)

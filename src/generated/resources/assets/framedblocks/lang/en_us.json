@@ -217,6 +217,7 @@
   "config.framedblocks.client.altGhostRenderer": "Use alternative placement preview renderer",
   "config.framedblocks.client.camoMessageVerbosity": "Disallowed camo message verbosity",
   "config.framedblocks.client.camoRotationMode": "Camo Rotation overlay: Display mode",
+  "config.framedblocks.client.conTexDisabled": "Disable connected textures support",
   "config.framedblocks.client.conTexMode": "Connected textures mode",
   "config.framedblocks.client.detailedCulling": "Detailed culling",
   "config.framedblocks.client.discreteUVSteps": "Use discrete UV steps",
