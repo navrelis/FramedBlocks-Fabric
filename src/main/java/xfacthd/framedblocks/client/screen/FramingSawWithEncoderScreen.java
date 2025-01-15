@@ -293,7 +293,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
                     Slot slot = menu.getSlot(i);
                     if (isHovering(slot.x, slot.y, 16, 16, mouseX, mouseY))
                     {
-                        if (i == 0 || recipe.getAdditives().get(i - 1).ingredient().test(carried))
+                        if (isValidEncodingInput(recipe, i, carried))
                         {
                             acceptEncodingInput(i, carried.copyWithCount(1));
                         }
@@ -304,6 +304,15 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private boolean isValidEncodingInput(FramingSawRecipe recipe, int slot, ItemStack stack)
+    {
+        if (slot == 0)
+        {
+            return cache.getMaterialValue(stack.getItem()) > 0;
+        }
+        return recipe.getAdditives().get(slot - 1).ingredient().test(stack);
     }
 
     public void acceptEncodingInput(int slot, ItemStack stack)
