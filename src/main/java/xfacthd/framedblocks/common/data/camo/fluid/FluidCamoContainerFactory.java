@@ -59,7 +59,7 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
         for (int tank = 0; tank < handler.getTanks(); tank++)
         {
             FluidStack fluid = handler.getFluidInTank(tank);
-            if (!isValidFluid(fluid.getFluid(), player))
+            if (!isValidFluid(fluid.getFluid(), player) || !fluid.isComponentsPatchEmpty())
             {
                 continue;
             }
