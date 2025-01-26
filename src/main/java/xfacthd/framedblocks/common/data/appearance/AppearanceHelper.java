@@ -54,9 +54,9 @@ public final class AppearanceHelper
         }
 
         ConTexMode cfgMode = ClientConfig.VIEW.getConTexMode();
-        if (cfgMode == ConTexMode.NONE || queryPos == null)
+        if (cfgMode == ConTexMode.NONE)
         {
-            // If queryPos is null, we can't make sure the connection is possible
+            // Don't continue if CT support is globally disabled
             return AIR;
         }
 
@@ -68,7 +68,6 @@ public final class AppearanceHelper
         }
 
         StateCache stateCache = framedBlock.getCache(state);
-        Direction edge = findPreferredEdge(pos, queryPos, side, type, stateCache);
         if (type.isDoubleBlock())
         {
             if (recursive)
@@ -84,6 +83,8 @@ public final class AppearanceHelper
 
             if (actualQueryState != null)
             {
+                Direction edge = findPreferredEdge(pos, queryPos, side, type, stateCache);
+
                 if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
                 {
                     if (!stateCache.canConnectFullEdge(side, edge))
@@ -126,6 +127,7 @@ public final class AppearanceHelper
         ConTexMode typeMode = type.getMinimumConTexMode();
         if (canUseMode(cfgMode, typeMode, ConTexMode.FULL_FACE) && stateCache.canConnectFullEdge(side, null))
         {
+            Direction edge = findPreferredEdge(pos, queryPos, side, type, stateCache);
             if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
             {
                 return modelData.getCamoContent().getAppearanceState();
@@ -133,9 +135,9 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        if (edge == null)
+        if (queryPos == null)
         {
-            // If the edge is null here, then there is no point in checking further
+            // If queryPos is null here, the specific connection edge cannot be determined
             return AIR;
         }
 
@@ -171,8 +173,12 @@ public final class AppearanceHelper
      * checks failing on double blocks due to an edge covering both parts being selected
      */
     @Nullable
-    private static Direction findPreferredEdge(BlockPos pos, BlockPos queryPos, Direction side, IBlockType type, StateCache stateCache)
+    private static Direction findPreferredEdge(BlockPos pos, @Nullable BlockPos queryPos, Direction side, IBlockType type, StateCache stateCache)
     {
+        if (queryPos == null)
+        {
+            return null;
+        }
         if (type.isDoubleBlock())
         {
             Direction edge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, stateCache, StateCache::canConnectFullEdge);
@@ -242,16 +248,20 @@ public final class AppearanceHelper
      * it's a double block
      * <ul>
      *     <li>Non-null, non-AIR => connectable block</li>
-     *     <li>Non-null, AIR => air block or framed block without CT support</li>
+     *     <li>Non-null, AIR => framed block without CT support</li>
      *     <li>Null => Double framed block, can't determine connecting component, won't connect to other double blocks,
      *     or neighbor state is actually air, in which case full-face and full-edge camos need to be returned</li>
      * </ul>
      */
     @Nullable
-    private static BlockState findApplicableNeighbor(BlockGetter level, BlockPos queryPos, @Nullable BlockState queryState)
+    private static BlockState findApplicableNeighbor(BlockGetter level, @Nullable BlockPos queryPos, @Nullable BlockState queryState)
     {
         if (queryState == null)
         {
+            if (queryPos == null)
+            {
+                return null;
+            }
             queryState = level.getBlockState(queryPos);
         }
         if (queryState.getBlock() instanceof IFramedBlock queryBlock)
@@ -271,9 +281,17 @@ public final class AppearanceHelper
      * of the given side
      */
     private static boolean isNotFramedOrCanConnectFullEdgeTo(
-            BlockPos pos, BlockPos queryPos, @Nullable BlockState queryState, Direction side, @Nullable Direction edge
+            BlockPos pos, @Nullable BlockPos queryPos, @Nullable BlockState queryState, Direction side, @Nullable Direction edge
     )
     {
+        if (queryPos == null && queryState != null)
+        {
+            if (queryState.getBlock() instanceof IFramedBlock queryBlock)
+            {
+                return queryBlock.getCache(queryState).canConnectFullEdge(side, null);
+            }
+            return true;
+        }
         if (queryState != null && queryState.getBlock() instanceof IFramedBlock queryBlock)
         {
             int nx = queryPos.getX() - pos.getX();
