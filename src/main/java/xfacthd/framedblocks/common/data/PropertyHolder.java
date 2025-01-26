@@ -15,6 +15,7 @@ public final class PropertyHolder
     public static final EnumProperty<HorizontalRotation> ROTATION = EnumProperty.create("rotation", HorizontalRotation.class);
     public static final EnumProperty<DirectionAxis> FACING_AXIS = EnumProperty.create("facing_axis", DirectionAxis.class);
     public static final EnumProperty<CompoundDirection> FACING_DIR = EnumProperty.create("facing_dir", CompoundDirection.class);
+    public static final EnumProperty<ChainType> CHAIN_TYPE = EnumProperty.create("chain", ChainType.class);
 
     public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty TOP_HALF = BooleanProperty.create("top_half");

@@ -244,5 +244,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_CHECKERED_PANEL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_TUBE, new TubeSkipPredicate());
         put(BlockType.FRAMED_CHAIN, new ChainSkipPredicate());
+        put(BlockType.FRAMED_LANTERN, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_SOUL_LANTERN, SideSkipPredicate.FALSE);
     }
 }

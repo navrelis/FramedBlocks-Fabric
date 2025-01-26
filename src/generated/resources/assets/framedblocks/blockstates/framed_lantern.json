@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "framedblocks:block/framed_lantern"
+    },
+    "hanging=true": {
+      "model": "framedblocks:block/framed_lantern_hanging"
+    }
+  }
+}

@@ -256,6 +256,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedBookshelf();
         registerFramedChiseledBookshelf(cube);
         registerFramedChain(cube);
+        registerFramedLantern();
+        registerFramedSoulLantern();
 
         registerFramingSaw();
         registerPoweredFramingSaw();
@@ -991,6 +993,36 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.BLOCK_FRAMED_CHAIN.value(), cube);
         itemModels().basicItem(FBContent.BLOCK_FRAMED_CHAIN.value().asItem());
+    }
+
+    private void registerFramedLantern()
+    {
+        ModelFile standingModel = models().getExistingFile(modLoc("block/framed_lantern"));
+        ModelFile hangingModel = models().getExistingFile(modLoc("block/framed_lantern_hanging"));
+        getVariantBuilder(FBContent.BLOCK_FRAMED_LANTERN.value()).forAllStatesExcept(state ->
+        {
+            boolean hanging = state.getValue(BlockStateProperties.HANGING);
+            return ConfiguredModel.builder()
+                    .modelFile(hanging ? hangingModel : standingModel)
+                    .build();
+        }, BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT, PropertyHolder.CHAIN_TYPE);
+
+        itemModels().basicItem(FBContent.BLOCK_FRAMED_LANTERN.value().asItem());
+    }
+
+    private void registerFramedSoulLantern()
+    {
+        ModelFile standingModel = models().getExistingFile(modLoc("block/framed_soul_lantern"));
+        ModelFile hangingModel = models().getExistingFile(modLoc("block/framed_soul_lantern_hanging"));
+        getVariantBuilder(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value()).forAllStatesExcept(state ->
+        {
+            boolean hanging = state.getValue(BlockStateProperties.HANGING);
+            return ConfiguredModel.builder()
+                    .modelFile(hanging ? hangingModel : standingModel)
+                    .build();
+        }, BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT, PropertyHolder.CHAIN_TYPE);
+
+        itemModels().basicItem(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value().asItem());
     }
 
 

@@ -1378,6 +1378,24 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LANTERN.value())
+                .pattern("CCC")
+                .pattern("CTC")
+                .pattern("CCC")
+                .define('C', FBContent.BLOCK_FRAMED_SLAB_CORNER.value())
+                .define('T', Items.TORCH)
+                .unlockedBy(Items.TORCH)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value())
+                .pattern("CCC")
+                .pattern("CTC")
+                .pattern("CCC")
+                .define('C', FBContent.BLOCK_FRAMED_SLAB_CORNER.value())
+                .define('T', Items.SOUL_TORCH)
+                .unlockedBy(Items.SOUL_TORCH)
+                .save(consumer);
+
 
 
         shapedRecipe(RecipeCategory.TOOLS, FBContent.BLOCK_FRAMING_SAW.value())

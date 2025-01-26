@@ -450,6 +450,8 @@ public final class FBClient
         wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_TUBE, FramedTubeGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHAIN, FramedChainGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LANTERN, FramedLanternGeometry::normal, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SOUL_LANTERN, FramedLanternGeometry::soul, WrapHelper.IGNORE_WATERLOGGED);
     }
 
     private static void onModelRegister(final ModelEvent.RegisterAdditional event)
@@ -461,6 +463,8 @@ public final class FBClient
         event.register(FramedTargetGeometry.OVERLAY_LOCATION);
         event.register(FramedCollapsibleBlockGeometry.ALT_BASE_MODEL_LOC);
         event.register(FramedCollapsibleCopycatBlockGeometry.ALT_BASE_MODEL_LOC);
+        event.register(FramedLanternGeometry.STANDING_CHAIN_LOCATION);
+        event.register(FramedLanternGeometry.HANGING_CHAIN_LOCATION);
         event.register(ErrorModel.LOCATION);
 
         if (SupplementariesCompat.isLoaded())
