@@ -38,6 +38,7 @@ public final class GhostBlockRenderer
     private static final Map<Item, GhostRenderBehaviour> RENDER_BEHAVIOURS = new IdentityHashMap<>();
     private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
     private static final String PROFILER_KEY = FramedConstants.MOD_ID + "_ghost_block";
+    private static final float SCALE = 1.0001F;
 
     public static void onRenderLevelStage(final RenderLevelStageEvent event)
     {
@@ -187,7 +188,9 @@ public final class GhostBlockRenderer
         profiler.push("draw");
         BakedModel model = ModelUtils.getModel(renderState);
         poseStack.pushPose();
-        poseStack.translate(offset.x, offset.y, offset.z);
+        poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
+        poseStack.scale(SCALE, SCALE, SCALE); // Scale up very slightly to avoid z-fighting with replaceable blocks like snow layers
+        poseStack.translate(-.5F, -.5F, -.5F);
         for (RenderType type : model.getRenderTypes(renderState, RANDOM, modelData))
         {
             doRenderGhostBlockInLayer(poseStack, builder, renderPos, renderState, type, modelData);
