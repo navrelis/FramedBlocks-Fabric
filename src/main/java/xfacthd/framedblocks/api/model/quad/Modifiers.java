@@ -156,6 +156,11 @@ public final class Modifiers
         float toXZ1 = positive ? Math.min(xz1, targetR) : Math.max(xz1, targetR);
         float toXZ2 = positive ? Math.min(xz2, targetL) : Math.max(xz2, targetL);
 
+        if (Mth.equal(xz1, toXZ1) && Mth.equal(xz2, toXZ2))
+        {
+            return true;
+        }
+
         boolean rotated = data.uvRotated();
         TextureAtlasSprite sprite = data.quad().getSprite();
 
@@ -242,6 +247,12 @@ public final class Modifiers
 
         float toY1 = downwards ? Math.max(y1, targetR) : Math.min(y1, targetR);
         float toY2 = downwards ? Math.max(y2, targetL) : Math.min(y2, targetL);
+
+        //noinspection SuspiciousNameCombination
+        if (Mth.equal(y1, toY1) && Mth.equal(y2, toY2))
+        {
+            return true;
+        }
 
         boolean rotated = data.uvRotated();
         TextureAtlasSprite sprite = data.quad().getSprite();
@@ -340,6 +351,11 @@ public final class Modifiers
 
         float toXZ1 = positive ? Math.max(xz1, targetTop) : Math.min(xz1, targetTop);
         float toXZ2 = positive ? Math.max(xz2, targetBot) : Math.min(xz2, targetBot);
+
+        if (Mth.equal(xz1, toXZ1) && Mth.equal(xz2, toXZ2))
+        {
+            return true;
+        }
 
         boolean rotated = data.uvRotated();
         TextureAtlasSprite sprite = data.quad().getSprite();
