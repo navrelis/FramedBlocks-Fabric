@@ -110,3 +110,10 @@ license="LGPL v3"
     versionRange="[${ae2_version},)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.framedblocks]]
+    modId="searchables"
+    type="optional"
+    versionRange="[${searchables_version},)"
+    ordering="NONE"
+    side="CLIENT"

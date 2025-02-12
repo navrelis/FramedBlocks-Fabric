@@ -111,6 +111,7 @@ repositories {
         content {
             includeGroup('org.embeddedt')
             includeGroup('mezz.jei')
+            includeGroup('com.blamejared.searchables')
         }
     }
     maven {
@@ -209,6 +210,8 @@ dependencies {
     compileOnly("snownee.jade:Jade-NeoForge:${jade_mc_version}-${jade_version}")
 
     implementation("curse.maven:atlasviewer-633577:${atlasviewer_coord}")
+
+    compileOnly("com.blamejared.searchables:Searchables-neoforge-${searchables_mc_version}:${searchables_version}")
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -230,7 +233,8 @@ tasks.withType(ProcessResources).configureEach {
             athena_version: athena_version,
             create_version: create_version,
             guidebook_version: guidebook_version,
-            ae2_version: ae2_version
+            ae2_version: ae2_version,
+            searchables_version: searchables_version
     ]
     inputs.properties replaceProperties
 

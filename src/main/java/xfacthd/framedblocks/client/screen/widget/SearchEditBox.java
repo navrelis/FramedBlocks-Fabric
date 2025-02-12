@@ -4,12 +4,14 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.common.compat.searchables.SearchablesCompat;
 
 import java.util.function.Consumer;
 
 public final class SearchEditBox extends EditBox
 {
     private static final long UPDATE_DELAY = 250L;
+    private static final boolean NO_DELAY = SearchablesCompat.isLoaded();
 
     private final Consumer<String> searchHandler;
     private boolean changed = false;
@@ -30,7 +32,10 @@ public final class SearchEditBox extends EditBox
         if (btn == 1 && this.clicked(mouseX, mouseY))
         {
             setValue("");
-            lastChange = System.currentTimeMillis() - UPDATE_DELAY;
+            if (!NO_DELAY)
+            {
+                lastChange = System.currentTimeMillis() - UPDATE_DELAY;
+            }
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, btn);
@@ -38,14 +43,24 @@ public final class SearchEditBox extends EditBox
 
     private void onSearchChanged(String text)
     {
-        changed = true;
+        if (lastQuery.equals(text)) return;
+
+        if (NO_DELAY)
+        {
+            searchHandler.accept(text);
+        }
+        else
+        {
+            changed = true;
+            lastChange = System.currentTimeMillis();
+        }
+
         lastQuery = text;
-        lastChange = System.currentTimeMillis();
     }
 
     public void tick()
     {
-        if (changed && System.currentTimeMillis() - lastChange > UPDATE_DELAY)
+        if (!NO_DELAY && changed && System.currentTimeMillis() - lastChange > UPDATE_DELAY)
         {
             changed = false;
             searchHandler.accept(lastQuery);
