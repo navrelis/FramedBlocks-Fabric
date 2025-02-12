@@ -5,7 +5,6 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.BlockModelShaper;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -20,11 +19,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.wrapping.TextureLookup;
+import xfacthd.framedblocks.api.render.RenderUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.model.cube.FramedChestLidGeometry;
@@ -98,8 +97,6 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
             ModelData data
     )
     {
-        ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
-
         int color = Minecraft.getInstance().getBlockColors().getColor(state, be.getLevel(), be.getBlockPos(), 0);
         float red = (float)(color >> 16 & 255) / 255.0F;
         float green = (float)(color >> 8 & 255) / 255.0F;
@@ -111,13 +108,14 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         RANDOM.setSeed(42);
         for (RenderType type : model.getRenderTypes(state, RANDOM, data))
         {
-            RenderType bufferType = type == RenderType.solid() ? Sheets.solidBlockSheet() : RenderTypeHelper.getEntityRenderType(type, false);
+            RenderType bufferType = RenderUtils.getEntityRenderType(type);
 
-            renderer.renderModel(
+            RenderUtils.renderModel(
                     matrix.last(),
                     buffer.getBuffer(bufferType),
                     state,
                     model,
+                    RANDOM,
                     red, green, blue,
                     light,
                     OverlayTexture.NO_OVERLAY,
