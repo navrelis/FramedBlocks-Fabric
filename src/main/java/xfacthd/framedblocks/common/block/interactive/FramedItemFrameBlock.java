@@ -58,7 +58,7 @@ public class FramedItemFrameBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.FACING, PropertyHolder.LEATHER, PropertyHolder.MAP_FRAME);
+        builder.add(BlockStateProperties.FACING, PropertyHolder.LEATHER, PropertyHolder.MAP_FRAME, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -66,6 +66,7 @@ public class FramedItemFrameBlock extends FramedBlock
     {
         return PlacementStateBuilder.of(this, ctx)
                 .withTargetFacing()
+                .withWater()
                 .validate((state, modCtx) -> canSurvive(state, modCtx.getLevel(), modCtx.getClickedPos()))
                 .build();
     }
