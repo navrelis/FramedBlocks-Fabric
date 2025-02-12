@@ -122,7 +122,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Nullable
     public BlockState getItemModelSource()
     {
-        return null;
+        return defaultBlockState();
     }
 
     @Override

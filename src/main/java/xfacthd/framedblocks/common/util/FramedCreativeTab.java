@@ -18,12 +18,6 @@ public final class FramedCreativeTab
                 {
                     for (BlockType type : BlockType.values())
                     {
-                        // Simple workaround for these two needing dedicated items for blueprint purposes
-                        if (type == BlockType.FRAMED_DOUBLE_SLAB || type == BlockType.FRAMED_DOUBLE_PANEL)
-                        {
-                            continue;
-                        }
-
                         if (type.hasBlockItem())
                         {
                             output.accept(FBContent.byType(type));
