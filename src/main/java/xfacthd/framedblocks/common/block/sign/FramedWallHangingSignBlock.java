@@ -40,6 +40,15 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
                     BlockPos pos = modCtx.getClickedPos();
                     Direction face = modCtx.getClickedFace();
 
+                    if (!modCtx.replacingClickedOnBlock())
+                    {
+                        BlockState adjState = level.getBlockState(pos.relative(face.getOpposite()));
+                        if (adjState.getBlock() instanceof FramedWallHangingSignBlock && adjState.getValue(FramedProperties.FACING_HOR).getAxis().test(face))
+                        {
+                            return null;
+                        }
+                    }
+
                     for (Direction dir : modCtx.getNearestLookingDirections())
                     {
                         if (dir.getAxis().isHorizontal() && !dir.getAxis().test(face))

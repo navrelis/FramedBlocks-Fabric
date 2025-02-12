@@ -166,11 +166,6 @@ public class FramedBlockEntity extends BlockEntity
 
     private ItemInteractionResult setCamo(Player player, ItemStack stack, CamoContainerFactory<?> factory, boolean secondary)
     {
-        if (stack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock)
-        {
-            return ItemInteractionResult.FAIL;
-        }
-
         CamoContainer<?, ?> camo = factory.applyCamo(level(), worldPosition, player, stack);
         if (camo != null)
         {

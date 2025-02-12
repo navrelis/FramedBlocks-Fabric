@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.world.item.*;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -40,6 +41,11 @@ public final class CamoContainerFactories
     @Nullable
     public static CamoContainerFactory<?> findCamoFactory(ItemStack stack)
     {
+        if (stack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock)
+        {
+            return null;
+        }
+
         CamoContainerFactory<?> factory = APPLICATION_ITEMS.get(stack.getItem());
         if (factory == null)
         {
