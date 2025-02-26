@@ -420,7 +420,7 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(SplitLineOverlay.SPLIT_LINE_FALSE, "Split-line of the deformed face runs along the steep diagonal.");
         add(SplitLineOverlay.SPLIT_LINE_TRUE, "Split-line of the deformed face runs along the shallow diagonal.");
-        add(SplitLineOverlay.MSG_SWITCH_SPLIT_LINE, "Hit with a Framed Hammer to switch the orientation of the split-line");
+        add(SplitLineOverlay.MSG_SWITCH_SPLIT_LINE, "Hit with a Framed Wrench to switch the orientation of the split-line");
 
         add(OneWayWindowOverlay.LINE_CURR_FACE, "Current see-through side: %s");
         add(OneWayWindowOverlay.LINE_SET_FACE, "Hit with a Framed Wrench to set the see-through side to %s");
