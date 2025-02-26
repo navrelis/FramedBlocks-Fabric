@@ -782,13 +782,15 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 mapper.apply(normalFrame, normalMapFrame),
                 PropertyHolder.LEATHER,
                 FramedProperties.GLOWING,
-                FramedProperties.PROPAGATES_SKYLIGHT
+                FramedProperties.PROPAGATES_SKYLIGHT,
+                BlockStateProperties.WATERLOGGED
         );
         getVariantBuilder(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.value()).forAllStatesExcept(
                 mapper.apply(glowFrame, glowMapFrame),
                 PropertyHolder.LEATHER,
                 FramedProperties.GLOWING,
-                FramedProperties.PROPAGATES_SKYLIGHT
+                FramedProperties.PROPAGATES_SKYLIGHT,
+                BlockStateProperties.WATERLOGGED
         );
 
         simpleItem(FBContent.BLOCK_FRAMED_ITEM_FRAME, "cutout");
