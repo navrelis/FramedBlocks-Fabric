@@ -449,6 +449,7 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT, FramedCheckeredPanelSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_TUBE, FramedTubeGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORNER_TUBE, FramedCornerTubeGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHAIN, FramedChainGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LANTERN, FramedLanternGeometry::normal, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SOUL_LANTERN, FramedLanternGeometry::soul, WrapHelper.IGNORE_WATERLOGGED);

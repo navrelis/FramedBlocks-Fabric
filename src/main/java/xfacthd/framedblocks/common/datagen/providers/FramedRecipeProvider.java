@@ -1391,6 +1391,13 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CORNER_TUBE.value(), 3)
+                .pattern("TT")
+                .pattern("T ")
+                .define('T', FBContent.BLOCK_FRAMED_TUBE.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_TUBE)
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_LANTERN.value())
                 .pattern("CCC")
                 .pattern("CTC")

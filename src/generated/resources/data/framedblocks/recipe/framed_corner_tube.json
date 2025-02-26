@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "T": {
+      "item": "framedblocks:framed_tube"
+    }
+  },
+  "pattern": [
+    "TT",
+    "T "
+  ],
+  "result": {
+    "count": 3,
+    "id": "framedblocks:framed_corner_tube"
+  }
+}
