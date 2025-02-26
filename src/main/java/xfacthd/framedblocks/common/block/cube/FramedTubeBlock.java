@@ -8,6 +8,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -61,6 +62,17 @@ public class FramedTubeBlock extends FramedBlock
     public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
     {
         return state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation)
+    {
+        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+        if (axis != Direction.Axis.Y && (rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90))
+        {
+            axis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
+        }
+        return state.setValue(BlockStateProperties.AXIS, axis);
     }
 
     @Override
