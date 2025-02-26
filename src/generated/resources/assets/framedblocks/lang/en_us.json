@@ -276,6 +276,7 @@
   "desc.framedblocks.blueprint_reinforced": "Reinforced: %s",
   "desc.framedblocks.blueprint_true": "true",
   "desc.framedblocks.camo.empty": "Empty",
+  "desc.framedblocks.slope_slab.place_upside_down": "Hold sneak key to place upside down",
   "framedblocks.configuration.general": "General",
   "framedblocks.configuration.overlay": "Overlays",
   "framedblocks.configuration.powered_framing_saw": "Powered Framing Saw",

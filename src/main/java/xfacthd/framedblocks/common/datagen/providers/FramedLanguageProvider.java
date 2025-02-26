@@ -13,6 +13,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.common.block.cube.FramedTankBlock;
+import xfacthd.framedblocks.common.block.slopeslab.FramedSlopeSlabBlock;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.jade.JadeCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiConstants;
@@ -388,6 +389,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(PhantomPasteItem.FEATURE_DISABLED, "The intangibility feature is disabled, this item therefor has no function!");
         add(FramedTankBlock.TANK_CONTENTS, "Stored Fluid: %s");
         add(FramedTankBlock.EMPTY_FLUID, "Empty");
+        add(FramedSlopeSlabBlock.PLACE_UPSIDE_DOWN, "Hold sneak key to place upside down");
     }
 
     private void addOverlayTranslations()
