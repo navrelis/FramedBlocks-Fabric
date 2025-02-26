@@ -25,6 +25,7 @@ neoForge {
         configureEach {
             // systemProperty  'neoforge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             systemProperty 'neoforge.enabledGameTestNamespaces', 'framedblocks'
+            systemProperty 'terminal.ansi', 'true'
 
             logLevel = org.slf4j.event.Level.DEBUG
 
