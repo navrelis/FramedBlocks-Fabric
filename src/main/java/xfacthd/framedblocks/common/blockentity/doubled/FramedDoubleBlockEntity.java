@@ -394,14 +394,14 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     {
         super.writeToDataPacket(nbt, lookupProvider);
 
-        nbt.put("camo_two", CamoContainerHelper.writeToNetwork(camoContainer));
+        nbt.put(CAMO_TWO_NBT_KEY, CamoContainerHelper.writeToNetwork(camoContainer));
     }
 
     @Override
     protected boolean readFromDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
         boolean needUpdate = false;
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo_two"));
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound(CAMO_TWO_NBT_KEY));
         if (!newCamo.equals(camoContainer))
         {
             int oldLight = getLightValue();
@@ -423,7 +423,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     {
         CompoundTag nbt = super.getUpdateTag(provider);
 
-        nbt.put("camo_two", CamoContainerHelper.writeToNetwork(camoContainer));
+        nbt.put(CAMO_TWO_NBT_KEY, CamoContainerHelper.writeToNetwork(camoContainer));
 
         return nbt;
     }
@@ -432,7 +432,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     protected boolean readCamoFromUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         boolean changed = super.readCamoFromUpdateTag(nbt, provider);
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo_two"));
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound(CAMO_TWO_NBT_KEY));
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
@@ -481,7 +481,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     public void removeComponentsFromTag(CompoundTag tag)
     {
         super.removeComponentsFromTag(tag);
-        tag.remove("camo_two");
+        tag.remove(CAMO_TWO_NBT_KEY);
     }
 
     @Override
@@ -504,7 +504,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        nbt.put("camo_two", CamoContainerHelper.writeToDisk(camoContainer));
+        nbt.put(CAMO_TWO_NBT_KEY, CamoContainerHelper.writeToDisk(camoContainer));
 
         super.saveAdditional(nbt, provider);
     }
@@ -513,6 +513,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         super.loadAdditional(nbt, provider);
-        camoContainer = loadAndValidateCamo(nbt, "camo_two");
+        camoContainer = loadAndValidateCamo(nbt, CAMO_TWO_NBT_KEY);
     }
 }

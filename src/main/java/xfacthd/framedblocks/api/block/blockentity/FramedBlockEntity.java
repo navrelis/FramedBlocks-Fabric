@@ -59,6 +59,7 @@ public class FramedBlockEntity extends BlockEntity
     private static final DeferredBlockEntity<FramedBlockEntity> DEFAULT_TYPE = DeferredBlockEntity.createBlockEntity(
             Utils.rl("framed_tile")
     );
+    public static final String CAMO_NBT_KEY = "camo";
     public static final Component MSG_BLACKLISTED = Utils.translate("msg", "camo.blacklisted");
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
     public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
@@ -592,6 +593,19 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
+    /**
+     * Returns whether this block is marked as intangible.
+     * <p>
+     * If this method returns {@code true}, an entity interacting with this block may still behave as if it
+     * returned {@code false} depending on the context.
+     *
+     * @return whether this block is marked as intangible
+     */
+    public boolean isMarkedIntangible()
+    {
+        return intangible;
+    }
+
     public boolean isIntangible(@Nullable CollisionContext ctx)
     {
         if (!ConfigView.Server.INSTANCE.enableIntangibility() || !intangible)
@@ -804,7 +818,7 @@ public class FramedBlockEntity extends BlockEntity
 
     protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
     {
-        nbt.put("camo", CamoContainerHelper.writeToNetwork(camoContainer));
+        nbt.put(CAMO_NBT_KEY, CamoContainerHelper.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
     }
 
@@ -813,7 +827,7 @@ public class FramedBlockEntity extends BlockEntity
         boolean needUpdate = false;
         boolean needCullingUpdate = false;
 
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo"));
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound(CAMO_NBT_KEY));
         if (!newCamo.equals(camoContainer))
         {
             int oldLight = getLightValue();
@@ -866,7 +880,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         CompoundTag nbt = super.getUpdateTag(provider);
 
-        nbt.put("camo", CamoContainerHelper.writeToNetwork(camoContainer));
+        nbt.put(CAMO_NBT_KEY, CamoContainerHelper.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
 
         return nbt;
@@ -895,7 +909,7 @@ public class FramedBlockEntity extends BlockEntity
 
     protected boolean readCamoFromUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo"));
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound(CAMO_NBT_KEY));
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
@@ -997,7 +1011,7 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void removeComponentsFromTag(CompoundTag tag)
     {
-        tag.remove("camo");
+        tag.remove(CAMO_NBT_KEY);
         tag.remove("glowing");
         tag.remove("intangible");
         tag.remove("reinforced");
@@ -1047,7 +1061,7 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        nbt.put("camo", CamoContainerHelper.writeToDisk(camoContainer));
+        nbt.put(CAMO_NBT_KEY, CamoContainerHelper.writeToDisk(camoContainer));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
         nbt.putBoolean("reinforced", reinforced);
@@ -1061,7 +1075,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         super.loadAdditional(nbt, provider);
 
-        camoContainer = loadAndValidateCamo(nbt, "camo");
+        camoContainer = loadAndValidateCamo(nbt, CAMO_NBT_KEY);
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
         reinforced = nbt.getBoolean("reinforced");

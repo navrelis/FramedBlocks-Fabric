@@ -18,6 +18,9 @@ import java.util.List;
 
 public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
 {
+    public static final String INVENTORY_NBT_KEY = "inventory";
+    public static final String LAST_SLOT_NBT_KEY = "last_slot";
+
     private final ItemStackHandler itemHandler = new ItemStackHandler(6);
     private int lastInteractedSlot = -1;
 
@@ -95,8 +98,8 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        nbt.put("inventory", itemHandler.serializeNBT(provider));
-        nbt.putInt("last_slot", lastInteractedSlot);
+        nbt.put(INVENTORY_NBT_KEY, itemHandler.serializeNBT(provider));
+        nbt.putInt(LAST_SLOT_NBT_KEY, lastInteractedSlot);
         super.saveAdditional(nbt, provider);
     }
 
@@ -104,7 +107,7 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         super.loadAdditional(nbt, provider);
-        itemHandler.deserializeNBT(provider, nbt.getCompound("inventory"));
-        lastInteractedSlot = nbt.getInt("last_slot");
+        itemHandler.deserializeNBT(provider, nbt.getCompound(INVENTORY_NBT_KEY));
+        lastInteractedSlot = nbt.getInt(LAST_SLOT_NBT_KEY);
     }
 }

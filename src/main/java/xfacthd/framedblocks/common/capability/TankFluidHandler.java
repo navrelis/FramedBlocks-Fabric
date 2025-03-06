@@ -10,6 +10,7 @@ import xfacthd.framedblocks.common.blockentity.special.FramedTankBlockEntity;
 public final class TankFluidHandler implements IFluidHandler
 {
     public static final int CAPACITY = 16 * FluidType.BUCKET_VOLUME;
+    public static final String FLUID_NBT_KEY = "fluid";
 
     private final FramedTankBlockEntity blockEntity;
     private FluidStack fluid = FluidStack.EMPTY;
@@ -119,14 +120,14 @@ public final class TankFluidHandler implements IFluidHandler
 
     public void load(CompoundTag tag, HolderLookup.Provider provider)
     {
-        fluid = FluidStack.parseOptional(provider, tag.getCompound("fluid"));
+        fluid = FluidStack.parseOptional(provider, tag.getCompound(FLUID_NBT_KEY));
     }
 
     public void save(CompoundTag nbt, HolderLookup.Provider provider)
     {
         if (!fluid.isEmpty())
         {
-            nbt.put("fluid", fluid.save(provider));
+            nbt.put(FLUID_NBT_KEY, fluid.save(provider));
         }
     }
 }

@@ -31,6 +31,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 {
     public static final int ROTATION_STEPS = 8;
     private static final int MAP_UPDATE_INTERVAL = 10;
+    public static final String ITEM_NBT_KEY = "item";
 
     private final boolean glowing;
     private ItemStack heldItem = ItemStack.EMPTY;
@@ -214,13 +215,13 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
     private void readFromNetwork(CompoundTag tag, HolderLookup.Provider provider)
     {
-        heldItem = ItemStack.parseOptional(provider, tag.getCompound("item"));
+        heldItem = ItemStack.parseOptional(provider, tag.getCompound(ITEM_NBT_KEY));
         rotation = tag.getByte("rotation");
     }
 
     private void writeToNetwork(CompoundTag tag, HolderLookup.Provider provider)
     {
-        tag.put("item", heldItem.saveOptional(provider));
+        tag.put(ITEM_NBT_KEY, heldItem.saveOptional(provider));
         tag.putByte("rotation", (byte) rotation);
     }
 
@@ -260,7 +261,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     {
         super.loadAdditional(tag, provider);
 
-        heldItem = ItemStack.parseOptional(provider, tag.getCompound("item"));
+        heldItem = ItemStack.parseOptional(provider, tag.getCompound(ITEM_NBT_KEY));
         rotation = tag.getByte("rotation");
         mapTickOffset = tag.getInt("map_tick_offset");
     }
@@ -270,7 +271,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     {
         super.saveAdditional(tag, provider);
 
-        tag.put("item", heldItem.saveOptional(provider));
+        tag.put(ITEM_NBT_KEY, heldItem.saveOptional(provider));
         tag.putByte("rotation", (byte) rotation);
         tag.putInt("map_tick_offset", mapTickOffset);
     }

@@ -101,9 +101,22 @@ repositories {
         url = 'https://maven.tterrag.com/'
         content {
             includeGroup('team.chisel.ctm')
-            includeGroup('com.tterrag.registrate')
-            includeGroup('com.jozufozu.flywheel')
+        }
+    }
+    maven {
+        name = 'Create maven'
+        url = 'https://maven.createmod.net/'
+        content {
             includeGroup('com.simibubi.create')
+            includeGroup('net.createmod.ponder')
+            includeGroup('dev.engine-room.flywheel')
+        }
+    }
+    maven {
+        name = 'DevOS maven'
+        url = 'https://mvn.devos.one/snapshots'
+        content {
+            includeGroup('com.tterrag.registrate')
         }
     }
     maven {
@@ -195,9 +208,10 @@ dependencies {
 
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}+mc${embeddium_mc_version}")
 
-    //compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}:slim") { transitive = false }
-    //compileOnly("com.jozufozu.flywheel:flywheel-forge-${flywheel_mc_version}:${flywheel_version}")
-    // Only needed when Create and/or Flywheel are switched to implementation
+    compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}-${create_build_number}") { transitive = false }
+    compileOnly("net.createmod.ponder:Ponder-NeoForge-${create_mc_version}:${ponder_version}")
+    // Only needed when Create and Ponder are switched to implementation
+    //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${create_mc_version}:${flywheel_version}")
     //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 
     //compileOnly("curse.maven:moonlight-499980:${moonlight_coord}")

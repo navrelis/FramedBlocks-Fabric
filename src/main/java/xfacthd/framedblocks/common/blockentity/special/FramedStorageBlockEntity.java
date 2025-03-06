@@ -27,6 +27,8 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 {
     public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
     public static final int SLOTS = 9 * 3;
+    public static final String INVENTORY_NBT_KEY = "inventory";
+    public static final String OVERFLOW_NBT_KEY = "overflow";
 
     private final StorageBlockItemStackHandler itemHandler = createItemHandler(this, false);
     private List<ItemStack> overflow = null;
@@ -136,7 +138,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        nbt.put("inventory", itemHandler.serializeNBT(provider));
+        nbt.put(INVENTORY_NBT_KEY, itemHandler.serializeNBT(provider));
         if (customName != null)
         {
             nbt.putString("custom_name", Component.Serializer.toJson(customName, provider));
@@ -149,7 +151,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         super.loadAdditional(nbt, provider);
-        itemHandler.deserializeNBT(provider, nbt.getCompound("inventory"));
+        itemHandler.deserializeNBT(provider, nbt.getCompound(INVENTORY_NBT_KEY));
         separateOverflow();
         loadOverflow(nbt, provider);
         if (nbt.contains("custom_name", Tag.TAG_STRING))
@@ -178,9 +180,9 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     private void loadOverflow(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        if (nbt.contains("overflow"))
+        if (nbt.contains(OVERFLOW_NBT_KEY))
         {
-            ListTag stackList = nbt.getList("overflow", Tag.TAG_COMPOUND);
+            ListTag stackList = nbt.getList(OVERFLOW_NBT_KEY, Tag.TAG_COMPOUND);
             overflow = NonNullList.withSize(stackList.size(), ItemStack.EMPTY);
             for (int i = 0; i < stackList.size(); i++)
             {
@@ -208,7 +210,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
                     stackList.add(overflow.get(i).save(provider, itemTag));
                 }
             }
-            nbt.put("overflow", stackList);
+            nbt.put(OVERFLOW_NBT_KEY, stackList);
         }
     }
 

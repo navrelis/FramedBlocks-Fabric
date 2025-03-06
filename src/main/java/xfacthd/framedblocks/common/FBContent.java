@@ -839,7 +839,7 @@ public final class FBContent
     )
     {
         DeferredBlockEntity<T> result = BE_TYPES.registerBlockEntity(name, factory, blocks);
-        if (!FMLEnvironment.production && isFramedBE)
+        if (isFramedBE)
         {
             //noinspection unchecked
             FRAMED_BLOCK_ENTITIES.add((DeferredBlockEntity<? extends FramedBlockEntity>) result);

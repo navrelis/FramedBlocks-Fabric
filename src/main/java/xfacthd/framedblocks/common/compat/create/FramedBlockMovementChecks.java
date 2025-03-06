@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.compat.create;
-/*
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
+
+import com.simibubi.create.api.contraption.BlockMovementChecks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -11,7 +11,12 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-public final class FramedBlockMovementChecks implements BlockMovementChecks.AllChecks
+public final class FramedBlockMovementChecks implements
+        BlockMovementChecks.MovementNecessaryCheck,
+        BlockMovementChecks.MovementAllowedCheck,
+        BlockMovementChecks.BrittleCheck,
+        BlockMovementChecks.AttachedCheck,
+        BlockMovementChecks.NotSupportiveCheck
 {
     @Override
     public BlockMovementChecks.CheckResult isBlockAttachedTowards(BlockState state, Level level, BlockPos pos, Direction side)
@@ -65,4 +70,4 @@ public final class FramedBlockMovementChecks implements BlockMovementChecks.AllC
     {
         return BlockMovementChecks.CheckResult.of(value);
     }
-}*/
+}
