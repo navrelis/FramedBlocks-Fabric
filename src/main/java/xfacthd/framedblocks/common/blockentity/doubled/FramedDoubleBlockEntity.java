@@ -213,11 +213,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     @Override
     public boolean canEntityDestroyCamo(Entity entity)
     {
-        if (super.canEntityDestroyCamo(entity))
-        {
-            return true;
-        }
-        return camoContainer.getContent().canEntityDestroy(level(), worldPosition, entity);
+        return super.canEntityDestroyCamo(entity) && camoContainer.getContent().canEntityDestroy(level(), worldPosition, entity);
     }
 
     @Override
