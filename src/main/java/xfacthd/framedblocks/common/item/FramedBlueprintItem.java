@@ -178,31 +178,7 @@ public class FramedBlueprintItem extends FramedToolItem
             return true;
         }
 
-        List<ItemStack> materials = new ArrayList<>();
-        materials.add(getBlockItem(data));
-        if (ServerConfig.VIEW.shouldConsumeCamoItem())
-        {
-            materials.addAll(getCamoStacksMerged(camos));
-        }
-
-        BlueprintCopyBehaviour behaviour = getBehaviour(data.block());
-
-        int glowstone = behaviour.getGlowstoneCount(data);
-        if (glowstone > 0)
-        {
-            materials.add(new ItemStack(Items.GLOWSTONE_DUST, glowstone));
-        }
-        int intangible = behaviour.getIntangibleCount(data);
-        if (intangible > 0)
-        {
-            materials.add(new ItemStack(Utils.PHANTOM_PASTE, intangible));
-        }
-        int reinforcement = behaviour.getReinforcementCount(data);
-        if (reinforcement > 0)
-        {
-            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), reinforcement));
-        }
-        materials.addAll(behaviour.getAdditionalConsumedMaterials(data));
+        List<ItemStack> materials = collectMaterials(data, camos);
 
         List<ItemStack> missingMaterials = new ArrayList<>();
         for (ItemStack stack : materials)
@@ -273,30 +249,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         if (!canCopyAllCamos(camos)) return;
 
-        List<ItemStack> materials = new ArrayList<>();
-        materials.add(getBlockItem(data));
-        if (ServerConfig.VIEW.shouldConsumeCamoItem())
-        {
-            materials.addAll(getCamoStacksMerged(camos));
-        }
-
-        BlueprintCopyBehaviour behaviour = getBehaviour(data.block());
-
-        int glowstone = behaviour.getGlowstoneCount(data);
-        if (glowstone > 0)
-        {
-            materials.add(new ItemStack(Items.GLOWSTONE_DUST, glowstone));
-        }
-        int intangible = behaviour.getIntangibleCount(data);
-        if (intangible > 0)
-        {
-            materials.add(new ItemStack(Utils.PHANTOM_PASTE, intangible));
-        }
-        int reinforcement = behaviour.getReinforcementCount(data);
-        if (reinforcement > 0)
-        {
-            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), reinforcement));
-        }
+        List<ItemStack> materials = collectMaterials(data, camos);
 
         Inventory inv = player.getInventory();
         for (int i = 0; i < inv.getContainerSize(); i++)
@@ -329,6 +282,36 @@ public class FramedBlueprintItem extends FramedToolItem
 
         //Copying fluid camos is currently not possible
         return camos.stream().allMatch(CamoContainer::canTriviallyConvertToItemStack);
+    }
+
+    private static List<ItemStack> collectMaterials(BlueprintData data, CamoList camos)
+    {
+        List<ItemStack> materials = new ArrayList<>();
+        materials.add(getBlockItem(data));
+        if (ServerConfig.VIEW.shouldConsumeCamoItem())
+        {
+            materials.addAll(getCamoStacksMerged(camos));
+        }
+
+        BlueprintCopyBehaviour behaviour = getBehaviour(data.block());
+
+        int glowstone = behaviour.getGlowstoneCount(data);
+        if (glowstone > 0)
+        {
+            materials.add(new ItemStack(Items.GLOWSTONE_DUST, glowstone));
+        }
+        int intangible = behaviour.getIntangibleCount(data);
+        if (intangible > 0)
+        {
+            materials.add(new ItemStack(Utils.PHANTOM_PASTE, intangible));
+        }
+        int reinforcement = behaviour.getReinforcementCount(data);
+        if (reinforcement > 0)
+        {
+            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), reinforcement));
+        }
+        materials.addAll(behaviour.getAdditionalConsumedMaterials(data));
+        return materials;
     }
 
     public static BlueprintCopyBehaviour getBehaviour(Block block)
