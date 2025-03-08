@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.data.doubleblock;
 
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.TriState;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
@@ -11,19 +12,19 @@ public enum SolidityCheck
 {
     NONE(
             be -> false,
-            (be, side, plant) -> TriState.DEFAULT
+            (be, level, side, plant) -> TriState.DEFAULT
     ),
     FIRST(
             be -> be.getCamo().getContent().isSolid(be.getLevel(), be.getBlockPos()),
-            (be, side, plant) -> be.getCamo().getContent().canSustainPlant(be.getLevel(), be.getBlockPos(), side, plant)
+            (be, level, side, plant) -> be.getCamo().getContent().canSustainPlant(level, be.getBlockPos(), side, plant)
     ),
     SECOND(
             be -> be.getCamoTwo().getContent().isSolid(be.getLevel(), be.getBlockPos()),
-            (be, side, plant) -> be.getCamoTwo().getContent().canSustainPlant(be.getLevel(), be.getBlockPos(), side, plant)
+            (be, level, side, plant) -> be.getCamoTwo().getContent().canSustainPlant(level, be.getBlockPos(), side, plant)
     ),
     BOTH(
             be -> FIRST.isSolid(be) && SECOND.isSolid(be),
-            (be, side, plant) -> TriState.DEFAULT
+            (be, level, side, plant) -> TriState.DEFAULT
     );
 
     private final Predicate<FramedDoubleBlockEntity> predicate;
@@ -40,8 +41,8 @@ public enum SolidityCheck
         return predicate.test(be);
     }
 
-    public TriState canSustainPlant(FramedDoubleBlockEntity be, Direction side, BlockState plant)
+    public TriState canSustainPlant(FramedDoubleBlockEntity be, BlockGetter level, Direction side, BlockState plant)
     {
-        return plantablePredicate.test(be, side, plant);
+        return plantablePredicate.test(be, level, side, plant);
     }
 }

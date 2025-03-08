@@ -750,9 +750,19 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.getContent().getFriction(level(), worldPosition, entity, frameFriction);
     }
 
+    /**
+     * @deprecated Use {@link #canCamoSustainPlant(BlockGetter, Direction, BlockState)} instead to ensure correct
+     * function during worldgen
+     */
+    @Deprecated(forRemoval = true)
     public TriState canCamoSustainPlant(Direction side, BlockState plant)
     {
-        return camoContainer.getContent().canSustainPlant(level(), worldPosition, side, plant);
+        return canCamoSustainPlant(level(), side, plant);
+    }
+
+    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant)
+    {
+        return camoContainer.getContent().canSustainPlant(level, worldPosition, side, plant);
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

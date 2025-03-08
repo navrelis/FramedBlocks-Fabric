@@ -635,7 +635,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return be.canCamoSustainPlant(side, plant);
+            return be.canCamoSustainPlant(level, side, plant);
         }
         return TriState.DEFAULT;
     }

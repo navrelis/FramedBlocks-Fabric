@@ -205,9 +205,9 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     }
 
     @Override
-    public TriState canCamoSustainPlant(Direction side, BlockState plant)
+    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant)
     {
-        return getStateCache().getSolidityCheck(side).canSustainPlant(this, side, plant);
+        return getStateCache().getSolidityCheck(side).canSustainPlant(this, level, side, plant);
     }
 
     @Override
