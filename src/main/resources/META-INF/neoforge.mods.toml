@@ -91,9 +91,9 @@ license="LGPL v3"
     side="BOTH"
 
 [[dependencies.framedblocks]]
-    modId="supplementaries"
+    modId="amendments"
     type="optional"
-    versionRange="[${supplementaries_version},)"
+    versionRange="[${amendments_version},)"
     ordering="NONE"
     side="BOTH"
 

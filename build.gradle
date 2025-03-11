@@ -214,8 +214,8 @@ dependencies {
     //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${create_mc_version}:${flywheel_version}")
     //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    //compileOnly("curse.maven:moonlight-499980:${moonlight_coord}")
-    //compileOnly("curse.maven:supplementaries-412082:${supplementaries_coord}")
+    //runtimeOnly("curse.maven:moonlight-499980:${moonlight_coord}")
+    compileOnly("curse.maven:amendments-896746:${amendments_coord}")
 
     //implementation("curse.maven:guidebook-253874:${guidebook_coord}")
 
@@ -244,7 +244,7 @@ tasks.withType(ProcessResources).configureEach {
             buildinggadgets_version: buildinggadgets_version,
             atlasviewer_version: atlasviewer_version,
             modernfix_version: modernfix_version,
-            supplementaries_version: supplementaries_version,
+            amendments_version: amendments_version,
             athena_version: athena_version,
             create_version: create_version,
             guidebook_version: guidebook_version,

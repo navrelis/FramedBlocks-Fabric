@@ -24,7 +24,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.block.interactive.FramedFlowerPotBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
-import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
+import xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
@@ -39,8 +39,8 @@ public class FramedFlowerPotGeometry extends Geometry
 
     public FramedFlowerPotGeometry(GeometryFactory.Context ctx)
     {
-        this.hanging = SupplementariesCompat.isLoaded() && ctx.state().getValue(PropertyHolder.HANGING);
-        this.hangingPotModel = hanging ? ctx.modelLookup().get(SupplementariesCompat.Client.HANGING_MODEL_LOCATION) : null;
+        this.hanging = AmendmentsCompat.isLoaded() && ctx.state().getValue(PropertyHolder.HANGING);
+        this.hangingPotModel = hanging ? ctx.modelLookup().get(AmendmentsCompat.Client.HANGING_MODEL_LOCATION) : null;
     }
 
     @Override

@@ -87,7 +87,7 @@ import xfacthd.framedblocks.common.block.slopepanel.FramedDoubleSlopePanelBlock;
 import xfacthd.framedblocks.common.block.slopeslab.FramedDoubleSlopeSlabBlock;
 import xfacthd.framedblocks.common.block.slopeslab.FramedFlatDoubleSlopeSlabCornerBlock;
 import xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
-import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
+import xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
@@ -468,9 +468,9 @@ public final class FBClient
         event.register(FramedLanternGeometry.HANGING_CHAIN_LOCATION);
         event.register(ErrorModel.LOCATION);
 
-        if (SupplementariesCompat.isLoaded())
+        if (AmendmentsCompat.isLoaded())
         {
-            event.register(SupplementariesCompat.Client.HANGING_MODEL_LOCATION);
+            event.register(AmendmentsCompat.Client.HANGING_MODEL_LOCATION);
         }
 
         ModelWrappingManager.reset();
