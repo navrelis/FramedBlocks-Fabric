@@ -210,10 +210,17 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
     @Override
     protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData)
     {
-        if (auxData instanceof AdjustableDoubleBlockData blockData)
+        if (auxData instanceof AdjustableDoubleBlockData(int height))
         {
-            firstHeight = blockData.firstHeight();
+            firstHeight = height;
         }
+    }
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag)
+    {
+        super.removeComponentsFromTag(tag);
+        tag.remove("first_height");
     }
 
     @Override

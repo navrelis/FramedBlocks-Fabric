@@ -182,10 +182,17 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     @Override
     protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData)
     {
-        if (auxData instanceof CollapsibleCopycatBlockData blockData)
+        if (auxData instanceof CollapsibleCopycatBlockData(int offsets))
         {
-            packedOffsets = blockData.offsets();
+            packedOffsets = offsets;
         }
+    }
+
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag)
+    {
+        super.removeComponentsFromTag(tag);
+        tag.remove("offsets");
     }
 
     @Override

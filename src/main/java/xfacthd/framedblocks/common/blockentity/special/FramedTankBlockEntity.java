@@ -90,6 +90,13 @@ public class FramedTankBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public void removeComponentsFromTag(CompoundTag tag)
+    {
+        super.removeComponentsFromTag(tag);
+        tag.remove(TankFluidHandler.FLUID_NBT_KEY);
+    }
+
+    @Override
     protected void applyMiscComponents(DataComponentInput input)
     {
         FluidStack contents = input.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.EMPTY).copy();

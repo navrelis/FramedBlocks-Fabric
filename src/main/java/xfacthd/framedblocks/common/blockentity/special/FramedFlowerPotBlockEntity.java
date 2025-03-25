@@ -127,6 +127,13 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public void removeComponentsFromTag(CompoundTag tag)
+    {
+        super.removeComponentsFromTag(tag);
+        tag.remove("flower");
+    }
+
+    @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder)
     {
         if (hasFlowerBlock())

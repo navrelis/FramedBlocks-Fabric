@@ -291,12 +291,20 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     }
 
     @Override
+    public void removeComponentsFromTag(CompoundTag tag)
+    {
+        super.removeComponentsFromTag(tag);
+        tag.remove("offsets");
+        tag.remove("face");
+    }
+
+    @Override
     protected void applyAuxDataFromBlueprint(AuxBlueprintData<?> auxData)
     {
-        if (auxData instanceof CollapsibleBlockData blockData)
+        if (auxData instanceof CollapsibleBlockData(NullableDirection face, int offsets))
         {
-            collapsedFace = blockData.collapsedFace().toDirection();
-            packedOffsets = blockData.offsets();
+            collapsedFace = face.toDirection();
+            packedOffsets = offsets;
         }
     }
 
