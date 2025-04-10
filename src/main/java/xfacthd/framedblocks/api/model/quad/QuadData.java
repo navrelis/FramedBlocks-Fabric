@@ -120,7 +120,7 @@ public final class QuadData
     {
         int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
         int packedNormal = vertexData[offset];
-        vertexData[offset] = ((((byte) (val * 127F)) & 0xFF) << 8 * idx) | (packedNormal & ~(0x000000FF << (8 * idx)));
+        vertexData[offset] = ((((byte) Math.round(val * 127F)) & 0xFF) << 8 * idx) | (packedNormal & ~(0x000000FF << (8 * idx)));
     }
 
     public void normal(int vert, Vector3f vals)
@@ -128,9 +128,9 @@ public final class QuadData
         int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
         int packedNormal = vertexData[offset];
         vertexData[offset] =
-                (((byte) (vals.x * 127F)) & 0xFF) |
-                ((((byte) (vals.y * 127F)) & 0xFF) << 8) |
-                ((((byte) (vals.z * 127F)) & 0xFF) << 16) |
+                (((byte) Math.round(vals.x * 127F)) & 0xFF) |
+                ((((byte) Math.round(vals.y * 127F)) & 0xFF) << 8) |
+                ((((byte) Math.round(vals.z * 127F)) & 0xFF) << 16) |
                 (packedNormal & 0xFF000000);
     }
 
