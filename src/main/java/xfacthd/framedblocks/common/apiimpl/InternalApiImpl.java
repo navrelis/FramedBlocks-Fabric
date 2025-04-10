@@ -6,16 +6,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
+import xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;
 import xfacthd.framedblocks.api.shapes.ReloadableShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeCache;
 import xfacthd.framedblocks.common.data.appearance.AppearanceHelper;
 import xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
+import xfacthd.framedblocks.common.data.camo.block.rotator.BlockCamoRotators;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
@@ -67,5 +70,11 @@ public final class InternalApiImpl implements InternalAPI
     {
         Preconditions.checkState(!FMLEnvironment.production, "Reloading shapes is not supported in production");
         ShapeReloader.addProvider(provider);
+    }
+
+    @Override
+    public BlockCamoRotator getCamoRotator(Block block)
+    {
+        return BlockCamoRotators.get(block);
     }
 }

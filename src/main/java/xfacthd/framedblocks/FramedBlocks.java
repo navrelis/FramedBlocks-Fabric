@@ -11,6 +11,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.common.config.*;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
+import xfacthd.framedblocks.common.data.camo.block.rotator.BlockCamoRotators;
 import xfacthd.framedblocks.common.data.capabilities.CapabilitySetup;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
@@ -52,6 +53,7 @@ public final class FramedBlocks
         forgeBus.addListener(CullingUpdateTracker::onServerLevelTick);
         forgeBus.addListener(CullingUpdateTracker::onServerShutdown);
         forgeBus.addListener(FramingSawRecipeCache::onAddReloadListener);
+        forgeBus.addListener(BlockCamoRotators::onAddReloadListener);
 
         if (!FMLEnvironment.production)
         {
