@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model.slopeedge.legacy;
+package xfacthd.framedblocks.client.model.slopeedge;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
@@ -14,14 +14,14 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
-public class LegacyFramedSlopeEdgeGeometry extends Geometry
+public class FramedSlopeEdgeGeometry extends Geometry
 {
     private final Direction dir;
     private final SlopeType type;
     private final boolean altType;
     private final boolean ySlope;
 
-    public LegacyFramedSlopeEdgeGeometry(GeometryFactory.Context ctx)
+    public FramedSlopeEdgeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.SLOPE_TYPE);
