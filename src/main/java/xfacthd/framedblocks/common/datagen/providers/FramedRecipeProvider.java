@@ -14,6 +14,7 @@ import net.neoforged.neoforge.common.Tags;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
+import xfacthd.framedblocks.common.crafting.ShapeRotationRecipeBuilder;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapedRecipeBuilder;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapelessRecipeBuilder;
 
@@ -1546,16 +1547,16 @@ public final class FramedRecipeProvider extends RecipeProvider
         String secondName = Utils.getKeyOrThrow(second).location().getPath();
 
         String name = firstName + "_rotate_to_" + secondName;
-        shapelessBuildingBlock(second.value())
-                .requires(first.value())
-                .requires(FBContent.ITEM_FRAMED_WRENCH.value())
+        new ShapeRotationRecipeBuilder(second.value())
+                .tool(Ingredient.of(Utils.TOOL_WRENCH))
+                .block(first.value())
                 .unlockedBy(first)
                 .save(consumer, Utils.rl(name));
 
         name = secondName + "_rotate_to_" + firstName;
-        shapelessBuildingBlock(first.value())
-                .requires(second.value())
-                .requires(FBContent.ITEM_FRAMED_WRENCH.value())
+        new ShapeRotationRecipeBuilder(first.value())
+                .tool(Ingredient.of(Utils.TOOL_WRENCH))
+                .block(second.value())
                 .unlockedBy(second)
                 .save(consumer, Utils.rl(name));
     }

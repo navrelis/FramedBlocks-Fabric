@@ -633,6 +633,10 @@ public final class FBContent
             "jei_camo",
             JeiCamoApplicationRecipeSerializer::new
     );
+    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_SHAPE_ROTATION = RECIPE_SERIALIZERS.register(
+            "rotate_shape",
+            ShapeRotationRecipe.Serializer::new
+    );
     // endregion
 
     // region CreativeModeTabs

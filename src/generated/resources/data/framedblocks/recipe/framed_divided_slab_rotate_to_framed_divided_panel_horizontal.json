@@ -1,16 +1,13 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "building",
-  "ingredients": [
-    {
-      "item": "framedblocks:framed_divided_slab"
-    },
-    {
-      "item": "framedblocks:framed_wrench"
-    }
-  ],
+  "type": "framedblocks:rotate_shape",
+  "block": {
+    "item": "framedblocks:framed_divided_slab"
+  },
   "result": {
     "count": 1,
     "id": "framedblocks:framed_divided_panel_horizontal"
+  },
+  "tool": {
+    "tag": "c:tools/wrench"
   }
 }

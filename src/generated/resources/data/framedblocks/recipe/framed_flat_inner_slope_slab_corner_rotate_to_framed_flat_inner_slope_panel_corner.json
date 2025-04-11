@@ -1,16 +1,13 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "building",
-  "ingredients": [
-    {
-      "item": "framedblocks:framed_flat_inner_slope_slab_corner"
-    },
-    {
-      "item": "framedblocks:framed_wrench"
-    }
-  ],
+  "type": "framedblocks:rotate_shape",
+  "block": {
+    "item": "framedblocks:framed_flat_inner_slope_slab_corner"
+  },
   "result": {
     "count": 1,
     "id": "framedblocks:framed_flat_inner_slope_panel_corner"
+  },
+  "tool": {
+    "tag": "c:tools/wrench"
   }
 }
