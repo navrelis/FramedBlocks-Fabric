@@ -1,7 +1,11 @@
 package xfacthd.framedblocks.common.crafting;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -16,6 +20,18 @@ import java.util.*;
 
 public final class CamoApplicationRecipe extends CustomRecipe
 {
+    public static final MapCodec<CamoApplicationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(CamoApplicationRecipe::category),
+            Ingredient.CODEC_NONEMPTY.fieldOf("copy_tool").forGetter(CamoApplicationRecipe::getCopyTool)
+    ).apply(inst, CamoApplicationRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, CamoApplicationRecipe> STREAM_CODEC = StreamCodec.composite(
+            CraftingBookCategory.STREAM_CODEC,
+            CamoApplicationRecipe::category,
+            Ingredient.CONTENTS_STREAM_CODEC,
+            CamoApplicationRecipe::getCopyTool,
+            CamoApplicationRecipe::new
+    );
+
     private final Ingredient copyTool;
 
     public CamoApplicationRecipe(CraftingBookCategory category, Ingredient copyTool)

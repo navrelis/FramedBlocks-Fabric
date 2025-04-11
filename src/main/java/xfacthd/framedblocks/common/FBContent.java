@@ -66,8 +66,10 @@ import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopeslab.*;
 import xfacthd.framedblocks.common.blockentity.special.*;
-import xfacthd.framedblocks.common.compat.jei.camo.JeiCamoApplicationRecipeSerializer;
-import xfacthd.framedblocks.common.crafting.*;
+import xfacthd.framedblocks.common.compat.jei.camo.JeiCamoApplicationRecipe;
+import xfacthd.framedblocks.common.crafting.CamoApplicationRecipe;
+import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
+import xfacthd.framedblocks.common.crafting.ShapeRotationRecipe;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.blueprint.auxdata.DoorAuxBlueprintData;
 import xfacthd.framedblocks.common.data.camo.block.BlockCamoContainerFactory;
@@ -95,8 +97,8 @@ public final class FBContent
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FramedConstants.MOD_ID);
     private static final DeferredBlockEntityRegister BE_TYPES = DeferredBlockEntityRegister.create(FramedConstants.MOD_ID);
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, FramedConstants.MOD_ID);
-    private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, FramedConstants.MOD_ID);
-    private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, FramedConstants.MOD_ID);
+    private static final DeferredRecipeTypeRegister RECIPE_TYPES = DeferredRecipeTypeRegister.create(FramedConstants.MOD_ID);
+    private static final DeferredRecipeSerializerRegister RECIPE_SERIALIZERS = DeferredRecipeSerializerRegister.create(FramedConstants.MOD_ID);
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FramedConstants.MOD_ID);
     private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, FramedConstants.MOD_ID);
     private static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, FramedConstants.MOD_ID);
@@ -621,21 +623,17 @@ public final class FBContent
     // endregion
 
     // region RecipeSerializers
-    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_FRAMING_SAW_RECIPE = RECIPE_SERIALIZERS.register(
-            "frame",
-            FramingSawRecipeSerializer::new
+    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_FRAMING_SAW_RECIPE = registerRecipeSerializer(
+            "frame", FramingSawRecipe.CODEC, FramingSawRecipe.STREAM_CODEC
     );
-    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_APPLY_CAMO = RECIPE_SERIALIZERS.register(
-            "apply_camo",
-            CamoApplicationRecipeSerializer::new
+    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_APPLY_CAMO = registerRecipeSerializer(
+            "apply_camo", CamoApplicationRecipe.CODEC, CamoApplicationRecipe.STREAM_CODEC
     );
-    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_JEI_CAMO = RECIPE_SERIALIZERS.register(
-            "jei_camo",
-            JeiCamoApplicationRecipeSerializer::new
+    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_JEI_CAMO = registerRecipeSerializer(
+            "jei_camo", JeiCamoApplicationRecipe.CODEC, JeiCamoApplicationRecipe.STREAM_CODEC
     );
-    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_SHAPE_ROTATION = RECIPE_SERIALIZERS.register(
-            "rotate_shape",
-            ShapeRotationRecipe.Serializer::new
+    public static final Holder<RecipeSerializer<?>> RECIPE_SERIALIZER_SHAPE_ROTATION = registerRecipeSerializer(
+            "rotate_shape", ShapeRotationRecipe.CODEC, ShapeRotationRecipe.STREAM_CODEC
     );
     // endregion
 
@@ -866,9 +864,16 @@ public final class FBContent
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static <T extends Recipe<?>> DeferredHolder<RecipeType<?>, RecipeType<T>> registerRecipeType(String name)
+    private static <T extends Recipe<?>> DeferredRecipeType<T> registerRecipeType(String name)
     {
-        return RECIPE_TYPES.register(name, () -> RecipeType.simple(Utils.rl(name)));
+        return RECIPE_TYPES.registerRecipeType(name);
+    }
+
+    private static <T extends Recipe<?>> DeferredRecipeSerializer<T> registerRecipeSerializer(
+            String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec
+    )
+    {
+        return RECIPE_SERIALIZERS.registerRecipeSerializer(name, codec, streamCodec);
     }
 
     @SuppressWarnings("SameParameterValue")

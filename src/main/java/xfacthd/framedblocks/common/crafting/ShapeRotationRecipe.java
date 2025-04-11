@@ -67,21 +67,4 @@ public final class ShapeRotationRecipe extends ShapelessRecipe
     {
         return (RecipeSerializer<ShapelessRecipe>) FBContent.RECIPE_SERIALIZER_SHAPE_ROTATION.value();
     }
-
-
-
-    public static final class Serializer implements RecipeSerializer<ShapeRotationRecipe>
-    {
-        @Override
-        public MapCodec<ShapeRotationRecipe> codec()
-        {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ShapeRotationRecipe> streamCodec()
-        {
-            return STREAM_CODEC;
-        }
-    }
 }
