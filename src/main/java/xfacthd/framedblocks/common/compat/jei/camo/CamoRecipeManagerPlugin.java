@@ -204,7 +204,7 @@ public final class CamoRecipeManagerPlugin implements ISimpleRecipeManagerPlugin
         String camoTwoId = mapStackOrTag(camoTwo, List.of(
                 Pair.of(JeiConstants.CAMO_BLOCK_EXAMPLES_TAG, "examples")
         ));
-        return Utils.rl("camo_application/jei_generated/" + frameId + "/" + camoOneId + "/" + camoTwoId);
+        return Utils.rl("/camo_application/jei_generated/" + frameId + "/" + camoOneId + "/" + camoTwoId);
     }
 
     private static String mapStackOrTag(Either<ItemStack, TagKey<Item>> value, List<Pair<TagKey<Item>, String>> converters)
