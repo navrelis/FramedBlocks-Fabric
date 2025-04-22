@@ -17,13 +17,17 @@ import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.IPillarLikeBlock;
+import xfacthd.framedblocks.common.block.slope.FramedConnectingPyramidBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.property.PillarConnection;
 
 import java.util.function.BiPredicate;
 
-public class FramedLatticeBlock extends FramedBlock
+public class FramedLatticeBlock extends FramedBlock implements IPillarLikeBlock
 {
     private final BiPredicate<Direction, BlockState> connectionTest;
+    private final PillarConnection pillarConnection;
 
     public FramedLatticeBlock(BlockType type)
     {
@@ -39,6 +43,12 @@ public class FramedLatticeBlock extends FramedBlock
             case FRAMED_LATTICE_BLOCK -> FramedLatticeBlock::canConnectThin;
             case FRAMED_THICK_LATTICE -> FramedLatticeBlock::canConnectThick;
             default -> throw new IllegalArgumentException("Unexpected lattice type: " + type);
+        };
+        this.pillarConnection = switch (type)
+        {
+            case FRAMED_LATTICE_BLOCK -> PillarConnection.POST;
+            case FRAMED_THICK_LATTICE -> PillarConnection.PILLAR;
+            default -> throw new IllegalArgumentException("Unexpected BlockType in FramedLatticeBlock: " + type);
         };
     }
 
@@ -110,7 +120,15 @@ public class FramedLatticeBlock extends FramedBlock
 
     private boolean canConnectTo(BlockState state, Direction side)
     {
-        return state.is(this) || connectionTest.test(side, state);
+        if (state.is(this) || connectionTest.test(side, state))
+        {
+            return true;
+        }
+        if (state.getBlock() instanceof FramedConnectingPyramidBlock)
+        {
+            return state.getValue(BlockStateProperties.FACING) == side.getOpposite();
+        }
+        return false;
     }
 
     @Override
@@ -151,6 +169,12 @@ public class FramedLatticeBlock extends FramedBlock
                 .setValue(FramedProperties.X_AXIS, true)
                 .setValue(FramedProperties.Y_AXIS, true)
                 .setValue(FramedProperties.Z_AXIS, true);
+    }
+
+    @Override
+    public PillarConnection getPillarConnection(BlockState state, Direction side)
+    {
+        return state.getValue(getPropFromAxis(side)) ? pillarConnection : PillarConnection.NONE;
     }
 
 

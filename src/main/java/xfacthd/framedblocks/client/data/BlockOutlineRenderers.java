@@ -86,8 +86,8 @@ public final class BlockOutlineRenderers
         event.register(BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W, new ExtendedCornerSlopePanelWallOutlineRenderer());
         event.register(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, new ExtendedInnerCornerSlopePanelOutlineRenderer());
         event.register(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W, new ExtendedInnerCornerSlopePanelWallOutlineRenderer());
-        event.register(BlockType.FRAMED_PYRAMID, new PyramidOutlineRenderer(false));
-        event.register(BlockType.FRAMED_PYRAMID_SLAB, new PyramidOutlineRenderer(true));
+        event.register(BlockType.FRAMED_PYRAMID, new PyramidOutlineRenderer());
+        event.register(BlockType.FRAMED_PYRAMID_SLAB, new PyramidSlabOutlineRenderer());
         event.register(BlockType.FRAMED_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_GLOWING_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
     }

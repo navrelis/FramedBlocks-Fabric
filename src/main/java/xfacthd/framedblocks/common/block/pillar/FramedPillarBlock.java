@@ -10,13 +10,23 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.IPillarLikeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.property.PillarConnection;
 
-public class FramedPillarBlock extends FramedBlock
+public class FramedPillarBlock extends FramedBlock implements IPillarLikeBlock
 {
+    private final PillarConnection pillarConnection;
+
     public FramedPillarBlock(BlockType blockType)
     {
         super(blockType);
+        this.pillarConnection = switch (blockType)
+        {
+            case FRAMED_POST -> PillarConnection.POST;
+            case FRAMED_PILLAR -> PillarConnection.PILLAR;
+            default -> throw new IllegalArgumentException("Unexpected BlockType in FramedPillarBlock: " + blockType);
+        };
     }
 
     @Override
@@ -69,5 +79,11 @@ public class FramedPillarBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+    }
+
+    @Override
+    public PillarConnection getPillarConnection(BlockState state, Direction side)
+    {
+        return side.getAxis() == state.getValue(BlockStateProperties.AXIS) ? pillarConnection : PillarConnection.NONE;
     }
 }

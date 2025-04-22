@@ -3,7 +3,9 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
@@ -12,14 +14,19 @@ import xfacthd.framedblocks.common.data.property.*;
 
 public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPlacementStateBuilder>
 {
-    private ExtPlacementStateBuilder(Block block, BlockPlaceContext ctx)
+    private ExtPlacementStateBuilder(Block block, @Nullable BlockState state, BlockPlaceContext ctx)
     {
-        super(block, ctx);
+        super(block, state, ctx);
     }
 
     public static ExtPlacementStateBuilder of(Block block, BlockPlaceContext ctx)
     {
-        return new ExtPlacementStateBuilder(block, ctx);
+        return of(block, block.defaultBlockState(), ctx);
+    }
+
+    public static ExtPlacementStateBuilder of(Block block, @Nullable BlockState state, BlockPlaceContext ctx)
+    {
+        return new ExtPlacementStateBuilder(block, state, ctx);
     }
 
     public ExtPlacementStateBuilder withRight()

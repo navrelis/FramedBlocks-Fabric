@@ -15,6 +15,8 @@ import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
 import xfacthd.framedblocks.client.model.slopeslab.FramedSlopeSlabGeometry;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.PillarConnection;
 
 public class FramedPyramidGeometry extends Geometry
 {
@@ -24,11 +26,45 @@ public class FramedPyramidGeometry extends Geometry
 
     private final Direction facing;
     private final boolean ySlope;
+    private final boolean hasPillar;
+    private final float slopeHeight;
+    private final float pillarHeight;
+    private final float pillarWidth;
+    private final float pillarFaceMin;
+    private final float pillarFaceMax;
 
     public FramedPyramidGeometry(GeometryFactory.Context ctx)
     {
         this.facing = ctx.state().getValue(BlockStateProperties.FACING);
         this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
+        PillarConnection pillar = ctx.state().getValue(PropertyHolder.PILLAR_CONNECTION);
+        this.hasPillar = pillar != PillarConnection.NONE;
+        this.slopeHeight = switch (pillar)
+        {
+            case NONE -> 1F;
+            case POST -> 12F/16F;
+            case PILLAR -> 8F/16F;
+        };
+        this.pillarHeight = switch (pillar)
+        {
+            case NONE -> 0F;
+            case POST -> 4F/16F;
+            case PILLAR -> 8F/16F;
+        };
+        this.pillarWidth = switch (pillar)
+        {
+            case NONE -> 0F;
+            case POST -> 10F/16F;
+            case PILLAR -> 12F/16F;
+        };
+        float pillarFaceRadius = switch (pillar)
+        {
+            case NONE -> 0F;
+            case POST -> 2F/16F;
+            case PILLAR -> 4F/16F;
+        };
+        this.pillarFaceMin = .5F - pillarFaceRadius;
+        this.pillarFaceMax = .5F + pillarFaceRadius;
     }
 
     @Override
@@ -41,6 +77,7 @@ public class FramedPyramidGeometry extends Geometry
             if (!ySlope && quadDir.getAxis() != facing.getAxis())
             {
                 QuadModifier.of(quad)
+                        .applyIf(Modifiers.cutSideUpDown(!up, slopeHeight), hasPillar)
                         .apply(Modifiers.cutSideLeftRight(false, up ? .5F : 1, up ? 1 : .5F))
                         .apply(Modifiers.cutSideLeftRight(true, up ? .5F : 1, up ? 1 : .5F))
                         .apply(Modifiers.makeVerticalSlope(up, FramedSlopePanelGeometry.SLOPE_ANGLE))
@@ -57,10 +94,28 @@ public class FramedPyramidGeometry extends Geometry
                     Vector3f origin = up ? TOP_CENTER : BOTTOM_CENTER;
 
                     QuadModifier.of(quad)
+                            .applyIf(Modifiers.cutTopBottom(dir, slopeHeight), hasPillar)
                             .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F, 1))
                             .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1, .5F))
                             .apply(Modifiers.offset(dir.getOpposite(), .5F))
                             .apply(Modifiers.rotate(dir.getClockWise().getAxis(), origin, angle, true))
+                            .export(quadMap.get(null));
+                }
+            }
+            if (hasPillar)
+            {
+                if (quadDir == facing)
+                {
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutTopBottom(pillarFaceMin, pillarFaceMin, pillarFaceMax, pillarFaceMax))
+                            .export(quadMap.get(quadDir));
+                }
+                else if (quadDir != facing.getOpposite())
+                {
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutSideUpDown(facing == Direction.UP, pillarHeight))
+                            .apply(Modifiers.cutSideLeftRight(pillarWidth))
+                            .apply(Modifiers.setPosition(pillarWidth))
                             .export(quadMap.get(null));
                 }
             }
@@ -70,6 +125,7 @@ public class FramedPyramidGeometry extends Geometry
             if (!ySlope && quadDir.getAxis() == facing.getAxis())
             {
                 QuadModifier.of(quad)
+                        .applyIf(Modifiers.cutSideUpDown(true, slopeHeight), hasPillar)
                         .apply(Modifiers.cutSideLeftRight(facing.getClockWise(), 1, .5F))
                         .apply(Modifiers.cutSideLeftRight(facing.getCounterClockWise(), 1, .5F))
                         .apply(Modifiers.makeVerticalSlope(true, FramedSlopeSlabGeometry.SLOPE_ANGLE))
@@ -77,6 +133,7 @@ public class FramedPyramidGeometry extends Geometry
                         .export(quadMap.get(null));
 
                 QuadModifier.of(quad)
+                        .applyIf(Modifiers.cutSideUpDown(false, slopeHeight), hasPillar)
                         .apply(Modifiers.cutSideLeftRight(facing.getClockWise(), .5F, 1))
                         .apply(Modifiers.cutSideLeftRight(facing.getCounterClockWise(), .5F, 1))
                         .apply(Modifiers.makeVerticalSlope(false, FramedSlopeSlabGeometry.SLOPE_ANGLE))
@@ -100,6 +157,7 @@ public class FramedPyramidGeometry extends Geometry
                 }
 
                 QuadModifier.of(quad)
+                        .applyIf(Modifiers.cutTopBottom(facing, slopeHeight), hasPillar)
                         .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), .5F, 1))
                         .apply(Modifiers.cutTopBottom(facing.getClockWise(), 1, .5F))
                         .apply(Modifiers.rotate(facing.getClockWise().getAxis(), origin, angle, true))
@@ -109,10 +167,37 @@ public class FramedPyramidGeometry extends Geometry
             {
                 boolean right = quadDir == facing.getClockWise();
                 QuadModifier.of(quad)
+                        .applyIf(Modifiers.cutSideLeftRight(facing, slopeHeight), hasPillar)
                         .apply(Modifiers.cutSideUpDown(true, right ? 1 : .5F, right ? .5F : 1))
                         .apply(Modifiers.cutSideUpDown(false, right ? 1 : .5F, right ? .5F : 1))
                         .apply(Modifiers.makeHorizontalSlope(!right, FramedSlopePanelGeometry.SLOPE_ANGLE))
                         .export(quadMap.get(null));
+            }
+
+            if (hasPillar)
+            {
+                if (Utils.isY(quadDir))
+                {
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutTopBottom(facing.getOpposite(), pillarHeight))
+                            .apply(Modifiers.cutTopBottom(facing.getClockWise().getAxis(), pillarWidth))
+                            .apply(Modifiers.setPosition(pillarWidth))
+                            .export(quadMap.get(null));
+                }
+                else if (quadDir == facing)
+                {
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutSide(pillarFaceMin, pillarFaceMin, pillarFaceMax, pillarFaceMax))
+                            .export(quadMap.get(quadDir));
+                }
+                else if (quadDir != facing.getOpposite())
+                {
+                    QuadModifier.of(quad)
+                            .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), pillarHeight))
+                            .apply(Modifiers.cutSideUpDown(pillarWidth))
+                            .apply(Modifiers.setPosition(pillarWidth))
+                            .export(quadMap.get(null));
+                }
             }
         }
     }

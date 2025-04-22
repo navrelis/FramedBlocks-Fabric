@@ -9,7 +9,10 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.PillarConnection;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
+import xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
 
 /**
  This class is machine-generated, any manual changes to this class will be overwritten.
@@ -36,6 +39,9 @@ public final class WallSkipPredicate implements SideSkipPredicate
                         up, adjState, side
                 );
                 case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(
+                        up, adjState, side
+                );
+                case FRAMED_PYRAMID -> testAgainstPyramid(
                         up, adjState, side
                 );
                 default -> false;
@@ -82,5 +88,16 @@ public final class WallSkipPredicate implements SideSkipPredicate
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         return (PillarDirs.Wall.isPillarDir(up, side) && PillarDirs.HalfPillar.isPillarDir(adjDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_PYRAMID)
+    private static boolean testAgainstPyramid(
+            boolean up, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
+
+        return (PillarDirs.Wall.isPillarDir(up, side) && SlopeDirs.Pyramid.isPillarDir(adjDir, adjConnection, side.getOpposite()));
     }
 }

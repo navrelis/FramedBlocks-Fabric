@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.data.skippreds.slope;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerType;
+import xfacthd.framedblocks.common.data.property.PillarConnection;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.skippreds.HalfDir;
 import xfacthd.framedblocks.common.data.skippreds.TriangleDir;
@@ -235,8 +236,7 @@ public final class SlopeDirs
         private InnerThreewayCorner() { }
     }
 
-    // TODO: re-enable when the pyramid can connect
-    /*public static final class Pyramid
+    public static final class Pyramid
     {
         public static boolean testEarlyExit(Direction dir, PillarConnection connection, Direction side)
         {
@@ -257,7 +257,7 @@ public final class SlopeDirs
     }
 
     // TODO: re-enable when the elevated pyramid slab is added
-    public static final class ElevatedPyramidSlab
+    /*public static final class ElevatedPyramidSlab
     {
         public static boolean isPostDir(Direction dir, PillarConnection connection, Direction side)
         {

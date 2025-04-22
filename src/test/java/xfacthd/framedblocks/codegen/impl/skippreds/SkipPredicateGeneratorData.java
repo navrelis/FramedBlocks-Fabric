@@ -622,7 +622,7 @@ final class SkipPredicateGeneratorData
                     ),
             entry("FRAMED_GLOWING_CUBE", "cube"),
             entry("FRAMED_PYRAMID", "slope")
-                    /*.props(
+                    .props(
                             Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE)
                                     .withEarlyExit(),
                             Property.internal("PillarConnection", "connection", "PILLAR_CONNECTION", PropType.CUSTOM)
@@ -633,9 +633,9 @@ final class SkipPredicateGeneratorData
                                     .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB"),
                             new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")
                                     .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB")
-                    )*/,
+                    ),
             entry("FRAMED_PYRAMID_SLAB", "slope"),
-            // TODO: re-enable when the elevated pyramid slab is added (see also above)
+            // TODO: re-enable when the elevated pyramid slab is added
             /*entry("FRAMED_ELEVATED_PYRAMID_SLAB", "slope")
                     .props(
                             Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE),

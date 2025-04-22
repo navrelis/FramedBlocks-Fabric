@@ -22,16 +22,30 @@ public class PlacementStateBuilder<T extends PlacementStateBuilder<T>>
     @Nullable
     protected BlockState state;
 
+    /**
+     * @deprecated Use {@link #PlacementStateBuilder(Block, BlockState, BlockPlaceContext)}} instead
+     */
+    @Deprecated(forRemoval = true)
     protected PlacementStateBuilder(Block block, BlockPlaceContext ctx)
+    {
+        this(block, block.defaultBlockState(), ctx);
+    }
+
+    protected PlacementStateBuilder(Block block, @Nullable BlockState state, BlockPlaceContext ctx)
     {
         this.block = block;
         this.ctx = ctx;
-        this.state = block.defaultBlockState();
+        this.state = state;
     }
 
     public static PlacementStateBuilder<?> of(Block block, BlockPlaceContext ctx)
     {
-        return new PlacementStateBuilder<>(block, ctx);
+        return of(block, block.defaultBlockState(), ctx);
+    }
+
+    public static PlacementStateBuilder<?> of(Block block, @Nullable BlockState state, BlockPlaceContext ctx)
+    {
+        return new PlacementStateBuilder<>(block, state, ctx);
     }
 
     /**
