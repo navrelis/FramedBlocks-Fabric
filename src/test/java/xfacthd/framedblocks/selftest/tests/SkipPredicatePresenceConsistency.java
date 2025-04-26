@@ -27,7 +27,7 @@ public final class SkipPredicatePresenceConsistency
             }
 
             Method[] methods = clazz.getDeclaredMethods();
-            Test test = new Test(clazz.getSimpleName(), EnumSet.noneOf(BlockType.class), EnumSet.noneOf(BlockType.class));
+            Test test = new Test(clazz.getSimpleName(), cullTest.noSelfTest(), EnumSet.noneOf(BlockType.class), EnumSet.noneOf(BlockType.class));
             for (Method mth : methods)
             {
                 CullTest.TestTarget target = mth.getAnnotation(CullTest.TestTarget.class);
@@ -56,7 +56,7 @@ public final class SkipPredicatePresenceConsistency
 
         TESTS.forEach((type, test) ->
         {
-            if (!test.targets.contains(type))
+            if (!test.noSelfTest && !test.targets.contains(type))
             {
                 reporter.warn("Type '{}' is missing a test against itself", type);
             }
@@ -112,7 +112,7 @@ public final class SkipPredicatePresenceConsistency
 
 
 
-    public record Test(String clazzName, Set<BlockType> targets, Set<BlockType> oneWayTargets) { }
+    public record Test(String clazzName, boolean noSelfTest, Set<BlockType> targets, Set<BlockType> oneWayTargets) { }
 
 
 

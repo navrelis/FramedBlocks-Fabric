@@ -13,6 +13,8 @@ public @interface CullTest
      */
     BlockType[] value();
 
+    boolean noSelfTest() default false;
+
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
     @interface TestTarget
