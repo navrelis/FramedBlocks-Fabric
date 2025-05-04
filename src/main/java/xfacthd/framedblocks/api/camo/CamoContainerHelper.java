@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
+import xfacthd.framedblocks.api.util.network.ValidatingDecoder;
 
 public final class CamoContainerHelper
 {
@@ -32,7 +33,8 @@ public final class CamoContainerHelper
     public static final Codec<CamoContainer<?, ?>> CODEC = REGISTRY.byNameCodec()
             .dispatch(CamoContainer::getFactory, CamoContainerFactory::codec);
     public static final StreamCodec<RegistryFriendlyByteBuf, CamoContainer<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(REGISTRY.key())
-            .dispatch(CamoContainer::getFactory, CamoContainerFactory::streamCodec);
+            .<CamoContainer<?, ?>>dispatch(CamoContainer::getFactory, CamoContainerFactory::streamCodec)
+            .apply(ValidatingDecoder.of(CamoContainerHelper::validateFromNetwork));
 
     /**
      * Save the given {@link CamoContainer} to a {@link CompoundTag} for saving to disk
@@ -93,7 +95,12 @@ public final class CamoContainerHelper
             LOGGER.error("Received unknown CamoContainer with ID {} from network, dropping!", id);
             return EmptyCamoContainer.EMPTY;
         }
-        return factory.readFromNetwork(tag);
+        return validateFromNetwork(factory.readFromNetwork(tag));
+    }
+
+    private static CamoContainer<?, ?> validateFromNetwork(CamoContainer<?, ?> container)
+    {
+        return validateCamo(container) ? container : EmptyCamoContainer.EMPTY;
     }
 
     /**
