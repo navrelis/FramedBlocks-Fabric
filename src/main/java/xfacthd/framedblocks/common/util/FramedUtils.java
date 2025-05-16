@@ -130,6 +130,11 @@ public final class FramedUtils
         }
     }
 
+    public static boolean hasProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property)
+    {
+        return ((AccessorStateDefinitionBuilder) builder).framedblocks$getProperties().containsKey(property.getName());
+    }
+
     public static void removeProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property)
     {
         Map<String, Property<?>> properties = ((AccessorStateDefinitionBuilder) builder).framedblocks$getProperties();

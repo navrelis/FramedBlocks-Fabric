@@ -5,7 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedWaterloggableWeightedPressurePlateBlock extends FramedWeightedPressurePlateBlock implements SimpleWaterloggedBlock
 {
@@ -29,7 +31,11 @@ public class FramedWaterloggableWeightedPressurePlateBlock extends FramedWeighte
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.WATERLOGGED);
+        if (!FramedUtils.hasProperty(builder, BlockStateProperties.WATERLOGGED))
+        {
+            // Some mods unconditionally add the WATERLOGGED property to pressure plates and FramedBlocks gets blamed...
+            builder.add(BlockStateProperties.WATERLOGGED);
+        }
     }
 
     @Override
