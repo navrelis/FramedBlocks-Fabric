@@ -2,14 +2,13 @@ package xfacthd.framedblocks.api.block.cache;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Cache for constant metadata related to a specific {@link BlockState}.
@@ -23,18 +22,15 @@ public class StateCache
     protected static final int DIR_COUNT_N = DIR_COUNT + 1;
     public static final StateCache EMPTY = new StateCache();
 
-    private final boolean anyFullFace;
-    private final boolean[] fullFace;
-    private final boolean[] conFullEdge;
-    private final boolean[] conDetailed;
+    private final byte fullFace;
+    private final long conFullEdge;
+    private final long conDetailed;
 
     public StateCache(BlockState state, IBlockType type)
     {
-        boolean anyFullFace = false;
-        boolean anyConDetailed = false;
-        boolean[] fullFace = new boolean[DIR_COUNT];
-        boolean[] conFullEdge = new boolean[DIR_COUNT * DIR_COUNT_N];
-        boolean[] conDetailed = new boolean[DIR_COUNT * DIR_COUNT];
+        byte fullFace = 0;
+        long conFullEdge = 0;
+        long conDetailed = 0;
 
         FullFacePredicate facePred = type.getFullFacePredicate();
         ConnectionPredicate conPred = type.getConnectionPredicate();
@@ -42,77 +38,83 @@ public class StateCache
 
         for (Direction side : DIRECTIONS)
         {
-            int sideOrd = side.ordinal();
-
-            boolean full = facePred.test(state, side);
-            anyFullFace |= full;
-            fullFace[sideOrd] = full;
+            if (facePred.test(state, side))
+            {
+                fullFace |= (byte) (1 << side.ordinal());
+            }
 
             if (!supportsCt)
             {
                 continue;
             }
 
-            int feNullIdx = sideOrd * DIR_COUNT_N + Utils.maskNullDirection(null);
-            conFullEdge[feNullIdx] = conPred.canConnectFullEdge(state, side, null);
+            boolean fullEdgeNull = conPred.canConnectFullEdge(state, side, null);
+            if (fullEdgeNull)
+            {
+                conFullEdge |= getSideEdgeNullableMask(side, null);
+            }
 
             for (Direction edge : DIRECTIONS)
             {
-                int feIdx = sideOrd * DIR_COUNT_N + Utils.maskNullDirection(edge);
+                long feMask = getSideEdgeNullableMask(side, edge);
                 if (edge.getAxis() == side.getAxis())
                 {
-                    conFullEdge[feIdx] = conFullEdge[feNullIdx];
+                    if (fullEdgeNull)
+                    {
+                        conFullEdge |= feMask;
+                    }
                     continue;
                 }
 
-                conFullEdge[feIdx] = conPred.canConnectFullEdge(state, side, edge);
+                if (conPred.canConnectFullEdge(state, side, edge))
+                {
+                    conFullEdge |= feMask;
+                }
 
-                boolean detailed = conPred.canConnectDetailed(state, side, edge);
-                anyConDetailed |= detailed;
-                int dIdx = sideOrd * DIR_COUNT + edge.ordinal();
-                conDetailed[dIdx] = detailed;
+                if (conPred.canConnectDetailed(state, side, edge))
+                {
+                    conDetailed |= getSideEdgeMask(side, edge);
+                }
             }
         }
 
-        this.anyFullFace = anyFullFace;
-        this.fullFace = anyFullFace ? fullFace : null;
-        this.conFullEdge = supportsCt ? conFullEdge : null;
-        this.conDetailed = anyConDetailed ? conDetailed : null;
+        this.fullFace = fullFace;
+        this.conFullEdge = conFullEdge;
+        this.conDetailed = conDetailed;
     }
 
     private StateCache()
     {
-        this.anyFullFace = false;
-        this.fullFace = null;
-        this.conFullEdge = null;
-        this.conDetailed = null;
+        this.fullFace = 0;
+        this.conFullEdge = 0;
+        this.conDetailed = 0;
     }
 
     public final boolean hasAnyFullFace()
     {
-        return anyFullFace;
+        return fullFace != 0;
     }
 
     public final boolean isFullFace(@Nullable Direction side)
     {
-        return side != null && anyFullFace && fullFace[side.ordinal()];
+        return side != null && fullFace != 0 && (fullFace & (1 << side.ordinal())) != 0;
     }
 
     public final boolean canConnectFullEdge(Direction side, @Nullable Direction edge)
     {
-        return conFullEdge != null && conFullEdge[side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge)];
+        return conFullEdge != 0 && (conFullEdge & getSideEdgeNullableMask(side, edge)) != 0;
     }
 
     public final boolean canConnectDetailed(Direction side, Direction edge)
     {
-        return conDetailed != null && conDetailed[side.ordinal() * DIR_COUNT + edge.ordinal()];
+        return conDetailed != 0 && (conDetailed & getSideEdgeMask(side, edge)) != 0;
     }
 
     @VisibleForTesting
     @ApiStatus.Internal
     public final boolean hasAnyDetailedConnections()
     {
-        return conDetailed != null;
+        return conDetailed != 0;
     }
 
     @Override
@@ -127,19 +129,25 @@ public class StateCache
             return false;
         }
         StateCache that = (StateCache) other;
-        return anyFullFace == that.anyFullFace &&
-                Arrays.equals(fullFace, that.fullFace) &&
-                Arrays.equals(conFullEdge, that.conFullEdge) &&
-                Arrays.equals(conDetailed, that.conDetailed);
+        return fullFace == that.fullFace && conFullEdge == that.conFullEdge && conDetailed == that.conDetailed;
     }
 
     @Override
     public int hashCode()
     {
-        int result = Objects.hashCode(anyFullFace);
-        result = 31 * result + Arrays.hashCode(fullFace);
-        result = 31 * result + Arrays.hashCode(conFullEdge);
-        result = 31 * result + Arrays.hashCode(conDetailed);
+        int result = Byte.hashCode(fullFace);
+        result = 31 * result + Long.hashCode(conFullEdge);
+        result = 31 * result + Long.hashCode(conDetailed);
         return result;
+    }
+
+    protected static long getSideEdgeNullableMask(Direction side, @Nullable Direction edge)
+    {
+        return 1L << (side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge));
+    }
+
+    protected static long getSideEdgeMask(Direction side, Direction edge)
+    {
+        return 1L << (side.ordinal() * DIR_COUNT + edge.ordinal());
     }
 }
