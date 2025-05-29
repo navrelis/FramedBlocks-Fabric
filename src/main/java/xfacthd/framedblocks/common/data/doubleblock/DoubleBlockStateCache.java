@@ -25,15 +25,15 @@ public class DoubleBlockStateCache extends StateCache
         IFramedDoubleBlock block = (IFramedDoubleBlock) state.getBlock();
         this.topInteractionMode = block.calculateTopInteractionMode(state);
         this.statePair = block.calculateBlockPair(state);
-        Utils.forAllDirections(false, side ->
+        for (Direction side : DIRECTIONS)
         {
             solidityChecks[side.ordinal()] = block.calculateSolidityCheck(state, side);
-            Utils.forAllDirections(edge ->
+            for (Direction edge : DIRECTIONS_WITH_NULL)
             {
                 CamoGetter getter;
                 if (edge != null && edge.getAxis() == side.getAxis())
                 {
-                    // null is the first value this lambda receives, so this is safe
+                    // null is the first value in DIRECTIONS_WITH_NULL, so this is safe
                     int cgNullIdx = side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(null);
                     getter = camoGetters[cgNullIdx];
                 }
@@ -43,8 +43,8 @@ public class DoubleBlockStateCache extends StateCache
                 }
                 int cgIdx = side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge);
                 camoGetters[cgIdx] = getter;
-            });
-        });
+            }
+        }
     }
 
     public final DoubleBlockTopInteractionMode getTopInteractionMode()

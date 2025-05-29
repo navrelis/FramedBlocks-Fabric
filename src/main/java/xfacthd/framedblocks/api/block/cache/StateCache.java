@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.block.cache;
 
+import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,7 +18,13 @@ import xfacthd.framedblocks.api.util.Utils;
  */
 public class StateCache
 {
-    private static final Direction[] DIRECTIONS = Direction.values();
+    protected static final Direction[] DIRECTIONS = Direction.values();
+    protected static final Direction[] DIRECTIONS_WITH_NULL = Util.make(() ->
+    {
+        Direction[] directions = new Direction[DIRECTIONS.length + 1];
+        System.arraycopy(DIRECTIONS, 0, directions, 1, DIRECTIONS.length);
+        return directions;
+    });
     protected static final int DIR_COUNT = DIRECTIONS.length;
     protected static final int DIR_COUNT_N = DIR_COUNT + 1;
     public static final StateCache EMPTY = new StateCache();
