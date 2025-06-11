@@ -213,6 +213,7 @@
     "framedblocks:framed_corner_tube",
     "framedblocks:framed_chain",
     "framedblocks:framed_lantern",
-    "framedblocks:framed_soul_lantern"
+    "framedblocks:framed_soul_lantern",
+    "framedblocks:framed_hopper"
   ]
 }

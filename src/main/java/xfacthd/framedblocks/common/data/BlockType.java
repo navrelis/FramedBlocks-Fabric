@@ -259,6 +259,7 @@ public enum BlockType implements IBlockType
     FRAMED_CHAIN                                    (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, ChainShapes::generate),
     FRAMED_LANTERN                                  (false, false, false,  true,  true, false, false, false, null),
     FRAMED_SOUL_LANTERN                             (false, false, false,  true,  true, false, false, false, null),
+    FRAMED_HOPPER                                   (false, false,  true, false,  true, false, false, false, ConTexMode.FULL_EDGE),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

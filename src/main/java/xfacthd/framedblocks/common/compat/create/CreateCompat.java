@@ -11,6 +11,7 @@ import com.simibubi.create.content.contraptions.behaviour.LeverMovingInteraction
 import com.simibubi.create.content.contraptions.behaviour.TrapdoorMovingInteraction;
 import com.simibubi.create.foundation.block.connected.CTModel;
 import net.minecraft.core.Holder;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
@@ -24,6 +25,7 @@ import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.compat.create.FramedBlockSafeNbtWriter;
 import xfacthd.framedblocks.api.compat.create.FramedBlockEntityItemRequirement;
+import xfacthd.framedblocks.common.blockentity.special.FramedHopperBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.capability.TankFluidHandler;
 import xfacthd.framedblocks.common.compat.create.schematic.nbt.FramedChiseledBookshelfSafeNbtWriter;
@@ -86,7 +88,8 @@ public final class CreateCompat
                 FBContent.BE_TYPE_FRAMED_SECRET_STORAGE, new FramedBlockSafeNbtWriter(FramedStorageBlockEntity.INVENTORY_NBT_KEY, FramedStorageBlockEntity.OVERFLOW_NBT_KEY),
                 FBContent.BE_TYPE_FRAMED_TANK, new FramedBlockSafeNbtWriter(TankFluidHandler.FLUID_NBT_KEY),
                 FBContent.BE_TYPE_FRAMED_ITEM_FRAME, new FramedItemFrameSafeNbtWriter(),
-                FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF, new FramedChiseledBookshelfSafeNbtWriter()
+                FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF, new FramedChiseledBookshelfSafeNbtWriter(),
+                FBContent.BE_TYPE_FRAMED_HOPPER, new FramedBlockSafeNbtWriter(ContainerHelper.TAG_ITEMS, FramedHopperBlockEntity.COOLDOWN_NBT_KEY)
         );
 
         public static void init()

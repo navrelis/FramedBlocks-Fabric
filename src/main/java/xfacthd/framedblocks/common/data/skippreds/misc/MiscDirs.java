@@ -45,8 +45,7 @@ public final class MiscDirs
         private CornerTube() { }
     }
 
-    // TODO: re-enable when hopper is added
-    /*public static final class Hopper
+    public static final class Hopper
     {
         public static boolean isHopperSideDir(Direction side)
         {
@@ -59,5 +58,5 @@ public final class MiscDirs
         }
 
         private Hopper() { }
-    }*/
+    }
 }

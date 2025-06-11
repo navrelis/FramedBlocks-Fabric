@@ -209,6 +209,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_TUBE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_CORNER_TUBE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_HOPPER, cube, "cutout");
 
         registerFramedCube(cube);
         registerFramedSlab(cube);

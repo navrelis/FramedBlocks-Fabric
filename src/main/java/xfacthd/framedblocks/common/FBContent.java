@@ -342,6 +342,7 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_CHAIN = registerBlock(FramedChainBlock::new, BlockType.FRAMED_CHAIN);
     public static final Holder<Block> BLOCK_FRAMED_LANTERN = registerBlock(FramedLanternBlock::new, BlockType.FRAMED_LANTERN);
     public static final Holder<Block> BLOCK_FRAMED_SOUL_LANTERN = registerBlock(FramedLanternBlock::new, BlockType.FRAMED_SOUL_LANTERN);
+    public static final Holder<Block> BLOCK_FRAMED_HOPPER = registerBlock(FramedHopperBlock::new, BlockType.FRAMED_HOPPER);
     // endregion
 
     // region Special Blocks
@@ -587,6 +588,10 @@ public final class FBContent
     public static final DeferredBlockEntity<FramedChiseledBookshelfBlockEntity> BE_TYPE_FRAMED_CHISELED_BOOKSHELF = registerBlockEntity(
             FramedChiseledBookshelfBlockEntity::new,
             BlockType.FRAMED_CHISELED_BOOKSHELF
+    );
+    public static final DeferredBlockEntity<FramedHopperBlockEntity> BE_TYPE_FRAMED_HOPPER = registerBlockEntity(
+            FramedHopperBlockEntity::new,
+            BlockType.FRAMED_HOPPER
     );
     // endregion
 

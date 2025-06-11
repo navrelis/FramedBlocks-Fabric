@@ -843,6 +843,11 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Items.SOUL_TORCH))
                 .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_HOPPER)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .additive(FramingSawRecipeAdditive.of(Tags.Items.CHESTS))
+                .save(consumer);
     }
 
     @Override

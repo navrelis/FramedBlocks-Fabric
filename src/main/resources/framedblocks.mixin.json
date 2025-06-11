@@ -9,6 +9,7 @@
         "AccessorTransientCraftingContainer",
         "InvokerBlockItem",
         "MixinBlockStateBase",
+        "MixinHopperBlockEntity",
         "MixinMapItemSavedData",
         "MixinStairBlock"
     ],

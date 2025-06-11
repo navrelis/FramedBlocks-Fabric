@@ -46,6 +46,12 @@ public final class CapabilitySetup
                 (be, side) -> be.getFluidHandler()
         );
 
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                FBContent.BE_TYPE_FRAMED_HOPPER.value(),
+                (be, side) -> be.new ItemHandler()
+        );
+
         event.registerItem(
                 Capabilities.FluidHandler.ITEM,
                 (stack, $) -> new FluidHandlerItemStack(FBContent.DC_TYPE_TANK_CONTENTS, stack, TankFluidHandler.CAPACITY),

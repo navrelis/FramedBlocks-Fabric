@@ -39,6 +39,9 @@ public final class CornerTubeSkipPredicate implements SideSkipPredicate
                 case FRAMED_TUBE -> testAgainstTube(
                         orientation, thick, adjState, side
                 );
+                case FRAMED_HOPPER -> testAgainstHopper(
+                        orientation, thick, side
+                );
                 default -> false;
             };
         }
@@ -65,5 +68,13 @@ public final class CornerTubeSkipPredicate implements SideSkipPredicate
         boolean adjThick = adjState.getValue(PropertyHolder.THICK);
 
         return MiscDirs.CornerTube.getOpeningDir(orientation, thick, side).isEqualTo(MiscDirs.Tube.getOpeningDir(adjAxis, adjThick, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_HOPPER)
+    private static boolean testAgainstHopper(
+            CornerTubeOrientation orientation, boolean thick, Direction side
+    )
+    {
+        return MiscDirs.CornerTube.getOpeningDir(orientation, thick, side).isEqualTo(MiscDirs.Hopper.getOpeningDir(side.getOpposite()));
     }
 }

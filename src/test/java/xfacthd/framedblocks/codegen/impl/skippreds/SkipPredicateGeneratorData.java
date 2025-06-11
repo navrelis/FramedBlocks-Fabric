@@ -712,14 +712,13 @@ final class SkipPredicateGeneratorData
                     .dirs(new TestDir("TubeOpening", "Opening", null, "tube_opening")),
             entry("FRAMED_CHAIN", "pillar"),
             entry("FRAMED_LANTERN", IGNORED_PKG),
-            entry("FRAMED_SOUL_LANTERN", IGNORED_PKG)/*,
-            TODO: re-enable when hopper is added
+            entry("FRAMED_SOUL_LANTERN", IGNORED_PKG),
             entry("FRAMED_HOPPER", "misc")
                     .dirs(
                             new TestDir("boolean", "HopperSide", null, "hopper_side"),
                             new TestDir("TubeOpening", "Opening", null, "tube_opening")
                                     .withExcludedTypes("FRAMED_HOPPER")
-                    )*/
+                    )
     );
 
     private static EntryBuilder entry(String type, String subPackage)
