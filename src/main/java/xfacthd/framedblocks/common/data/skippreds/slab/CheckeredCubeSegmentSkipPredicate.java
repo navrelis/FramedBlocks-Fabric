@@ -10,18 +10,21 @@ import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
-import xfacthd.framedblocks.common.data.skippreds.DiagCornerDir;
 
+/**
+ This class is machine-generated, any manual changes to this class will be overwritten.
+ */
 @CullTest(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT)
 public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
             boolean second = state.getValue(PropertyHolder.SECOND);
-            return switch (type)
+
+            return switch (blockType)
             {
                 case FRAMED_CHECKERED_CUBE_SEGMENT -> testAgainstCheckeredCubeSegment(
                         second, adjState, side
@@ -44,7 +47,7 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
     )
     {
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
-        return getDiagCornerDir(second, side).isEqualTo(getDiagCornerDir(adjSecond, side.getOpposite()));
+        return SlabDirs.CheckeredCubeSegment.getDiagCornerDir(second, side).isEqualTo(SlabDirs.CheckeredCubeSegment.getDiagCornerDir(adjSecond, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)
@@ -54,7 +57,8 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
     {
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
-        return getDiagCornerDir(second, side).isEqualTo(CheckeredSlabSegmentSkipPredicate.getDiagCornerDir(adjTop, adjSecond, side.getOpposite()));
+
+        return SlabDirs.CheckeredCubeSegment.getDiagCornerDir(second, side).isEqualTo(SlabDirs.CheckeredSlabSegment.getDiagCornerDir(adjTop, adjSecond, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT)
@@ -64,21 +68,7 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
-        return getDiagCornerDir(second, side).isEqualTo(CheckeredPanelSegmentSkipPredicate.getDiagCornerDir(adjDir, adjSecond, side.getOpposite()));
-    }
 
-
-
-    public static DiagCornerDir getDiagCornerDir(boolean second, Direction side)
-    {
-        return switch (side)
-        {
-            case DOWN -> second ? DiagCornerDir.DOWN_NE_SW : DiagCornerDir.DOWN_NW_SE;
-            case UP -> second ? DiagCornerDir.UP_NW_SE : DiagCornerDir.UP_NE_SW;
-            case NORTH -> second ? DiagCornerDir.NORTH_UW_DE : DiagCornerDir.NORTH_UE_DW;
-            case SOUTH -> second ? DiagCornerDir.SOUTH_UE_DW : DiagCornerDir.SOUTH_UW_DE;
-            case WEST -> second ? DiagCornerDir.WEST_UN_DS : DiagCornerDir.WEST_US_DN;
-            case EAST -> second ? DiagCornerDir.EAST_US_DN : DiagCornerDir.EAST_UN_DS;
-        };
+        return SlabDirs.CheckeredCubeSegment.getDiagCornerDir(second, side).isEqualTo(SlabDirs.CheckeredPanelSegment.getDiagCornerDir(adjDir, adjSecond, side.getOpposite()));
     }
 }

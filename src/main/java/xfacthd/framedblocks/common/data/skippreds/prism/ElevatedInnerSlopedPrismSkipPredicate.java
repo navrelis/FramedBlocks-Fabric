@@ -11,8 +11,10 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CompoundDirection;
 import xfacthd.framedblocks.common.data.property.DirectionAxis;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
-import xfacthd.framedblocks.common.data.skippreds.HalfDir;
 
+/**
+ This class is machine-generated, any manual changes to this class will be overwritten.
+ */
 @CullTest(BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM)
 public final class ElevatedInnerSlopedPrismSkipPredicate implements SideSkipPredicate
 {
@@ -20,53 +22,42 @@ public final class ElevatedInnerSlopedPrismSkipPredicate implements SideSkipPred
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        Direction orientation = cmpDir.orientation();
-        if (side != orientation || orientation.getAxis() == cmpDir.direction().getAxis())
+        if (PrismDirs.ElevatedInnerSlopedPrism.testEarlyExit(cmpDir, side))
         {
             return false;
         }
 
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
-            return switch (type)
+            return switch (blockType)
             {
-                case FRAMED_ELEVATED_INNER_SLOPED_PRISM -> testAgainstInnerSlopedPrism(
+                case FRAMED_ELEVATED_INNER_SLOPED_PRISM -> testAgainstElevatedInnerSlopedPrism(
                         cmpDir, adjState, side
                 );
-                case FRAMED_ELEVATED_INNER_PRISM -> testAgainstInnerPrism(
+                case FRAMED_ELEVATED_INNER_PRISM -> testAgainstElevatedInnerPrism(
                         cmpDir, adjState, side
                 );
                 default -> false;
             };
         }
-
         return false;
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM)
-    private static boolean testAgainstInnerSlopedPrism(CompoundDirection cmpDir, BlockState adjState, Direction side)
+    private static boolean testAgainstElevatedInnerSlopedPrism(
+            CompoundDirection cmpDir, BlockState adjState, Direction side
+    )
     {
         CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
-        return getTriDir(cmpDir, side).isEqualTo(getTriDir(adjCmpDir, side.getOpposite()));
+        return PrismDirs.ElevatedInnerSlopedPrism.getTriDir(cmpDir, side).isEqualTo(PrismDirs.ElevatedInnerSlopedPrism.getTriDir(adjCmpDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_INNER_PRISM)
-    private static boolean testAgainstInnerPrism(CompoundDirection cmpDir, BlockState adjState, Direction side)
+    private static boolean testAgainstElevatedInnerPrism(
+            CompoundDirection cmpDir, BlockState adjState, Direction side
+    )
     {
         DirectionAxis adjDirAxis = adjState.getValue(PropertyHolder.FACING_AXIS);
-        return getTriDir(cmpDir, side).isEqualTo(ElevatedInnerPrismSkipPredicate.getTriDir(adjDirAxis, side.getOpposite()));
-    }
-
-
-
-    public static HalfDir getTriDir(CompoundDirection cmpDir, Direction side)
-    {
-        Direction dir = cmpDir.direction();
-        Direction orientation = cmpDir.orientation();
-        if (dir.getAxis() != orientation.getAxis() && side == orientation)
-        {
-            return HalfDir.fromDirections(side, dir);
-        }
-        return HalfDir.NULL;
+        return PrismDirs.ElevatedInnerSlopedPrism.getTriDir(cmpDir, side).isEqualTo(PrismDirs.ElevatedInnerPrism.getTriDir(adjDirAxis, side.getOpposite()));
     }
 }

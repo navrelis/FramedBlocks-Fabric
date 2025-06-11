@@ -14,13 +14,15 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.data.skippreds.*;
-import xfacthd.framedblocks.common.data.skippreds.slab.SlabEdgeSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slab.SlabSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slope.VerticalHalfSlopeSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slopeedge.*;
-import xfacthd.framedblocks.common.data.skippreds.stairs.*;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
+import xfacthd.framedblocks.common.data.skippreds.slab.SlabDirs;
+import xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
+import xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeDirs;
+import xfacthd.framedblocks.common.data.skippreds.stairs.StairsDirs;
 
+/**
+ This class is machine-generated, any manual changes to this class will be overwritten.
+ */
 @CullTest(BlockType.FRAMED_COMPOUND_SLOPE_SLAB)
 public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
 {
@@ -36,6 +38,21 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_COMPOUND_SLOPE_SLAB -> testAgainstCompoundSlopeSlab(
                         dir, adjState, side
                 );
+                case FRAMED_VERTICAL_HALF_SLOPE -> testAgainstVerticalHalfSlope(
+                        dir, adjState, side
+                );
+                case FRAMED_SLOPE_EDGE -> testAgainstSlopeEdge(
+                        dir, adjState, side
+                );
+                case FRAMED_ELEVATED_SLOPE_EDGE -> testAgainstElevatedSlopeEdge(
+                        dir, adjState, side
+                );
+                case FRAMED_INNER_CORNER_SLOPE_EDGE -> testAgainstInnerCornerSlopeEdge(
+                        dir, adjState, side
+                );
+                case FRAMED_ELEVATED_CORNER_SLOPE_EDGE -> testAgainstElevatedCornerSlopeEdge(
+                        dir, adjState, side
+                );
                 case FRAMED_SLAB -> testAgainstSlab(
                         dir, adjState, side
                 );
@@ -43,6 +60,12 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
                         dir, adjState, side
                 );
                 case FRAMED_STAIRS -> testAgainstStairs(
+                        dir, adjState, side
+                );
+                case FRAMED_SLOPED_STAIRS -> testAgainstSlopedStairs(
+                        dir, adjState, side
+                );
+                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(
                         dir, adjState, side
                 );
                 case FRAMED_SLOPE_SLAB -> testAgainstSlopeSlab(
@@ -57,24 +80,6 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedSlopeSlabCorner(
                         dir, adjState, side
                 );
-                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(
-                        dir, adjState, side
-                );
-                case FRAMED_VERTICAL_HALF_SLOPE -> testAgainstVerticalHalfSlope(
-                        dir, adjState, side
-                );
-                case FRAMED_SLOPED_STAIRS -> testAgainstSlopedStairs(
-                        dir, adjState, side
-                );
-                case FRAMED_SLOPE_EDGE -> testAgainstSlopeEdge(
-                        dir, adjState, side
-                );
-                case FRAMED_ELEVATED_SLOPE_EDGE -> testAgainstElevatedSlopeEdge(
-                        dir, adjState, side
-                );
-                case FRAMED_INNER_CORNER_SLOPE_EDGE -> testAgainstInnerCornerSlopeEdge(
-                        dir, adjState, side
-                );
                 default -> false;
             };
         }
@@ -87,95 +92,8 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
     )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        return getTriDir(dir, side).isEqualTo(getTriDir(adjDir, side.getOpposite())) ||
-               getHalfDir(dir, side).isEqualTo(getHalfDir(adjDir, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_SLAB)
-    private static boolean testAgainstSlab(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-        return getHalfDir(dir, side).isEqualTo(SlabSkipPredicate.getHalfDir(adjTop, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)
-    private static boolean testAgainstSlabEdge(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getHalfDir(dir, side).isEqualTo(SlabEdgeSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_STAIRS)
-    private static boolean testAgainstStairs(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
-        Half adjHalf = adjState.getValue(BlockStateProperties.HALF);
-
-        return getHalfDir(dir, side).isEqualTo(StairsSkipPredicate.getHalfDir(adjDir, adjShape, adjHalf, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_SLOPE_SLAB)
-    private static boolean testAgainstSlopeSlab(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
-
-        return getHalfDir(dir, side).isEqualTo(SlopeSlabSkipPredicate.getHalfDir(adjDir, adjTopHalf, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_SLOPE_SLAB)
-    private static boolean testAgainstElevatedSlopeSlab(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getHalfDir(dir, side).isEqualTo(ElevatedSlopeSlabSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER)
-    private static boolean testAgainstFlatInnerSlopeSlabCorner(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
-
-        return getHalfDir(dir, side).isEqualTo(FlatInnerSlopeSlabCornerSkipPredicate.getHalfDir(adjDir, adjTopHalf, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER)
-    private static boolean testAgainstFlatElevatedSlopeSlabCorner(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getHalfDir(dir, side).isEqualTo(FlatElevatedSlopeSlabCornerSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_HALF_STAIRS)
-    private static boolean testAgainstVerticalHalfStairs(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getHalfDir(dir, side).isEqualTo(VerticalHalfStairsSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
+        return SlopeSlabDirs.CompoundSlopeSlab.getTriDir(dir, side).isEqualTo(SlopeSlabDirs.CompoundSlopeSlab.getTriDir(adjDir, side.getOpposite())) ||
+               SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_HALF_SLOPE)
@@ -186,18 +104,7 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        return getHalfDir(dir, side).isEqualTo(VerticalHalfSlopeSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_SLOPED_STAIRS)
-    private static boolean testAgainstSlopedStairs(
-            Direction dir, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getHalfDir(dir, side).isEqualTo(SlopedStairsSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeDirs.VerticalHalfSlope.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE_EDGE)
@@ -209,7 +116,7 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
         boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
 
-        return getHalfDir(dir, side).isEqualTo(SlopeEdgeSkipPredicate.getHalfDir(adjDir, adjType, adjAlt, side.getOpposite()));
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeEdgeDirs.SlopeEdge.getHalfDir(adjDir, adjType, adjAlt, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_SLOPE_EDGE)
@@ -220,7 +127,7 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
-        return getHalfDir(dir, side).isEqualTo(ElevatedSlopeEdgeSkipPredicate.getHalfDir(adjDir, adjType, side.getOpposite()));
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeEdgeDirs.ElevatedSlopeEdge.getHalfDir(adjDir, adjType, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_INNER_CORNER_SLOPE_EDGE)
@@ -232,30 +139,115 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
         boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
 
-        return getHalfDir(dir, side).isEqualTo(InnerCornerSlopeEdgeSkipPredicate.getHalfDir(adjDir, adjType, adjAlt, side.getOpposite()));
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeEdgeDirs.InnerCornerSlopeEdge.getHalfDir(adjDir, adjType, adjAlt, side.getOpposite()));
     }
 
-
-
-    public static HalfTriangleDir getTriDir(Direction dir, Direction side)
+    @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_CORNER_SLOPE_EDGE)
+    private static boolean testAgainstElevatedCornerSlopeEdge(
+            Direction dir, BlockState adjState, Direction side
+    )
     {
-        if (side.getAxis() == dir.getClockWise().getAxis())
-        {
-            return HalfTriangleDir.fromDirections(Direction.DOWN, dir, false);
-        }
-        return HalfTriangleDir.NULL;
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeEdgeDirs.ElevatedCornerSlopeEdge.getHalfDir(adjDir, adjType, side.getOpposite()));
     }
 
-    public static HalfDir getHalfDir(Direction dir, Direction side)
+    @CullTest.TestTarget(BlockType.FRAMED_SLAB)
+    private static boolean testAgainstSlab(
+            Direction dir, BlockState adjState, Direction side
+    )
     {
-        if (side == dir)
-        {
-            return HalfDir.fromDirections(side, Direction.UP);
-        }
-        if (side == dir.getOpposite())
-        {
-            return HalfDir.fromDirections(side, Direction.DOWN);
-        }
-        return HalfDir.NULL;
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlabDirs.Slab.getHalfDir(adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)
+    private static boolean testAgainstSlabEdge(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlabDirs.SlabEdge.getHalfDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_STAIRS)
+    private static boolean testAgainstStairs(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
+        Half adjHalf = adjState.getValue(BlockStateProperties.HALF);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(StairsDirs.Stairs.getHalfDir(adjDir, adjShape, adjHalf, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SLOPED_STAIRS)
+    private static boolean testAgainstSlopedStairs(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(StairsDirs.SlopedStairs.getHalfDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_HALF_STAIRS)
+    private static boolean testAgainstVerticalHalfStairs(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(StairsDirs.VerticalHalfStairs.getHalfDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SLOPE_SLAB)
+    private static boolean testAgainstSlopeSlab(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeSlabDirs.SlopeSlab.getHalfDir(adjDir, adjTopHalf, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_SLOPE_SLAB)
+    private static boolean testAgainstElevatedSlopeSlab(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeSlabDirs.ElevatedSlopeSlab.getHalfDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER)
+    private static boolean testAgainstFlatInnerSlopeSlabCorner(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeSlabDirs.FlatInnerSlopeSlabCorner.getHalfDir(adjDir, adjTopHalf, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER)
+    private static boolean testAgainstFlatElevatedSlopeSlabCorner(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeSlabDirs.FlatElevatedSlopeSlabCorner.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 }

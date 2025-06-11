@@ -29,7 +29,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
     protected void fill()
     {
         put(BlockType.FRAMED_CUBE, SideSkipPredicate.FALSE);
-        put(BlockType.FRAMED_SLOPE, SlopeSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_SLOPE, new SlopeSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_SLOPE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_HALF_SLOPE, new HalfSlopeSkipPredicate());
         put(BlockType.FRAMED_VERTICAL_HALF_SLOPE, new VerticalHalfSlopeSkipPredicate());
@@ -39,11 +39,11 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_CORNER_SLOPE, new CornerSkipPredicate());
         put(BlockType.FRAMED_INNER_CORNER_SLOPE, new InnerCornerSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_CORNER, SideSkipPredicate.FALSE);
-        put(BlockType.FRAMED_PRISM_CORNER, new ThreewayCornerSkipPredicate());
-        put(BlockType.FRAMED_INNER_PRISM_CORNER, new InnerThreewayCornerSkipPredicate());
+        put(BlockType.FRAMED_PRISM_CORNER, ThreewayCornerSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_PRISM_CORNER, InnerThreewayCornerSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_PRISM_CORNER, SideSkipPredicate.FALSE);
-        put(BlockType.FRAMED_THREEWAY_CORNER, new ThreewayCornerSkipPredicate());
-        put(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerSkipPredicate());
+        put(BlockType.FRAMED_THREEWAY_CORNER, ThreewayCornerSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_THREEWAY_CORNER, InnerThreewayCornerSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, new ElevatedSlopeEdgeSkipPredicate());
@@ -93,10 +93,10 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_WALL, new WallSkipPredicate());
         put(BlockType.FRAMED_FENCE, new FenceSkipPredicate());
         put(BlockType.FRAMED_FENCE_GATE, new FenceGateSkipPredicate());
-        put(BlockType.FRAMED_DOOR, new DoorSkipPredicate());
-        put(BlockType.FRAMED_IRON_DOOR, new DoorSkipPredicate());
-        put(BlockType.FRAMED_TRAPDOOR, new TrapdoorSkipPredicate());
-        put(BlockType.FRAMED_IRON_TRAPDOOR, new TrapdoorSkipPredicate());
+        put(BlockType.FRAMED_DOOR, DoorSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_IRON_DOOR, DoorSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_TRAPDOOR, TrapdoorSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_IRON_TRAPDOOR, TrapdoorSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_PRESSURE_PLATE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STONE_PRESSURE_PLATE, SideSkipPredicate.FALSE);
@@ -134,10 +134,10 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_BARS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PANE, new PaneSkipPredicate());
         put(BlockType.FRAMED_HORIZONTAL_PANE, new HorizontalPaneSkipPredicate());
-        put(BlockType.FRAMED_RAIL_SLOPE, SlopeSkipPredicate.INSTANCE);
-        put(BlockType.FRAMED_POWERED_RAIL_SLOPE, SlopeSkipPredicate.INSTANCE);
-        put(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, SlopeSkipPredicate.INSTANCE);
-        put(BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE, SlopeSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_RAIL_SLOPE, RailSlopeSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_POWERED_RAIL_SLOPE, RailSlopeSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, RailSlopeSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE, RailSlopeSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_FANCY_RAIL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_FANCY_POWERED_RAIL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_FANCY_DETECTOR_RAIL, SideSkipPredicate.FALSE);
@@ -224,8 +224,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_PYRAMID, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PYRAMID_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_TARGET, SideSkipPredicate.FALSE);
-        put(BlockType.FRAMED_GATE, new GateSkipPredicate());
-        put(BlockType.FRAMED_IRON_GATE, new GateSkipPredicate());
+        put(BlockType.FRAMED_GATE, GateSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_IRON_GATE, GateSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_ITEM_FRAME, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_GLOWING_ITEM_FRAME, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_MINI_CUBE, SideSkipPredicate.FALSE);

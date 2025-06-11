@@ -4,44 +4,98 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.Half;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.block.door.FramedDoorBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
-@CullTest(BlockType.FRAMED_DOOR)
+/**
+ This class is machine-generated, any manual changes to this class will be overwritten.
+ */
+@CullTest({
+        BlockType.FRAMED_DOOR,
+        BlockType.FRAMED_IRON_DOOR
+})
 public final class DoorSkipPredicate implements SideSkipPredicate
 {
+    public static final DoorSkipPredicate INSTANCE = new DoorSkipPredicate();
+
+    private DoorSkipPredicate() { }
+
     @Override
-    @CullTest.TestTarget(BlockType.FRAMED_DOOR)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction facing = getDoorFacing(state);
-
-        if (side.getAxis() == facing.getAxis())
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
-            return false;
-        }
+            Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
+            boolean open = state.getValue(BlockStateProperties.OPEN);
 
-        if (!(adjState.getBlock() instanceof FramedDoorBlock))
-        {
-            return false;
+            return switch (blockType)
+            {
+                case FRAMED_DOOR,
+                     FRAMED_IRON_DOOR -> testAgainstDoor(
+                        dir, hinge, open, adjState, side
+                );
+                case FRAMED_TRAPDOOR,
+                     FRAMED_IRON_TRAPDOOR -> testAgainstTrapdoor(
+                        dir, hinge, open, adjState, side
+                );
+                case FRAMED_GATE,
+                     FRAMED_IRON_GATE -> testAgainstGate(
+                        dir, hinge, open, adjState, side
+                );
+                default -> false;
+            };
         }
-
-        return facing == getDoorFacing(adjState);
+        return false;
     }
 
-    private static Direction getDoorFacing(BlockState state)
+    @CullTest.TestTarget({
+            BlockType.FRAMED_DOOR,
+            BlockType.FRAMED_IRON_DOOR
+    })
+    private static boolean testAgainstDoor(
+            Direction dir, DoorHingeSide hinge, boolean open, BlockState adjState, Direction side
+    )
     {
-        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
+        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        DoorHingeSide adjHinge = adjState.getValue(BlockStateProperties.DOOR_HINGE);
+        boolean adjOpen = adjState.getValue(BlockStateProperties.OPEN);
 
-        if (state.getValue(BlockStateProperties.OPEN))
-        {
-            return hinge == DoorHingeSide.LEFT ? facing.getClockWise() : facing.getCounterClockWise();
-        }
+        return DoorDirs.Door.getDoorEdgeDir(dir, hinge, open, side).isEqualTo(DoorDirs.Door.getDoorEdgeDir(adjDir, adjHinge, adjOpen, side.getOpposite()));
+    }
 
-        return facing;
+    @CullTest.TestTarget({
+            BlockType.FRAMED_TRAPDOOR,
+            BlockType.FRAMED_IRON_TRAPDOOR
+    })
+    private static boolean testAgainstTrapdoor(
+            Direction dir, DoorHingeSide hinge, boolean open, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        Half adjHalf = adjState.getValue(BlockStateProperties.HALF);
+        boolean adjOpen = adjState.getValue(BlockStateProperties.OPEN);
+
+        return DoorDirs.Door.getDoorEdgeDir(dir, hinge, open, side).isEqualTo(DoorDirs.Trapdoor.getDoorEdgeDir(adjDir, adjHalf, adjOpen, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget({
+            BlockType.FRAMED_GATE,
+            BlockType.FRAMED_IRON_GATE
+    })
+    private static boolean testAgainstGate(
+            Direction dir, DoorHingeSide hinge, boolean open, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        DoorHingeSide adjHinge = adjState.getValue(BlockStateProperties.DOOR_HINGE);
+        boolean adjOpen = adjState.getValue(BlockStateProperties.OPEN);
+
+        return DoorDirs.Door.getDoorEdgeDir(dir, hinge, open, side).isEqualTo(DoorDirs.Gate.getDoorEdgeDir(adjDir, adjHinge, adjOpen, side.getOpposite()));
     }
 }

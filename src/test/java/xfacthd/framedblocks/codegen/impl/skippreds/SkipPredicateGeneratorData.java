@@ -323,7 +323,10 @@ final class SkipPredicateGeneratorData
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                             Property.internal("SlopeType", "type", "SLOPE_TYPE", PropType.CUSTOM)
                     )
-                    .dirs(new TestDir("HalfDir", "Half", null, "board_xz_hor", "board_xz_vert", "board_y")),
+                    .dirs(
+                            new TestDir("HalfDir", "Half", null, "board_xz_hor", "board_xz_vert", "board_y"),
+                            new TestDir("CornerDir", "Corner", null, "strip_corner")
+                    ),
             entry("FRAMED_LATTICE_BLOCK", "pillar")
                     .shortName("Lattice")
                     .props(
@@ -619,7 +622,7 @@ final class SkipPredicateGeneratorData
                     ),
             entry("FRAMED_GLOWING_CUBE", "cube"),
             entry("FRAMED_PYRAMID", "slope")
-                    .props(
+                    /*.props(
                             Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE)
                                     .withEarlyExit(),
                             Property.internal("PillarConnection", "connection", "PILLAR_CONNECTION", PropType.CUSTOM)
@@ -627,10 +630,10 @@ final class SkipPredicateGeneratorData
                     )
                     .dirs(
                             new TestDir("boolean", "Post", null, "post_hor", "post_vert")
-                                    .withExcludedTypes("FRAMED_PYRAMID"/*, "FRAMED_ELEVATED_PYRAMID_SLAB"*/),
+                                    .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB"),
                             new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")
-                                    .withExcludedTypes("FRAMED_PYRAMID"/*, "FRAMED_ELEVATED_PYRAMID_SLAB"*/)
-                    ),
+                                    .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB")
+                    )*/,
             entry("FRAMED_PYRAMID_SLAB", "slope"),
             // TODO: re-enable when the elevated pyramid slab is added (see also above)
             /*entry("FRAMED_ELEVATED_PYRAMID_SLAB", "slope")

@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
-import xfacthd.framedblocks.common.data.skippreds.pillar.WallSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.pillar.PillarDirs;
 
 @CullTest(BlockType.FRAMED_FENCE_GATE)
 public final class FenceGateSkipPredicate implements SideSkipPredicate
@@ -48,6 +48,6 @@ public final class FenceGateSkipPredicate implements SideSkipPredicate
     @CullTest.TestTarget(value = BlockType.FRAMED_WALL, oneWay = true)
     private static boolean testAgainstWall(boolean inWall, BlockState adjState, Direction side)
     {
-        return inWall && WallSkipPredicate.getArm(adjState, side.getOpposite()) != WallSide.NONE;
+        return inWall && PillarDirs.Wall.getWallSide(adjState, side.getOpposite()) != WallSide.NONE;
     }
 }

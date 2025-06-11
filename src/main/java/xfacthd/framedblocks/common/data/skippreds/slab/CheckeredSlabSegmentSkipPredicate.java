@@ -7,32 +7,34 @@ import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.*;
-import xfacthd.framedblocks.common.data.skippreds.*;
-import xfacthd.framedblocks.common.data.skippreds.slopeedge.CornerSlopeEdgeSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slopeedge.ElevatedCornerSlopeEdgeSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.*;
-import xfacthd.framedblocks.common.data.skippreds.stairs.*;
+import xfacthd.framedblocks.common.data.property.CornerType;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
+import xfacthd.framedblocks.common.data.property.StairsType;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
+import xfacthd.framedblocks.common.data.skippreds.pillar.PillarDirs;
+import xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeDirs;
+import xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.SlopePanelCornerDirs;
+import xfacthd.framedblocks.common.data.skippreds.stairs.StairsDirs;
 
+/**
+ This class is machine-generated, any manual changes to this class will be overwritten.
+ */
 @CullTest(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)
 public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
             boolean top = state.getValue(FramedProperties.TOP);
             boolean second = state.getValue(PropertyHolder.SECOND);
-            return switch (type)
+
+            return switch (blockType)
             {
                 case FRAMED_CHECKERED_SLAB_SEGMENT -> testAgainstCheckeredSlabSegment(
-                        top, second, adjState, side
-                );
-                case FRAMED_CHECKERED_CUBE_SEGMENT -> testAgainstCheckeredCubeSegment(
                         top, second, adjState, side
                 );
                 case FRAMED_CORNER_SLOPE_EDGE -> testAgainstCornerSlopeEdge(
@@ -41,19 +43,22 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
                 case FRAMED_ELEVATED_CORNER_SLOPE_EDGE -> testAgainstElevatedCornerSlopeEdge(
                         top, second, adjState, side
                 );
-                case FRAMED_SLAB_CORNER -> testAgainstSlabCorner(
-                        top, second, adjState, side
-                );
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(
                         top, second, adjState, side
                 );
-                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(
+                case FRAMED_SLAB_CORNER -> testAgainstSlabCorner(
                         top, second, adjState, side
                 );
                 case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(
                         top, second, adjState, side
                 );
+                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(
+                        top, second, adjState, side
+                );
                 case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(
+                        top, second, adjState, side
+                );
+                case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
                         top, second, adjState, side
                 );
                 case FRAMED_SMALL_CORNER_SLOPE_PANEL_W -> testAgainstSmallCornerSlopePanelWall(
@@ -66,6 +71,12 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
                         top, second, adjState, side
                 );
                 case FRAMED_MASONRY_CORNER_SEGMENT -> testAgainstMasonryCornerSegment(
+                        top, second, adjState, side
+                );
+                case FRAMED_CHECKERED_CUBE_SEGMENT -> testAgainstCheckeredCubeSegment(
+                        top, second, adjState, side
+                );
+                case FRAMED_CHECKERED_PANEL_SEGMENT -> testAgainstCheckeredPanelSegment(
                         top, second, adjState, side
                 );
                 default -> false;
@@ -81,17 +92,9 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     {
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
-        return getDiagCornerDir(top, second, side).isEqualTo(getDiagCornerDir(adjTop, adjSecond, side.getOpposite())) ||
-               getCornerDir(top, second, side).isEqualTo(getCornerDir(adjTop, adjSecond, side.getOpposite()));
-    }
 
-    @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT)
-    private static boolean testAgainstCheckeredCubeSegment(
-            boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
-        boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
-        return getDiagCornerDir(top, second, side).isEqualTo(CheckeredCubeSegmentSkipPredicate.getDiagCornerDir(adjSecond, side.getOpposite()));
+        return SlabDirs.CheckeredSlabSegment.getDiagCornerDir(top, second, side).isEqualTo(SlabDirs.CheckeredSlabSegment.getDiagCornerDir(adjTop, adjSecond, side.getOpposite())) ||
+               SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlabDirs.CheckeredSlabSegment.getCornerDir(adjTop, adjSecond, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_CORNER_SLOPE_EDGE)
@@ -103,7 +106,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
         boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
 
-        return getCornerDir(top, second, side).isEqualTo(CornerSlopeEdgeSkipPredicate.getCornerDir(adjDir, adjType, adjAlt, side.getOpposite()));
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlopeEdgeDirs.CornerSlopeEdge.getCornerDir(adjDir, adjType, adjAlt, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_CORNER_SLOPE_EDGE)
@@ -114,17 +117,7 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
-        return getCornerDir(top, second, side).isEqualTo(ElevatedCornerSlopeEdgeSkipPredicate.getCornerDir(adjDir, adjType, side.getOpposite()));
-    }
-
-    @CullTest.TestTarget(BlockType.FRAMED_SLAB_CORNER)
-    private static boolean testAgainstSlabCorner(
-            boolean top, boolean second, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-        return getCornerDir(top, second, side).isEqualTo(SlabCornerSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlopeEdgeDirs.ElevatedCornerSlopeEdge.getCornerDir(adjDir, adjType, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)
@@ -134,17 +127,19 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
-        return getCornerDir(top, second, side).isEqualTo(SlabEdgeSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlabDirs.SlabEdge.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
-    @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_STAIRS)
-    private static boolean testAgainstVerticalStairs(
+    @CullTest.TestTarget(BlockType.FRAMED_SLAB_CORNER)
+    private static boolean testAgainstSlabCorner(
             boolean top, boolean second, BlockState adjState, Direction side
     )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
-        return getCornerDir(top, second, side).isEqualTo(VerticalStairsSkipPredicate.getCornerDir(adjDir, adjType, side.getOpposite()));
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlabDirs.SlabCorner.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_HALF_STAIRS)
@@ -155,7 +150,19 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
-        return getCornerDir(top, second, side).isEqualTo(HalfStairsSkipPredicate.getCornerDir(adjDir, adjTop, adjRight, side.getOpposite()));
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(StairsDirs.HalfStairs.getCornerDir(adjDir, adjTop, adjRight, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_STAIRS)
+    private static boolean testAgainstVerticalStairs(
+            boolean top, boolean second, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(StairsDirs.VerticalStairs.getCornerDir(adjDir, adjType, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_VERTICAL_HALF_STAIRS)
@@ -165,7 +172,19 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
-        return getCornerDir(top, second, side).isEqualTo(VerticalHalfStairsSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(StairsDirs.VerticalHalfStairs.getCornerDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_THREEWAY_CORNER_PILLAR)
+    private static boolean testAgainstThreewayCornerPillar(
+            boolean top, boolean second, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W)
@@ -175,7 +194,8 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-        return getCornerDir(top, second, side).isEqualTo(SmallCornerSlopePanelWallSkipPredicate.getCornerDir(adjDir, adjRot, side.getOpposite()));
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlopePanelCornerDirs.SmallCornerSlopePanelWall.getCornerDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W)
@@ -185,7 +205,8 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-        return getCornerDir(top, second, side).isEqualTo(SmallInnerCornerSlopePanelWallSkipPredicate.getCornerDir(adjDir, adjRot, side.getOpposite()));
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlopePanelCornerDirs.SmallInnerCornerSlopePanelWall.getCornerDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL_W)
@@ -195,7 +216,8 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-        return getCornerDir(top, second, side).isEqualTo(ExtendedCornerSlopePanelWallSkipPredicate.getCornerDir(adjDir, adjRot, side.getOpposite()));
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlopePanelCornerDirs.ExtendedCornerSlopePanelWall.getCornerDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_MASONRY_CORNER_SEGMENT)
@@ -206,35 +228,26 @@ public final class CheckeredSlabSegmentSkipPredicate implements SideSkipPredicat
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        return getCornerDir(top, second, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlabDirs.MasonryCornerSegment.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
-
-
-    public static DiagCornerDir getDiagCornerDir(boolean top, boolean second, Direction side)
+    @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT)
+    private static boolean testAgainstCheckeredCubeSegment(
+            boolean top, boolean second, BlockState adjState, Direction side
+    )
     {
-        if (top && side == Direction.UP)
-        {
-            return second ? DiagCornerDir.UP_NW_SE : DiagCornerDir.UP_NE_SW;
-        }
-        else if (!top && side == Direction.DOWN)
-        {
-            return second ? DiagCornerDir.DOWN_NE_SW : DiagCornerDir.DOWN_NW_SE;
-        }
-        return DiagCornerDir.NULL;
+        boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
+        return SlabDirs.CheckeredSlabSegment.getDiagCornerDir(top, second, side).isEqualTo(SlabDirs.CheckeredCubeSegment.getDiagCornerDir(adjSecond, side.getOpposite()));
     }
 
-    public static CornerDir getCornerDir(boolean top, boolean second, Direction side)
+    @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT)
+    private static boolean testAgainstCheckeredPanelSegment(
+            boolean top, boolean second, BlockState adjState, Direction side
+    )
     {
-        if (!Utils.isY(side))
-        {
-            boolean x = Utils.isX(side);
-            return CornerDir.fromDirections(
-                    side,
-                    top ? Direction.UP : Direction.DOWN,
-                    second == x ? side.getCounterClockWise() : side.getClockWise()
-            );
-        }
-        return CornerDir.NULL;
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
+
+        return SlabDirs.CheckeredSlabSegment.getCornerDir(top, second, side).isEqualTo(SlabDirs.CheckeredPanelSegment.getCornerDir(adjDir, adjSecond, side.getOpposite()));
     }
 }
