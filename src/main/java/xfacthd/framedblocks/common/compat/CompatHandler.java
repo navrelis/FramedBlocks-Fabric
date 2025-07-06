@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.compat;
 
 import net.neoforged.bus.api.IEventBus;
+import xfacthd.framedblocks.common.compat.additionalplacements.AdditionalPlacementsCompat;
 import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import xfacthd.framedblocks.common.compat.athena.AthenaCompat;
@@ -14,6 +15,7 @@ public final class CompatHandler
 {
     public static void init(IEventBus modBus)
     {
+        AdditionalPlacementsCompat.init();
         AppliedEnergisticsCompat.init(modBus);
         AmendmentsCompat.init();
         AthenaCompat.init();

@@ -117,3 +117,10 @@ license="LGPL v3"
     versionRange="[${searchables_version},)"
     ordering="NONE"
     side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="additionalplacements"
+    type="optional"
+    versionRange="[${additionalplacements_version},)"
+    ordering="NONE"
+    side="BOTH"
