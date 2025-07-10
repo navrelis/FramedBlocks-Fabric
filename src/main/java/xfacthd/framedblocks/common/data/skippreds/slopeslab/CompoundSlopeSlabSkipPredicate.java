@@ -80,6 +80,9 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedSlopeSlabCorner(
                         dir, adjState, side
                 );
+                case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
+                        dir, adjState, side
+                );
                 default -> false;
             };
         }
@@ -249,5 +252,14 @@ public final class CompoundSlopeSlabSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeSlabDirs.FlatElevatedSlopeSlabCorner.getHalfDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)
+    private static boolean testAgainstElevatedPyramidSlab(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return SlopeSlabDirs.CompoundSlopeSlab.getHalfDir(dir, side).isEqualTo(SlopeDirs.ElevatedPyramidSlab.getHalfDir(adjDir, side.getOpposite()));
     }
 }

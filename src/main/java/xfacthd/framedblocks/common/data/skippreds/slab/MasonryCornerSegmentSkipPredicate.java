@@ -127,6 +127,9 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
                 case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W -> testAgainstExtendedInnerCornerSlopePanelWall(
                         dir, top, adjState, side
                 );
+                case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
+                        dir, top, adjState, side
+                );
                 case FRAMED_CHECKERED_SLAB_SEGMENT -> testAgainstCheckeredSlabSegment(
                         dir, top, adjState, side
                 );
@@ -475,6 +478,15 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return SlabDirs.MasonryCornerSegment.getStairDir(dir, top, side).isEqualTo(SlopePanelCornerDirs.ExtendedInnerCornerSlopePanelWall.getStairDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)
+    private static boolean testAgainstElevatedPyramidSlab(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return SlabDirs.MasonryCornerSegment.getHalfDir(dir, top, side).isEqualTo(SlopeDirs.ElevatedPyramidSlab.getHalfDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)

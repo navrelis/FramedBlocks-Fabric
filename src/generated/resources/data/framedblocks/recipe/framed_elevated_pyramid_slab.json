@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": {
+      "item": "framedblocks:framed_pyramid_slab"
+    },
+    "S": {
+      "item": "framedblocks:framed_slab"
+    }
+  },
+  "pattern": [
+    "P",
+    "S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks:framed_elevated_pyramid_slab"
+  }
+}

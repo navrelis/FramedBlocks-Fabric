@@ -99,6 +99,9 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
                 case FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerCornerSlopePanelWall(
                         dir, top, topHalf, adjState, side
                 );
+                case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
+                        dir, topHalf, adjState, side
+                );
                 default -> false;
             };
         }
@@ -327,5 +330,14 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return SlopeSlabDirs.FlatInnerSlopeSlabCorner.getTriDir(dir, top, topHalf, side).isEqualTo(SlopePanelCornerDirs.LargeInnerCornerSlopePanelWall.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB)
+    private static boolean testAgainstElevatedPyramidSlab(
+            Direction dir, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return SlopeSlabDirs.FlatInnerSlopeSlabCorner.getHalfDir(dir, topHalf, side).isEqualTo(SlopeDirs.ElevatedPyramidSlab.getHalfDir(adjDir, side.getOpposite()));
     }
 }

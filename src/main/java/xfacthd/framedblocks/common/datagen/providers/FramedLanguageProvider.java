@@ -245,6 +245,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_GLOWING_CUBE.value(), "Framed Glowing Cube");
         add(FBContent.BLOCK_FRAMED_PYRAMID.value(), "Framed Pyramid");
         add(FBContent.BLOCK_FRAMED_PYRAMID_SLAB.value(), "Framed Pyramid Slab");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB.value(), "Framed Elevated Pyramid Slab");
         add(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE.value(), "Framed Horizontal Pane");
         add(FBContent.BLOCK_FRAMED_TARGET.value(), "Framed Target");
         add(FBContent.BLOCK_FRAMED_GATE.value(), "Framed Gate");

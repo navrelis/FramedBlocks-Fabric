@@ -20,14 +20,14 @@ import xfacthd.framedblocks.common.data.property.PillarConnection;
 
 public class FramedPyramidGeometry extends Geometry
 {
-    private static final Vector3f BOTTOM_CENTER = new Vector3f(.5F, 0, .5F);
-    private static final Vector3f TOP_CENTER = new Vector3f(.5F, 1, .5F);
-    private static final Vector3f ZERO = new Vector3f();
+    static final Vector3f BOTTOM_CENTER = new Vector3f(.5F, 0, .5F);
+    static final Vector3f TOP_CENTER = new Vector3f(.5F, 1, .5F);
+    static final Vector3f ZERO = new Vector3f();
 
-    private final Direction facing;
-    private final boolean ySlope;
-    private final boolean hasPillar;
-    private final float slopeHeight;
+    final Direction facing;
+    final boolean ySlope;
+    final boolean hasPillar;
+    final float slopeHeight;
     private final float pillarHeight;
     private final float pillarWidth;
     private final float pillarFaceMin;
@@ -39,18 +39,8 @@ public class FramedPyramidGeometry extends Geometry
         this.ySlope = ctx.state().getValue(FramedProperties.Y_SLOPE);
         PillarConnection pillar = ctx.state().getValue(PropertyHolder.PILLAR_CONNECTION);
         this.hasPillar = pillar != PillarConnection.NONE;
-        this.slopeHeight = switch (pillar)
-        {
-            case NONE -> 1F;
-            case POST -> 12F/16F;
-            case PILLAR -> 8F/16F;
-        };
-        this.pillarHeight = switch (pillar)
-        {
-            case NONE -> 0F;
-            case POST -> 4F/16F;
-            case PILLAR -> 8F/16F;
-        };
+        this.slopeHeight = computeSlopeHeight(pillar);
+        this.pillarHeight = computePillarHeight(pillar);
         this.pillarWidth = switch (pillar)
         {
             case NONE -> 0F;
@@ -68,9 +58,18 @@ public class FramedPyramidGeometry extends Geometry
     }
 
     @Override
-    public void transformQuad(QuadMap quadMap, BakedQuad quad)
+    public final void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
+        buildBody(quadMap, quad, quadDir);
+        if (hasPillar)
+        {
+            buildPillar(quadMap, quad, quadDir);
+        }
+    }
+
+    protected void buildBody(QuadMap quadMap, BakedQuad quad, Direction quadDir)
+    {
         if (Utils.isY(facing))
         {
             boolean up = facing == Direction.UP;
@@ -99,23 +98,6 @@ public class FramedPyramidGeometry extends Geometry
                             .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1, .5F))
                             .apply(Modifiers.offset(dir.getOpposite(), .5F))
                             .apply(Modifiers.rotate(dir.getClockWise().getAxis(), origin, angle, true))
-                            .export(quadMap.get(null));
-                }
-            }
-            if (hasPillar)
-            {
-                if (quadDir == facing)
-                {
-                    QuadModifier.of(quad)
-                            .apply(Modifiers.cutTopBottom(pillarFaceMin, pillarFaceMin, pillarFaceMax, pillarFaceMax))
-                            .export(quadMap.get(quadDir));
-                }
-                else if (quadDir != facing.getOpposite())
-                {
-                    QuadModifier.of(quad)
-                            .apply(Modifiers.cutSideUpDown(facing == Direction.UP, pillarHeight))
-                            .apply(Modifiers.cutSideLeftRight(pillarWidth))
-                            .apply(Modifiers.setPosition(pillarWidth))
                             .export(quadMap.get(null));
                 }
             }
@@ -173,33 +155,73 @@ public class FramedPyramidGeometry extends Geometry
                         .apply(Modifiers.makeHorizontalSlope(!right, FramedSlopePanelGeometry.SLOPE_ANGLE))
                         .export(quadMap.get(null));
             }
+        }
+    }
 
-            if (hasPillar)
+    private void buildPillar(QuadMap quadMap, BakedQuad quad, Direction quadDir)
+    {
+        if (Utils.isY(facing))
+        {
+            if (quadDir == facing)
             {
-                if (Utils.isY(quadDir))
-                {
-                    QuadModifier.of(quad)
-                            .apply(Modifiers.cutTopBottom(facing.getOpposite(), pillarHeight))
-                            .apply(Modifiers.cutTopBottom(facing.getClockWise().getAxis(), pillarWidth))
-                            .apply(Modifiers.setPosition(pillarWidth))
-                            .export(quadMap.get(null));
-                }
-                else if (quadDir == facing)
-                {
-                    QuadModifier.of(quad)
-                            .apply(Modifiers.cutSide(pillarFaceMin, pillarFaceMin, pillarFaceMax, pillarFaceMax))
-                            .export(quadMap.get(quadDir));
-                }
-                else if (quadDir != facing.getOpposite())
-                {
-                    QuadModifier.of(quad)
-                            .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), pillarHeight))
-                            .apply(Modifiers.cutSideUpDown(pillarWidth))
-                            .apply(Modifiers.setPosition(pillarWidth))
-                            .export(quadMap.get(null));
-                }
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutTopBottom(pillarFaceMin, pillarFaceMin, pillarFaceMax, pillarFaceMax))
+                        .export(quadMap.get(quadDir));
+            }
+            else if (quadDir != facing.getOpposite())
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutSideUpDown(facing == Direction.UP, pillarHeight))
+                        .apply(Modifiers.cutSideLeftRight(pillarWidth))
+                        .apply(Modifiers.setPosition(pillarWidth))
+                        .export(quadMap.get(null));
             }
         }
+        else
+        {
+            if (Utils.isY(quadDir))
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutTopBottom(facing.getOpposite(), pillarHeight))
+                        .apply(Modifiers.cutTopBottom(facing.getClockWise().getAxis(), pillarWidth))
+                        .apply(Modifiers.setPosition(pillarWidth))
+                        .export(quadMap.get(null));
+            }
+            else if (quadDir == facing)
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutSide(pillarFaceMin, pillarFaceMin, pillarFaceMax, pillarFaceMax))
+                        .export(quadMap.get(quadDir));
+            }
+            else if (quadDir != facing.getOpposite())
+            {
+                QuadModifier.of(quad)
+                        .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), pillarHeight))
+                        .apply(Modifiers.cutSideUpDown(pillarWidth))
+                        .apply(Modifiers.setPosition(pillarWidth))
+                        .export(quadMap.get(null));
+            }
+        }
+    }
+
+    protected float computeSlopeHeight(PillarConnection pillar)
+    {
+        return switch (pillar)
+        {
+            case NONE -> 1F;
+            case POST -> 12F/16F;
+            case PILLAR -> 8F/16F;
+        };
+    }
+
+    protected float computePillarHeight(PillarConnection pillar)
+    {
+        return switch (pillar)
+        {
+            case NONE -> 0F;
+            case POST -> 4F/16F;
+            case PILLAR -> 8F/16F;
+        };
     }
 
     @Override

@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public sealed class PyramidOutlineRenderer implements OutlineRenderer permits PyramidSlabOutlineRenderer
+public sealed class PyramidOutlineRenderer implements OutlineRenderer permits PyramidSlabOutlineRenderer, ElevatedPyramidSlabOutlineRenderer
 {
     private static final Quaternionf[] XN_DIR = makeQuaternionArray();
 

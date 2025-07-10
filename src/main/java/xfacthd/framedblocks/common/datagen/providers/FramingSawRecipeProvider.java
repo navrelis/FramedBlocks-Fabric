@@ -742,12 +742,16 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.DUSTS_GLOWSTONE, 4))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PYRAMID)
-                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PYRAMID, 3)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, 3)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB, 3)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_TARGET)
