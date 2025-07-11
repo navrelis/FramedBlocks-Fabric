@@ -8,6 +8,10 @@ import xfacthd.framedblocks.api.render.OutlineRenderer;
 
 public final class SlopedStairsOutlineRenderer implements OutlineRenderer
 {
+    public static final SlopedStairsOutlineRenderer INSTANCE = new SlopedStairsOutlineRenderer();
+
+    private SlopedStairsOutlineRenderer() { }
+
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {

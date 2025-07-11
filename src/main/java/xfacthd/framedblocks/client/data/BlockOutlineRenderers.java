@@ -29,8 +29,12 @@ public final class BlockOutlineRenderers
         event.register(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, ElevatedInnerCornerSlopeEdgeOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE, new ThreewayCornerSlopeEdgeOutlineRenderer());
         event.register(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeOutlineRenderer());
-        event.register(BlockType.FRAMED_SLOPED_STAIRS, new SlopedStairsOutlineRenderer());
-        event.register(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsOutlineRenderer());
+        event.register(BlockType.FRAMED_SLOPED_STAIRS, SlopedStairsOutlineRenderer.INSTANCE);
+        event.register(BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLAB, SlopedStairsOutlineRenderer.INSTANCE);
+        event.register(BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLOPE, SlopedStairsOutlineRenderer.INSTANCE);
+        event.register(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, VerticalSlopedStairsOutlineRenderer.INSTANCE);
+        event.register(BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL, VerticalSlopedStairsOutlineRenderer.INSTANCE);
+        event.register(BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE, VerticalSlopedStairsOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_POWERED_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);

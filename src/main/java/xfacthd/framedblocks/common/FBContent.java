@@ -178,6 +178,8 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_SLICED_STAIRS_PANEL = registerBlock(FramedSlicedStairsPanelBlock::new, BlockType.FRAMED_SLICED_STAIRS_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_SLOPED_STAIRS = registerBlock(FramedSlopedStairsBlock::new, BlockType.FRAMED_SLOPED_STAIRS);
     public static final Holder<Block> BLOCK_FRAMED_SLOPED_DOUBLE_STAIRS = registerBlock(FramedSlopedDoubleStairsBlock::new, BlockType.FRAMED_SLOPED_DOUBLE_STAIRS);
+    public static final Holder<Block> BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLAB = registerBlock(FramedSlicedSlopedStairsSlabBlock::new, BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLAB);
+    public static final Holder<Block> BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLOPE = registerBlock(FramedSlicedSlopedStairsSlopeBlock::new, BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_VERTICAL_STAIRS = registerBlock(FramedVerticalStairsBlock::new, BlockType.FRAMED_VERTICAL_STAIRS);
     public static final Holder<Block> BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final Holder<Block> BLOCK_FRAMED_VERTICAL_HALF_STAIRS = registerBlock(FramedVerticalHalfStairsBlock::new, BlockType.FRAMED_VERTICAL_HALF_STAIRS);
@@ -186,6 +188,8 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_VERTICAL_SLICED_STAIRS = registerBlock(FramedVerticalSlicedStairsBlock::new, BlockType.FRAMED_VERTICAL_SLICED_STAIRS);
     public static final Holder<Block> BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS = registerBlock(FramedVerticalSlopedStairsBlock::new, BlockType.FRAMED_VERTICAL_SLOPED_STAIRS);
     public static final Holder<Block> BLOCK_FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS = registerBlock(FramedVerticalSlopedDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS);
+    public static final Holder<Block> BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL = registerBlock(FramedVerticalSlicedSlopedStairsPanelBlock::new, BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE = registerBlock(FramedVerticalSlicedSlopedStairsSlopeBlock::new, BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_THREEWAY_CORNER_PILLAR = registerBlock(FramedThreewayCornerPillarBlock::new, BlockType.FRAMED_THREEWAY_CORNER_PILLAR);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR = registerBlock(FramedDoubleThreewayCornerPillarBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR);
     public static final Holder<Block> BLOCK_FRAMED_WALL = registerBlock(FramedWallBlock::new, BlockType.FRAMED_WALL);
@@ -468,9 +472,25 @@ public final class FBContent
             FramedSlopedDoubleStairsBlockEntity::new,
             BlockType.FRAMED_SLOPED_DOUBLE_STAIRS
     );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_SLICED_SLOPED_DOUBLE_STAIRS_SLAB = registerBlockEntity(
+            FramedSlicedSlopedStairsSlabBlockEntity::new,
+            BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLAB
+    );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_SLICED_SLOPED_DOUBLE_STAIRS_SLOPE = registerBlockEntity(
+            FramedSlicedSlopedStairsSlopeBlockEntity::new,
+            BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLOPE
+    );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS = registerBlockEntity(
             FramedVerticalSlopedDoubleStairsBlockEntity::new,
             BlockType.FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS
+    );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_VERTICAL_SLICED_SLOPED_DOUBLE_STAIRS_PANEL = registerBlockEntity(
+            FramedVerticalSlicedSlopedStairsPanelBlockEntity::new,
+            BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL
+    );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_VERTICAL_SLICED_SLOPED_DOUBLE_STAIRS_SLOPE = registerBlockEntity(
+            FramedVerticalSlicedSlopedStairsSlopeBlockEntity::new,
+            BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOOR = registerBlockEntity(
             FramedDoorBlockEntity::new,

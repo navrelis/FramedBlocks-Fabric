@@ -10,7 +10,8 @@
     }
   },
   "pattern": [
-    "SH"
+    "H",
+    "S"
   ],
   "result": {
     "count": 1,

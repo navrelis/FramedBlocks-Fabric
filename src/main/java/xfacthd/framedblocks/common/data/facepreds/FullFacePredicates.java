@@ -79,6 +79,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_SLICED_STAIRS_PANEL, new SlicedStairsPanelFullFacePredicate());
         put(BlockType.FRAMED_SLOPED_STAIRS, new SlopedStairsFullFacePredicate());
         put(BlockType.FRAMED_SLOPED_DOUBLE_STAIRS, new SlopedDoubleStairsFullFacePredicate());
+        put(BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLAB, FullFacePredicate.TOP);
+        put(BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLOPE, new SlicedSlopedStairsSlopeFullFacePredicate());
         put(BlockType.FRAMED_VERTICAL_STAIRS, new VerticalStairsFullFacePredicate());
         put(BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS, new VerticalDoubleStairsFullFacePredicate());
         put(BlockType.FRAMED_VERTICAL_HALF_STAIRS, FullFacePredicate.FALSE);
@@ -87,6 +89,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_VERTICAL_SLICED_STAIRS, new VerticalSlicedStairsFullFacePredicate());
         put(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsFullFacePredicate());
         put(BlockType.FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS, new VerticalSlopedDoubleStairsFullFacePredicate());
+        put(BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL, FullFacePredicate.HOR_DIR);
+        put(BlockType.FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE, new VerticalSlicedSlopedStairsSlopeFullFacePredicate());
         put(BlockType.FRAMED_THREEWAY_CORNER_PILLAR, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_WALL, FullFacePredicate.FALSE);

@@ -288,6 +288,8 @@ public final class FBClient
         wrapDoubleModel(FBContent.BLOCK_FRAMED_SLICED_STAIRS_PANEL, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLOPED_STAIRS, FramedSlopedStairsGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_SLOPED_DOUBLE_STAIRS, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLAB, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLOPE, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS, FramedVerticalStairsGeometry::new, WrapHelper.IGNORE_DEFAULT_LOCK);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS, FramedVerticalHalfStairsGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
@@ -296,6 +298,8 @@ public final class FBClient
         wrapDoubleModel(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_STAIRS, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS, FramedVerticalSlopedStairsGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR, FramedThreewayCornerPillarGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL, FramedWallGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);

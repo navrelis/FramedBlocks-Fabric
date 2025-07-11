@@ -233,6 +233,14 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLAB)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLOPE)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLICED_STAIRS_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
@@ -271,6 +279,14 @@ public final class FramingSawRecipeProvider extends RecipeProvider
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_WALL)

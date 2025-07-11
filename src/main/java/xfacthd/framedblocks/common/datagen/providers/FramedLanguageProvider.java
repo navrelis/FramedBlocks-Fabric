@@ -106,6 +106,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS.value(), "Framed Double Half Stairs");
         add(FBContent.BLOCK_FRAMED_SLOPED_STAIRS.value(), "Framed Sloped Stairs");
         add(FBContent.BLOCK_FRAMED_SLOPED_DOUBLE_STAIRS.value(), "Framed Sloped Double Stairs");
+        add(FBContent.BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLAB.value(), "Framed Sliced Sloped Stairs (Slab)");
+        add(FBContent.BLOCK_FRAMED_SLICED_SLOPED_STAIRS_SLOPE.value(), "Framed Sliced Sloped Stairs (Slope)");
         add(FBContent.BLOCK_FRAMED_SLICED_STAIRS_SLAB.value(), "Framed Sliced Stairs (Slab)");
         add(FBContent.BLOCK_FRAMED_SLICED_STAIRS_PANEL.value(), "Framed Sliced Stairs (Panel)");
         add(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.value(), "Framed Vertical Stairs");
@@ -116,6 +118,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_STAIRS.value(), "Framed Vertical Sliced Stairs");
         add(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS.value(), "Framed Vertical Sloped Stairs");
         add(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS.value(), "Framed Vertical Sloped Double Stairs");
+        add(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_PANEL.value(), "Framed Vertical Sliced Sloped Stairs (Panel)");
+        add(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_SLOPED_STAIRS_SLOPE.value(), "Framed Vertical Sliced Sloped Stairs (Slope)");
         add(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR.value(), "Framed Threeway Corner Pillar");
         add(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR.value(), "Framed Double Threeway Corner Pillar");
         add(FBContent.BLOCK_FRAMED_WALL.value(), "Framed Wall");
