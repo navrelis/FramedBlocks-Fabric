@@ -19,9 +19,9 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedVerticalSlopedStairsBlock extends FramedBlock
 {
-    public FramedVerticalSlopedStairsBlock()
+    public FramedVerticalSlopedStairsBlock(BlockType type)
     {
-        super(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS);
+        super(type);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
@@ -41,22 +41,22 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
         return PlacementStateBuilder.of(this, ctx)
                 .withCustom((state, modCtx) ->
                 {
-                    Direction facing = ctx.getHorizontalDirection();
+                    Direction facing = modCtx.getHorizontalDirection();
                     state = state.setValue(FramedProperties.FACING_HOR, facing);
 
-                    Direction face = ctx.getClickedFace();
+                    Direction face = modCtx.getClickedFace();
                     HorizontalRotation rot;
                     if (face == facing.getOpposite())
                     {
-                        rot = HorizontalRotation.fromWallCorner(ctx.getClickLocation(), face);
+                        rot = HorizontalRotation.fromWallCorner(modCtx.getClickLocation(), face);
                     }
                     else
                     {
-                        rot = HorizontalRotation.fromPerpendicularWallCorner(facing, face, ctx.getClickLocation());
+                        rot = HorizontalRotation.fromPerpendicularWallCorner(facing, face, modCtx.getClickLocation());
                     }
                     return state.setValue(PropertyHolder.ROTATION, rot);
                 })
-                .withWater()
+                .tryWithWater()
                 .build();
     }
 

@@ -81,6 +81,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_SLICED_STAIRS_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLICED_STAIRS_PANEL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPED_STAIRS, new SlopedStairsSkipPredicate());
+        put(BlockType.FRAMED_SLOPED_DOUBLE_STAIRS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_VERTICAL_STAIRS, new VerticalStairsSkipPredicate());
         put(BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_VERTICAL_HALF_STAIRS, new VerticalHalfStairsSkipPredicate());
@@ -88,6 +89,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_VERTICAL_DOUBLE_HALF_STAIRS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_VERTICAL_SLICED_STAIRS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsSkipPredicate());
+        put(BlockType.FRAMED_VERTICAL_SLOPED_DOUBLE_STAIRS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_THREEWAY_CORNER_PILLAR, new ThreewayCornerPillarSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_WALL, new WallSkipPredicate());
