@@ -630,9 +630,9 @@ final class SkipPredicateGeneratorData
                     )
                     .dirs(
                             new TestDir("boolean", "Post", null, "post_hor", "post_vert")
-                                    .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB"),
+                                    .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB", "FRAMED_UPPER_PYRAMID_SLAB"),
                             new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")
-                                    .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB")
+                                    .withExcludedTypes("FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB", "FRAMED_UPPER_PYRAMID_SLAB")
                     ),
             entry("FRAMED_PYRAMID_SLAB", "slope"),
             entry("FRAMED_ELEVATED_PYRAMID_SLAB", "slope")
@@ -643,9 +643,21 @@ final class SkipPredicateGeneratorData
                     .dirs(
                             new TestDir("HalfDir", "Half", List.of("dir"), "half_xz_hor", "half_xz_vert", "half_y"),
                             new TestDir("boolean", "Post", null, "post_hor", "post_vert")
-                                    .withExcludedTypes("FRAMED_ELEVATED_PYRAMID_SLAB", "FRAMED_PYRAMID"),
+                                    .withExcludedTypes("FRAMED_ELEVATED_PYRAMID_SLAB", "FRAMED_PYRAMID", "FRAMED_UPPER_PYRAMID_SLAB"),
                             new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")
-                                    .withExcludedTypes("FRAMED_ELEVATED_PYRAMID_SLAB", "FRAMED_PYRAMID")
+                                    .withExcludedTypes("FRAMED_ELEVATED_PYRAMID_SLAB", "FRAMED_PYRAMID", "FRAMED_UPPER_PYRAMID_SLAB")
+                    ),
+            entry("FRAMED_UPPER_PYRAMID_SLAB", "slope").props(
+                            Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE)
+                                    .withEarlyExit(),
+                            Property.internal("PillarConnection", "connection", "PILLAR_CONNECTION", PropType.CUSTOM)
+                                    .withEarlyExit()
+                    )
+                    .dirs(
+                            new TestDir("boolean", "Post", null, "post_hor", "post_vert")
+                                    .withExcludedTypes("FRAMED_UPPER_PYRAMID_SLAB", "FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB"),
+                            new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")
+                                    .withExcludedTypes("FRAMED_UPPER_PYRAMID_SLAB", "FRAMED_PYRAMID", "FRAMED_ELEVATED_PYRAMID_SLAB")
                     ),
             entry("FRAMED_TARGET", IGNORED_PKG),
             entry("FRAMED_GATE", "door")

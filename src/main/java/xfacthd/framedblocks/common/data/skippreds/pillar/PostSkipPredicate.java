@@ -48,6 +48,9 @@ public final class PostSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
                         axis, adjState, side
                 );
+                case FRAMED_UPPER_PYRAMID_SLAB -> testAgainstUpperPyramidSlab(
+                        axis, adjState, side
+                );
                 default -> false;
             };
         }
@@ -103,5 +106,16 @@ public final class PostSkipPredicate implements SideSkipPredicate
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 
         return (PillarDirs.Post.isPostDir(axis, side) && SlopeDirs.ElevatedPyramidSlab.isPostDir(adjDir, adjConnection, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_UPPER_PYRAMID_SLAB)
+    private static boolean testAgainstUpperPyramidSlab(
+            Direction.Axis axis, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
+
+        return (PillarDirs.Post.isPostDir(axis, side) && SlopeDirs.UpperPyramidSlab.isPostDir(adjDir, adjConnection, side.getOpposite()));
     }
 }

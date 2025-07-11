@@ -280,8 +280,7 @@ public final class SlopeDirs
         private ElevatedPyramidSlab() { }
     }
 
-    // TODO: re-enable when the stacked pyramid slab is added
-    /*public static final class UpperPyramidSlab
+    public static final class UpperPyramidSlab
     {
         public static boolean testEarlyExit(Direction dir, PillarConnection connection, Direction side)
         {
@@ -299,7 +298,7 @@ public final class SlopeDirs
         }
 
         private UpperPyramidSlab() { }
-    }*/
+    }
 
     public static final class RailSlope
     {

@@ -53,6 +53,9 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_PYRAMID_SLAB -> testAgainstElevatedPyramidSlab(
                         xAxis, yAxis, zAxis, adjState, side
                 );
+                case FRAMED_UPPER_PYRAMID_SLAB -> testAgainstUpperPyramidSlab(
+                        xAxis, yAxis, zAxis, adjState, side
+                );
                 default -> false;
             };
         }
@@ -118,5 +121,16 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
         PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
 
         return (PillarDirs.ThickLattice.isPillarDir(xAxis, yAxis, zAxis, side) && SlopeDirs.ElevatedPyramidSlab.isPillarDir(adjDir, adjConnection, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_UPPER_PYRAMID_SLAB)
+    private static boolean testAgainstUpperPyramidSlab(
+            boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        PillarConnection adjConnection = adjState.getValue(PropertyHolder.PILLAR_CONNECTION);
+
+        return (PillarDirs.ThickLattice.isPillarDir(xAxis, yAxis, zAxis, side) && SlopeDirs.UpperPyramidSlab.isPillarDir(adjDir, adjConnection, side.getOpposite()));
     }
 }

@@ -221,6 +221,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_PYRAMID, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);
+        put(BlockType.FRAMED_UPPER_PYRAMID_SLAB, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_STACKED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_TARGET, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_GATE, DoorFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_IRON_GATE, DoorFullFacePredicate.INSTANCE);

@@ -55,6 +55,29 @@ public final class PyramidShapes implements SplitShapeGenerator
             null,
             null
     );
+    public static final PyramidShapes UPPER_SLAB = new PyramidShapes(
+            () -> ShapeUtils.orUnoptimized(
+                    Block.box(0, 0, 4, 16, 16, 8),
+                    Block.box(4, 4, 0, 12, 12, 4)
+            ),
+            () -> ShapeUtils.orUnoptimized(
+                    Block.box(  0,   0, 7.5,   16,   16,  8),
+                    Block.box( .5,  .5,   4, 15.5, 15.5,  8),
+                    Block.box(  4,   4,  .5,   12,   12,  4),
+                    Block.box(7.5, 7.5,   0,  8.5,  8.5, .5)
+            ),
+            () -> ShapeUtils.orUnoptimized(
+                    Block.box(  0,   0, 7.5,   16,   16,  8),
+                    Block.box( .5,  .5,   4, 15.5, 15.5,  8),
+                    Block.box(  4,   4,  .5,   12,   12,  4),
+                    Block.box(  6,   6,    0,  10,   10, .5)
+            ),
+            () -> ShapeUtils.orUnoptimized(
+                    Block.box(  0,   0, 7.5,   16,   16,  8),
+                    Block.box( .5,  .5,   4, 15.5, 15.5,  8),
+                    Block.box(  4,   4,   0,   12,   12,  4)
+            )
+    );
     public static final PyramidShapes ELEVATED_SLAB = new PyramidShapes(
             () -> ShapeUtils.orUnoptimized(
                     Block.box(0, 0, 4, 16, 16, 16),

@@ -63,6 +63,7 @@ public final class FramedLootTableProvider extends LootTableProvider
                             .include(FBContent.DC_TYPE_TANK_CONTENTS.value())
             ));
 
+            add(FBContent.BLOCK_FRAMED_UPPER_PYRAMID_SLAB.value(), noDrop());
             add(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT.value(), noDrop());
             add(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT.value(), noDrop());
             add(FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT.value(), noDrop());

@@ -224,6 +224,8 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_PYRAMID, new PyramidConnectionPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, new ElevatedPyramidSlabConnectionPredicate());
+        put(BlockType.FRAMED_UPPER_PYRAMID_SLAB, new UpperPyramidSlabConnectionPredicate());
+        put(BlockType.FRAMED_STACKED_PYRAMID_SLAB, new StackedPyramidSlabConnectionPredicate());
         put(BlockType.FRAMED_TARGET, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_GATE, DoorConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_IRON_GATE, DoorConnectionPredicate.INSTANCE);

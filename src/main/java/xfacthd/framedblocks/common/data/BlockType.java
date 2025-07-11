@@ -236,6 +236,8 @@ public enum BlockType implements IBlockType
     FRAMED_PYRAMID                                  ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, PyramidShapes.FULL),
     FRAMED_PYRAMID_SLAB                             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, PyramidShapes.SLAB),
     FRAMED_ELEVATED_PYRAMID_SLAB                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, PyramidShapes.ELEVATED_SLAB),
+    FRAMED_UPPER_PYRAMID_SLAB                       ( true, false, false,  true, false,  true, false, false, ConTexMode.DETAILED, PyramidShapes.UPPER_SLAB),
+    FRAMED_STACKED_PYRAMID_SLAB                     ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, PyramidShapes.ELEVATED_SLAB),
     FRAMED_TARGET                                   ( true, false,  true, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_GATE                                     ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE, GateShapes::generate),
     FRAMED_IRON_GATE                                ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE, GateShapes::generate),

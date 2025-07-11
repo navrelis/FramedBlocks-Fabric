@@ -195,6 +195,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PYRAMID, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB, cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_UPPER_PYRAMID_SLAB.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_PYRAMID_SLAB, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_GATE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_IRON_GATE, ironCube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_MINI_CUBE, cube, "cutout");

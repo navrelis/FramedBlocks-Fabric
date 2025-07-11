@@ -754,6 +754,10 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STACKED_PYRAMID_SLAB, 3)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_TARGET)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additives(List.of(

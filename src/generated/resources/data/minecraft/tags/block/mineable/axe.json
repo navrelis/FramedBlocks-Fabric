@@ -194,6 +194,8 @@
     "framedblocks:framed_pyramid",
     "framedblocks:framed_pyramid_slab",
     "framedblocks:framed_elevated_pyramid_slab",
+    "framedblocks:framed_upper_pyramid_slab",
+    "framedblocks:framed_stacked_pyramid_slab",
     "framedblocks:framed_target",
     "framedblocks:framed_gate",
     "framedblocks:framed_mini_cube",

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "framedblocks:framed_hammer"
+    },
+    "P": {
+      "item": "framedblocks:framed_pyramid_slab"
+    },
+    "S": {
+      "item": "framedblocks:framed_slab"
+    }
+  },
+  "pattern": [
+    "H",
+    "P",
+    "S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks:framed_stacked_pyramid_slab"
+  }
+}
