@@ -115,8 +115,12 @@ public final class SkipPredicateGeneratorImpl
     private static final String TEST_MTH_SPECIAL_PROP_LOOKUP_TEMPLATE = "        %s adj%s = %s.%s(adjState);";
     private static final String DIR_TEST_TEMPLATE_FIRST = "return %s.get%sDir(%s).isEqualTo(%s.get%sDir(%s))";
     private static final String DIR_TEST_TEMPLATE_OTHER = "       %s.get%sDir(%s).isEqualTo(%s.get%sDir(%s))";
-    private static final String PRIMITIVE_DIR_TEST_TEMPLATE_FIRST = "return (%s.is%sDir(%s) && %s.is%sDir(%s))";
-    private static final String PRIMITIVE_DIR_TEST_TEMPLATE_OTHER = "       (%s.is%sDir(%s) && %s.is%sDir(%s))";
+    private static final String BOOLEAN_DIR_TEST_TEMPLATE_FIRST = "return (%s.is%sDir(%s) && %s.is%sDir(%s))";
+    private static final String BOOLEAN_DIR_TEST_TEMPLATE_OTHER = "       (%s.is%sDir(%s) && %s.is%sDir(%s))";
+    private static final String IDENTITY_DIR_TEST_TEMPLATE_FIRST = "return %s.get%sDir(%s) == %s.get%sDir(%s)";
+    private static final String IDENTITY_DIR_TEST_TEMPLATE_OTHER = "       %s.get%sDir(%s) == %s.get%sDir(%s)";
+    private static final String EQUALS_DIR_TEST_TEMPLATE_FIRST = "return %s.get%sDir(%s).equals(%s.get%sDir(%s))";
+    private static final String EQUALS_DIR_TEST_TEMPLATE_OTHER = "       %s.get%sDir(%s).equals(%s.get%sDir(%s))";
     private static final String SPECIAL_DIR_TEST_TEMPLATE_FIRST = "return %s.test%sDir(%s)";
     private static final String SPECIAL_DIR_TEST_TEMPLATE_OTHER = "       %s.test%sDir(%s)";
 
@@ -591,16 +595,14 @@ public final class SkipPredicateGeneratorImpl
         {
             if (!first) builder.append(" ||\n");
 
-            TestType testType = TestType.of(pair.first, first);
-            boolean special = testType.isSpecial();
-            String template = switch (testType)
+            boolean special = pair.first.isSpecial();
+            String template = switch (pair.first.comparison())
             {
-                case FIRST_OBJECT -> DIR_TEST_TEMPLATE_FIRST;
-                case OTHER_OBJECT -> DIR_TEST_TEMPLATE_OTHER;
-                case FIRST_PRIMITIVE -> PRIMITIVE_DIR_TEST_TEMPLATE_FIRST;
-                case OTHER_PRIMITIVE -> PRIMITIVE_DIR_TEST_TEMPLATE_OTHER;
-                case FIRST_SPECIAL -> SPECIAL_DIR_TEST_TEMPLATE_FIRST;
-                case OTHER_SPECIAL -> SPECIAL_DIR_TEST_TEMPLATE_OTHER;
+                case TEST_DIR -> first ? DIR_TEST_TEMPLATE_FIRST : DIR_TEST_TEMPLATE_OTHER;
+                case BOOLEAN -> first ? BOOLEAN_DIR_TEST_TEMPLATE_FIRST : BOOLEAN_DIR_TEST_TEMPLATE_OTHER;
+                case IDENTITY -> first ? IDENTITY_DIR_TEST_TEMPLATE_FIRST : IDENTITY_DIR_TEST_TEMPLATE_OTHER;
+                case EQUALS -> first ? EQUALS_DIR_TEST_TEMPLATE_FIRST : EQUALS_DIR_TEST_TEMPLATE_OTHER;
+                case SPECIAL -> first ? SPECIAL_DIR_TEST_TEMPLATE_FIRST : SPECIAL_DIR_TEST_TEMPLATE_OTHER;
             };
             String firstExecParams = buildTestExecParams(sourceType, pair.first, false, noPropsTypes, special);
             String dirTestExec;
@@ -778,44 +780,6 @@ public final class SkipPredicateGeneratorImpl
             this.specialLookupTemplate = specialLookupTemplate;
         }
     }
-
-    private enum TestType
-    {
-        FIRST_OBJECT,
-        OTHER_OBJECT,
-        FIRST_PRIMITIVE,
-        OTHER_PRIMITIVE,
-        FIRST_SPECIAL,
-        OTHER_SPECIAL
-        ;
-
-        private static final TestType[] TYPES = values();
-
-        public boolean isSpecial()
-        {
-            return this == FIRST_SPECIAL || this == OTHER_SPECIAL;
-        }
-
-        public static TestType of(TestDir testDir, boolean first)
-        {
-            int idx = 0;
-            if (testDir.special())
-            {
-                idx += 4;
-            }
-            else if (testDir.primitive())
-            {
-                idx += 2;
-            }
-            if (!first)
-            {
-                idx += 1;
-            }
-            return TYPES[idx];
-        }
-    }
-
-
 
     private SkipPredicateGeneratorImpl() { }
 }
