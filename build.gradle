@@ -185,8 +185,6 @@ dependencies {
     //compileOnly("curse.maven:buildinggadgets-298187:${buildinggadgets_coord}")
 
     compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
-    //runtimeOnly("com.teamresourceful.resourcefullib:resourcefullib-neoforge-${resful_lib_mc_version}:${resful_lib_version}")
-    //runtimeOnly("earth.terrarium.chipped:chipped-neoforge-${chipped_mc_version}:${chipped_version}")
 
     compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
@@ -204,10 +202,6 @@ dependencies {
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
     //runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
 
-    compileOnly("curse.maven:modernfix-790626:${modernfix_coord}")
-
-    //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}+mc${embeddium_mc_version}")
-
     compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}-${create_build_number}") { transitive = false }
     compileOnly("net.createmod.ponder:Ponder-NeoForge-${create_mc_version}:${ponder_version}")
     // Only needed when Create and Ponder are switched to implementation
@@ -216,8 +210,6 @@ dependencies {
 
     //runtimeOnly("curse.maven:moonlight-499980:${moonlight_coord}")
     compileOnly("curse.maven:amendments-896746:${amendments_coord}")
-
-    //implementation("curse.maven:guidebook-253874:${guidebook_coord}")
 
     compileOnly("appeng:appliedenergistics2:${ae2_version}:api")
     //runtimeOnly("appeng:appliedenergistics2:${ae2_version}")
@@ -237,7 +229,6 @@ tasks.withType(ProcessResources).configureEach {
             minecraft_version_range: minecraft_version_range,
             neoforge_version: neoforge_version,
             neoforge_version_range: neoforge_version_range,
-            loader_version_range: loader_version_range,
             mod_version: mod_version,
             jei_version: jei_version,
             rei_version: rei_version,
@@ -245,11 +236,9 @@ tasks.withType(ProcessResources).configureEach {
             diag_blocks_version: diag_blocks_version,
             buildinggadgets_version: buildinggadgets_version,
             atlasviewer_version: atlasviewer_version,
-            modernfix_version: modernfix_version,
             amendments_version: amendments_version,
             athena_version: athena_version,
             create_version: create_version,
-            guidebook_version: guidebook_version,
             ae2_version: ae2_version,
             searchables_version: searchables_version,
             additionalplacements_version: additionalplacements_version
