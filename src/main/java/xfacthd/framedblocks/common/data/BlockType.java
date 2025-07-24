@@ -249,7 +249,7 @@ public enum BlockType implements IBlockType
     FRAMED_IRON_GATE                                ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE, GateShapes::generate),
     FRAMED_ITEM_FRAME                               (false,  true,  true,  true,  true, false, false, false, null, ItemFrameShapes::generate),
     FRAMED_GLOWING_ITEM_FRAME                       (false,  true,  true,  true,  true, false, false, false, null, ItemFrameShapes::generate),
-    FRAMED_MINI_CUBE                                (false, false, false,  true,  true,  true, false, false, null, Block.box(4, 0, 4, 12, 8, 12)),
+    FRAMED_MINI_CUBE                                (false, false, false,  true,  true,  true, false, false, null, MiniCubeShapes::generate),
     FRAMED_ONE_WAY_WINDOW                           (false, false,  true, false,  true, false, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_BOOKSHELF                                ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_CHISELED_BOOKSHELF                       ( true, false,  true, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
