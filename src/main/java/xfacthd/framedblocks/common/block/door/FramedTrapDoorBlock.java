@@ -21,7 +21,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
+                .setValue(PropertyHolder.ROTATE_TEXTURE, false)
         );
     }
 
@@ -44,7 +47,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
+        builder.add(FramedProperties.SOLID, PropertyHolder.ROTATE_TEXTURE, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
@@ -59,6 +62,22 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(level, pos, placer, stack);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        ItemStack stack = player.getMainHandItem();
+        if (stack.is(Utils.FRAMED_HAMMER.value()))
+        {
+            if (!level.isClientSide())
+            {
+                state = state.setValue(PropertyHolder.ROTATE_TEXTURE, !state.getValue(PropertyHolder.ROTATE_TEXTURE));
+                level.setBlock(pos, state, Block.UPDATE_ALL);
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

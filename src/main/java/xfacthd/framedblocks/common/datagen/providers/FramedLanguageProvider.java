@@ -469,6 +469,10 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(CamoRotationOverlay.ROTATEABLE_FALSE, "The targetted camo cannot be rotated");
         add(CamoRotationOverlay.ROTATEABLE_TRUE, "The targetted camo can be rotated");
+
+        add(TrapdoorTextureRotationOverlay.ROTATING_FALSE, "Camo texture will not rotate when opening the trapdoor");
+        add(TrapdoorTextureRotationOverlay.ROTATING_TRUE, "Camo texture will rotate when opening the trapdoor");
+        add(TrapdoorTextureRotationOverlay.ROTATING_TOGGLE, "Hit with a Framed Hammer to toggle texture rotation");
     }
 
     private void addConfigTranslations()
@@ -513,6 +517,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_ONE_WAY_WINDOW_MODE, "One-Way Window overlay: Display mode");
         add(ClientConfig.TRANSLATION_FRAME_BACKGROUND_MODE, "Item Frame Background overlay: Display mode");
         add(ClientConfig.TRANSLATION_CAMO_ROTATION_MODE, "Camo Rotation overlay: Display mode");
+        add(ClientConfig.TRANSLATION_TRAPDOOR_TEXTURE_ROTATION_MODE, "Trapdoor Texture Rotation overlay: Display mode");
 
         add("framedblocks.configuration.section.framedblocks.devtools.toml", "Dev Tools Settings");
         add("framedblocks.configuration.section.framedblocks.devtools.toml.title", "FramedBlocks Dev Tools Configuration");

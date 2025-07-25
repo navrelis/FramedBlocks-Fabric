@@ -5,6 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public final class TrapdoorFullFacePredicate implements FullFacePredicate
 {
@@ -17,6 +18,7 @@ public final class TrapdoorFullFacePredicate implements FullFacePredicate
     {
         if (state.getValue(BlockStateProperties.OPEN))
         {
+            if (state.getValue(PropertyHolder.ROTATE_TEXTURE)) return false;
             return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite() == side;
         }
         else if (state.getValue(BlockStateProperties.HALF) == Half.TOP)

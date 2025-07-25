@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public final class TrapdoorConnectionPredicate implements ConnectionPredicate
 {
@@ -16,8 +17,10 @@ public final class TrapdoorConnectionPredicate implements ConnectionPredicate
     @Override
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
-        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         boolean open = state.getValue(BlockStateProperties.OPEN);
+        if (open && state.getValue(PropertyHolder.ROTATE_TEXTURE)) return false;
+
+        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
         Direction fullFace = facing.getOpposite();
         if (!open)
@@ -41,10 +44,10 @@ public final class TrapdoorConnectionPredicate implements ConnectionPredicate
     @Override
     public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
     {
-        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         boolean open = state.getValue(BlockStateProperties.OPEN);
+        if (open && state.getValue(PropertyHolder.ROTATE_TEXTURE)) return false;
 
-        Direction fullFace = facing;
+        Direction fullFace = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         if (!open)
         {
             Half half = state.getValue(BlockStateProperties.HALF);
