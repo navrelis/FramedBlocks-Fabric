@@ -21,6 +21,7 @@ import xfacthd.framedblocks.common.config.ClientConfig;
 public final class AppearanceHelper
 {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final boolean CLIENT = FMLEnvironment.dist.isClient();
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
     public static BlockState getAppearance(
@@ -33,7 +34,18 @@ public final class AppearanceHelper
             @Nullable BlockPos queryPos
     )
     {
-        return getAppearance(framedBlock, state, level, pos, side, queryState, queryPos, false);
+        if (!CLIENT)
+        {
+            return AIR;
+        }
+
+        ConTexMode cfgMode = ClientConfig.VIEW.getConTexMode();
+        if (cfgMode == ConTexMode.NONE)
+        {
+            return AIR;
+        }
+
+        return getAppearance(framedBlock, state, level, pos, side, queryState, queryPos, cfgMode, false);
     }
 
     private static BlockState getAppearance(
@@ -44,17 +56,19 @@ public final class AppearanceHelper
             Direction side,
             @Nullable BlockState queryState,
             @Nullable BlockPos queryPos,
+            ConTexMode cfgMode,
             boolean recursive
     )
     {
         IBlockType type = framedBlock.getBlockType();
-        if (!FMLEnvironment.dist.isClient() || !type.supportsConnectedTextures())
+        if (!type.supportsConnectedTextures())
         {
             return AIR;
         }
 
-        ConTexMode cfgMode = ClientConfig.VIEW.getConTexMode();
-        if (cfgMode == ConTexMode.NONE)
+        boolean doubleBlock = type.isDoubleBlock();
+        StateCache stateCache = framedBlock.getCache(state);
+        if (!doubleBlock && !stateCache.mayConnect(side))
         {
             // Don't continue if CT support is globally disabled
             return AIR;
@@ -67,8 +81,7 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        StateCache stateCache = framedBlock.getCache(state);
-        if (type.isDoubleBlock())
+        if (doubleBlock)
         {
             if (recursive)
             {
@@ -83,7 +96,7 @@ public final class AppearanceHelper
 
             if (actualQueryState != null)
             {
-                Direction edge = findPreferredEdge(pos, queryPos, side, type, stateCache);
+                Direction edge = findPreferredEdge(pos, queryPos, side, true, stateCache);
 
                 if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
                 {
@@ -111,7 +124,7 @@ public final class AppearanceHelper
                 if (componentState != null)
                 {
                     IFramedBlock componentBlock = ((IFramedBlock) componentState.getBlock());
-                    return getAppearance(componentBlock, componentState, level, pos, side, actualQueryState, queryPos, true);
+                    return getAppearance(componentBlock, componentState, level, pos, side, actualQueryState, queryPos, cfgMode, true);
                 }
             }
             return AIR;
@@ -127,7 +140,7 @@ public final class AppearanceHelper
         ConTexMode typeMode = type.getMinimumConTexMode();
         if (canUseMode(cfgMode, typeMode, ConTexMode.FULL_FACE) && stateCache.canConnectFullEdge(side, null))
         {
-            Direction edge = findPreferredEdge(pos, queryPos, side, type, stateCache);
+            Direction edge = findPreferredEdge(pos, queryPos, side, false, stateCache);
             if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
             {
                 return modelData.getCamoContent().getAppearanceState();
@@ -173,13 +186,13 @@ public final class AppearanceHelper
      * checks failing on double blocks due to an edge covering both parts being selected
      */
     @Nullable
-    private static Direction findPreferredEdge(BlockPos pos, @Nullable BlockPos queryPos, Direction side, IBlockType type, StateCache stateCache)
+    private static Direction findPreferredEdge(BlockPos pos, @Nullable BlockPos queryPos, Direction side, boolean doubleBlock, StateCache stateCache)
     {
         if (queryPos == null)
         {
             return null;
         }
-        if (type.isDoubleBlock())
+        if (doubleBlock)
         {
             Direction edge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, stateCache, StateCache::canConnectFullEdge);
             if (edge != null)

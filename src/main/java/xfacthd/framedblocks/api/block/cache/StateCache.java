@@ -30,12 +30,14 @@ public class StateCache
     public static final StateCache EMPTY = new StateCache();
 
     private final byte fullFace;
+    private final byte mayConnect;
     private final long conFullEdge;
     private final long conDetailed;
 
     public StateCache(BlockState state, IBlockType type)
     {
         byte fullFace = 0;
+        byte mayConnect = 0;
         long conFullEdge = 0;
         long conDetailed = 0;
 
@@ -45,9 +47,10 @@ public class StateCache
 
         for (Direction side : DIRECTIONS)
         {
+            byte sideBit = (byte) (1 << side.ordinal());
             if (facePred.test(state, side))
             {
-                fullFace |= (byte) (1 << side.ordinal());
+                fullFace |= sideBit;
             }
 
             if (!supportsCt)
@@ -59,6 +62,7 @@ public class StateCache
             if (fullEdgeNull)
             {
                 conFullEdge |= getSideEdgeNullableMask(side, null);
+                mayConnect |= sideBit;
             }
 
             for (Direction edge : DIRECTIONS)
@@ -76,16 +80,19 @@ public class StateCache
                 if (conPred.canConnectFullEdge(state, side, edge))
                 {
                     conFullEdge |= feMask;
+                    mayConnect |= sideBit;
                 }
 
                 if (conPred.canConnectDetailed(state, side, edge))
                 {
                     conDetailed |= getSideEdgeMask(side, edge);
+                    mayConnect |= sideBit;
                 }
             }
         }
 
         this.fullFace = fullFace;
+        this.mayConnect = mayConnect;
         this.conFullEdge = conFullEdge;
         this.conDetailed = conDetailed;
     }
@@ -93,6 +100,7 @@ public class StateCache
     private StateCache()
     {
         this.fullFace = 0;
+        this.mayConnect = 0;
         this.conFullEdge = 0;
         this.conDetailed = 0;
     }
@@ -105,6 +113,11 @@ public class StateCache
     public final boolean isFullFace(@Nullable Direction side)
     {
         return side != null && fullFace != 0 && (fullFace & (1 << side.ordinal())) != 0;
+    }
+
+    public final boolean mayConnect(Direction side)
+    {
+        return mayConnect != 0 && (mayConnect & (1 << side.ordinal())) != 0;
     }
 
     public final boolean canConnectFullEdge(Direction side, @Nullable Direction edge)
