@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3fc;
 import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -159,6 +160,24 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
         }
         return proxyBehaviour(proxiedStack).appendModelData(proxiedStack, null, ctx, renderState, renderPass, data);
     }
+
+    @Override
+    public Vector3fc getRenderOffset(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            int renderPass,
+            ModelData data
+    )
+    {
+        if (proxiedStack == null)
+        {
+            return OFFSET_ZERO;
+        }
+        return proxyBehaviour(proxiedStack).getRenderOffset(proxiedStack, null, ctx, renderState, renderPass, data);
+    }
+
 
     private static GhostRenderBehaviour proxyBehaviour(ItemStack proxiedStack)
     {

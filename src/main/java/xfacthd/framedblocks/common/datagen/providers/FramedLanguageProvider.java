@@ -280,6 +280,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_LANTERN.value(), "Framed Lantern");
         add(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value(), "Framed Soul Lantern");
         add(FBContent.BLOCK_FRAMED_HOPPER.value(), "Framed Hopper");
+        add(FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(), "Framed Layered Cube");
     }
 
     private void addSpecialBlockTranslations()

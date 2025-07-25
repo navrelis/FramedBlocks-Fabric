@@ -880,6 +880,10 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.CHESTS))
                 .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LAYERED_CUBE)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
+                .save(consumer);
     }
 
     @Override

@@ -5,11 +5,17 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.datagen.loot.FramedBlockLootSubProvider;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.loot.LayeredCubeAdditionalItemCountNumberProvider;
 
 import java.util.List;
 import java.util.Set;
@@ -62,6 +68,21 @@ public final class FramedLootTableProvider extends LootTableProvider
                     CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                             .include(FBContent.DC_TYPE_TANK_CONTENTS.value())
             ));
+
+            add(
+                    FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(),
+                    LootTable.lootTable()
+                            .withPool(createDropWithCamoPool(FBContent.BLOCK_FRAMED_LAYERED_CUBE.value()))
+                            .withPool(applyExplosionCondition(
+                                    FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(),
+                                    LootPool.lootPool()
+                                            .setRolls(ConstantValue.exactly(1.0F))
+                                            .add(applyExplosionDecay(
+                                                    FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(),
+                                                    LootItem.lootTableItem(FBContent.BLOCK_FRAMED_LAYERED_CUBE.value())
+                                            ).apply(SetItemCountFunction.setCount(LayeredCubeAdditionalItemCountNumberProvider.INSTANCE)))
+                            ))
+            );
 
             add(FBContent.BLOCK_FRAMED_UPPER_PYRAMID_SLAB.value(), noDrop());
             add(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT.value(), noDrop());

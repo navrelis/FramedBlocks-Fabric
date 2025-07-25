@@ -17,11 +17,14 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
-public abstract class FramedSpecialDoubleBlockItem extends BlockItem
+public abstract class FramedSpecialBlockItem extends BlockItem
 {
-    public FramedSpecialDoubleBlockItem(Block block, Properties props)
+    private final boolean doubleBlock;
+
+    public FramedSpecialBlockItem(Block block, boolean doubleBlock, Properties props)
     {
         super(block, props);
+        this.doubleBlock = doubleBlock;
     }
 
     @Override
@@ -38,7 +41,7 @@ public abstract class FramedSpecialDoubleBlockItem extends BlockItem
                 if (!level.isClientSide())
                 {
                     boolean writeToCamoTwo = shouldWriteToCamoTwo(ctx, originalState);
-                    CamoList camos = ctx.getItemInHand().get(FBContent.DC_TYPE_CAMO_LIST);
+                    CamoList camos = ctx.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
                     Utils.wrapInStateCopy(
                             level,
                             pos,
@@ -50,7 +53,7 @@ public abstract class FramedSpecialDoubleBlockItem extends BlockItem
                     );
 
                     CamoContainer<?, ?> camo = EmptyCamoContainer.EMPTY;
-                    if (camos != null && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
+                    if (doubleBlock && !camos.isEmpty() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
                     {
                         camo = camos.getCamo(0);
                         be.setCamo(camo, !writeToCamoTwo);
@@ -69,4 +72,20 @@ public abstract class FramedSpecialDoubleBlockItem extends BlockItem
     protected abstract BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState);
 
     protected abstract boolean shouldWriteToCamoTwo(BlockPlaceContext ctx, BlockState originalState);
+
+
+
+    public static abstract class Single extends FramedSpecialBlockItem
+    {
+        public Single(Block block, Properties props)
+        {
+            super(block, false, props);
+        }
+
+        @Override
+        protected boolean shouldWriteToCamoTwo(BlockPlaceContext ctx, BlockState originalState)
+        {
+            return false;
+        }
+    }
 }

@@ -81,6 +81,11 @@ public abstract class FramedBlockLootSubProvider extends BlockLootSubProvider
         add(block, funcBlock -> LootTable.lootTable().withPool(createDropWithCamoPool(funcBlock, drop, itemModifier)));
     }
 
+    protected final LootPool.Builder createDropWithCamoPool(Block block)
+    {
+        return createDropWithCamoPool(block, block, builder -> {});
+    }
+
     protected final LootPool.Builder createDropWithCamoPool(Block block, Block drop, Consumer<LootPoolSingletonContainer.Builder<?>> itemModifier)
     {
         LootPoolSingletonContainer.Builder<?> tableItem = LootItem.lootTableItem(drop)

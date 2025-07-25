@@ -17,6 +17,7 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.property.StairsType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
+import xfacthd.framedblocks.common.data.skippreds.misc.MiscDirs;
 import xfacthd.framedblocks.common.data.skippreds.pillar.PillarDirs;
 import xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
 import xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeDirs;
@@ -134,6 +135,9 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
                         dir, top, adjState, side
                 );
                 case FRAMED_CHECKERED_PANEL_SEGMENT -> testAgainstCheckeredPanelSegment(
+                        dir, top, adjState, side
+                );
+                case FRAMED_LAYERED_CUBE -> testAgainstLayeredCube(
                         dir, top, adjState, side
                 );
                 default -> false;
@@ -509,5 +513,16 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
 
         return SlabDirs.MasonryCornerSegment.getCornerDir(dir, top, side).isEqualTo(SlabDirs.CheckeredPanelSegment.getCornerDir(adjDir, adjSecond, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LAYERED_CUBE)
+    private static boolean testAgainstLayeredCube(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
+        int adjLayers = adjState.getValue(BlockStateProperties.LAYERS);
+
+        return SlabDirs.MasonryCornerSegment.getHalfDir(dir, top, side).isEqualTo(MiscDirs.LayeredCube.getHalfDir(adjFacing, adjLayers, side.getOpposite()));
     }
 }

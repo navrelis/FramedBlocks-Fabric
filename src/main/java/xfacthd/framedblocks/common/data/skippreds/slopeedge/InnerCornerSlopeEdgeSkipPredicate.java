@@ -17,6 +17,7 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.property.StairsType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
+import xfacthd.framedblocks.common.data.skippreds.misc.MiscDirs;
 import xfacthd.framedblocks.common.data.skippreds.pillar.PillarDirs;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabDirs;
 import xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
@@ -157,6 +158,9 @@ public final class InnerCornerSlopeEdgeSkipPredicate implements SideSkipPredicat
                         dir, type, alt, adjState, side
                 );
                 case FRAMED_MASONRY_CORNER_SEGMENT -> testAgainstMasonryCornerSegment(
+                        dir, type, alt, adjState, side
+                );
+                case FRAMED_LAYERED_CUBE -> testAgainstLayeredCube(
                         dir, type, alt, adjState, side
                 );
                 default -> false;
@@ -603,5 +607,16 @@ public final class InnerCornerSlopeEdgeSkipPredicate implements SideSkipPredicat
 
         return SlopeEdgeDirs.InnerCornerSlopeEdge.getHalfDir(dir, type, alt, side).isEqualTo(SlabDirs.MasonryCornerSegment.getHalfDir(adjDir, adjTop, side.getOpposite())) ||
                SlopeEdgeDirs.InnerCornerSlopeEdge.getStairDir(dir, type, alt, side).isEqualTo(SlabDirs.MasonryCornerSegment.getStairDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_LAYERED_CUBE)
+    private static boolean testAgainstLayeredCube(
+            Direction dir, CornerType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
+        int adjLayers = adjState.getValue(BlockStateProperties.LAYERS);
+
+        return SlopeEdgeDirs.InnerCornerSlopeEdge.getHalfDir(dir, type, alt, side).isEqualTo(MiscDirs.LayeredCube.getHalfDir(adjFacing, adjLayers, side.getOpposite()));
     }
 }

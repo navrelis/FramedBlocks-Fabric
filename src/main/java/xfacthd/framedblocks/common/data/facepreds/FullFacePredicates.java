@@ -254,5 +254,6 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_LANTERN, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SOUL_LANTERN, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_HOPPER, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_LAYERED_CUBE, new LayeredCubeFullFacePredicate());
     }
 }

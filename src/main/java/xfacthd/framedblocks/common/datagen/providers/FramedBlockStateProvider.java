@@ -44,6 +44,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile obsidianCube = makeUnderlayedCube("framed_obsidian_cube", mcLoc("block/obsidian"));
         ModelFile ironCube = makeUnderlayedCube("framed_iron_cube", mcLoc("block/iron_block"));
         ModelFile goldCube = makeUnderlayedCube("framed_gold_cube", mcLoc("block/gold_block"));
+        ModelFile snowCube = makeUnderlayedCube("framed_snow_cube", mcLoc("block/snow"));
 
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.value(), cube);
@@ -219,6 +220,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_TUBE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_CORNER_TUBE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_HOPPER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_LAYERED_CUBE, snowCube, "cutout");
 
         registerFramedCube(cube);
         registerFramedSlab(cube);

@@ -729,6 +729,16 @@ final class SkipPredicateGeneratorData
                             new TestDir("boolean", "HopperSide", null, "hopper_side"),
                             new TestDir("TubeOpening", "Opening", null, "tube_opening")
                                     .withExcludedTypes("FRAMED_HOPPER")
+                    ),
+            entry("FRAMED_LAYERED_CUBE", "misc")
+                    .props(
+                            Property.vanilla("Direction", "facing", "FACING", PropType.PRIMITIVE),
+                            Property.vanilla("int", "layers", "LAYERS", PropType.PRIMITIVE)
+                    )
+                    .dirs(
+                            new TestDir("int", "Layers", null, "layers_dir"),
+                            new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y")
+                                    .withExcludedTypes("FRAMED_LAYERED_CUBE")
                     )
     );
 

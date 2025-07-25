@@ -257,5 +257,6 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_LANTERN, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_SOUL_LANTERN, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_HOPPER, new HopperConnectionPredicate());
+        put(BlockType.FRAMED_LAYERED_CUBE, new LayeredCubeConnectionPredicate());
     }
 }

@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.item.FramedSpecialDoubleBlockItem;
+import xfacthd.framedblocks.common.item.FramedSpecialBlockItem;
 
 public class FramedPanelBlock extends FramedBlock
 {
@@ -57,7 +57,7 @@ public class FramedPanelBlock extends FramedBlock
     @Override
     public BlockItem createBlockItem()
     {
-        return new FramedSpecialDoubleBlockItem(this, new Item.Properties())
+        return new FramedSpecialBlockItem(this, true, new Item.Properties())
         {
             @Override
             protected BlockState getReplacementState(BlockPlaceContext ctx, BlockState originalState)

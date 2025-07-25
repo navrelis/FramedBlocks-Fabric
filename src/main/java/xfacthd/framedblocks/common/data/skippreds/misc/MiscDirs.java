@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.data.skippreds.misc;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerTubeOrientation;
+import xfacthd.framedblocks.common.data.skippreds.HalfDir;
 import xfacthd.framedblocks.common.data.skippreds.TubeOpening;
 
 public final class MiscDirs
@@ -58,5 +59,28 @@ public final class MiscDirs
         }
 
         private Hopper() { }
+    }
+
+    public static final class LayeredCube
+    {
+        public static int getLayersDir(Direction dir, int layers, Direction side)
+        {
+            if (side.getAxis() != dir.getAxis())
+            {
+                return dir.ordinal() << 3 | (layers - 1);
+            }
+            return 0;
+        }
+
+        public static HalfDir getHalfDir(Direction dir, int layers, Direction side)
+        {
+            if (side.getAxis() != dir.getAxis() && layers == 4)
+            {
+                return HalfDir.fromDirections(side, dir.getOpposite());
+            }
+            return HalfDir.NULL;
+        }
+
+        private LayeredCube() { }
     }
 }

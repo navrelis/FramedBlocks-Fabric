@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -79,6 +80,7 @@ import xfacthd.framedblocks.api.blueprint.BlueprintData;
 import xfacthd.framedblocks.common.data.component.*;
 import xfacthd.framedblocks.api.datagen.loot.objects.NonTrivialCamoLootCondition;
 import xfacthd.framedblocks.api.datagen.loot.objects.SplitCamoLootFunction;
+import xfacthd.framedblocks.common.data.loot.LayeredCubeAdditionalItemCountNumberProvider;
 import xfacthd.framedblocks.common.item.*;
 import xfacthd.framedblocks.common.menu.*;
 import xfacthd.framedblocks.common.particle.BasicParticleType;
@@ -104,6 +106,7 @@ public final class FBContent
     private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, FramedConstants.MOD_ID);
     private static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS = DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, FramedConstants.MOD_ID);
     private static final DeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, FramedConstants.MOD_ID);
+    private static final DeferredRegister<LootNumberProviderType> LOOT_NUMBER_PROVIDERS = DeferredRegister.create(Registries.LOOT_NUMBER_PROVIDER_TYPE, FramedConstants.MOD_ID);
 
     private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
@@ -353,6 +356,7 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_LANTERN = registerBlock(FramedLanternBlock::new, BlockType.FRAMED_LANTERN);
     public static final Holder<Block> BLOCK_FRAMED_SOUL_LANTERN = registerBlock(FramedLanternBlock::new, BlockType.FRAMED_SOUL_LANTERN);
     public static final Holder<Block> BLOCK_FRAMED_HOPPER = registerBlock(FramedHopperBlock::new, BlockType.FRAMED_HOPPER);
+    public static final Holder<Block> BLOCK_FRAMED_LAYERED_CUBE = registerBlock(FramedLayeredCubeBlock::new, BlockType.FRAMED_LAYERED_CUBE);
     // endregion
 
     // region Special Blocks
@@ -700,6 +704,12 @@ public final class FBContent
     );
     // endregion
 
+    // region LootNumberProviderTypes
+    public static final Holder<LootNumberProviderType> LAYERED_CUBE_ADDITIONAL_ITEM_COUNT_NUMBER_PROVIDER = LOOT_NUMBER_PROVIDERS.register(
+            "layered_cube", () -> new LootNumberProviderType(MapCodec.unit(LayeredCubeAdditionalItemCountNumberProvider.INSTANCE))
+    );
+    // endregion
+
     // region CamoContainer.Factories
     public static final DeferredHolder<CamoContainerFactory<?>, EmptyCamoContainerFactory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
             "empty",
@@ -751,6 +761,7 @@ public final class FBContent
         PARTICLE_TYPES.register(modBus);
         LOOT_CONDITIONS.register(modBus);
         LOOT_FUNCTIONS.register(modBus);
+        LOOT_NUMBER_PROVIDERS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
         AUX_BLUEPRINT_DATA_TYPES.register(modBus);
 

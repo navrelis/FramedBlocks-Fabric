@@ -77,6 +77,7 @@ public final class GhostRenderBehaviours
                 FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_SLAB,
                 FBContent.BLOCK_FRAMED_ADJ_DOUBLE_COPYCAT_PANEL
         ));
+        event.registerBlock(new LayeredCubeGhostRenderBehaviour(), FBContent.BLOCK_FRAMED_LAYERED_CUBE);
     }
 
 

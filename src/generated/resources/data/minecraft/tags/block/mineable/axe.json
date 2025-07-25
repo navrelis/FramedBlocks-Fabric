@@ -223,6 +223,7 @@
     "framedblocks:framed_chain",
     "framedblocks:framed_lantern",
     "framedblocks:framed_soul_lantern",
-    "framedblocks:framed_hopper"
+    "framedblocks:framed_hopper",
+    "framedblocks:framed_layered_cube"
   ]
 }

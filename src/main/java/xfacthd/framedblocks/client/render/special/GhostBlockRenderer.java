@@ -21,6 +21,7 @@ import net.neoforged.fml.ModLoader;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import org.joml.Vector3fc;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.ghost.RegisterGhostRenderBehavioursEvent;
@@ -159,9 +160,13 @@ public final class GhostBlockRenderer
         modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, renderPass, modelData);
         profiler.pop(); //append_modeldata
 
+        profiler.push("get_render_offset");
+        Vector3fc renderOffset = behaviour.getRenderOffset(stack, proxiedStack, context, renderState, renderPass, modelData);
+        profiler.pop();
+
         MultiBufferSource.BufferSource buffers = mc().renderBuffers().bufferSource();
 
-        doRenderGhostBlock(poseStack, buffers, profiler, renderPos, renderState, modelData);
+        doRenderGhostBlock(poseStack, buffers, profiler, renderPos, renderState, renderOffset, modelData);
 
         return true;
     }
@@ -172,6 +177,7 @@ public final class GhostBlockRenderer
             ProfilerFiller profiler,
             BlockPos renderPos,
             BlockState renderState,
+            Vector3fc renderOffset,
             ModelData modelData
     )
     {
@@ -188,6 +194,7 @@ public final class GhostBlockRenderer
         profiler.push("draw");
         BakedModel model = ModelUtils.getModel(renderState);
         poseStack.pushPose();
+        poseStack.translate(renderOffset.x(), renderOffset.y(), renderOffset.z());
         poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
         poseStack.scale(SCALE, SCALE, SCALE); // Scale up very slightly to avoid z-fighting with replaceable blocks like snow layers
         poseStack.translate(-.5F, -.5F, -.5F);

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.ghost;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -15,6 +16,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -31,6 +34,8 @@ import java.util.Objects;
  */
 public interface GhostRenderBehaviour
 {
+    Vector3fc OFFSET_ZERO = new Vector3f();
+
     /**
      * If the {@link Item} this behaviour is registered for proxies another {@code Item}, then this method should be
      * used to return the actual {@code Item} whose block representation should be rendered, an example of this
@@ -236,5 +241,28 @@ public interface GhostRenderBehaviour
     )
     {
         return data;
+    }
+
+    /**
+     * Return an additional offset to apply to the {@link PoseStack} before rendering.
+     *
+     * @param stack The {@link ItemStack} in the players main hand
+     * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
+     * @param ctx The {@link BlockPlaceContext} to use for determining the resulting
+     * @param renderState The {@code BlockState} to render
+     * @param renderPass The current render pass index
+     * @param data The prepared {@code ModelData} to be given to the {@link BakedModel} that is to be rendered
+     * @return The offset to apply to the {@link PoseStack} before rendering
+     */
+    default Vector3fc getRenderOffset(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            int renderPass,
+            ModelData data
+    )
+    {
+        return OFFSET_ZERO;
     }
 }
