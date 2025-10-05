@@ -20,7 +20,8 @@ public final class BlockInteractOverlayLayer implements LayeredDraw.Layer
             new OneWayWindowOverlay(),
             new FrameBackgroundOverlay(),
             new CamoRotationOverlay(),
-            new TrapdoorTextureRotationOverlay()
+            new TrapdoorTextureRotationOverlay(),
+            new CopycatStyleOverlay()
     );
 
     @Override

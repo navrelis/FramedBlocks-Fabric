@@ -281,6 +281,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_SOUL_LANTERN.value(), "Framed Soul Lantern");
         add(FBContent.BLOCK_FRAMED_HOPPER.value(), "Framed Hopper");
         add(FBContent.BLOCK_FRAMED_LAYERED_CUBE.value(), "Framed Layered Cube");
+        add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value(), "Framed Lightning Rod");
     }
 
     private void addSpecialBlockTranslations()
@@ -473,6 +474,11 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(TrapdoorTextureRotationOverlay.ROTATING_FALSE, "Camo texture will not rotate when opening the trapdoor");
         add(TrapdoorTextureRotationOverlay.ROTATING_TRUE, "Camo texture will rotate when opening the trapdoor");
         add(TrapdoorTextureRotationOverlay.ROTATING_TOGGLE, "Hit with a Framed Hammer to toggle texture rotation");
+
+        add(CopycatStyleOverlay.LINE_USE_STANDARD, "The targetted block uses standard appearance");
+        add(CopycatStyleOverlay.LINE_USE_COPYCAT, "The targetted block uses copycat-style appearance");
+        add(CopycatStyleOverlay.LINE_SET_STANDARD, "Hit with a Framed Hammer to use standard appearance");
+        add(CopycatStyleOverlay.LINE_SET_COPYCAT, "Hit with a Framed Hammer to use copycat-style appearance");
     }
 
     private void addConfigTranslations()
@@ -518,6 +524,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_FRAME_BACKGROUND_MODE, "Item Frame Background overlay: Display mode");
         add(ClientConfig.TRANSLATION_CAMO_ROTATION_MODE, "Camo Rotation overlay: Display mode");
         add(ClientConfig.TRANSLATION_TRAPDOOR_TEXTURE_ROTATION_MODE, "Trapdoor Texture Rotation overlay: Display mode");
+        add(ClientConfig.TRANSLATION_COPYCAT_STYLE_MODE, "Copycate Style overlay: Display mode");
 
         add("framedblocks.configuration.section.framedblocks.devtools.toml", "Dev Tools Settings");
         add("framedblocks.configuration.section.framedblocks.devtools.toml.title", "FramedBlocks Dev Tools Configuration");

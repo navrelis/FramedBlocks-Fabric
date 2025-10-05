@@ -46,6 +46,7 @@ public final class ClientConfig
     private static final String KEY_FRAME_BACKGROUND_MODE = "itemFrameBackgroundMode";
     private static final String KEY_CAMO_ROTATION_MODE = "camoRotationMode";
     private static final String KEY_TRAPDOOR_TEXTURE_ROTATION_MODE = "trapdoorTextureRotationMode";
+    private static final String KEY_COPYCAT_STYLE_MODE = "copycatStyleMode";
 
     public static final String TRANSLATION_SHOW_GHOST_BLOCKS = translate(KEY_SHOW_GHOST_BLOCKS);
     public static final String TRANSLATION_ALT_GHOST_RENDERER = translate(KEY_ALT_GHOST_RENDERER);
@@ -73,6 +74,7 @@ public final class ClientConfig
     public static final String TRANSLATION_FRAME_BACKGROUND_MODE = translate(KEY_FRAME_BACKGROUND_MODE);
     public static final String TRANSLATION_CAMO_ROTATION_MODE = translate(KEY_CAMO_ROTATION_MODE);
     public static final String TRANSLATION_TRAPDOOR_TEXTURE_ROTATION_MODE = translate(KEY_TRAPDOOR_TEXTURE_ROTATION_MODE);
+    public static final String TRANSLATION_COPYCAT_STYLE_MODE = translate(KEY_COPYCAT_STYLE_MODE);
 
     private static final String COMMENT_OVERLAY_HIDDEN = "If set to HIDDEN, the %s overlay will be completely hidden";
     private static final String COMMENT_OVERLAY_ICON = "If set to ICON, the %s overlay will only show an icon";
@@ -104,6 +106,7 @@ public final class ClientConfig
     private static OverlayDisplayMode frameBackgroundMode = OverlayDisplayMode.DETAILED;
     private static OverlayDisplayMode camoRotationMode = OverlayDisplayMode.DETAILED;
     private static OverlayDisplayMode trapdoorTextureRotationMode = OverlayDisplayMode.DETAILED;
+    private static OverlayDisplayMode copycatStyleMode = OverlayDisplayMode.DETAILED;
 
     private static final ModConfigSpec.BooleanValue SHOW_GHOST_BLOCKS_VALUE;
     private static final ModConfigSpec.BooleanValue ALT_GHOST_RENDERER_VALUE;
@@ -132,6 +135,7 @@ public final class ClientConfig
     private static final ModConfigSpec.EnumValue<OverlayDisplayMode> FRAME_BACKGROUND_MODE_VALUE;
     private static final ModConfigSpec.EnumValue<OverlayDisplayMode> CAMO_ROTATION_MODE_VALUE;
     private static final ModConfigSpec.EnumValue<OverlayDisplayMode> TRAPDOOR_TEXTURE_ROTATION_MODE_VALUE;
+    private static final ModConfigSpec.EnumValue<OverlayDisplayMode> COPYCAT_STYLE_MODE_VALUE;
 
     public static void init(IEventBus modBus, ModContainer modContainer)
     {
@@ -305,6 +309,12 @@ public final class ClientConfig
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Trapdoor Texture Rotation"))
                 .translation(TRANSLATION_TRAPDOOR_TEXTURE_ROTATION_MODE)
                 .defineEnum(KEY_TRAPDOOR_TEXTURE_ROTATION_MODE, OverlayDisplayMode.DETAILED);
+        COPYCAT_STYLE_MODE_VALUE = builder
+                .comment(COMMENT_OVERLAY_HIDDEN.formatted("Copycat Style"))
+                .comment(COMMENT_OVERLAY_ICON.formatted("Copycat Style"))
+                .comment(COMMENT_OVERLAY_DETAILED.formatted("Copycat Style"))
+                .translation(translate(KEY_COPYCAT_STYLE_MODE))
+                .defineEnum(KEY_COPYCAT_STYLE_MODE, OverlayDisplayMode.DETAILED);
         builder.pop();
 
         SPEC = builder.build();
@@ -351,6 +361,7 @@ public final class ClientConfig
             frameBackgroundMode = FRAME_BACKGROUND_MODE_VALUE.get();
             camoRotationMode = CAMO_ROTATION_MODE_VALUE.get();
             trapdoorTextureRotationMode = TRAPDOOR_TEXTURE_ROTATION_MODE_VALUE.get();
+            copycatStyleMode = COPYCAT_STYLE_MODE_VALUE.get();
         }
     }
 
@@ -514,6 +525,12 @@ public final class ClientConfig
         public OverlayDisplayMode getTrapdoorTextureRotationMode()
         {
             return trapdoorTextureRotationMode;
+        }
+
+        @Override
+        public OverlayDisplayMode getCopycatStyleMode()
+        {
+            return copycatStyleMode;
         }
     }
 }

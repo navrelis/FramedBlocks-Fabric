@@ -1,8 +1,10 @@
 package xfacthd.framedblocks;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.neoforged.fml.*;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.world.poi.ExtendPoiTypesEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -47,6 +49,7 @@ public final class FramedBlocks
         modBus.addListener(NetworkHandler::onRegisterPayloads);
         modBus.addListener(BlueprintBehaviours::onRegisterBlueprintCopyBehaviours);
         modBus.addListener(FramedDataMaps::onRegisterDataMapTypes);
+        modBus.addListener(FramedBlocks::onExtendPoiTypes);
 
         IEventBus forgeBus = NeoForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);
@@ -86,6 +89,11 @@ public final class FramedBlocks
     {
         event.addListener(ShapeReloader.INSTANCE);
         event.addListener(StateCacheBuilder.CacheReloader.INSTANCE);
+    }
+
+    private static void onExtendPoiTypes(ExtendPoiTypesEvent event)
+    {
+        event.addBlockToPoi(PoiTypes.LIGHTNING_ROD, FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
     }
 
     private static String getBlockEntityWarning()

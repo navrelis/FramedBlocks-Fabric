@@ -144,6 +144,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
         pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_GATE.value());
         pickaxeBlocks.add(FBContent.BLOCK_FRAMING_SAW.value());
         pickaxeBlocks.add(FBContent.BLOCK_POWERED_FRAMING_SAW.value());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
 
         IntrinsicTagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()
