@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
+import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -55,7 +56,8 @@ abstract class BlockInteractOverlay
 
     boolean render(GuiGraphics graphics)
     {
-        OverlayDisplayMode mode = modeGetter.get();
+        OverlayDisplayMode cfgMode = ClientConfig.VIEW.getMaxOverlayMode();
+        OverlayDisplayMode mode = cfgMode.constrain(modeGetter.get());
         if (mode == OverlayDisplayMode.HIDDEN || player().isSpectator() || Minecraft.getInstance().options.hideGui)
         {
             return false;

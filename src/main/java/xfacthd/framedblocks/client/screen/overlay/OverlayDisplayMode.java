@@ -4,5 +4,10 @@ public enum OverlayDisplayMode
 {
     HIDDEN,
     ICON,
-    DETAILED
+    DETAILED;
+
+    public OverlayDisplayMode constrain(OverlayDisplayMode other)
+    {
+        return ordinal() < other.ordinal() ? this : other;
+    }
 }

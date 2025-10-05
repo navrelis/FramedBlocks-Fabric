@@ -241,6 +241,7 @@
   "config.framedblocks.client.forceAoOnGlowingBlocks": "Force ambient occlusion on glowing framed blocks",
   "config.framedblocks.client.ghostRenderOpacity": "Placement preview opacity",
   "config.framedblocks.client.itemFrameBackgroundMode": "Item Frame Background overlay: Display mode",
+  "config.framedblocks.client.maxOverlayMode": "Max overlay display mode",
   "config.framedblocks.client.oneWayWindowMode": "One-Way Window overlay: Display mode",
   "config.framedblocks.client.prismOffsetMode": "Prism offset overlay: Display mode",
   "config.framedblocks.client.reinforcedMode": "Reinforcement overlay: Display mode",
