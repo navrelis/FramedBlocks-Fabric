@@ -746,7 +746,8 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y")
                                     .withExcludedTypes("FRAMED_LAYERED_CUBE")
                     ),
-            entry("FRAMED_LIGHTNING_ROD", IGNORED_PKG)
+            entry("FRAMED_LIGHTNING_ROD", IGNORED_PKG),
+            entry("FRAMED_PATH", IGNORED_PKG)
     );
 
     private static EntryBuilder entry(String type, String subPackage)

@@ -261,5 +261,6 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_HOPPER, new HopperSkipPredicate());
         put(BlockType.FRAMED_LAYERED_CUBE, new LayeredCubeSkipPredicate());
         put(BlockType.FRAMED_LIGHTNING_ROD, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_PATH, new PathSkipPredicate());
     }
 }
