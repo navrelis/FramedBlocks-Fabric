@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +21,6 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.model.*;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -157,11 +157,7 @@ public final class FluidModel implements BakedModel
         UnbakedModel bareModel = modelBakery.getModel(singleTexture ? BARE_MODEL_SINGLE.id() : BARE_MODEL.id());
         Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
 
-        ResourceLocation fluidName = Preconditions.checkNotNull(
-                NeoForgeRegistries.FLUID_TYPES.getKey(fluid.getFluidType()),
-                "Cannot create FluidModel for unregistered FluidType of fluid %s",
-                fluid
-        );
+        ResourceLocation fluidName = Objects.requireNonNull(BuiltInRegistries.FLUID.getKey(fluid));
         ModelResourceLocation modelName = new ModelResourceLocation(
                 Utils.rl("fluid/" + fluidName.toString().replace(":", "_")),
                 "framedblocks_dynamic_fluid"
