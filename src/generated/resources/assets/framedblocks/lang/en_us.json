@@ -379,6 +379,7 @@
   "tooltip.framedblocks.framing_saw.mode.pattern_encode": "AE2 Pattern Encoding",
   "tooltip.framedblocks.framing_saw.output_count": "Result size: %s, max size: %s",
   "tooltip.framedblocks.framing_saw.press_to_show": "Press [%s] to show all possible items",
+  "tooltip.framedblocks.framing_saw.use_intermediate": "Use a smaller block as an intermediate step",
   "tooltip.framedblocks.is_waterloggable.false": "Block is not waterloggable.",
   "tooltip.framedblocks.is_waterloggable.true": "Block is waterloggable.",
   "tooltip.framedblocks.lock_state": "State %s",

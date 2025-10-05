@@ -49,6 +49,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     public static final String TOOLTIP_OUTPUT_COUNT = Utils.translationKey("tooltip", "framing_saw.output_count");
     public static final Component TOOLTIP_HAVE_ITEM_NONE = Utils.translate("tooltip", "framing_saw.have_item_none").withStyle(ChatFormatting.GOLD);
     public static final String TOOLTIP_PRESS_TO_SHOW = Utils.translationKey("tooltip", "framing_saw.press_to_show");
+    public static final String TOOLTIP_USE_INTERMEDIATE = Utils.translationKey("tooltip", "framing_saw.use_intermediate");
     public static final Component MSG_HINT_SEARCH = Utils.translate("msg", "framing_saw.search");
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw.png");
     public static final ResourceLocation WARNING_ICON = Utils.rl("neoforge", "textures/gui/experimental_warning.png");
@@ -314,86 +315,89 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
 
             ItemStack input = screen.getInputStack();
             int listAdditives = -1;
-            MutableComponent detail = switch (matchResult)
+            List<MutableComponent> detail = switch (matchResult)
             {
-                case CAMO_PRESENT -> null;
+                case CAMO_PRESENT -> List.of();
                 case MATERIAL_VALUE ->
                 {
                     int matIn = input.isEmpty() ? 0 : cache.getMaterialValue(input.getItem()) * input.getCount();
                     int matReq = recipe.getMaterialAmount();
-                    yield Component.translatable(
+                    yield List.of(Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT,
                             Component.literal(Integer.toString(matIn)).withStyle(ChatFormatting.GOLD),
                             Component.literal(Integer.toString(matReq)).withStyle(ChatFormatting.GOLD)
-                    );
+                    ));
                 }
                 case MATERIAL_LCM ->
                 {
-                    if (input.isEmpty()) yield Component.empty();
+                    if (input.isEmpty()) yield List.of();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
                             screen.getRecipeInput(), true
                     );
-                    yield Component.translatable(
+                    yield List.of(Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
                             Component.literal(Integer.toString(input.getCount())).withStyle(ChatFormatting.GOLD),
                             Component.literal(Integer.toString(calc.getInputCount())).withStyle(ChatFormatting.GOLD)
-                    );
+                    ));
                 }
                 case OUTPUT_SIZE ->
                 {
-                    if (input.isEmpty()) yield Component.empty();
+                    if (input.isEmpty()) yield List.of();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
                             screen.getRecipeInput(), true
                     );
                     int maxSize = recipe.getResult().getMaxStackSize();
-                    yield Component.translatable(TOOLTIP_OUTPUT_COUNT, calc.getOutputCount(), maxSize);
+                    yield List.of(
+                            Component.translatable(TOOLTIP_OUTPUT_COUNT, calc.getOutputCount(), maxSize),
+                            Component.translatable(TOOLTIP_USE_INTERMEDIATE)
+                    );
                 }
                 case MISSING_ADDITIVE_0, MISSING_ADDITIVE_1, MISSING_ADDITIVE_2 ->
                 {
                     listAdditives = matchResult.additiveSlot();
                     FramingSawRecipeAdditive additive = recipe.getAdditives().get(matchResult.additiveSlot());
-                    yield makeHaveButNeedTooltip(TOOLTIP_HAVE_ITEM_NONE, additive);
+                    yield List.of(makeHaveButNeedTooltip(TOOLTIP_HAVE_ITEM_NONE, additive));
                 }
                 case UNEXPECTED_ADDITIVE_0, UNEXPECTED_ADDITIVE_1, UNEXPECTED_ADDITIVE_2 ->
                 {
                     Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
-                    yield Component.translatable(
+                    yield List.of(Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM,
                             Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
                             TOOLTIP_HAVE_ITEM_NONE
-                    );
+                    ));
                 }
                 case INCORRECT_ADDITIVE_0, INCORRECT_ADDITIVE_1, INCORRECT_ADDITIVE_2 ->
                 {
                     listAdditives = matchResult.additiveSlot();
                     Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
-                    yield makeHaveButNeedTooltip(
+                    yield List.of(makeHaveButNeedTooltip(
                             Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
                             recipe.getAdditives().get(matchResult.additiveSlot())
-                    );
+                    ));
                 }
                 case INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2 ->
                 {
-                    if (input.isEmpty()) yield Component.empty();
+                    if (input.isEmpty()) yield List.of();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
                             screen.getRecipeInput(), true
                     );
                     int cntIn = screen.getAdditiveStack(matchResult.additiveSlot()).getCount();
                     int cntReq = calc.getAdditiveCount(matchResult.additiveSlot());
-                    yield Component.translatable(
+                    yield List.of(Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
                             Component.literal(Integer.toString(cntIn)).withStyle(ChatFormatting.GOLD),
                             Component.literal(Integer.toString(cntReq)).withStyle(ChatFormatting.GOLD)
-                    );
+                    ));
                 }
                 case SUCCESS -> throw new IllegalStateException("Unreachable");
             };
-            if (detail != null)
+            for (MutableComponent component : detail)
             {
-                components.add(detail.withStyle(ChatFormatting.RED));
+                components.add(component.withStyle(ChatFormatting.RED));
             }
 
             if (listAdditives > -1)
