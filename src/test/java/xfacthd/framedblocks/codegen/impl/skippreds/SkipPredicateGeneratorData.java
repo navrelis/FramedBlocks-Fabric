@@ -376,6 +376,12 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_HALF_PILLAR", "pillar")
                     .props(Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE).withEarlyExit())
                     .dirs(new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")),
+            entry("FRAMED_PILLAR_SOCKET", "pillar")
+                    .props(Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE))
+                    .dirs(
+                            new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y"),
+                            new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")
+                    ),
             entry("FRAMED_POST", "pillar")
                     .props(Property.vanilla("Direction.Axis", "axis", "AXIS", PropType.PRIMITIVE).withEarlyExit())
                     .dirs(new TestDir("boolean", "Post", null, "post_hor", "post_vert")),
@@ -739,7 +745,8 @@ final class SkipPredicateGeneratorData
                             new TestDir("int", "Layers", null, "layers_dir"),
                             new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y")
                                     .withExcludedTypes("FRAMED_LAYERED_CUBE")
-                    )
+                    ),
+            entry("FRAMED_LIGHTNING_ROD", IGNORED_PKG)
     );
 
     private static EntryBuilder entry(String type, String subPackage)

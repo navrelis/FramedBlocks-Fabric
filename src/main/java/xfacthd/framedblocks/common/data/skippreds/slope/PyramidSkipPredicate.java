@@ -52,6 +52,9 @@ public final class PyramidSkipPredicate implements SideSkipPredicate
                 case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(
                         dir, connection, adjState, side
                 );
+                case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
+                        dir, connection, adjState, side
+                );
                 case FRAMED_POST -> testAgainstPost(
                         dir, connection, adjState, side
                 );
@@ -119,6 +122,15 @@ public final class PyramidSkipPredicate implements SideSkipPredicate
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         return (SlopeDirs.Pyramid.isPillarDir(dir, connection, side) && PillarDirs.HalfPillar.isPillarDir(adjDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)
+    private static boolean testAgainstPillarSocket(
+            Direction dir, PillarConnection connection, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return (SlopeDirs.Pyramid.isPillarDir(dir, connection, side) && PillarDirs.PillarSocket.isPillarDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_POST)

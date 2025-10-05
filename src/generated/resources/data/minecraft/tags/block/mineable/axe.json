@@ -125,6 +125,8 @@
     "framedblocks:framed_flower_pot",
     "framedblocks:framed_pillar",
     "framedblocks:framed_half_pillar",
+    "framedblocks:framed_pillar_socket",
+    "framedblocks:framed_split_pillar_socket",
     "framedblocks:framed_post",
     "framedblocks:framed_collapsible_block",
     "framedblocks:framed_collapsible_copycat_block",

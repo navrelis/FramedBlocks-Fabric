@@ -92,6 +92,9 @@ public final class LayeredCubeSkipPredicate implements SideSkipPredicate
                 case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(
                         facing, layers, adjState, side
                 );
+                case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
+                        facing, layers, adjState, side
+                );
                 case FRAMED_SLOPE_SLAB -> testAgainstSlopeSlab(
                         facing, layers, adjState, side
                 );
@@ -318,6 +321,15 @@ public final class LayeredCubeSkipPredicate implements SideSkipPredicate
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return MiscDirs.LayeredCube.getHalfDir(facing, layers, side).isEqualTo(StairsDirs.VerticalSlopedStairs.getHalfDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)
+    private static boolean testAgainstPillarSocket(
+            Direction facing, int layers, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return MiscDirs.LayeredCube.getHalfDir(facing, layers, side).isEqualTo(PillarDirs.PillarSocket.getHalfDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE_SLAB)

@@ -47,6 +47,9 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
                 case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(
                         xAxis, yAxis, zAxis, adjState, side
                 );
+                case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
+                        xAxis, yAxis, zAxis, adjState, side
+                );
                 case FRAMED_PYRAMID -> testAgainstPyramid(
                         xAxis, yAxis, zAxis, adjState, side
                 );
@@ -99,6 +102,15 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
         return (PillarDirs.ThickLattice.isPillarDir(xAxis, yAxis, zAxis, side) && PillarDirs.HalfPillar.isPillarDir(adjDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)
+    private static boolean testAgainstPillarSocket(
+            boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return (PillarDirs.ThickLattice.isPillarDir(xAxis, yAxis, zAxis, side) && PillarDirs.PillarSocket.isPillarDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_PYRAMID)

@@ -95,6 +95,9 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
                 case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
                         dir, top, adjState, side
                 );
+                case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
+                        dir, top, adjState, side
+                );
                 case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(
                         dir, top, adjState, side
                 );
@@ -359,6 +362,15 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
 
         return SlabDirs.MasonryCornerSegment.getCornerDir(dir, top, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getCornerDir(adjDir, adjTop, side.getOpposite())) ||
                SlabDirs.MasonryCornerSegment.getStairDir(dir, top, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getStairDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)
+    private static boolean testAgainstPillarSocket(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return SlabDirs.MasonryCornerSegment.getHalfDir(dir, top, side).isEqualTo(PillarDirs.PillarSocket.getHalfDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE_PANEL)

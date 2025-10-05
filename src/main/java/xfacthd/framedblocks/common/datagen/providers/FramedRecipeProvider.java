@@ -814,6 +814,24 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLAB_CORNER)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PILLAR_SOCKET.value(), 1)
+                .pattern("P")
+                .pattern("S")
+                .define('P', FBContent.BLOCK_FRAMED_HALF_PILLAR.value())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_HALF_PILLAR)
+                .save(consumer);
+
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_SPLIT_PILLAR_SOCKET.value(), 1)
+                .requires(FBContent.BLOCK_FRAMED_PILLAR_SOCKET.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_PILLAR_SOCKET)
+                .save(consumer);
+
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_PILLAR_SOCKET.value(), 1)
+                .requires(FBContent.BLOCK_FRAMED_SPLIT_PILLAR_SOCKET.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_SPLIT_PILLAR_SOCKET)
+                .save(consumer, Utils.rl("framed_pillar_socket_from_split_pillar_socket"));
+
         shapelessBuildingBlock(FBContent.BLOCK_FRAMED_SLAB_CORNER.value(), 1)
                 .requires(FBContent.BLOCK_FRAMED_HALF_PILLAR.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_HALF_PILLAR)

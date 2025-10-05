@@ -177,6 +177,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_FLOWER_POT.value(), "Framed Flower Pot");
         add(FBContent.BLOCK_FRAMED_PILLAR.value(), "Framed Pillar");
         add(FBContent.BLOCK_FRAMED_HALF_PILLAR.value(), "Framed Half Pillar");
+        add(FBContent.BLOCK_FRAMED_PILLAR_SOCKET.value(), "Framed Pillar Socket");
+        add(FBContent.BLOCK_FRAMED_SPLIT_PILLAR_SOCKET.value(), "Framed Split Pillar Socket");
         add(FBContent.BLOCK_FRAMED_POST.value(), "Framed Post");
         add(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value(), "Framed Collapsible Block");
         add(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.value(), "Framed Collapsible Copycat Block");

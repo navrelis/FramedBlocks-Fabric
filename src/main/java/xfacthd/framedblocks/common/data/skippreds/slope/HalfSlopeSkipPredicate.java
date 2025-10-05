@@ -101,6 +101,9 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
                      FRAMED_ACTIVATOR_RAIL_SLOPE -> testAgainstRailSlope(
                         dir, top, right, adjState, side
                 );
+                case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
+                        dir, top, right, adjState, side
+                );
                 case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(
                         dir, top, right, adjState, side
                 );
@@ -339,6 +342,15 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
     {
         Direction adjDir = ((ISlopeBlock) adjState.getBlock()).getFacing(adjState);
         return SlopeDirs.HalfSlope.getTriDir(dir, top, right, side).isEqualTo(SlopeDirs.RailSlope.getTriDir(adjDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)
+    private static boolean testAgainstPillarSocket(
+            Direction dir, boolean top, boolean right, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return SlopeDirs.HalfSlope.getHalfDir(dir, top, right, side).isEqualTo(PillarDirs.PillarSocket.getHalfDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE_PANEL)

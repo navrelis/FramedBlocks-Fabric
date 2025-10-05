@@ -106,6 +106,9 @@ public final class InnerCornerSlopeEdgeSkipPredicate implements SideSkipPredicat
                 case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
                         dir, type, alt, adjState, side
                 );
+                case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
+                        dir, type, alt, adjState, side
+                );
                 case FRAMED_SLOPE_SLAB -> testAgainstSlopeSlab(
                         dir, type, alt, adjState, side
                 );
@@ -410,6 +413,15 @@ public final class InnerCornerSlopeEdgeSkipPredicate implements SideSkipPredicat
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         return SlopeEdgeDirs.InnerCornerSlopeEdge.getStairDir(dir, type, alt, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getStairDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)
+    private static boolean testAgainstPillarSocket(
+            Direction dir, CornerType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return SlopeEdgeDirs.InnerCornerSlopeEdge.getHalfDir(dir, type, alt, side).isEqualTo(PillarDirs.PillarSocket.getHalfDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE_SLAB)

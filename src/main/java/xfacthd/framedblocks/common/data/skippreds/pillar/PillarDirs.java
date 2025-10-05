@@ -11,6 +11,7 @@ import xfacthd.framedblocks.common.data.skippreds.CornerDir;
 import xfacthd.framedblocks.common.data.skippreds.HalfDir;
 import xfacthd.framedblocks.common.data.skippreds.TriangleDir;
 
+@SuppressWarnings("JavaExistingMethodCanBeUsed")
 public final class PillarDirs
 {
     public static final class CornerPillar
@@ -227,6 +228,25 @@ public final class PillarDirs
         }
 
         private HalfPillar() { }
+    }
+
+    public static final class PillarSocket
+    {
+        public static HalfDir getHalfDir(Direction dir, Direction side)
+        {
+            if (side.getAxis() != dir.getAxis())
+            {
+                return HalfDir.fromDirections(side, dir);
+            }
+            return HalfDir.NULL;
+        }
+
+        public static boolean isPillarDir(Direction dir, Direction side)
+        {
+            return side == dir.getOpposite();
+        }
+
+        private PillarSocket() { }
     }
 
     public static final class Post

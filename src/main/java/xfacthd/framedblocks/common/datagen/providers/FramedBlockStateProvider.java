@@ -132,6 +132,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PILLAR, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_HALF_PILLAR, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_PILLAR_SOCKET, cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SPLIT_PILLAR_SOCKET, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_POST, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_PRISM, cube, "cutout");
