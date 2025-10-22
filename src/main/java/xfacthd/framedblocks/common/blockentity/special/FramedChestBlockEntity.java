@@ -71,7 +71,8 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         if (openCount > 0)
         {
             openCount--;
-            if (openCount == 0)
+            // Prevent placing back and duping the chest if the closing was triggered by the block being broken
+            if (openCount == 0 && getType().isValid(level().getBlockState(worldPosition)))
             {
                 playSound(level(), worldPosition, getBlockState(), SoundEvents.CHEST_CLOSE);
                 level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSING));
