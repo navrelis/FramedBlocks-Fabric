@@ -64,7 +64,7 @@ public abstract class SimpleBlockCamoContainerFactory extends AbstractBlockCamoC
     {
         if (!ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
         {
-            return stack.copy();
+            return stack.copyWithCount(1);
         }
         return ItemStack.EMPTY;
     }
