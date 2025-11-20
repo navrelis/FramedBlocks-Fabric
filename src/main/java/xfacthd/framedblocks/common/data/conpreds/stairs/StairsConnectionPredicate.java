@@ -143,7 +143,7 @@ public final class StairsConnectionPredicate implements ConnectionPredicate
                 }
                 else if (side.getAxis() == facing.getClockWise().getAxis())
                 {
-                    yield edge == dirTwo.getOpposite();
+                    yield edge == dirTwo.getOpposite() || edge == facing.getOpposite();
                 }
                 yield false;
             }
