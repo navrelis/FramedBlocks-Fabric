@@ -21,6 +21,6 @@ public final class FramedSpecialDoubleBlockItemRequirements implements Schematic
     @Override
     public ItemRequirement getRequiredItems(BlockState state, @Nullable BlockEntity blockEntity)
     {
-        return new ItemRequirement(ItemRequirement.ItemUseType.CONSUME, new ItemStack(itemBlock.value()));
+        return new ItemRequirement(ItemRequirement.ItemUseType.CONSUME, new ItemStack(itemBlock.value(), 2));
     }
 }
