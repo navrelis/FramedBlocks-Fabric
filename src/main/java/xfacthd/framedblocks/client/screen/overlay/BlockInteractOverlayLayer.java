@@ -4,7 +4,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public final class BlockInteractOverlayLayer implements LayeredDraw.Layer
         {
             if (overlay.render(graphics))
             {
-                if (FMLEnvironment.production) break;
+                if (Platform.isProduction()) break;
 
                 if (renderedOverlay != null)
                 {

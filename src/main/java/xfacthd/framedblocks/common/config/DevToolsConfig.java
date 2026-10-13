@@ -1,13 +1,13 @@
 package xfacthd.framedblocks.common.config;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.ConfigView;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.regex.Pattern;
@@ -46,19 +46,19 @@ public final class DevToolsConfig
     private static Pattern stateMergerDebugFilter = null;
     private static boolean occlusionShapeDebug = false;
 
-    public static void init(IEventBus modBus, ModContainer modContainer)
+    public static void init()
     {
-        if (!FMLEnvironment.production)
+        if (!Platform.isProduction())
         {
-            modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
-            modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-            modContainer.registerConfig(ModConfig.Type.CLIENT, SPEC, "framedblocks_fabric-devtools.toml");
+            NeoForgeModConfigEvents.loading(FramedConstants.MOD_ID).register(DevToolsConfig::onConfigReloaded);
+            NeoForgeModConfigEvents.reloading(FramedConstants.MOD_ID).register(DevToolsConfig::onConfigReloaded);
+            NeoForgeConfigRegistry.INSTANCE.register(FramedConstants.MOD_ID, ModConfig.Type.CLIENT, SPEC, "framedblocks_fabric-devtools.toml");
         }
     }
 
     static
     {
-        if (FMLEnvironment.production)
+        if (Platform.isProduction())
         {
             SPEC = null;
             DOUBLE_BLOCK_PART_DEBUG_VALUE = null;
@@ -137,9 +137,9 @@ public final class DevToolsConfig
         return Utils.translateConfig("devtools", key);
     }
 
-    private static void onConfigReloaded(ModConfigEvent event)
+    private static void onConfigReloaded(ModConfig config)
     {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
+        if (config.getType() == ModConfig.Type.CLIENT && config.getSpec() == SPEC)
         {
             doubleBlockPartDebug = DOUBLE_BLOCK_PART_DEBUG_VALUE.get();
             connectionDebug = CONNECTION_DEBUG_VALUE.get();
@@ -157,7 +157,7 @@ public final class DevToolsConfig
 
     public static final class ViewImpl implements ExtConfigView.DevTools
     {
-        private static final boolean IN_DEV = !FMLEnvironment.production;
+        private static final boolean IN_DEV = !Platform.isProduction();
 
         @Override
         public boolean isDoubleBlockPartHitDebugRendererEnabled()

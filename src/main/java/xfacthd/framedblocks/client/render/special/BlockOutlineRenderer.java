@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.fml.ModLoader;
+import xfacthd.framedblocks.platform.event.ModEvents;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -85,7 +85,7 @@ public final class BlockOutlineRenderer
 
     public static void init()
     {
-        ModLoader.postEvent(new RegisterOutlineRenderersEvent((type, renderer) ->
+        ModEvents.post(new RegisterOutlineRenderersEvent((type, renderer) ->
         {
             Preconditions.checkArgument(
                     type.hasSpecialHitbox(),

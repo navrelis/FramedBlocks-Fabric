@@ -12,7 +12,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.Lazy;
+import xfacthd.framedblocks.platform.util.Lazy;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -73,7 +73,7 @@ public final class FramingSawRecipe implements Recipe<RecipeInput>
         {
             return FramingSawRecipeMatchResult.MATERIAL_VALUE;
         }
-        if (!input.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmptyOrContentsEmpty())
+        if (!input.getOrDefault(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY).isEmptyOrContentsEmpty())
         {
             return FramingSawRecipeMatchResult.CAMO_PRESENT;
         }

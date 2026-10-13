@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.shapes;
 
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 
@@ -24,7 +24,7 @@ public final class ShapeCache<K>
         this.generator = generator;
         this.cache = mapFactory.get();
         generator.accept(cache);
-        if (!FMLEnvironment.production)
+        if (!Platform.isProduction())
         {
             InternalAPI.INSTANCE.registerShapeCache(this);
         }

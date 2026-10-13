@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.menu;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -37,9 +36,9 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     @Nullable
     private RecipeHolder<FramingSawRecipe> lastRecipe = null;
 
-    public PoweredFramingSawMenu(int windowId, Inventory inv, FriendlyByteBuf buf)
+    public PoweredFramingSawMenu(int windowId, Inventory inv, BlockPos pos)
     {
-        this(windowId, inv, inv.player.level(), buf.readBlockPos());
+        this(windowId, inv, inv.player.level(), pos);
     }
 
     public PoweredFramingSawMenu(int windowId, Inventory inv, Level level, BlockPos pos)

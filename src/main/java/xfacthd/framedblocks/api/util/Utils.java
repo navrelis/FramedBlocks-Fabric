@@ -28,8 +28,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.common.ItemAbility;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.registries.DeferredItem;
+import xfacthd.framedblocks.platform.registry.DeferredItem;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -228,7 +227,9 @@ public final class Utils
 
     public static MutableComponent translateTag(TagKey<?> tag)
     {
-        String key = Tags.getTagTranslationKey(tag);
+        ResourceLocation registry = tag.registry().location();
+        String registryName = registry.getNamespace().equals("minecraft") ? registry.getPath() : registry.getNamespace() + "." + registry.getPath();
+        String key = "tag." + registryName.replace('/', '.') + "." + tag.location().toString().replace(':', '.').replace('/', '.');
         return Component.translatableWithFallback(key, "#" + tag.location());
     }
 
@@ -615,7 +616,7 @@ public final class Utils
 
     public static boolean isConfigurationTool(ItemStack stack)
     {
-        return stack.is(FRAMED_SCREWDRIVER) || stack.canPerformAction(ACTION_WRENCH_CONFIGURE);
+        return stack.is(FRAMED_SCREWDRIVER.value()) || stack.canPerformAction(ACTION_WRENCH_CONFIGURE);
     }
 
     public static String formatItemStack(ItemStack stack)

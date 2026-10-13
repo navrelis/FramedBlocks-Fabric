@@ -10,8 +10,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.*;
-import net.neoforged.fml.ModLoader;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.event.ModEvents;
+import xfacthd.framedblocks.platform.Platform;
 import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -66,9 +66,9 @@ public final class FramedBlockDebugRenderer
 
     public static void init()
     {
-        if (FMLEnvironment.production) return;
+        if (Platform.isProduction()) return;
 
-        ModLoader.postEvent(new AttachDebugRenderersEvent((type, renderer) ->
+        ModEvents.post(new AttachDebugRenderersEvent((type, renderer) ->
                 RENDERERS_BY_TYPE.computeIfAbsent(type, $ -> new ReferenceOpenHashSet<>()).add(renderer)
         ));
 

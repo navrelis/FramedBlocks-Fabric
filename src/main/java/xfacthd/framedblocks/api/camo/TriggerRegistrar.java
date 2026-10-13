@@ -11,7 +11,7 @@ public interface TriggerRegistrar
     /**
      * Default predicate for removal of block camos. Should be preferred over specifically using the hammer for mod compatibility
      */
-    Predicate<ItemStack> DEFAULT_REMOVAL = stack -> stack.is(Utils.FRAMED_HAMMER) || stack.canPerformAction(Utils.ACTION_WRENCH_EMPTY);
+    Predicate<ItemStack> DEFAULT_REMOVAL = stack -> stack.is(Utils.FRAMED_HAMMER.value()) || stack.canPerformAction(Utils.ACTION_WRENCH_EMPTY);
 
     /**
      * Register the given {@link Item} as a valid applicator for the {@link CamoContainerFactory}

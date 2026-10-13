@@ -2,7 +2,7 @@ package xfacthd.framedblocks.api.util.registration;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.util.FramedConstants;
 

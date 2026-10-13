@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.fml.ModLoader;
+import xfacthd.framedblocks.platform.event.ModEvents;
 import xfacthd.framedblocks.api.blueprint.*;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -53,7 +53,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
     public FramedBlueprintItem(FramedToolType type)
     {
-        super(type, new Properties().component(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY));
+        super(type, new Properties().component(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FramedBlueprintItem extends FramedToolItem
         {
             if (!level.isClientSide())
             {
-                stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+                stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY);
             }
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
         }
@@ -93,7 +93,7 @@ public class FramedBlueprintItem extends FramedToolItem
         {
             return writeBlueprint(level, pos, context.getItemInHand());
         }
-        BlueprintData data = context.getItemInHand().getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        BlueprintData data = context.getItemInHand().getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY);
         if (!data.isEmpty())
         {
             return readBlueprint(context, player, data);
@@ -114,7 +114,7 @@ public class FramedBlueprintItem extends FramedToolItem
             BlueprintCopyBehaviour behaviour = getBehaviour(state.getBlock());
             BlueprintData data = behaviour.writeToBlueprint(level, pos, state, be);
             data = storeBlockStateProperties(behaviour, data, state);
-            stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA, data);
+            stack.set(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), data);
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
@@ -366,7 +366,7 @@ public class FramedBlueprintItem extends FramedToolItem
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> components, TooltipFlag flag)
     {
-        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY);
         if (blueprintData.isEmpty())
         {
             components.add(Component.translatable(CONTAINED_BLOCK, BLOCK_NONE).withStyle(ChatFormatting.GOLD));
@@ -395,7 +395,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
     public static void init()
     {
-        ModLoader.postEvent(new RegisterBlueprintCopyBehavioursEvent((behaviour, blocks) ->
+        ModEvents.post(new RegisterBlueprintCopyBehavioursEvent((behaviour, blocks) ->
         {
             Preconditions.checkNotNull(behaviour, "BlueprintCopyBehaviour must be non-null");
             Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a BlueprintCopyBehaviour");

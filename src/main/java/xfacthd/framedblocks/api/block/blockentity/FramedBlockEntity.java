@@ -7,7 +7,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
@@ -28,9 +27,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.common.*;
-import net.neoforged.neoforge.common.util.TriState;
+import xfacthd.framedblocks.platform.model.ModelData;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+import xfacthd.framedblocks.platform.util.TriState;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -60,6 +59,8 @@ public class FramedBlockEntity extends BlockEntity
             Utils.rl("framed_tile")
     );
     public static final String CAMO_NBT_KEY = "camo";
+    private static final String KEY_CLIENT_SYNC_MARKER = "fb_client_sync";
+    private static final String KEY_INITIAL_SYNC_MARKER = "fb_initial_sync";
     public static final Component MSG_BLACKLISTED = Utils.translate("msg", "camo.blacklisted");
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
     public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
@@ -109,7 +110,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return clearCamo(player, stack, camo, secondary);
         }
-        else if (stack.is(Tags.Items.DUSTS_GLOWSTONE) && !glowing)
+        else if (stack.is(ConventionalItemTags.GLOWSTONE_DUSTS) && !glowing)
         {
             return applyGlowstone(player, stack);
         }
@@ -153,7 +154,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return stack.is(Utils.PHANTOM_PASTE) && getBlockType().allowMakingIntangible();
+        return stack.is(Utils.PHANTOM_PASTE.value()) && getBlockType().allowMakingIntangible();
     }
 
     private static boolean canRemoveReinforcement(ItemStack stack)
@@ -476,7 +477,6 @@ public class FramedBlockEntity extends BlockEntity
 
         if (changed)
         {
-            requestModelDataUpdate();
             if (rerender)
             {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -496,7 +496,6 @@ public class FramedBlockEntity extends BlockEntity
         if (wasHidden != hidden)
         {
             culledFaces[side.ordinal()] = hidden;
-            requestModelDataUpdate();
             if (rerender)
             {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -779,7 +778,6 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.getContent().canEntityDestroy(level(), worldPosition, entity);
     }
 
-    @Override
     public void onLoad()
     {
         if (!level().isClientSide())
@@ -794,7 +792,6 @@ public class FramedBlockEntity extends BlockEntity
                 doLightUpdate();
             }
         }
-        super.onLoad();
     }
 
     @Override
@@ -815,19 +812,41 @@ public class FramedBlockEntity extends BlockEntity
         {
             CompoundTag tag = new CompoundTag();
             ((FramedBlockEntity) be).writeToDataPacket(tag, registryAccess);
+            tag.putBoolean(KEY_CLIENT_SYNC_MARKER, true);
             return tag;
         });
     }
 
-    @Override
-    public final void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider)
+    /**
+     * Vanilla handles both the initial update tag and the update packet by calling {@code loadWithComponents()}.
+     * Tags produced by {@link #getUpdatePacket()} and {@link #getUpdateTag(HolderLookup.Provider)} are marked and
+     * routed to the respective handlers here, all other tags are regular save data and must not be intercepted.
+     * The markers are only honoured on the client.
+     *
+     * @return true if the tag was handled and must not be loaded as save data
+     */
+    @ApiStatus.Internal
+    public final boolean handleSyncTag(CompoundTag tag, HolderLookup.Provider lookupProvider)
     {
-        CompoundTag nbt = pkt.getTag();
-        if (!nbt.isEmpty() && readFromDataPacket(nbt, lookupProvider))
+        if (level == null || !level.isClientSide())
         {
-            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            requestModelDataUpdate();
+            return false;
         }
+
+        if (tag.getBoolean(KEY_CLIENT_SYNC_MARKER))
+        {
+            if (readFromDataPacket(tag, lookupProvider))
+            {
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
+            return true;
+        }
+        if (tag.getBoolean(KEY_INITIAL_SYNC_MARKER))
+        {
+            handleUpdateTag(tag, lookupProvider);
+            return true;
+        }
+        return false;
     }
 
     protected void writeToDataPacket(CompoundTag nbt, HolderLookup.Provider lookupProvider)
@@ -896,11 +915,11 @@ public class FramedBlockEntity extends BlockEntity
 
         nbt.put(CAMO_NBT_KEY, CamoContainerHelper.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
+        nbt.putBoolean(KEY_INITIAL_SYNC_MARKER, true);
 
         return nbt;
     }
 
-    @Override
     public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         if (readCamoFromUpdateTag(nbt, provider))
@@ -917,8 +936,6 @@ public class FramedBlockEntity extends BlockEntity
         {
             reinforced = newReinforced;
         }
-
-        requestModelDataUpdate();
     }
 
     protected boolean readCamoFromUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
@@ -950,7 +967,6 @@ public class FramedBlockEntity extends BlockEntity
      * Model data
      */
 
-    @Override
     public final ModelData getModelData()
     {
         if (cullStateDirty)
@@ -959,6 +975,12 @@ public class FramedBlockEntity extends BlockEntity
             cullStateDirty = false;
         }
         return getModelData(true);
+    }
+
+    @Override
+    public final Object getRenderData()
+    {
+        return getModelData();
     }
 
     /**
@@ -1041,13 +1063,13 @@ public class FramedBlockEntity extends BlockEntity
         FrameConfig cfg = new FrameConfig(glowing, intangible, reinforced);
         if (!cfg.equals(FrameConfig.DEFAULT))
         {
-            builder.set(Utils.DC_TYPE_FRAME_CONFIG, cfg);
+            builder.set(Utils.DC_TYPE_FRAME_CONFIG.value(), cfg);
         }
     }
 
     protected void collectCamoComponents(DataComponentMap.Builder builder)
     {
-        builder.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(camoContainer));
+        builder.set(Utils.DC_TYPE_CAMO_LIST.value(), CamoList.of(camoContainer));
     }
 
     protected void collectMiscComponents(DataComponentMap.Builder builder) { }
@@ -1058,12 +1080,12 @@ public class FramedBlockEntity extends BlockEntity
         applyCamoComponents(input);
         applyMiscComponents(input);
 
-        input.getOrDefault(Utils.DC_TYPE_FRAME_CONFIG, FrameConfig.DEFAULT).apply(this);
+        input.getOrDefault(Utils.DC_TYPE_FRAME_CONFIG.value(), FrameConfig.DEFAULT).apply(this);
     }
 
     protected void applyCamoComponents(DataComponentInput input)
     {
-        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(0), false);
+        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY).getCamo(0), false);
     }
 
     protected void applyMiscComponents(DataComponentInput input) { }

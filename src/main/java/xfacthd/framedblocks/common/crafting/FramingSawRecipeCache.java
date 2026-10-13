@@ -3,13 +3,11 @@ package xfacthd.framedblocks.common.crafting;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.server.ReloadableServerResources;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.CloseableResourceManager;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -113,9 +111,17 @@ public final class FramingSawRecipeCache
         return client ? CLIENT_INSTANCE : SERVER_INSTANCE;
     }
 
-    public static void onAddReloadListener(final AddReloadListenerEvent event)
+    public static void onServerStarting(MinecraftServer server)
     {
-        event.addListener(new Reloader(event.getServerResources()));
+        SERVER_INSTANCE.update(server.getRecipeManager());
+    }
+
+    public static void onDataPackReloaded(MinecraftServer server, CloseableResourceManager resourceManager, boolean success)
+    {
+        if (success)
+        {
+            SERVER_INSTANCE.update(server.getRecipeManager());
+        }
     }
 
     private static int sortRecipes(RecipeHolder<FramingSawRecipe> holder1, RecipeHolder<FramingSawRecipe> holder2)
@@ -145,16 +151,5 @@ public final class FramingSawRecipeCache
 
         // Assume that items from the same namespace use the same IBlockType implementation and are therefore comparable
         return typeOne.compareTo(typeTwo);
-    }
-
-
-
-    private record Reloader(ReloadableServerResources serverResources) implements ResourceManagerReloadListener
-    {
-        @Override
-        public void onResourceManagerReload(ResourceManager resourceManager)
-        {
-            FramingSawRecipeCache.SERVER_INSTANCE.update(serverResources.getRecipeManager());
-        }
     }
 }

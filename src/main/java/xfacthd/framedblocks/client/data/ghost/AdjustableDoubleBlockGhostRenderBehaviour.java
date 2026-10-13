@@ -3,8 +3,8 @@ package xfacthd.framedblocks.client.data.ghost;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
@@ -32,7 +32,7 @@ public final class AdjustableDoubleBlockGhostRenderBehaviour extends DoubleBlock
     @Override
     public ModelData appendModelData(ItemStack stack, @Nullable ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, int renderPass, ModelData data)
     {
-        AdjustableDoubleBlockData blockData = stack.get(FBContent.DC_TYPE_ADJ_DOUBLE_BLOCK_DATA);
+        AdjustableDoubleBlockData blockData = stack.get(FBContent.DC_TYPE_ADJ_DOUBLE_BLOCK_DATA.value());
         int firstHeight = blockData != null ? blockData.firstHeight() : FramedAdjustableDoubleBlockEntity.CENTER_PART_HEIGHT;
         int offsetsLeft = offsetPacker.pack(renderState, firstHeight, false);
         int offsetsRight = offsetPacker.pack(renderState, firstHeight, true);

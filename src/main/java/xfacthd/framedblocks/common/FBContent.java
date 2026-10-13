@@ -2,6 +2,8 @@ package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.MapCodec;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
@@ -20,13 +22,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import xfacthd.framedblocks.platform.Platform;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
-import net.neoforged.neoforge.network.IContainerFactory;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredRegister;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
@@ -112,14 +111,10 @@ public final class FBContent
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
             FramedConstants.MOD_ID
     );
-    public static final Registry<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
-            builder -> builder.sync(true)
-    );
+    public static final Registry<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(true);
 
     private static final DeferredAuxDataTypeRegister AUX_BLUEPRINT_DATA_TYPES = DeferredAuxDataTypeRegister.create(FramedConstants.MOD_ID);
-    public static final Registry<AuxBlueprintData.Type<?>> AUX_BLUEPRINT_DATA_TYPE_REGISTRY = AUX_BLUEPRINT_DATA_TYPES.makeRegistry(
-            builder -> builder.sync(true)
-    );
+    public static final Registry<AuxBlueprintData.Type<?>> AUX_BLUEPRINT_DATA_TYPE_REGISTRY = AUX_BLUEPRINT_DATA_TYPES.makeRegistry(true);
 
     private static final Map<BlockType, Holder<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
     private static final Map<FramedToolType, Holder<Item>> TOOLS_BY_TYPE = new EnumMap<>(FramedToolType.class);
@@ -405,6 +400,7 @@ public final class FBContent
             "adjustable_double_block",
             builder -> builder.persistent(AdjustableDoubleBlockData.CODEC).networkSynchronized(AdjustableDoubleBlockData.STREAM_CODEC)
     );
+    // TODO(transfer-api): NeoForge SimpleFluidContent has to be replaced together with the fluid handling
     public static final DeferredDataComponentType<SimpleFluidContent> DC_TYPE_TANK_CONTENTS = DATA_COMPONENTS.registerComponentType(
             "tank_contents",
             builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC)
@@ -656,7 +652,7 @@ public final class FBContent
             "framed_double_chest"
     );
     public static final DeferredHolder<MenuType<?>, MenuType<FramingSawMenu>> MENU_TYPE_FRAMING_SAW = registerMenuType(
-            (id, inv, buf) -> FramingSawMenu.create(id, inv, ContainerLevelAccess.NULL),
+            (id, inv, pos) -> FramingSawMenu.create(id, inv, ContainerLevelAccess.NULL),
             "framing_saw"
     );
     public static final DeferredHolder<MenuType<?>, MenuType<PoweredFramingSawMenu>> MENU_TYPE_POWERED_FRAMING_SAW = registerMenuType(
@@ -752,22 +748,23 @@ public final class FBContent
 
 
 
-    public static void init(IEventBus modBus)
+    public static void init()
     {
-        BLOCKS.register(modBus);
-        DATA_COMPONENTS.register(modBus);
-        ITEMS.register(modBus);
-        BE_TYPES.register(modBus);
-        CONTAINER_TYPES.register(modBus);
-        RECIPE_TYPES.register(modBus);
-        RECIPE_SERIALIZERS.register(modBus);
-        CREATIVE_TABS.register(modBus);
-        PARTICLE_TYPES.register(modBus);
-        LOOT_CONDITIONS.register(modBus);
-        LOOT_FUNCTIONS.register(modBus);
-        LOOT_NUMBER_PROVIDERS.register(modBus);
-        CAMO_CONTAINER_FACTORIES.register(modBus);
-        AUX_BLUEPRINT_DATA_TYPES.register(modBus);
+        // Order matters: items reference data components and blocks, block entity types reference blocks
+        DATA_COMPONENTS.registerAll();
+        CAMO_CONTAINER_FACTORIES.registerAll();
+        AUX_BLUEPRINT_DATA_TYPES.registerAll();
+        BLOCKS.registerAll();
+        ITEMS.registerAll();
+        BE_TYPES.registerAll();
+        CONTAINER_TYPES.registerAll();
+        RECIPE_TYPES.registerAll();
+        RECIPE_SERIALIZERS.registerAll();
+        PARTICLE_TYPES.registerAll();
+        LOOT_CONDITIONS.registerAll();
+        LOOT_FUNCTIONS.registerAll();
+        LOOT_NUMBER_PROVIDERS.registerAll();
+        CREATIVE_TABS.registerAll();
 
         DOUBLE_BLOCK_ENTITIES.add((DeferredBlockEntity<? extends FramedDoubleBlockEntity>) BE_TYPE_FRAMED_DOUBLE_BLOCK);
     }
@@ -882,7 +879,7 @@ public final class FBContent
                 .toArray(Block[]::new);
 
         DeferredBlockEntity<T> result = registerBlockEntity(factory, types[0].getName(), blocks, true);
-        if (!FMLEnvironment.production && Arrays.stream(types).anyMatch(BlockType::isDoubleBlock))
+        if (!Platform.isProduction() && Arrays.stream(types).anyMatch(BlockType::isDoubleBlock))
         {
             //noinspection unchecked
             DOUBLE_BLOCK_ENTITIES.add((DeferredBlockEntity<? extends FramedDoubleBlockEntity>) result);
@@ -911,10 +908,10 @@ public final class FBContent
     }
 
     private static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(
-            IContainerFactory<T> factory, String name
+            ExtendedScreenHandlerType.ExtendedFactory<T, BlockPos> factory, String name
     )
     {
-        return CONTAINER_TYPES.register(name, () -> IMenuTypeExtension.create(factory));
+        return CONTAINER_TYPES.register(name, () -> new ExtendedScreenHandlerType<>(factory, BlockPos.STREAM_CODEC));
     }
 
     @SuppressWarnings("SameParameterValue")

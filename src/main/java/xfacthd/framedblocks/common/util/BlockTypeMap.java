@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -23,7 +23,7 @@ public abstract class BlockTypeMap<T>
     public final void initialize()
     {
         fill();
-        if (!FMLEnvironment.production)
+        if (!Platform.isProduction())
         {
             check();
         }

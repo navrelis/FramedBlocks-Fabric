@@ -13,7 +13,8 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelDataHelper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -46,7 +47,7 @@ public interface IFramedDoubleBlock extends IFramedBlock
     @Override
     default boolean isCamoEmissiveRendering(BlockState state, BlockGetter level, BlockPos pos)
     {
-        ModelData modelData = level.getModelData(pos);
+        ModelData modelData = ModelDataHelper.get(level, pos);
         if (modelData == ModelData.EMPTY) return false;
 
         return IFramedBlock.isCamoEmissiveRendering(modelData.get(IFramedDoubleBlockEntity.DATA_ONE)) ||

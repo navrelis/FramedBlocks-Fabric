@@ -6,9 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.server.ServerStoppedEvent;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.common.net.payload.ClientboundCullingUpdatePayload;
 
@@ -19,14 +18,8 @@ public final class CullingUpdateTracker
     private static final Map<ResourceKey<Level>, Long2ObjectMap<LongSet>> UPDATED_POSITIONS = new Reference2ObjectOpenHashMap<>();
 
     // Send updates at the start of the next tick to ensure receipt after block update packet
-    public static void onServerLevelTick(final LevelTickEvent.Pre event)
+    public static void onServerLevelTick(ServerLevel level)
     {
-        Level level = event.getLevel();
-        if (level.isClientSide())
-        {
-            return;
-        }
-
         ResourceKey<Level> dim = level.dimension();
         Long2ObjectMap<LongSet> chunks = UPDATED_POSITIONS.get(dim);
         if (chunks != null && !chunks.isEmpty())
@@ -35,7 +28,7 @@ public final class CullingUpdateTracker
             {
                 long chunk = entry.getLongKey();
                 PacketDistributor.sendToPlayersTrackingChunk(
-                        (ServerLevel) level,
+                        level,
                         new ChunkPos(chunk),
                         new ClientboundCullingUpdatePayload(chunk, entry.getValue())
                 );
@@ -44,7 +37,7 @@ public final class CullingUpdateTracker
         }
     }
 
-    public static void onServerShutdown(@SuppressWarnings("unused") final ServerStoppedEvent event)
+    public static void onServerShutdown(@SuppressWarnings("unused") MinecraftServer server)
     {
         UPDATED_POSITIONS.clear();
     }

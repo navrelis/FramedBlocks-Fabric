@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.common.util;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
@@ -10,10 +12,9 @@ public final class FramedCreativeTab
 {
     public static CreativeModeTab makeTab()
     {
-        return CreativeModeTab.builder()
+        return FabricItemGroup.builder()
                 .title(Component.translatable("itemGroup.framed_blocks"))
                 .icon(() -> new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value()))
-                .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                 .displayItems((params, output) ->
                 {
                     for (BlockType type : BlockType.values())

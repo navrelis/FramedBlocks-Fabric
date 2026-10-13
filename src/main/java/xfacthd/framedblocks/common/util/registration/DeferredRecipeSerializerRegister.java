@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredRegister;
 import xfacthd.framedblocks.api.util.registration.DeferredRecipeSerializer;
 import xfacthd.framedblocks.common.util.SimpleRecipeSerializer;
 

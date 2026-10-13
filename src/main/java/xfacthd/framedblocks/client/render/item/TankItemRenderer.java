@@ -63,10 +63,10 @@ public final class TankItemRenderer extends BlockEntityWithoutLevelRenderer
 
         if (!validModel) return;
 
-        CamoContent<?> camo = stack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(0).getContent();
+        CamoContent<?> camo = stack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY).getCamo(0).getContent();
         if (camo.isSolid(EmptyBlockGetter.INSTANCE, BlockPos.ZERO)) return;
 
-        SimpleFluidContent content = stack.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.EMPTY);
+        SimpleFluidContent content = stack.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS.value(), SimpleFluidContent.EMPTY);
         if (content.isEmpty()) return;
 
         IClientFluidTypeExtensions fluidExt = IClientFluidTypeExtensions.of(content.getFluid());

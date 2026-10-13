@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import net.neoforged.neoforge.common.util.Lazy;
+import xfacthd.framedblocks.platform.util.Lazy;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.mixin.AccessorIngredient;
 import xfacthd.framedblocks.mixin.AccessorStateDefinitionBuilder;

@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
 
 public final class DeferredBlockEntity<T extends BlockEntity> extends DeferredHolder<BlockEntityType<?>, BlockEntityType<T>>
 {

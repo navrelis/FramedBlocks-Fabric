@@ -113,13 +113,13 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder)
     {
-        builder.set(FBContent.DC_TYPE_TARGET_COLOR, new TargetColor(overlayColor));
+        builder.set(FBContent.DC_TYPE_TARGET_COLOR.value(), new TargetColor(overlayColor));
     }
 
     @Override
     protected void applyMiscComponents(DataComponentInput input)
     {
-        TargetColor color = input.getOrDefault(FBContent.DC_TYPE_TARGET_COLOR, TargetColor.DEFAULT);
+        TargetColor color = input.getOrDefault(FBContent.DC_TYPE_TARGET_COLOR.value(), TargetColor.DEFAULT);
         overlayColor = color.color();
     }
 

@@ -111,7 +111,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     {
         if (heldItem.getItem() instanceof MapItem)
         {
-            FramedMap map = heldItem.remove(FBContent.DC_TYPE_FRAMED_MAP);
+            FramedMap map = heldItem.remove(FBContent.DC_TYPE_FRAMED_MAP.value());
             if (map != null)
             {
                 MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
@@ -144,7 +144,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
             if (heldItem.getItem() instanceof MapItem)
             {
                 Direction dir = getBlockState().getValue(BlockStateProperties.FACING).getOpposite();
-                heldItem.set(FBContent.DC_TYPE_FRAMED_MAP, new FramedMap(worldPosition, dir));
+                heldItem.set(FBContent.DC_TYPE_FRAMED_MAP.value(), new FramedMap(worldPosition, dir));
             }
         }
 
@@ -168,7 +168,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     public ItemStack getCloneItem()
     {
         ItemStack stack = heldItem.copy();
-        stack.remove(FBContent.DC_TYPE_FRAMED_MAP);
+        stack.remove(FBContent.DC_TYPE_FRAMED_MAP.value());
         return stack;
     }
 

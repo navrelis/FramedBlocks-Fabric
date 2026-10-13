@@ -51,7 +51,7 @@ public class FramedBlockColor implements BlockColor, ItemColor
             return -1;
         }
 
-        CamoList camos = stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        CamoList camos = stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY);
         if (tintIndex < -1 && block.getBlockType().isDoubleBlock())
         {
             tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);

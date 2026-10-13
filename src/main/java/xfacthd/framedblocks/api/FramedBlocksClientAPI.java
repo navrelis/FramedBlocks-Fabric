@@ -3,7 +3,7 @@ package xfacthd.framedblocks.api;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.api.model.data.QuadMap;

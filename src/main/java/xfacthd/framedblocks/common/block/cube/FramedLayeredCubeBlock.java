@@ -67,7 +67,7 @@ public class FramedLayeredCubeBlock extends FramedBlock
         {
             return false;
         }
-        if (!useContext.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY).isEmpty())
+        if (!useContext.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY).isEmpty())
         {
             return false;
         }

@@ -6,7 +6,7 @@ import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3fc;
 import xfacthd.framedblocks.api.blueprint.BlueprintData;
@@ -22,7 +22,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     @Nullable
     public ItemStack getProxiedStack(ItemStack stack)
     {
-        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY);
         if (!blueprintData.isEmpty())
         {
             ItemStack proxied = new ItemStack(blueprintData.block());
@@ -60,7 +60,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
             return null;
         }
         BlockState state = proxyBehaviour(proxiedStack).getRenderState(proxiedStack, null, hit, ctx, hitState, renderPass);
-        BlockItemStateProperties stateProps = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY).blockState();
+        BlockItemStateProperties stateProps = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY).blockState();
         if (state != null && !stateProps.isEmpty())
         {
             state = stateProps.apply(state);
@@ -109,7 +109,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     {
         if (proxiedStack == null) return CamoList.EMPTY;
 
-        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+        BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY);
         if (!blueprintData.isEmpty())
         {
             return FramedBlueprintItem.getCamoContainers(blueprintData);

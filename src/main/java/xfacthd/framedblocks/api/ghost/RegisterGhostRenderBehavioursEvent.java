@@ -3,14 +3,12 @@ package xfacthd.framedblocks.api.ghost;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.Event;
-import net.neoforged.fml.event.IModBusEvent;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public final class RegisterGhostRenderBehavioursEvent extends Event implements IModBusEvent
+public final class RegisterGhostRenderBehavioursEvent
 {
     private final BiConsumer<GhostRenderBehaviour, Block[]> blockRegistrar;
     private final BiConsumer<GhostRenderBehaviour, Item[]> itemRegistrar;

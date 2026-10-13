@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.items.IItemHandler;
 import xfacthd.framedblocks.common.FBContent;
@@ -82,7 +82,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
 
     public static void tick(Level level, BlockPos pos, BlockState state, PoweredFramingSawBlockEntity be)
     {
-        if (!FMLEnvironment.production && INSERT_ENERGY_DEBUG)
+        if (!Platform.isProduction() && INSERT_ENERGY_DEBUG)
         {
             be.energyStorage.receiveEnergy(be.energyStorage.getMaxReceive(), false);
         }
@@ -298,11 +298,9 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         return true;
     }
 
-    @Override
     @SuppressWarnings("unchecked")
     public void onLoad()
     {
-        super.onLoad();
         cache = FramingSawRecipeCache.get(level().isClientSide());
         if (selectedRecipeId != null && !level().isClientSide())
         {

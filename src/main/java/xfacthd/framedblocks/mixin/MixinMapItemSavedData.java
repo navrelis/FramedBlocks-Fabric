@@ -34,13 +34,13 @@ public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover
     @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isFramed()Z", ordinal = 0))
     private boolean framedblocks$checkVanillaFramedOrCustomFramed(boolean isFramed, Player player, ItemStack stack)
     {
-        return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP) != null;
+        return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP.value()) != null;
     }
 
     @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isFramed()Z", ordinal = 1))
     private boolean framedblocks$checkNotVanillaFramedAndNotCustomFramed(boolean isFramed, Player player, ItemStack stack)
     {
-        return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP) != null;
+        return isFramed || stack.get(FBContent.DC_TYPE_FRAMED_MAP.value()) != null;
     }
 
     @Inject(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
@@ -48,7 +48,7 @@ public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover
     {
         FramedMap framedMap;
         //noinspection ConstantConditions
-        if (trackingPosition && (framedMap = mapStack.get(FBContent.DC_TYPE_FRAMED_MAP)) != null)
+        if (trackingPosition && (framedMap = mapStack.get(FBContent.DC_TYPE_FRAMED_MAP.value())) != null)
         {
             String frameId = FramedMap.makeFrameId(framedMap.pos());
             if (!framedblocks$frameMarkers.containsKey(frameId))

@@ -7,8 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredRegister;
 import xfacthd.framedblocks.api.util.registration.DeferredBlockEntity;
 
 import java.util.function.Supplier;

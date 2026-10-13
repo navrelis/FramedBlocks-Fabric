@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.client.data;
 
 import com.google.common.base.Preconditions;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.HashMap;

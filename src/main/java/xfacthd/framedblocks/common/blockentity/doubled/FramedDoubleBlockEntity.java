@@ -18,9 +18,9 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.client.model.data.*;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.util.TriState;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
@@ -368,7 +368,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     @Override
     public boolean hasCustomOutlineRendering(Player player)
     {
-        return !FMLEnvironment.production && DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled();
+        return !Platform.isProduction() && DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled();
     }
 
     public final Tuple<BlockState, BlockState> getBlockPair()
@@ -483,14 +483,14 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     @Override
     protected void collectCamoComponents(DataComponentMap.Builder builder)
     {
-        builder.set(FBContent.DC_TYPE_CAMO_LIST, CamoList.of(getCamo(), camoContainer));
+        builder.set(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.of(getCamo(), camoContainer));
     }
 
     @Override
     protected void applyCamoComponents(DataComponentInput input)
     {
         super.applyCamoComponents(input);
-        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY).getCamo(1), true);
+        setCamo(input.getOrDefault(Utils.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY).getCamo(1), true);
     }
 
     /*

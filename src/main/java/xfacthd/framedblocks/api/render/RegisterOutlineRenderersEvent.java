@@ -1,13 +1,11 @@
 package xfacthd.framedblocks.api.render;
 
-import net.neoforged.bus.api.Event;
-import net.neoforged.fml.event.IModBusEvent;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.type.IBlockType;
 
 import java.util.function.BiConsumer;
 
-public final class RegisterOutlineRenderersEvent extends Event implements IModBusEvent
+public final class RegisterOutlineRenderersEvent
 {
     private final BiConsumer<IBlockType, OutlineRenderer> registrar;
 

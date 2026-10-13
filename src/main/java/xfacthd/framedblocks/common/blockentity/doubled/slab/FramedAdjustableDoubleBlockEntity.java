@@ -9,8 +9,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -226,13 +226,13 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
     @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder)
     {
-        builder.set(FBContent.DC_TYPE_ADJ_DOUBLE_BLOCK_DATA, new AdjustableDoubleBlockData(firstHeight));
+        builder.set(FBContent.DC_TYPE_ADJ_DOUBLE_BLOCK_DATA.value(), new AdjustableDoubleBlockData(firstHeight));
     }
 
     @Override
     protected void applyMiscComponents(DataComponentInput input)
     {
-        AdjustableDoubleBlockData blockData = input.get(FBContent.DC_TYPE_ADJ_DOUBLE_BLOCK_DATA);
+        AdjustableDoubleBlockData blockData = input.get(FBContent.DC_TYPE_ADJ_DOUBLE_BLOCK_DATA.value());
         if (blockData != null)
         {
             firstHeight = blockData.firstHeight();

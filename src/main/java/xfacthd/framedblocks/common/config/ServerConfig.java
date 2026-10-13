@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.common.config;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import xfacthd.framedblocks.api.util.ConfigView;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class ServerConfig
@@ -59,11 +59,11 @@ public final class ServerConfig
     private static final ModConfigSpec.IntValue POWERED_SAW_CONSUMPTION_VALUE;
     private static final ModConfigSpec.IntValue POWERED_SAW_RECIPE_DURATION_VALUE;
 
-    public static void init(IEventBus modBus, ModContainer modContainer)
+    public static void init()
     {
-        modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
-        modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-        modContainer.registerConfig(ModConfig.Type.SERVER, SPEC);
+        NeoForgeModConfigEvents.loading(FramedConstants.MOD_ID).register(ServerConfig::onConfigReloaded);
+        NeoForgeModConfigEvents.reloading(FramedConstants.MOD_ID).register(ServerConfig::onConfigReloaded);
+        NeoForgeConfigRegistry.INSTANCE.register(FramedConstants.MOD_ID, ModConfig.Type.SERVER, SPEC);
     }
 
     static
@@ -128,9 +128,9 @@ public final class ServerConfig
         return Utils.translateConfig("server", key);
     }
 
-    private static void onConfigReloaded(ModConfigEvent event)
+    private static void onConfigReloaded(ModConfig config)
     {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == SPEC)
+        if (config.getType() == ModConfig.Type.SERVER && config.getSpec() == SPEC)
         {
             allowBlockEntities = ALLOW_BLOCK_ENTITIES_VALUE.get();
             enableIntangibleFeature = ENABLE_INTANGIBLE_FEATURE_VALUE.get();

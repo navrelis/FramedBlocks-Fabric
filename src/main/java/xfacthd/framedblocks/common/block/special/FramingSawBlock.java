@@ -1,8 +1,10 @@
 package xfacthd.framedblocks.common.block.special;
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -62,7 +64,7 @@ public class FramingSawBlock extends Block
     {
         if (!level.isClientSide())
         {
-            player.openMenu(new MenuProvider()
+            player.openMenu(new ExtendedScreenHandlerFactory<BlockPos>()
             {
                 @Override
                 public Component getDisplayName()
@@ -75,7 +77,13 @@ public class FramingSawBlock extends Block
                 {
                     return createSawMenu(containerId, inventory, level, pos);
                 }
-            }, pos);
+
+                @Override
+                public BlockPos getScreenOpeningData(ServerPlayer player)
+                {
+                    return pos;
+                }
+            });
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }

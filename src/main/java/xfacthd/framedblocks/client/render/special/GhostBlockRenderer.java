@@ -17,10 +17,10 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.neoforged.fml.ModLoader;
+import xfacthd.framedblocks.platform.event.ModEvents;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.joml.Vector3fc;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -237,7 +237,7 @@ public final class GhostBlockRenderer
 
     public static void init()
     {
-        ModLoader.postEvent(new RegisterGhostRenderBehavioursEvent(
+        ModEvents.post(new RegisterGhostRenderBehavioursEvent(
                 (behaviour, blocks) ->
                 {
                     Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");

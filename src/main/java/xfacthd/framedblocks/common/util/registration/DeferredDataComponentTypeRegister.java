@@ -4,8 +4,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredRegister;
 import xfacthd.framedblocks.api.util.registration.DeferredDataComponentType;
 
 import java.util.function.UnaryOperator;

@@ -6,8 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelDataHelper;
+import xfacthd.framedblocks.platform.Platform;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -21,7 +22,7 @@ import xfacthd.framedblocks.common.config.ClientConfig;
 public final class AppearanceHelper
 {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final boolean CLIENT = FMLEnvironment.dist.isClient();
+    private static final boolean CLIENT = Platform.isClient();
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
     public static BlockState getAppearance(
@@ -346,7 +347,7 @@ public final class AppearanceHelper
     @Nullable
     private static FramedBlockData getModelData(BlockGetter level, BlockPos pos, BlockState componentState, boolean mayBeSingle)
     {
-        ModelData data = level.getModelData(pos);
+        ModelData data = ModelDataHelper.get(level, pos);
         if (data == ModelData.EMPTY)
         {
             return null;

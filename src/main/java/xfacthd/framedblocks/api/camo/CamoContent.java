@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.common.extensions.IBlockStateExtension;
-import net.neoforged.neoforge.common.util.TriState;
+import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;

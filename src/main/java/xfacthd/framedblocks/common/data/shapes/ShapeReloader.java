@@ -2,16 +2,18 @@ package xfacthd.framedblocks.common.data.shapes;
 
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.shapes.ReloadableShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeCache;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ShapeReloader implements ResourceManagerReloadListener
+public final class ShapeReloader implements SimpleSynchronousResourceReloadListener
 {
     public static final ShapeReloader INSTANCE = new ShapeReloader();
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -28,6 +30,12 @@ public final class ShapeReloader implements ResourceManagerReloadListener
     public static synchronized void addProvider(ReloadableShapeProvider provider)
     {
         PROVIDERS.add(provider);
+    }
+
+    @Override
+    public ResourceLocation getFabricId()
+    {
+        return Utils.rl("shape_reloader");
     }
 
     @Override

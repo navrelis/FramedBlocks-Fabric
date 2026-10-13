@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.block.blockentity;
 
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 
 public interface IFramedDoubleBlockEntity

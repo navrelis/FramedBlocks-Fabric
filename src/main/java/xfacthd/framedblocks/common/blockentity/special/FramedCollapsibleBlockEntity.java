@@ -10,8 +10,8 @@ import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
@@ -298,7 +298,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder)
     {
-        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA, new CollapsibleBlockData(packedOffsets));
+        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA.value(), new CollapsibleBlockData(packedOffsets));
 
         BlockState state = getBlockState();
         BlockItemStateProperties stateProperties = BlockItemStateProperties.EMPTY
@@ -310,7 +310,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     @Override
     protected void applyMiscComponents(DataComponentInput input)
     {
-        CollapsibleBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA);
+        CollapsibleBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA.value());
         if (blockData != null)
         {
             packedOffsets = blockData.offsets();

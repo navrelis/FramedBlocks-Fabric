@@ -6,7 +6,7 @@ import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.common.FBContent;
@@ -45,7 +45,7 @@ public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBe
             ModelData data
     )
     {
-        CollapsibleBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA);
+        CollapsibleBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_BLOCK_DATA.value());
         if (blockData != null)
         {
             return data.derive().with(FramedCollapsibleBlockEntity.OFFSETS, blockData.offsets()).build();

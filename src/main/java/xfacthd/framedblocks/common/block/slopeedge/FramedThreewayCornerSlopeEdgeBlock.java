@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -55,7 +55,7 @@ public class FramedThreewayCornerSlopeEdgeBlock extends FramedBlock
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (!FMLEnvironment.production && player.isShiftKeyDown())
+        if (!Platform.isProduction() && player.isShiftKeyDown())
         {
             level.setBlockAndUpdate(pos, state.cycle(PropertyHolder.ALT_TYPE));
             return true;

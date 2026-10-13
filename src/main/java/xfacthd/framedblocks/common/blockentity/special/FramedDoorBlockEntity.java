@@ -32,13 +32,13 @@ public class FramedDoorBlockEntity extends FramedBlockEntity
 
         CamoContainer<?, ?> camoOne = top ? otherCamo : getCamo();
         CamoContainer<?, ?> camoTwo = top ? getCamo() : otherCamo;
-        builder.set(FBContent.DC_TYPE_CAMO_LIST, CamoList.of(camoOne, camoTwo));
+        builder.set(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.of(camoOne, camoTwo));
     }
 
     @Override
     protected void applyCamoComponents(DataComponentInput input)
     {
-        CamoList camoList = input.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        CamoList camoList = input.getOrDefault(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY);
         boolean top = getBlockState().getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
         setCamo(camoList.getCamo(top ? 1 : 0), false);
     }

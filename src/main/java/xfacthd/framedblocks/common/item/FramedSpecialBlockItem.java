@@ -41,7 +41,7 @@ public abstract class FramedSpecialBlockItem extends BlockItem
                 if (!level.isClientSide())
                 {
                     boolean writeToCamoTwo = shouldWriteToCamoTwo(ctx, originalState);
-                    CamoList camos = ctx.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+                    CamoList camos = ctx.getItemInHand().getOrDefault(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY);
                     Utils.wrapInStateCopy(
                             level,
                             pos,

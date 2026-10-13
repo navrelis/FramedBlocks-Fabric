@@ -5,7 +5,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.common.FBContent;
@@ -27,7 +27,7 @@ public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostR
     )
     {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
-        CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
+        CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA.value());
         if (state != null && blockData != null)
         {
             Rotation rotation = state.getValue(PropertyHolder.COPYCAT_ROTATION);
@@ -47,7 +47,7 @@ public final class CollapsibleCopycatBlockGhostRenderBehaviour implements GhostR
             ModelData data
     )
     {
-        CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
+        CollapsibleCopycatBlockData blockData = stack.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA.value());
         if (blockData != null)
         {
             return data.derive().with(FramedCollapsibleCopycatBlockEntity.OFFSETS, blockData.offsets()).build();

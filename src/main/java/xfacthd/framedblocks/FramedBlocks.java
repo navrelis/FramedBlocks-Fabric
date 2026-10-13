@@ -1,24 +1,33 @@
 package xfacthd.framedblocks;
 
+import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientBlockEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
-import net.neoforged.fml.*;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.world.poi.ExtendPoiTypesEvent;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.slf4j.Logger;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.RegisterBlueprintCopyBehavioursEvent;
 import xfacthd.framedblocks.common.config.*;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.capabilities.CapabilitySetup;
 import xfacthd.framedblocks.common.data.FramedDataMaps;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
@@ -29,74 +38,101 @@ import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.net.NetworkHandler;
 import xfacthd.framedblocks.common.util.EventHandler;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.event.ModEvents;
 
-@Mod(FramedConstants.MOD_ID)
-@SuppressWarnings("UtilityClassWithPublicConstructor")
-public final class FramedBlocks
+import java.util.Set;
+
+public final class FramedBlocks implements ModInitializer
 {
     public static final Logger LOGGER = LogUtils.getLogger();
+    private static boolean commonSetupDone = false;
 
-    public FramedBlocks(IEventBus modBus, ModContainer modContainer)
+    @Override
+    public void onInitialize()
     {
-        FBContent.init(modBus);
+        // Client and common configs are loaded on registration, NeoForge loads them before the registry events fire
+        ClientConfig.init();
+        ServerConfig.init();
+        DevToolsConfig.init();
 
-        ClientConfig.init(modBus, modContainer);
-        ServerConfig.init(modBus, modContainer);
-        DevToolsConfig.init(modBus, modContainer);
+        FBContent.init();
 
-        modBus.addListener(CapabilitySetup::onRegisterCapabilities);
-        modBus.addListener(FramedBlocks::onCommonSetup);
-        modBus.addListener(NetworkHandler::onRegisterPayloads);
-        modBus.addListener(BlueprintBehaviours::onRegisterBlueprintCopyBehaviours);
-        modBus.addListener(FramedDataMaps::onRegisterDataMapTypes);
-        modBus.addListener(FramedBlocks::onExtendPoiTypes);
+        CapabilitySetup.init();
+        NetworkHandler.init();
+        FramedDataMaps.init();
+        ModEvents.addListener(RegisterBlueprintCopyBehavioursEvent.class, BlueprintBehaviours::onRegisterBlueprintCopyBehaviours);
+        extendPoiTypes();
 
-        IEventBus forgeBus = NeoForge.EVENT_BUS;
-        forgeBus.addListener(EventHandler::onBlockLeftClick);
-        forgeBus.addListener(EventHandler::onServerShutdown);
-        forgeBus.addListener(CullingUpdateTracker::onServerLevelTick);
-        forgeBus.addListener(CullingUpdateTracker::onServerShutdown);
-        forgeBus.addListener(FramingSawRecipeCache::onAddReloadListener);
-        forgeBus.addListener(FramedDataMaps::onDataMapsUpdated);
-
-        if (!FMLEnvironment.production)
+        ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register((be, level) -> onBlockEntityLoad(be));
+        if (Platform.isClient())
         {
-            forgeBus.addListener(FramedBlocks::onAddDebugReloadListener);
+            ClientHooks.init();
+        }
+        AttackBlockCallback.EVENT.register(EventHandler::onBlockLeftClick);
+        ServerLifecycleEvents.SERVER_STOPPED.register(EventHandler::onServerShutdown);
+        ServerLifecycleEvents.SERVER_STOPPED.register(CullingUpdateTracker::onServerShutdown);
+        ServerTickEvents.START_WORLD_TICK.register(CullingUpdateTracker::onServerLevelTick);
+        ServerLifecycleEvents.SERVER_STARTING.register(FramingSawRecipeCache::onServerStarting);
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FramingSawRecipeCache::onDataPackReloaded);
+
+        if (!Platform.isProduction())
+        {
+            ResourceManagerHelper dataManager = ResourceManagerHelper.get(PackType.SERVER_DATA);
+            dataManager.registerReloadListener(ShapeReloader.INSTANCE);
+            dataManager.registerReloadListener(StateCacheBuilder.CacheReloader.INSTANCE);
         }
 
         FullFacePredicates.PREDICATES.initialize();
         SideSkipPredicates.PREDICATES.initialize();
         ConnectionPredicates.PREDICATES.initialize();
 
-        CompatHandler.init(modBus);
+        CompatHandler.init();
 
-        CrashReportCallables.registerCrashCallable(
-                "FramedBlocks BlockEntity Warning",
-                FramedBlocks::getBlockEntityWarning,
-                ServerConfig.VIEW::allowBlockEntities
+        // Tags are loaded on both sides after all mods were initialized and all registries are complete, which makes
+        // this the closest equivalent to NeoForge's common setup
+        CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> onCommonSetup());
+    }
+
+    // Synchronized so that concurrent callers (integrated server and client thread) only return once the setup is complete
+    private static synchronized void onCommonSetup()
+    {
+        if (!commonSetupDone)
+        {
+            StateCacheBuilder.ensureStateCachesInitialized();
+            FramedBlueprintItem.init();
+            CompatHandler.commonSetup();
+            CamoContainerFactories.registerCamoFactories();
+            commonSetupDone = true;
+        }
+    }
+
+    // NeoForge's BlockEntity#onLoad() has no vanilla equivalent, the Fabric load events fire at the same point
+    private static void onBlockEntityLoad(BlockEntity be)
+    {
+        if (be instanceof FramedBlockEntity framedBe)
+        {
+            framedBe.onLoad();
+        }
+        else if (be instanceof PoweredFramingSawBlockEntity sawBe)
+        {
+            sawBe.onLoad();
+        }
+    }
+
+    private static void extendPoiTypes()
+    {
+        Holder<PoiType> holder = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(PoiTypes.LIGHTNING_ROD);
+        Set<BlockState> addedStates = ImmutableSet.copyOf(
+                FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value().getStateDefinition().getPossibleStates()
         );
+
+        PoiType type = holder.value();
+        type.matchingStates = ImmutableSet.<BlockState>builder().addAll(type.matchingStates).addAll(addedStates).build();
+        PoiTypes.registerBlockStates(holder, addedStates);
     }
 
-    private static void onCommonSetup(final FMLCommonSetupEvent event)
-    {
-        StateCacheBuilder.ensureStateCachesInitialized();
-        FramedBlueprintItem.init();
-        CompatHandler.commonSetup();
-        CamoContainerFactories.registerCamoFactories();
-    }
-
-    private static void onAddDebugReloadListener(final AddReloadListenerEvent event)
-    {
-        event.addListener(ShapeReloader.INSTANCE);
-        event.addListener(StateCacheBuilder.CacheReloader.INSTANCE);
-    }
-
-    private static void onExtendPoiTypes(ExtendPoiTypesEvent event)
-    {
-        event.addBlockToPoi(PoiTypes.LIGHTNING_ROD, FBContent.BLOCK_FRAMED_LIGHTNING_ROD.value());
-    }
-
-    private static String getBlockEntityWarning()
+    public static String getBlockEntityWarning()
     {
         return """
                
@@ -106,5 +142,14 @@ public final class FramedBlocks
                \t\t- If you can't identify the block or the crash wasn't fixed, make a backup of the world and disable the mentioned config setting
                \t\tIf the crash still happens, please report it on the FramedBlocks GitHub repository
                """;
+    }
+
+    // Isolated in a nested class to keep the client-only event class from being loaded on a dedicated server
+    private static final class ClientHooks
+    {
+        private static void init()
+        {
+            ClientBlockEntityEvents.BLOCK_ENTITY_LOAD.register((be, level) -> onBlockEntityLoad(be));
+        }
     }
 }

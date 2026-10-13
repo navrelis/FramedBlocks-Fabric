@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.common.FBContent;
@@ -224,13 +224,13 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     @Override
     protected void collectMiscComponents(DataComponentMap.Builder builder)
     {
-        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA, new CollapsibleCopycatBlockData(packedOffsets));
+        builder.set(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA.value(), new CollapsibleCopycatBlockData(packedOffsets));
     }
 
     @Override
     protected void applyMiscComponents(DataComponentInput input)
     {
-        CollapsibleCopycatBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA);
+        CollapsibleCopycatBlockData blockData = input.get(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA.value());
         if (blockData != null)
         {
             packedOffsets = blockData.offsets();

@@ -1,12 +1,11 @@
 package xfacthd.framedblocks.api.camo.block.rotator;
 
 import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.Event;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.BiConsumer;
 
-public final class RegisterBlockCamoRotatorsEvent extends Event
+public final class RegisterBlockCamoRotatorsEvent
 {
     private final BiConsumer<Block, BlockCamoRotator> registrar;
 

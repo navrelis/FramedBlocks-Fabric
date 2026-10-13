@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
 
 public final class DeferredRecipeType<T extends Recipe<?>> extends DeferredHolder<RecipeType<?>, RecipeType<T>>
 {

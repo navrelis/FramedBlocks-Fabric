@@ -10,8 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
 import xfacthd.framedblocks.common.FBContent;
@@ -138,14 +138,14 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     {
         if (hasFlowerBlock())
         {
-            builder.set(FBContent.DC_TYPE_POTTED_FLOWER, new PottedFlower(flowerBlock));
+            builder.set(FBContent.DC_TYPE_POTTED_FLOWER.value(), new PottedFlower(flowerBlock));
         }
     }
 
     @Override
     protected void applyMiscComponents(DataComponentInput input)
     {
-        PottedFlower flower = input.getOrDefault(FBContent.DC_TYPE_POTTED_FLOWER, PottedFlower.EMPTY);
+        PottedFlower flower = input.getOrDefault(FBContent.DC_TYPE_POTTED_FLOWER.value(), PottedFlower.EMPTY);
         if (!flower.isEmpty())
         {
             flowerBlock = flower.flower();

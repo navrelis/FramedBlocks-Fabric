@@ -25,6 +25,6 @@ public final class FlowerPotCopyBehaviour implements BlueprintCopyBehaviour
     public void attachDataToDummyRenderStack(ItemStack stack, BlueprintData data)
     {
         PottedFlower flower = data.getAuxDataOrDefault(PottedFlower.EMPTY);
-        stack.set(FBContent.DC_TYPE_POTTED_FLOWER, flower);
+        stack.set(FBContent.DC_TYPE_POTTED_FLOWER.value(), flower);
     }
 }

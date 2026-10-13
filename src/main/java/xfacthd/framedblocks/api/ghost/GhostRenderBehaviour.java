@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -168,7 +168,7 @@ public interface GhostRenderBehaviour
      */
     default CamoList readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
-        return stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        return stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY);
     }
 
     /**

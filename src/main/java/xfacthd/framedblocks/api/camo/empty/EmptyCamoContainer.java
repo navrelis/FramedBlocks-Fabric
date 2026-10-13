@@ -2,7 +2,7 @@ package xfacthd.framedblocks.api.camo.empty;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.FramedConstants;

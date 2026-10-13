@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.*;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.util.TriState;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -123,7 +123,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
     {
-        if (FMLEnvironment.dist.isClient())
+        if (Platform.isClient())
         {
             return ClientUtils.getFluidColor(level, pos, fluid.defaultFluidState());
         }
@@ -133,7 +133,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public int getTintColor(ItemStack stack, int tintIdx)
     {
-        if (FMLEnvironment.dist.isClient())
+        if (Platform.isClient())
         {
             return ClientUtils.getFluidColor(fluid.defaultFluidState());
         }

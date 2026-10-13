@@ -8,7 +8,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -61,14 +61,14 @@ public final class InternalApiImpl implements InternalAPI
     @Override
     public void registerShapeCache(ShapeCache<?> cache)
     {
-        Preconditions.checkState(!FMLEnvironment.production, "Reloading shapes is not supported in production");
+        Preconditions.checkState(!Platform.isProduction(), "Reloading shapes is not supported in production");
         ShapeReloader.addCache(cache);
     }
 
     @Override
     public void registerReloadableShapeProvider(ReloadableShapeProvider provider)
     {
-        Preconditions.checkState(!FMLEnvironment.production, "Reloading shapes is not supported in production");
+        Preconditions.checkState(!Platform.isProduction(), "Reloading shapes is not supported in production");
         ShapeReloader.addProvider(provider);
     }
 

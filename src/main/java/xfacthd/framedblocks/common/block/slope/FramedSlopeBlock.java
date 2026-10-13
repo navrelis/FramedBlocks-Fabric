@@ -75,7 +75,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock, ICompl
                 if (!level.isClientSide())
                 {
                     boolean fancy = railSlope instanceof IFramedDoubleBlock;
-                    CamoList camos = fancy ? stack.get(FBContent.DC_TYPE_CAMO_LIST) : null;
+                    CamoList camos = fancy ? stack.get(FBContent.DC_TYPE_CAMO_LIST.value()) : null;
                     Utils.wrapInStateCopy(level, pos, player, stack, false, true, () ->
                             level.setBlockAndUpdate(pos, newState)
                     );

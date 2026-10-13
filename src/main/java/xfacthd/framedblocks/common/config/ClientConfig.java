@@ -1,10 +1,9 @@
 package xfacthd.framedblocks.common.config;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
+import xfacthd.framedblocks.platform.Platform;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.*;
@@ -145,11 +144,11 @@ public final class ClientConfig
     private static final ModConfigSpec.EnumValue<OverlayDisplayMode> TRAPDOOR_TEXTURE_ROTATION_MODE_VALUE;
     private static final ModConfigSpec.EnumValue<OverlayDisplayMode> COPYCAT_STYLE_MODE_VALUE;
 
-    public static void init(IEventBus modBus, ModContainer modContainer)
+    public static void init()
     {
-        modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
-        modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-        modContainer.registerConfig(ModConfig.Type.CLIENT, SPEC);
+        NeoForgeModConfigEvents.loading(FramedConstants.MOD_ID).register(ClientConfig::onConfigReloaded);
+        NeoForgeModConfigEvents.reloading(FramedConstants.MOD_ID).register(ClientConfig::onConfigReloaded);
+        NeoForgeConfigRegistry.INSTANCE.register(FramedConstants.MOD_ID, ModConfig.Type.CLIENT, SPEC);
     }
 
     static
@@ -349,12 +348,12 @@ public final class ClientConfig
 
     private static boolean validateModId(Object val)
     {
-        return val instanceof String string && ModList.get().isLoaded(string);
+        return val instanceof String string && Platform.isModLoaded(string);
     }
 
-    private static void onConfigReloaded(ModConfigEvent event)
+    private static void onConfigReloaded(ModConfig config)
     {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
+        if (config.getType() == ModConfig.Type.CLIENT && config.getSpec() == SPEC)
         {
             showGhostBlocks = SHOW_GHOST_BLOCKS_VALUE.get();
             altGhostRenderer = ALT_GHOST_RENDERER_VALUE.get();

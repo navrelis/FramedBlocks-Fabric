@@ -7,13 +7,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xfacthd.framedblocks.common.blockentity.special.FramedHopperBlockEntity;
-
-import javax.annotation.Nullable;
 
 @Mixin(HopperBlockEntity.class)
 public class MixinHopperBlockEntity

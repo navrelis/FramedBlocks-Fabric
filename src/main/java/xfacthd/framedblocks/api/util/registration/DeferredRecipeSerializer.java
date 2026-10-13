@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
 
 public final class DeferredRecipeSerializer<T extends Recipe<?>> extends DeferredHolder<RecipeSerializer<?>, RecipeSerializer<T>>
 {

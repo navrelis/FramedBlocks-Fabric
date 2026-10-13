@@ -25,10 +25,11 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.common.Tags;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelDataHelper;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
-import net.neoforged.neoforge.common.util.TriState;
+import xfacthd.framedblocks.platform.util.TriState;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -131,7 +132,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
                     return;
                 }
             }
-            else if (!offhandStack.is(Tags.Items.DUSTS_GLOWSTONE))
+            else if (!offhandStack.is(ConventionalItemTags.GLOWSTONE_DUSTS))
             {
                 return;
             }
@@ -407,7 +408,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default boolean isCamoEmissiveRendering(@SuppressWarnings("unused") BlockState state, BlockGetter level, BlockPos pos)
     {
-        ModelData modelData = level.getModelData(pos);
+        ModelData modelData = ModelDataHelper.get(level, pos);
         return isCamoEmissiveRendering(modelData);
     }
 
@@ -672,7 +673,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default void appendCamoHoverText(ItemStack stack, List<Component> lines)
     {
-        Optional<MutableComponent> camoText = printCamoData(stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY), false);
+        Optional<MutableComponent> camoText = printCamoData(stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY), false);
         if (camoText.isPresent())
         {
             lines.add(Component.translatable(CAMO_LABEL, camoText.get()).withStyle(ChatFormatting.GOLD));

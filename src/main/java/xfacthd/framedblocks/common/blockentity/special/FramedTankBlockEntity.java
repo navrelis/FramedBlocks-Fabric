@@ -99,7 +99,7 @@ public class FramedTankBlockEntity extends FramedBlockEntity
     @Override
     protected void applyMiscComponents(DataComponentInput input)
     {
-        FluidStack contents = input.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.EMPTY).copy();
+        FluidStack contents = input.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS.value(), SimpleFluidContent.EMPTY).copy();
         if (!contents.isEmpty())
         {
             fluidHandler.setFluid(contents);
@@ -112,7 +112,7 @@ public class FramedTankBlockEntity extends FramedBlockEntity
         FluidStack contents = fluidHandler.getFluid();
         if (!contents.isEmpty())
         {
-            builder.set(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.copyOf(contents));
+            builder.set(FBContent.DC_TYPE_TANK_CONTENTS.value(), SimpleFluidContent.copyOf(contents));
         }
     }
 

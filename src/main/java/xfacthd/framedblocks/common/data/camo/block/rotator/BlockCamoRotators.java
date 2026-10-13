@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.InfestedRotatedPillarBlock;
 import net.minecraft.world.level.block.RedstoneLampBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.neoforge.common.NeoForge;
+import xfacthd.framedblocks.platform.event.ModEvents;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
@@ -76,7 +76,7 @@ public final class BlockCamoRotators
         int defaultCount = ROTATORS.size();
 
         MutableInt customCount = new MutableInt();
-        NeoForge.EVENT_BUS.post(new RegisterBlockCamoRotatorsEvent((key, value) ->
+        ModEvents.post(new RegisterBlockCamoRotatorsEvent((key, value) ->
         {
             ROTATORS.put(key, value);
             customCount.increment();

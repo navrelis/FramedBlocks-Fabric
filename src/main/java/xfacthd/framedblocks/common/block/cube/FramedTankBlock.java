@@ -84,7 +84,7 @@ public class FramedTankBlock extends FramedBlock
         super.appendHoverText(stack, ctx, lines, flag);
 
         Component name = EMPTY_FLUID;
-        SimpleFluidContent content = stack.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS, SimpleFluidContent.EMPTY);
+        SimpleFluidContent content = stack.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS.value(), SimpleFluidContent.EMPTY);
         if (!content.isEmpty())
         {
             name = content.getFluid().getFluidType().getDescription().copy().withStyle(ChatFormatting.WHITE);

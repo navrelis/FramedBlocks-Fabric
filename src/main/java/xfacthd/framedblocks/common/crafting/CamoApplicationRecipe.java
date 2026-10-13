@@ -119,7 +119,7 @@ public final class CamoApplicationRecipe extends CustomRecipe
         }
 
         ItemStack result = blockStack.copyWithCount(1);
-        result.set(FBContent.DC_TYPE_CAMO_LIST, CamoList.of(camos));
+        result.set(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.of(camos));
         return result;
     }
 

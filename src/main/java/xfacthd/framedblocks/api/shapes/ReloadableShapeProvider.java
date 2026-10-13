@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.platform.Platform;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 
@@ -18,7 +18,7 @@ public final class ReloadableShapeProvider implements ShapeProvider
 
     public ReloadableShapeProvider(ShapeGenerator generator, ImmutableList<BlockState> states)
     {
-        Preconditions.checkState(!FMLEnvironment.production, "Reloading shapes is not supported in production");
+        Preconditions.checkState(!Platform.isProduction(), "Reloading shapes is not supported in production");
         this.generator = generator;
         this.states = states;
         this.wrapped = generator.generate(states);

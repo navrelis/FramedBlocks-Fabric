@@ -7,8 +7,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
+import xfacthd.framedblocks.platform.registry.DeferredRegister;
 import xfacthd.framedblocks.api.util.registration.DeferredRecipeType;
 
 public final class DeferredRecipeTypeRegister extends DeferredRegister<RecipeType<?>>
@@ -30,7 +30,14 @@ public final class DeferredRecipeTypeRegister extends DeferredRegister<RecipeTyp
     public <R extends Recipe<?>> DeferredRecipeType<R> registerRecipeType(String name)
     {
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(getNamespace(), name);
-        Holder<RecipeType<?>> holder = register(name, () -> RecipeType.simple(location));
+        Holder<RecipeType<?>> holder = register(name, () -> new RecipeType<R>()
+        {
+            @Override
+            public String toString()
+            {
+                return location.toString();
+            }
+        });
         return (DeferredRecipeType<R>) holder;
     }
 

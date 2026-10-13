@@ -19,7 +19,7 @@ public final class BlueprintPropertyOverride
                 HAS_DATA,
                 (stack, level, entity, seed) ->
                 {
-                    BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA, BlueprintData.EMPTY);
+                    BlueprintData blueprintData = stack.getOrDefault(FBContent.DC_TYPE_BLUEPRINT_DATA.value(), BlueprintData.EMPTY);
                     return blueprintData.isEmpty() ? 0 : 1;
                 }
         );
