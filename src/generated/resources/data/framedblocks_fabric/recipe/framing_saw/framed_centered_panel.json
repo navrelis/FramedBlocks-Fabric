@@ -1,0 +1,8 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "material": 3072,
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_centered_panel"
+  }
+}

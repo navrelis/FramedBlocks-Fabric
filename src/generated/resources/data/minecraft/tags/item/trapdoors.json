@@ -1,6 +1,6 @@
 {
   "values": [
-    "framedblocks:framed_trapdoor",
-    "framedblocks:framed_iron_trapdoor"
+    "framedblocks_fabric:framed_trapdoor",
+    "framedblocks_fabric:framed_iron_trapdoor"
   ]
 }

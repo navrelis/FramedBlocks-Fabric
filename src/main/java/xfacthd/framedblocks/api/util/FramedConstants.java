@@ -8,7 +8,7 @@ import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 
 public final class FramedConstants
 {
-    public static final String MOD_ID = "framedblocks";
+    public static final String MOD_ID = "framedblocks_fabric";
     public static final ResourceLocation CAMO_CONTAINER_FACTORY_REGISTRY_NAME = Utils.rl("camo_containers");
     public static final ResourceKey<Registry<CamoContainerFactory<?>>> CAMO_CONTAINER_FACTORY_REGISTRY_KEY = ResourceKey.createRegistryKey(CAMO_CONTAINER_FACTORY_REGISTRY_NAME);
     public static final ResourceLocation AUX_BLUEPRINT_DATA_TYPE_REGISTRY_NAME = Utils.rl("aux_blueprint_data");

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "framedblocks_fabric:item/framed_lantern"
+  }
+}

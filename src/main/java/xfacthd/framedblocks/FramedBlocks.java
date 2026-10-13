@@ -100,7 +100,7 @@ public final class FramedBlocks
     {
         return """
                
-               \t\tThe 'allowBlockEntities' setting in the framedblocks-server.toml config file is enabled.
+               \t\tThe 'allowBlockEntities' setting in the framedblocks_fabric-server.toml config file is enabled.
                \t\tIf this crash happened in FramedBlocks code, please try the following solutions before reporting:
                \t\t- If you can identify the block that was used as a camo and resulted in the crash, add the block to the blacklist tag
                \t\t- If you can't identify the block or the crash wasn't fixed, make a backup of the world and disable the mentioned config setting

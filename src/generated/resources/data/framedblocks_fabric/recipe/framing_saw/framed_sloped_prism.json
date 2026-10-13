@@ -1,0 +1,8 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "material": 1536,
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_sloped_prism"
+  }
+}

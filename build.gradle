@@ -1,76 +1,23 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.134'
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 }
 
 version = mod_version
 group = 'xfacthd.framedblocks'
 
 base {
-    archivesName = 'FramedBlocks'
+    archivesName = 'FramedBlocksFabric'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
 
-neoForge {
-    version = project.neoforge_version
-
-    parchment {
-        minecraftVersion = project.parchment_minecraft_version
-        mappingsVersion = project.parchment_mappings_version
-    }
-
-    runs {
-        configureEach {
-            // systemProperty  'neoforge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            systemProperty 'neoforge.enabledGameTestNamespaces', 'framedblocks'
-            systemProperty 'terminal.ansi', 'true'
-
-            logLevel = org.slf4j.event.Level.DEBUG
-
-            sourceSet = project.sourceSets.test
-        }
-
-        client {
-            client()
-            gameDirectory = project.file('run')
-        }
-
-        server {
-            server()
-            gameDirectory = project.file('run_server')
-
-            programArgument '--nogui'
-        }
-
-        data {
-            data()
-            gameDirectory = project.file('run')
-
-            programArguments.addAll(
-                    '--mod', 'framedblocks',
-                    '--all',
-                    '--output', file('src/generated/resources/').getAbsolutePath(),
-                    '--existing', file('src/main/resources/').getAbsolutePath(),
-                    '--existing-mod', 'ae2'
-            )
-        }
-
-        gameTestServer {
-            type = "gameTestServer"
-            gameDirectory = project.file('run_gametest')
-        }
-    }
-
-    mods {
-        framedblocks {
-            sourceSet(project.sourceSets.main)
-            sourceSet(project.sourceSets.test)
-        }
-    }
-
-    addModdingDependenciesTo(project.sourceSets.test)
+loom {
+    accessWidenerPath = file('src/main/resources/framedblocks_fabric.accesswidener')
 }
 
 sourceSets {
@@ -80,97 +27,22 @@ sourceSets {
 
     test {
         java {
-            srcDir "src/test/java"
+            srcDirs = []
         }
         resources {
-            srcDir "src/test/resources"
+            srcDirs = []
         }
     }
 }
 
 repositories {
     maven {
-        name = 'CurseMaven'
-        url = 'https://www.cursemaven.com'
-        content {
-            includeGroup('curse.maven')
-        }
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
     }
     maven {
-        name = "tterrag's maven"
-        url = 'https://maven.tterrag.com/'
-        content {
-            includeGroup('team.chisel.ctm')
-        }
-    }
-    maven {
-        name = 'Create maven'
-        url = 'https://maven.createmod.net/'
-        content {
-            includeGroup('com.simibubi.create')
-            includeGroup('net.createmod.ponder')
-            includeGroup('dev.engine-room.flywheel')
-        }
-    }
-    maven {
-        name = 'DevOS maven'
-        url = 'https://mvn.devos.one/snapshots'
-        content {
-            includeGroup('com.tterrag.registrate')
-        }
-    }
-    maven {
-        name = "Jared's maven"
-        url = 'https://maven.blamejared.com/'
-        content {
-            includeGroup('org.embeddedt')
-            includeGroup('mezz.jei')
-            includeGroup('com.blamejared.searchables')
-        }
-    }
-    maven {
-        name = 'TerraformersMC maven'
-        url = "https://maven.terraformersmc.com/"
-        content {
-            includeGroup('dev.emi')
-        }
-    }
-    maven {
-        name = "Shedaniel's maven"
-        url = 'https://maven.shedaniel.me/'
-        content {
-            includeGroup('dev.architectury')
-            includeGroup('me.shedaniel')
-            includeGroup('me.shedaniel.cloth')
-        }
-    }
-    maven {
-        name = 'ResourcefulBees maven'
-        url = 'https://maven.resourcefulbees.com/repository/maven-public/'
-        content {
-            includeGroup('com.teamresourceful')
-            includeGroup('com.teamresourceful.resourcefullib')
-            includeGroup('earth.terrarium.athena')
-            includeGroup('earth.terrarium.chipped')
-        }
-    }
-    maven {
-        name = 'Modmaven'
-        url = 'https://modmaven.dev/'
-        content {
-            includeGroup('appeng')
-        }
-    }
-    maven {
-        name = 'Shadows Maven'
-        url = 'https://maven.shadowsoffire.dev/releases'
-        content {
-            includeGroup('snownee.jade')
-        }
-    }
-    maven {
-        name = "Fuzs Mod Resources"
-        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+        name = 'Fuzs Mod Resources'
+        url = 'https://raw.githubusercontent.com/Fuzss/modresources/main/maven/'
         content {
             includeGroupByRegex('fuzs.*')
         }
@@ -178,90 +50,38 @@ repositories {
 }
 
 dependencies {
-    // Only needed when DiagonalBlocks is switched to implementation
-    //runtimeOnly("curse.maven:puzzleslib-495476:${puzzles_lib_coord}")
-    compileOnly("fuzs.diagonalblocks:diagonalblocks-neoforge:${diag_blocks_version}")
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
+    }
 
-    //compileOnly("curse.maven:buildinggadgets-298187:${buildinggadgets_coord}")
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 
-    compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
-
-    compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
-    compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
-    runtimeOnly("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
-
-    // Switch Arch, Cloth and REI-neoforge to impl for runtime testing
-    compileOnly("dev.architectury:architectury-neoforge:${arch_version}")
-    compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_version}")
-    compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
-    //runtimeOnly("curse.maven:reipc-521393:${reipc_coord}")
-    compileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}")
-    compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}")
-    compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
-
-    compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
-    //runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
-
-    compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}-${create_build_number}") { transitive = false }
-    compileOnly("net.createmod.ponder:Ponder-NeoForge-${create_mc_version}:${ponder_version}")
-    // Only needed when Create and Ponder are switched to implementation
-    //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${create_mc_version}:${flywheel_version}")
-    //runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
-
-    //runtimeOnly("curse.maven:moonlight-499980:${moonlight_coord}")
-    compileOnly("curse.maven:amendments-896746:${amendments_coord}")
-
-    compileOnly("appeng:appliedenergistics2:${ae2_version}:api")
-    //runtimeOnly("appeng:appliedenergistics2:${ae2_version}")
-
-    compileOnly("snownee.jade:Jade-NeoForge:${jade_mc_version}-${jade_version}")
-
-    implementation("curse.maven:atlasviewer-633577:${atlasviewer_coord}")
-
-    compileOnly("com.blamejared.searchables:Searchables-neoforge-${searchables_mc_version}:${searchables_version}")
-
-    compileOnly("curse.maven:additionalplacements-674852:${additionalplacements_coord}")
+    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+    include "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
 }
 
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            minecraft_version: minecraft_version,
-            minecraft_version_range: minecraft_version_range,
-            neoforge_version: neoforge_version,
-            neoforge_version_range: neoforge_version_range,
-            mod_version: mod_version,
-            jei_version: jei_version,
-            rei_version: rei_version,
-            emi_version: emi_version,
-            diag_blocks_version: diag_blocks_version,
-            buildinggadgets_version: buildinggadgets_version,
-            atlasviewer_version: atlasviewer_version,
-            amendments_version: amendments_version,
-            athena_version: athena_version,
-            create_version: create_version,
-            ae2_version: ae2_version,
-            searchables_version: searchables_version,
-            additionalplacements_version: additionalplacements_version
+            version: project.version
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/neoforge.mods.toml']) {
+    filesMatching('fabric.mod.json') {
         expand replaceProperties
     }
 }
 
-processTestResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
-test {
-    // The test sourceset is being (mis)used for non-standard tests
-    failOnNoDiscoveredTests = false
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
 }
 
 publishing {
     publications {
-        register ('mavenJava', MavenPublication) {
+        register('mavenJava', MavenPublication) {
             from components.java
         }
     }
@@ -270,8 +90,4 @@ publishing {
             url = "file://${project.projectDir}/mcmodsrepo"
         }
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

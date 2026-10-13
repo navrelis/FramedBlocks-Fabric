@@ -1,0 +1,36 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "framedblocks_fabric:block/framed_underlay"
+      },
+      "when": {
+        "solid_bg": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "framedblocks_fabric:block/framed_cube"
+      },
+      "when": {
+        "alt": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "framedblocks_fabric:block/framed_cube_alt"
+      },
+      "when": {
+        "alt": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "framedblocks_fabric:block/framed_reinforcement"
+      },
+      "when": {
+        "reinforced": "true"
+      }
+    }
+  ]
+}

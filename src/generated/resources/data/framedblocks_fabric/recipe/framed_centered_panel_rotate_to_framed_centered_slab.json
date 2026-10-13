@@ -1,0 +1,13 @@
+{
+  "type": "framedblocks_fabric:rotate_shape",
+  "block": {
+    "item": "framedblocks_fabric:framed_centered_panel"
+  },
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_centered_slab"
+  },
+  "tool": {
+    "tag": "c:tools/wrench"
+  }
+}

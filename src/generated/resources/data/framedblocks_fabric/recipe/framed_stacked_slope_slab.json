@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_slab"
+    },
+    "H": {
+      "item": "framedblocks_fabric:framed_hammer"
+    },
+    "S": {
+      "item": "framedblocks_fabric:framed_slope_slab"
+    }
+  },
+  "pattern": [
+    "H",
+    "S",
+    "F"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_stacked_slope_slab"
+  }
+}

@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.util;
 
 /**
- * @deprecated Debug properties migrated to dev-only framedblocks-devtools config file
+ * @deprecated Debug properties migrated to dev-only framedblocks_fabric-devtools config file
  */
 @Deprecated(forRemoval = true)
 @SuppressWarnings("unused")

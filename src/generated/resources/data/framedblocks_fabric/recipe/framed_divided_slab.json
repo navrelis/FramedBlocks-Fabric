@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "E": {
+      "item": "framedblocks_fabric:framed_slab_edge"
+    }
+  },
+  "pattern": [
+    "EE"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_divided_slab"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "I I",
+    "IFI",
+    "I I"
+  ],
+  "result": {
+    "count": 16,
+    "id": "framedblocks_fabric:framed_fancy_rail"
+  }
+}

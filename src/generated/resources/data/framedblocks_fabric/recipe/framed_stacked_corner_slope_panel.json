@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "framedblocks_fabric:framed_large_corner_slope_panel"
+    },
+    "P": {
+      "item": "framedblocks_fabric:framed_corner_pillar"
+    }
+  },
+  "pattern": [
+    "CP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_stacked_corner_slope_panel"
+  }
+}

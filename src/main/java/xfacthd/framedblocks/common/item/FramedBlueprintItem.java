@@ -34,11 +34,11 @@ import java.util.*;
 
 public class FramedBlueprintItem extends FramedToolItem
 {
-    public static final String CONTAINED_BLOCK = "desc.framedblocks.blueprint_block";
-    public static final String CAMO_BLOCK = "desc.framedblocks.blueprint_camo";
-    public static final String IS_ILLUMINATED = "desc.framedblocks.blueprint_illuminated";
-    public static final String IS_INTANGIBLE = "desc.framedblocks.blueprint_intangible";
-    public static final String IS_REINFORCED = "desc.framedblocks.blueprint_reinforced";
+    public static final String CONTAINED_BLOCK = "desc.framedblocks_fabric.blueprint_block";
+    public static final String CAMO_BLOCK = "desc.framedblocks_fabric.blueprint_camo";
+    public static final String IS_ILLUMINATED = "desc.framedblocks_fabric.blueprint_illuminated";
+    public static final String IS_INTANGIBLE = "desc.framedblocks_fabric.blueprint_intangible";
+    public static final String IS_REINFORCED = "desc.framedblocks_fabric.blueprint_reinforced";
     public static final String MISSING_MATERIALS = Utils.translationKey("desc", "blueprint_missing_materials");
     public static final MutableComponent BLOCK_NONE = Utils.translate("desc", "blueprint_none").withStyle(ChatFormatting.RED);
     public static final MutableComponent BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "framedblocks_fabric:framed_prism_corner"
+    },
+    "I": {
+      "item": "framedblocks_fabric:framed_inner_prism_corner"
+    }
+  },
+  "pattern": [
+    "IC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_double_prism_corner"
+  }
+}

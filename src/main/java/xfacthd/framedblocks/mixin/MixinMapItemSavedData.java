@@ -61,7 +61,7 @@ public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover
     @Inject(method = "load", at = @At("TAIL"))
     private static void framedblocks$loadCustomMapMarkers(CompoundTag tag, HolderLookup.Provider lookupProvider, CallbackInfoReturnable<MapItemSavedData> cir)
     {
-        ListTag frames = tag.getList("framedblocks:frames", Tag.TAG_COMPOUND);
+        ListTag frames = tag.getList("framedblocks_fabric:frames", Tag.TAG_COMPOUND);
         for (int i = 0; i < frames.size(); i++)
         {
             CompoundTag frameTag = frames.getCompound(i);
@@ -84,7 +84,7 @@ public abstract class MixinMapItemSavedData implements FramedMap.MarkerRemover
             {
                 FramedMap.CODEC.encodeStart(NbtOps.INSTANCE, map).ifSuccess(frames::add);
             }
-            tag.put("framedblocks:frames", frames);
+            tag.put("framedblocks_fabric:frames", frames);
         }
     }
 

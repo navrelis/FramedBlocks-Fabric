@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "framedblocks_fabric:framed_floor_board"
+    },
+    {
+      "item": "framedblocks_fabric:framed_hammer"
+    }
+  ],
+  "result": {
+    "count": 16,
+    "id": "framedblocks_fabric:framed_corner_strip"
+  }
+}

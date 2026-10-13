@@ -52,7 +52,7 @@ public final class DevToolsConfig
         {
             modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
             modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
-            modContainer.registerConfig(ModConfig.Type.CLIENT, SPEC, "framedblocks-devtools.toml");
+            modContainer.registerConfig(ModConfig.Type.CLIENT, SPEC, "framedblocks_fabric-devtools.toml");
         }
     }
 

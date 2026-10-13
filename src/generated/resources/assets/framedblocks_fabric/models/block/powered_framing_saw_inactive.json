@@ -1,0 +1,6 @@
+{
+  "parent": "framedblocks_fabric:block/powered_framing_saw",
+  "textures": {
+    "saw": "framedblocks_fabric:block/stonecutter_saw_still"
+  }
+}

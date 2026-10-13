@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "framedblocks_fabric:framed_hammer"
+    },
+    "S": {
+      "item": "framedblocks_fabric:framed_slope_slab"
+    }
+  },
+  "pattern": [
+    "SSH"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_compound_slope_slab"
+  }
+}

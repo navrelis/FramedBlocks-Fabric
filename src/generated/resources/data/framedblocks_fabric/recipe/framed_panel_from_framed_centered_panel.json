@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "framedblocks_fabric:framed_centered_panel"
+    },
+    {
+      "item": "framedblocks_fabric:framed_hammer"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_panel"
+  }
+}

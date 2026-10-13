@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "conditions": [
+                {
+                  "condition": "framedblocks_fabric:non_trivial_camo"
+                }
+              ],
+              "function": "minecraft:copy_components",
+              "include": [
+                "framedblocks_fabric:camo_list"
+              ],
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "framedblocks_fabric:framed_stacked_inner_corner_slope_edge"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "framedblocks_fabric:blocks/framed_stacked_inner_corner_slope_edge"
+}

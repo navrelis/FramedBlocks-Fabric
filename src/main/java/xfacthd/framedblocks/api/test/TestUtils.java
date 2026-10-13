@@ -452,7 +452,7 @@ public final class TestUtils
                                         INTANGIBILITY_BLOCK,
                                         !be.isIntangible(ctx),
                                         () -> String.format(
-                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks:disable_intangible'",
+                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks_fabric:disable_intangible'",
                                                 state.getBlock(),
                                                 item
                                         )
@@ -463,7 +463,7 @@ public final class TestUtils
                                         INTANGIBILITY_BLOCK,
                                         !currState.getShape(helper.getLevel(), pos, ctx).isEmpty(),
                                         () -> String.format(
-                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks:disable_intangible'",
+                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks_fabric:disable_intangible'",
                                                 state.getBlock(),
                                                 item
                                         )

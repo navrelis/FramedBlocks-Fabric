@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "framedblocks_fabric",
+  "version": "${version}",
+  "name": "FramedBlocks Fabric (Unofficial)",
+  "description": "Unofficial Fabric port of FramedBlocks by XFactHD. Building blocks in many shapes that take on the look of any block.",
+  "authors": [
+    "XFactHD"
+  ],
+  "contributors": [
+    "navrelis (Fabric port)"
+  ],
+  "contact": {
+    "homepage": "https://github.com/navrelis/FramedBlocksFabric",
+    "sources": "https://github.com/navrelis/FramedBlocksFabric",
+    "issues": "https://github.com/navrelis/FramedBlocksFabric"
+  },
+  "license": "LGPL-3.0-only",
+  "icon": "assets/framedblocks_fabric/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "xfacthd.framedblocks.FramedBlocks"
+    ],
+    "client": [
+      "xfacthd.framedblocks.client.FBClient"
+    ]
+  },
+  "mixins": [
+    "framedblocks_fabric.mixins.json"
+  ],
+  "accessWidener": "framedblocks_fabric.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.19.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "forgeconfigapiport": "*"
+  }
+}

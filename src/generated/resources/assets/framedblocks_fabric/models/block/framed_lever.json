@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/lever",
+  "textures": {
+    "base": "neoforge:white",
+    "particle": "framedblocks_fabric:block/framed_block"
+  }
+}

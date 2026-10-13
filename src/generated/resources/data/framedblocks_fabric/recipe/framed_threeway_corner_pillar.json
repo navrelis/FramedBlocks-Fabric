@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "E": {
+      "item": "framedblocks_fabric:framed_slab_edge"
+    },
+    "P": {
+      "item": "framedblocks_fabric:framed_corner_pillar"
+    }
+  },
+  "pattern": [
+    "P",
+    "E"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_threeway_corner_pillar"
+  }
+}

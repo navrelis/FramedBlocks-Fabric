@@ -1,0 +1,30 @@
+accessWidener	v2	named
+# Not carried over from accesstransformer.cfg: "protected PressurePlateBlock sensitivity" (field no longer exists in 1.21.1)
+# NeoForge "protected" entries are mapped to "accessible" (public), "public-f" on a method to "accessible" + "extendable"
+
+accessible	method	net/minecraft/client/gui/GuiGraphics	innerBlit	(Lnet/minecraft/resources/ResourceLocation;IIIIIFFFF)V
+accessible	method	net/minecraft/nbt/NbtUtils	setValueHelper	(Lnet/minecraft/world/level/block/state/StateHolder;Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/String;Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/level/block/state/StateHolder;
+accessible	method	net/minecraft/client/resources/model/ModelBakery	getModel	(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/resources/model/UnbakedModel;
+accessible	class	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl
+accessible	method	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl	<init>	(Lnet/minecraft/client/resources/model/ModelBakery;Lnet/minecraft/client/resources/model/ModelBakery$TextureGetter;Lnet/minecraft/client/resources/model/ModelResourceLocation;)V
+accessible	method	net/minecraft/data/recipes/RecipeProvider	getName	()Ljava/lang/String;
+extendable	method	net/minecraft/data/recipes/RecipeProvider	getName	()Ljava/lang/String;
+accessible	field	net/minecraft/client/particle/ParticleEngine	random	Lnet/minecraft/util/RandomSource;
+accessible	method	net/minecraft/server/network/ServerGamePacketListenerImpl	filterTextPacket	(Ljava/util/List;)Ljava/util/concurrent/CompletableFuture;
+accessible	method	net/minecraft/world/level/block/ChiseledBookShelfBlock	getHitSlot	(Lnet/minecraft/world/phys/BlockHitResult;Lnet/minecraft/world/level/block/state/BlockState;)Ljava/util/OptionalInt;
+accessible	method	net/minecraft/world/level/block/WallBlock	makeShapes	(FFFFFF)Ljava/util/Map;
+accessible	method	net/minecraft/data/recipes/RecipeProvider	has	(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/advancements/Criterion;
+accessible	method	net/minecraft/data/recipes/RecipeProvider	has	(Lnet/minecraft/tags/TagKey;)Lnet/minecraft/advancements/Criterion;
+accessible	method	net/minecraft/world/level/block/WallBlock	connectsTo	(Lnet/minecraft/world/level/block/state/BlockState;ZLnet/minecraft/core/Direction;)Z
+accessible	method	net/minecraft/world/level/block/IronBarsBlock	attachsTo	(Lnet/minecraft/world/level/block/state/BlockState;Z)Z
+extendable	method	net/minecraft/world/level/block/IronBarsBlock	attachsTo	(Lnet/minecraft/world/level/block/state/BlockState;Z)Z
+accessible	method	net/minecraft/world/level/block/Block	copyProperty	(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/properties/Property;)Lnet/minecraft/world/level/block/state/BlockState;
+accessible	method	net/minecraft/world/level/block/StairBlock	getStairsShape	(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/properties/StairsShape;
+accessible	method	net/minecraft/client/renderer/LevelRenderer	renderShape	(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDFFFF)V
+accessible	method	net/minecraft/client/renderer/blockentity/SignRenderer	isOutlineVisible	(Lnet/minecraft/core/BlockPos;I)Z
+accessible	field	net/minecraft/data/recipes/ShapelessRecipeBuilder	category	Lnet/minecraft/data/recipes/RecipeCategory;
+accessible	field	net/minecraft/data/recipes/ShapelessRecipeBuilder	result	Lnet/minecraft/world/item/Item;
+accessible	field	net/minecraft/data/recipes/ShapelessRecipeBuilder	criteria	Ljava/util/Map;
+accessible	field	net/minecraft/data/recipes/ShapelessRecipeBuilder	group	Ljava/lang/String;
+accessible	field	net/minecraft/world/item/crafting/ShapelessRecipe	result	Lnet/minecraft/world/item/ItemStack;
+accessible	method	net/minecraft/world/level/block/entity/HopperBlockEntity	isFullContainer	(Lnet/minecraft/world/Container;Lnet/minecraft/core/Direction;)Z

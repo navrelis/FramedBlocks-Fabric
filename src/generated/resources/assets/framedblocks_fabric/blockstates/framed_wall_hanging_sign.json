@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "framedblocks_fabric:block/framed_wall_hanging_sign",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "framedblocks_fabric:block/framed_wall_hanging_sign",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "framedblocks_fabric:block/framed_wall_hanging_sign"
+    },
+    "facing=west": {
+      "model": "framedblocks_fabric:block/framed_wall_hanging_sign",
+      "y": 90
+    }
+  }
+}

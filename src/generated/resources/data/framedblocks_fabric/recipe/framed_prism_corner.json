@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_slope"
+    }
+  },
+  "pattern": [
+    "F F",
+    " F "
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_prism_corner"
+  }
+}

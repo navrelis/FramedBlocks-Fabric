@@ -1,0 +1,4 @@
+{
+  "parent": "framedblocks_fabric:block/framed_tank",
+  "render_type": "minecraft:cutout"
+}

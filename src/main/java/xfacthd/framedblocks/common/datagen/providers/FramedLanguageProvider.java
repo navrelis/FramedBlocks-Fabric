@@ -302,7 +302,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), "Framed Screwdriver");
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
         add(FBContent.ITEM_PHANTOM_PASTE.value(), "Phantom Paste");
-        add("item.framedblocks.framing_saw_pattern", "Framing Saw Pattern");
+        add("item.framedblocks_fabric.framing_saw_pattern", "Framing Saw Pattern");
     }
 
     private void addSpecialTranslations()
@@ -488,8 +488,8 @@ public final class FramedLanguageProvider extends LanguageProvider
 
     private void addConfigTranslations()
     {
-        add("framedblocks.configuration.general", "General");
-        add("framedblocks.configuration.powered_framing_saw", "Powered Framing Saw");
+        add("framedblocks_fabric.configuration.general", "General");
+        add("framedblocks_fabric.configuration.powered_framing_saw", "Powered Framing Saw");
         add(ServerConfig.TRANSLATION_ALLOW_BLOCK_ENTITIES, "Allow BlockEntities");
         add(ServerConfig.TRANSLATION_ENABLE_INTANGIBILITY, "Enable intangibility feature");
         add(ServerConfig.TRANSLATION_ONE_WAY_WINDOW_OWNABLE, "One-Way Window ownability");
@@ -501,8 +501,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ServerConfig.TRANSLATION_POWERED_SAW_CONSUMPTION, "Consumption");
         add(ServerConfig.TRANSLATION_POWERED_SAW_RECIPE_DURATION, "Crafting Duration");
 
-        //add("framedblocks.configuration.general", "General");
-        add("framedblocks.configuration.overlay", "Overlays");
+        //add("framedblocks_fabric.configuration.general", "General");
+        add("framedblocks_fabric.configuration.overlay", "Overlays");
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_ALT_GHOST_RENDERER, "Use alternative placement preview renderer");
         add(ClientConfig.TRANSLATION_GHOST_RENDER_OPACITY, "Placement preview opacity");
@@ -533,8 +533,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_TRAPDOOR_TEXTURE_ROTATION_MODE, "Trapdoor Texture Rotation overlay: Display mode");
         add(ClientConfig.TRANSLATION_COPYCAT_STYLE_MODE, "Copycate Style overlay: Display mode");
 
-        add("framedblocks.configuration.section.framedblocks.devtools.toml", "Dev Tools Settings");
-        add("framedblocks.configuration.section.framedblocks.devtools.toml.title", "FramedBlocks Dev Tools Configuration");
+        add("framedblocks_fabric.configuration.section.framedblocks_fabric.devtools.toml", "Dev Tools Settings");
+        add("framedblocks_fabric.configuration.section.framedblocks_fabric.devtools.toml.title", "FramedBlocks Dev Tools Configuration");
         add(DevToolsConfig.TRANSLATION_DOUBLE_BLOCK_PART_DEBUG, "Double-block part debug");
         add(DevToolsConfig.TRANSLATION_CONNECTION_DEBUG, "ConnectionPredicate debug");
         add(DevToolsConfig.TRANSLATION_QUAD_WINDING_DEBUG, "Quad-winding debug");

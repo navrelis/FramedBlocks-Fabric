@@ -1,0 +1,26 @@
+{
+    "required": true,
+    "package": "xfacthd.framedblocks_fabric.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "plugin": "xfacthd.framedblocks_fabric.common.util.FramedMixinConfigPlugin",
+    "mixins": [
+        "AccessorIngredient",
+        "AccessorStateDefinitionBuilder",
+        "AccessorTransientCraftingContainer",
+        "InvokerBlockItem",
+        "MixinBlockStateBase",
+        "MixinHopperBlockEntity",
+        "MixinMapItemSavedData",
+        "MixinStairBlock"
+    ],
+    "client": [
+        "client.AccessorMultiPlayerGameMode",
+        "client.AccessorWeightedBakedModel",
+        "client.DevMixinLevelRenderer",
+        "client.MixinLevelRenderer"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8"
+}

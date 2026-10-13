@@ -1,0 +1,16 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:chain"
+      }
+    }
+  ],
+  "material": 3072,
+  "result": {
+    "count": 2,
+    "id": "framedblocks_fabric:framed_hanging_sign"
+  }
+}

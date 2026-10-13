@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_collapsible_block"
+    }
+  },
+  "pattern": [
+    "FF"
+  ],
+  "result": {
+    "count": 2,
+    "id": "framedblocks_fabric:framed_adj_double_slab"
+  }
+}

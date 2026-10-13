@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_panel"
+    },
+    "H": {
+      "item": "framedblocks_fabric:framed_hammer"
+    }
+  },
+  "pattern": [
+    "FFH"
+  ],
+  "result": {
+    "count": 4,
+    "id": "framedblocks_fabric:framed_wall_board"
+  }
+}
