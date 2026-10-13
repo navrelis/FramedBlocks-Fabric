@@ -9,9 +9,10 @@
 //   docs/images/icon.png       512x512  (16x)
 //   docs/images/banner.png     1280x320 (320x80 logical, 4x)
 //
-// The art is drawn from scratch: shapes are described as convex solids in a unit cube, rendered with an
-// orthographic 2:1 dimetric ray caster sampled once per pixel centre (hard edges, no anti-aliasing), with
-// an oak-frame texture (outer beams, inner bevel, optional X cross-brace) evaluated per hit point.
+// The art is drawn from scratch. The master icon (a framed slope) is built from explicit screen-space face
+// polygons with exact 2 px beams and 2 px X braces (see drawFaces). The smaller banner blocks are rendered
+// from convex solids with an orthographic 2:1 dimetric ray caster sampled once per pixel centre (hard
+// edges, no anti-aliasing). Palette: at most 16 colours.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,7 +30,7 @@ const PAL_DEF = {
   OUT:  '#2a1a10', // outline
   HL:   '#fff1c8', // rim highlight (top-left)
   // tone 0: brightest (faces turned to the light)      base       bevel      recess
-  T0B: '#fbeec6', T0S: '#dcc48a', T0R: '#d5b97a',
+  T0B: '#fbeec6', T0S: '#dcc48a', T0R: '#cfae6a',
   // tone 1: top-like
   T1B: '#e4cb94', T1S: '#bc9f66', T1R: '#5c442c',
   // tone 2: left-like
@@ -356,9 +357,8 @@ function renderShape(shape, k) {
 // ---------------------------------------------------------------------------------------------------------
 const SHAPES = {
   // Master icon subject: framed cube with its upper-left corner (0,1,1) sliced off as a slope facet.
-  cutCube: [piece(0, 1, 0, 1, 0, 1, [[-1, 1, 1, 2 - 0.78]])],
   cube: [piece(0, 1, 0, 1, 0, 1)],
-  slope: [piece(0, 1, 0, 1, 0, 1, [[0, 1, 1, 1]])],
+  slope: [piece(0, 1, 0, 1, 0, 1, [[1, 0, 1, 1]])], // faces right (the icon block is the left-facing wedge)
   slab: [piece(0, 1, 0, 1, 0, 0.5)],
   stairs: [piece(0, 1, 0, 1, 0, 0.5), piece(0, 0.5, 0, 1, 0.5, 1)],
   panel: [piece(0, 1, 0.75, 1, 0, 1)],
@@ -441,13 +441,92 @@ function drawText(cv, str, x, y, scale, spacing, fill, shade, outline) {
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// Master icon
+// Master icon: hand-defined faces (screen-space polygons on the 32x32 grid), no ray casting.
+// Every frame beam is exactly 2 px wide, measured along one pixel axis (vertical offset for 2:1 edges,
+// horizontal offset for steep edges), so all lines follow clean iso stepping. A silhouette edge adds a
+// 1 px dark outline outside its 2 px beam. Braces are 2 px bands along the face diagonals.
 // ---------------------------------------------------------------------------------------------------------
+/**
+ * faces: [{ poly: [[x,y],...], tone: 0..3, edges: [{ axis: 'v'|'h', sil?: bool, hl?: bool }, ...] (edge i = poly[i] -> poly[i+1]),
+ *           braces?: [{ a: [x,y], b: [x,y], axis: 'v'|'h' }] }]
+ */
+function drawFaces(faces, size) {
+  const px = new Uint8Array(size * size);
+  const prepared = faces.map((f) => {
+    const cx = f.poly.reduce((a, p) => a + p[0], 0) / f.poly.length;
+    const cy = f.poly.reduce((a, p) => a + p[1], 0) / f.poly.length;
+    const edges = f.edges.map((e, i) => {
+      const a = f.poly[i], b = f.poly[(i + 1) % f.poly.length];
+      // signed offset of point (x,y) from the edge line along the chosen axis, positive on the face side
+      const off = (x, y) => (e.axis === 'v'
+        ? (y - (a[1] + ((b[1] - a[1]) * (x - a[0])) / (b[0] - a[0])))
+        : (x - (a[0] + ((b[0] - a[0]) * (y - a[1])) / (b[1] - a[1]))));
+      const sign = Math.sign(off(cx, cy));
+      return { ...e, d: (x, y) => sign * off(x, y) };
+    });
+    const braces = (f.braces || []).map((br) => ({
+      d: (x, y) => (br.axis === 'v'
+        ? Math.abs(y - (br.a[1] + ((br.b[1] - br.a[1]) * (x - br.a[0])) / (br.b[0] - br.a[0])))
+        : Math.abs(x - (br.a[0] + ((br.b[0] - br.a[0]) * (y - br.a[1])) / (br.b[1] - br.a[1])))),
+    }));
+    return { f, edges, braces };
+  });
+  const faceOf = new Int8Array(size * size).fill(-1);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const xc = x + 0.5, yc = y + 0.5;
+      for (const [fi, { f, edges, braces }] of prepared.entries()) {
+        const ds = edges.map((e) => e.d(xc, yc));
+        if (ds.some((d) => d <= 0)) continue;
+        const B = IDX['T' + f.tone + 'B'], R = IDX['T' + f.tone + 'R'];
+        let c = R;
+        if (braces.some((br) => br.d(xc, yc) < 1)) c = B;
+        edges.forEach((e, i) => { if (ds[i] < (e.sil ? 3 : 2)) c = B; });
+        edges.forEach((e, i) => { if (e.hl && ds[i] >= 1 && ds[i] < 2) c = IDX.HL; });
+        edges.forEach((e, i) => { if (e.sil && ds[i] < 1) c = IDX.OUT; });
+        px[y * size + x] = c;
+        faceOf[y * size + x] = fi;
+        break;
+      }
+    }
+  }
+  // clean-up: recess fragments smaller than MIN_RECESS pixels (slivers, orphan pixels) become beam tone
+  const MIN_RECESS = 6;
+  const seen = new Uint8Array(size * size);
+  for (let i = 0; i < size * size; i++) {
+    const fi = faceOf[i];
+    if (fi < 0 || seen[i] || px[i] !== IDX['T' + faces[fi].tone + 'R']) continue;
+    const comp = [], stack = [i];
+    seen[i] = 1;
+    while (stack.length) {
+      const p = stack.pop(); comp.push(p);
+      const x = p % size, y = (p - x) / size;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= size || ny >= size) continue;
+        const q = ny * size + nx;
+        if (!seen[q] && faceOf[q] === fi && px[q] === px[i]) { seen[q] = 1; stack.push(q); }
+      }
+    }
+    if (comp.length < MIN_RECESS) for (const p of comp) px[p] = IDX['T' + faces[fi].tone + 'B'];
+  }
+  return { w: size, h: size, px };
+}
+
+/** Framed slope: sloped face rising from the front bottom edge to the back top edge, plus the right triangle. */
 function buildIcon() {
-  const sprite = renderShape(SHAPES.cutCube, 1);
-  const cv = makeCanvas(32, 32);
-  blit(cv, sprite, 0, 0);
-  return cv;
+  const faces = [
+    { // sloped face (lit)
+      poly: [[16, 0], [32, 8], [16, 32], [0, 24]], tone: 0,
+      edges: [{ axis: 'v', sil: true, hl: true }, { axis: 'h' }, { axis: 'v', sil: true }, { axis: 'h', sil: true, hl: true }],
+      braces: [{ a: [16, 0], b: [16, 32], axis: 'h' }, { a: [32, 8], b: [0, 24], axis: 'v' }],
+    },
+    { // right triangle (shade)
+      poly: [[32, 8], [32, 24], [16, 32]], tone: 3,
+      edges: [{ axis: 'h', sil: true }, { axis: 'v', sil: true }, { axis: 'h' }],
+    },
+  ];
+  return drawFaces(faces, 32);
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -476,11 +555,11 @@ function buildBanner() {
   const K = 0.875; // 28px unit cube
   const order = [
     ['cube', 'L'], ['slope', 'L'], ['stairs', 'L'],
-    ['slab', 'R'], ['pillar', 'R'], ['cutCube', 'R'],
+    ['slab', 'R'], ['pillar', 'R'], ['icon', 'R'],
   ];
   const baseline = 72; // y of the bottom vertex of the unit cube
   const sprites = order.map(([name, side]) => {
-    const sp = renderShape(SHAPES[name], K);
+    const sp = name === 'icon' ? buildIcon() : renderShape(SHAPES[name], K); // the icon block keeps its native 32px art
     return { name, side, sp, bb: bbox(sp) };
   });
   const groups = { L: sprites.filter((s) => s.side === 'L'), R: sprites.filter((s) => s.side === 'R') };
@@ -498,9 +577,10 @@ function buildBanner() {
       const ox = Math.round(x) - s.bb.x0;
       const oy = baseline - s.sp.h; // sprite bottom row sits on the baseline
       // floor tile (unit-cell rhombus) in the darker background tone
-      const cx = ox + 14, cy = baseline - 7; // centre of the cell on the floor
-      for (let y = -7; y < 7; y++) for (let xx = -14; xx < 14; xx++) {
-        if (Math.abs(xx + 0.5) / 14 + Math.abs(y + 0.5) / 7 <= 1) put(cv, cx + xx, cy + y, IDX.BG1);
+      const hw = s.sp.w / 2, hh = hw / 2;
+      const cx = ox + hw, cy = baseline - hh; // centre of the cell on the floor
+      for (let y = -hh; y < hh; y++) for (let xx = -hw; xx < hw; xx++) {
+        if (Math.abs(xx + 0.5) / hw + Math.abs(y + 0.5) / hh <= 1) put(cv, cx + xx, cy + y, IDX.BG1);
       }
       blit(cv, s.sp, ox, oy);
       x += s.bb.w + gap;
