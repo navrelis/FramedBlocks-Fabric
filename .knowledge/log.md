@@ -19,3 +19,6 @@
 - C2 light emission — Opus, short — running
 - B2b networking, data maps, config sync check, leftover cleanup — Sonnet, long — running
 - C3 Transfer API storage — Sonnet, long — running
+- B1 rendering core — Opus, long — report received, core files read (ModelBridge, framed model emit path, wrapping plugin, item mixin): accepted and committed; 0 errors in its dirs, untested in game. Outside changes (FBClient init, ModelBridge call sites, BlockRenderLayerMap, reload listener) go to C4.
+- Session 2 stopped by auto-handoff; C2, B2b and C3 were stopped before writing anything. State and next steps: see handoff.md in the repo root.
+- Session 3: handoff checked against repo; matches (no source changes pending). C2 (Opus short), B2b (Sonnet long), C3 (Sonnet long) re-delegated in parallel.
