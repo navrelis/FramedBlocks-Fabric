@@ -1,8 +1,8 @@
 {
     "required": true,
-    "package": "xfacthd.framedblocks_fabric.mixin",
+    "package": "xfacthd.framedblocks.mixin",
     "compatibilityLevel": "JAVA_21",
-    "plugin": "xfacthd.framedblocks_fabric.common.util.FramedMixinConfigPlugin",
+    "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
     "mixins": [
         "AccessorIngredient",
         "AccessorStateDefinitionBuilder",

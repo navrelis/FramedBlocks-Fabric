@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -29,7 +29,7 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
     {
         if (DEV_ONLY_MIXINS.contains(mixinClassName))
         {
-            return !FMLEnvironment.production;
+            return FabricLoader.getInstance().isDevelopmentEnvironment();
         }
         return true;
     }
