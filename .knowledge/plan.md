@@ -15,9 +15,9 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | E1 | Compat port (JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer); remove Create, AE2, Building Gadgets, Athena hook | Compiles; each gated | A1 | Sonnet long | done |
 | B2b | Networking (4 payloads), data-map replacement + sync, server-config sync check, AE2/Create leftover cleanup | No `neoforge.network`/`datamaps` imports; payloads both directions; data map loaded + synced | B2a | Sonnet long | done (untested at runtime) |
 | C2 | Per-position light emission (aux light replacement) | No `AuxiliaryLightManager` left; all vanilla emission readers covered and listed | B2a | Opus short (precision override) | in progress (session 3) |
-| C3 | Item / fluid / energy storage on Transfer API | No `neoforge.{items,fluids,energy,capabilities}` imports outside client dirs; no dupes/loss | B2a | Sonnet long | done (untested at runtime) |
+| C3 | Item / fluid / energy storage on Transfer API | No `neoforge.{items,fluids,energy,capabilities}` imports outside client dirs; no dupes/loss | B2a | Sonnet long | in progress (session 3) |
 | C1 | Block/item behaviour hooks (sound, friction, explosion, fire, plants, beacon, ladder, effects, pick block, appearance, tool actions) | Each upstream hook has a Fabric path; listed in a table | C2, B2b, C3 | Sonnet long | open |
-| C4 | Client wiring: FBClient, BERs, ghost + outline renderers, colours, particles, overlays, screens, hit/destroy effects, sprite source, loaders, loader-specific JSON | Client compiles; no NeoForge-only JSON keys unhandled | B1, B2b | Sonnet long | open |
+| C4 | Client wiring: FBClient, BERs, ghost + outline renderers, colours, particles, overlays, screens, hit/destroy effects, sprite source, loaders, loader-specific JSON | Client compiles; no NeoForge-only JSON keys unhandled | B1, B2b | Sonnet long | in progress (C4a wiring; C4b effects/loaders/JSON after C3) |
 | D1 | First full compile + fix rounds | `gradlew build` passes | B, C | Sonnet per error cluster | open |
 | D2 | Run client and dedicated server | Both start without errors | D1 | lead + Sonnet fixes | open |
 | E2 | Game tests on Fabric gametest | Upstream game tests run and pass (or documented) | D2 | Sonnet long | open |
@@ -26,4 +26,4 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 
 Parallel now: C2 (Opus), B2b (Sonnet), C3 (Sonnet) with explicit file ownership. Next: C4 (after B2b), C1 (after C2/B2b/C3; shares IFramedBlock and block classes).
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 22 (M1, M2, A1, A2, B2a x2, E1, B2b x2, C3 x2), Opus 6 (B1 x2, C2 x2). Planned total: Sonnet ~34, Opus ~9.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 24 (M1, M2, A1, A2, B2a x2, E1, B2b x2, C3 x2, C4a), Opus 6 (B1 x2, C2 x2). Planned total: Sonnet ~34, Opus ~9.
