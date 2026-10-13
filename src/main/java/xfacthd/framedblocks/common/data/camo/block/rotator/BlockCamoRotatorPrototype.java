@@ -1,6 +1,9 @@
 package xfacthd.framedblocks.common.data.camo.block.rotator;
 
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import xfacthd.framedblocks.api.camo.block.rotator.BlockCamoRotator;
@@ -12,6 +15,8 @@ public record BlockCamoRotatorPrototype(String property)
 {
     public static final Codec<BlockCamoRotatorPrototype> CODEC = Codec.STRING
             .xmap(BlockCamoRotatorPrototype::new, BlockCamoRotatorPrototype::property);
+    public static final StreamCodec<ByteBuf, BlockCamoRotatorPrototype> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
+            .map(BlockCamoRotatorPrototype::new, BlockCamoRotatorPrototype::property);
 
     public boolean isApplicableTo(Block block)
     {

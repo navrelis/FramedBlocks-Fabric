@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block.sign;
 
 import com.google.common.base.Preconditions;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.*;
 import net.minecraft.network.chat.CommonComponents;
@@ -26,7 +27,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
@@ -213,7 +213,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         if (player instanceof ServerPlayer serverPlayer)
         {
             sign.setEditingPlayer(player.getUUID());
-            PacketDistributor.sendToPlayer(serverPlayer, new ClientboundOpenSignScreenPayload(sign.getBlockPos(), frontText));
+            ServerPlayNetworking.send(serverPlayer, new ClientboundOpenSignScreenPayload(sign.getBlockPos(), frontText));
         }
     }
 

@@ -437,7 +437,7 @@ public final class Utils
 
     public static TagKey<Block> blockTag(String modid, String name)
     {
-        return BlockTags.create(Utils.rl(modid, name));
+        return TagKey.create(Registries.BLOCK, Utils.rl(modid, name));
     }
 
     public static TagKey<Item> itemTag(String name)
@@ -447,7 +447,7 @@ public final class Utils
 
     public static TagKey<Item> itemTag(String modid, String name)
     {
-        return ItemTags.create(Utils.rl(modid, name));
+        return TagKey.create(Registries.ITEM, Utils.rl(modid, name));
     }
 
     public static Property<?> getRotatableProperty(BlockState state)

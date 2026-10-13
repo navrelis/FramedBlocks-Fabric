@@ -22,3 +22,4 @@
 - B1 rendering core — Opus, long — report received, core files read (ModelBridge, framed model emit path, wrapping plugin, item mixin): accepted and committed; 0 errors in its dirs, untested in game. Outside changes (FBClient init, ModelBridge call sites, BlockRenderLayerMap, reload listener) go to C4.
 - Session 2 stopped by auto-handoff; C2, B2b and C3 were stopped before writing anything. State and next steps: see handoff.md in the repo root.
 - Session 3: handoff checked against repo; matches (no source changes pending). C2 (Opus short), B2b (Sonnet long), C3 (Sonnet long) re-delegated in parallel.
+- B2b networking, data maps, cleanup — Sonnet, long — full diff read, accepted and committed. FCAP syncs SERVER configs itself (no extra payload). No block_camo_rotators JSON ships (extension point only). C4 must call ClientNetworkHandler.initClient(). Untested at runtime.

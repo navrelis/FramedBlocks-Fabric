@@ -11,7 +11,6 @@ import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
@@ -274,10 +273,6 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
 
     public static FramingSawMenu create(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
     {
-        if (AppliedEnergisticsCompat.isLoaded())
-        {
-            return new FramingSawWithEncoderMenu(containerId, inv, levelAccess);
-        }
         return new FramingSawMenu(containerId, inv, levelAccess);
     }
 

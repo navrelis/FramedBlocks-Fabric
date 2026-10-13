@@ -83,9 +83,8 @@ public final class BlockCamoRotators
         }));
 
         MutableInt datapackCount = new MutableInt();
-        BuiltInRegistries.BLOCK.getDataMap(FramedDataMaps.BLOCK_CAMO_ROTATORS).forEach((key, prototype) ->
+        FramedDataMaps.forEachCamoRotator((block, prototype) ->
         {
-            Block block = BuiltInRegistries.BLOCK.getOrThrow(key);
             if (!prototype.isApplicableTo(block))
             {
                 LOGGER.error("BlockCamoRotator for property {} from datamap cannot be applied to {}, dropping!", prototype.property(), block);

@@ -16,6 +16,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.platform.model.RenderTypeHelper;
 import xfacthd.framedblocks.platform.model.ModelData;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.render.Quaternions;
@@ -118,7 +118,7 @@ public class FramedSignScreen extends Screen
     @Override
     public void removed()
     {
-        PacketDistributor.sendToServer(new ServerboundSignUpdatePayload(sign.getBlockPos(), front, Arrays.copyOf(lines, lines.length)));
+        ClientPlayNetworking.send(new ServerboundSignUpdatePayload(sign.getBlockPos(), front, Arrays.copyOf(lines, lines.length)));
     }
 
     @Override

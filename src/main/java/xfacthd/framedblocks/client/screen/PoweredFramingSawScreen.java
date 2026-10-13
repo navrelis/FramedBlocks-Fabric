@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.screen;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
@@ -11,7 +12,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
-import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -278,7 +278,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
             //noinspection ConstantConditions
             if (menu.clickMenuButton(minecraft.player, id))
             {
-                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, id));
+                ClientPlayNetworking.send(new ServerboundSelectFramingSawRecipePayload(menu.containerId, id));
             }
         }
     }

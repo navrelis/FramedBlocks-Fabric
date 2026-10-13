@@ -2,13 +2,15 @@ package xfacthd.framedblocks.common.data.cullupdate;
 
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.common.net.payload.ClientboundCullingUpdatePayload;
 
 import java.util.Map;
@@ -27,11 +29,11 @@ public final class CullingUpdateTracker
             for (Long2ObjectMap.Entry<LongSet> entry : chunks.long2ObjectEntrySet())
             {
                 long chunk = entry.getLongKey();
-                PacketDistributor.sendToPlayersTrackingChunk(
-                        level,
-                        new ChunkPos(chunk),
-                        new ClientboundCullingUpdatePayload(chunk, entry.getValue())
-                );
+                ClientboundCullingUpdatePayload payload = new ClientboundCullingUpdatePayload(chunk, entry.getValue());
+                for (ServerPlayer player : PlayerLookup.tracking(level, new ChunkPos(chunk)))
+                {
+                    ServerPlayNetworking.send(player, payload);
+                }
             }
             chunks.clear();
         }

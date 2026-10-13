@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.net.payload;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,7 +9,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedByteBufCodecs;
 import xfacthd.framedblocks.api.util.Utils;
@@ -36,11 +36,11 @@ public record ServerboundSignUpdatePayload(BlockPos pos, boolean front, String[]
         return TYPE;
     }
 
-    public void handle(IPayloadContext ctx)
+    public void handle(ServerPlayNetworking.Context ctx)
     {
-        ServerPlayer player = (ServerPlayer) ctx.player();
+        ServerPlayer player = ctx.player();
         List<String> strippedLines = Stream.of(lines).map(ChatFormatting::stripFormatting).toList();
-        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.enqueueWork(() ->
+        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.server().execute(() ->
         {
             Level level = player.level();
 

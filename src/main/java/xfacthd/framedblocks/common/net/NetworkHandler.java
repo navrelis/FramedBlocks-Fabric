@@ -1,43 +1,26 @@
 package xfacthd.framedblocks.common.net;
 
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.HandlerThread;
-import xfacthd.framedblocks.common.data.cullupdate.ClientCullingUpdateTracker;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import xfacthd.framedblocks.common.net.payload.*;
 
 public final class NetworkHandler
 {
-    private static final String PROTOCOL_VERSION = "3";
-
-    public static void onRegisterPayloads(final RegisterPayloadHandlersEvent event)
+    /**
+     * Registers all payload types and the server-side receivers.
+     * The client-side receivers are registered by {@link xfacthd.framedblocks.client.net.ClientNetworkHandler}.
+     * Fabric invokes all receivers on the main thread of the receiving side, no additional scheduling is required
+     */
+    public static void init()
     {
-        event.registrar(PROTOCOL_VERSION)
-                .executesOn(HandlerThread.NETWORK)
-                .playToServer(
-                        ServerboundSignUpdatePayload.TYPE,
-                        ServerboundSignUpdatePayload.CODEC,
-                        ServerboundSignUpdatePayload::handle
-                )
-                .playToClient(
-                        ClientboundOpenSignScreenPayload.TYPE,
-                        ClientboundOpenSignScreenPayload.CODEC,
-                        ClientboundOpenSignScreenPayload::handle
-                )
-                .playToClient(
-                        ClientboundCullingUpdatePayload.TYPE,
-                        ClientboundCullingUpdatePayload.CODEC,
-                        ClientCullingUpdateTracker::handleCullingUpdates
-                )
-                .playToServer(
-                        ServerboundSelectFramingSawRecipePayload.TYPE,
-                        ServerboundSelectFramingSawRecipePayload.CODEC,
-                        ServerboundSelectFramingSawRecipePayload::handle
-                )
-                .playToServer(
-                        ServerboundEncodeFramingSawPatternPayload.TYPE,
-                        ServerboundEncodeFramingSawPatternPayload.STREAM_CODEC,
-                        ServerboundEncodeFramingSawPatternPayload::handle
-                );
+        PayloadTypeRegistry.playC2S().register(ServerboundSignUpdatePayload.TYPE, ServerboundSignUpdatePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ServerboundSelectFramingSawRecipePayload.TYPE, ServerboundSelectFramingSawRecipePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundOpenSignScreenPayload.TYPE, ClientboundOpenSignScreenPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundCullingUpdatePayload.TYPE, ClientboundCullingUpdatePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundCamoRotatorsPayload.TYPE, ClientboundCamoRotatorsPayload.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(ServerboundSignUpdatePayload.TYPE, ServerboundSignUpdatePayload::handle);
+        ServerPlayNetworking.registerGlobalReceiver(ServerboundSelectFramingSawRecipePayload.TYPE, ServerboundSelectFramingSawRecipePayload::handle);
     }
 
 
