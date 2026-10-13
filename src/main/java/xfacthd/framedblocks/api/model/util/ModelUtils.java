@@ -10,9 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.IQuadTransformer;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -194,12 +192,13 @@ public final class ModelUtils
         // Avoid the unnecessary copy if the quad isn't tinted at all
         if (quad.getTintIndex() == -1) return quad;
 
-        return new BakedQuad(
+        return ExtendedBakedQuad.create(
                 quad.getVertices(), //Don't need to copy the vertex data, it won't be modified by the caller
                 encodeSecondaryTintIndex(quad.getTintIndex()),
                 quad.getDirection(),
                 quad.getSprite(),
-                quad.isShade()
+                quad.isShade(),
+                ExtendedBakedQuad.hasAmbientOcclusion(quad)
         );
     }
 
@@ -226,7 +225,7 @@ public final class ModelUtils
 
     public static ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource random, ModelData data)
     {
-        return getModel(state).getRenderTypes(state, random, data);
+        return ModelBridge.getRenderTypes(getModel(state), state, random, data);
     }
 
     public static ArrayList<BakedQuad> getCullableQuads(
@@ -248,7 +247,7 @@ public final class ModelUtils
         {
             if (filter.test(dir))
             {
-                List<BakedQuad> sideQuads = model.getQuads(state, dir, rand, data, renderType);
+                List<BakedQuad> sideQuads = ModelBridge.getQuads(model, state, dir, rand, data, renderType);
                 if (sideQuads.isEmpty())
                 {
                     // Try extracting useful quads from the list of (supposedly) uncullable quads if querying cullable
@@ -262,7 +261,7 @@ public final class ModelUtils
     }
 
     /**
-     * Guess the cull-face of quads returned by {@link BakedModel#getQuads(BlockState, Direction, RandomSource, ModelData, RenderType)}
+     * Guess the cull-face of quads returned by {@link ModelBridge#getQuads(BakedModel, BlockState, Direction, RandomSource, ModelData, RenderType)}
      * with a {@code null} side (i.e. supposedly uncullable quads) and filter them to return the ones applicable to the given
      * {@link Direction} and touching the block edge. This fixes blocks becoming invisible when mods forget to specify
      * cull-faces in their models
@@ -280,7 +279,7 @@ public final class ModelUtils
             Direction side
     )
     {
-        List<BakedQuad> nullQuads = model.getQuads(state, null, rand, data, renderType);
+        List<BakedQuad> nullQuads = ModelBridge.getQuads(model, state, null, rand, data, renderType);
         if (nullQuads.isEmpty()) return Collections.emptyList();
 
         List<BakedQuad> filtered = new ArrayList<>();

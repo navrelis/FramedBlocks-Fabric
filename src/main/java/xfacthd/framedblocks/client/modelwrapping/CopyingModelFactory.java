@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.neoforge.common.util.Lazy;
+import xfacthd.framedblocks.platform.util.Lazy;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.wrapping.ModelFactory;
 import xfacthd.framedblocks.api.util.Utils;

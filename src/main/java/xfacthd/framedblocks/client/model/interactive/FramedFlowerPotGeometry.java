@@ -9,8 +9,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.QuadMap;
@@ -112,7 +113,7 @@ public class FramedFlowerPotGeometry extends Geometry
         if (hanging && layer == RenderType.cutout())
         {
             Utils.forAllDirections(dir ->
-                    Utils.copyAll(hangingPotModel.getQuads(null, dir, rand, data, null), quadMap.get(dir))
+                    Utils.copyAll(ModelBridge.getQuads(hangingPotModel, null, dir, rand, data, null), quadMap.get(dir))
             );
         }
     }
@@ -133,12 +134,12 @@ public class FramedFlowerPotGeometry extends Geometry
     {
         BakedModel potModel = ModelUtils.getModel(potState);
 
-        if (potModel.getRenderTypes(potState, rand, ModelData.EMPTY).contains(layer))
+        if (ModelBridge.getRenderTypes(potModel, potState, rand, ModelData.EMPTY).contains(layer))
         {
             Utils.forAllDirections(dir ->
             {
                 List<BakedQuad> outQuads = quadMap.get(dir);
-                for (BakedQuad quad : potModel.getQuads(potState, dir, rand, ModelData.EMPTY, layer))
+                for (BakedQuad quad : ModelBridge.getQuads(potModel, potState, dir, rand, ModelData.EMPTY, layer))
                 {
                     if (!ClientUtils.isTexture(quad, POT_TEXTURE) && !ClientUtils.isTexture(quad, DIRT_TEXTURE))
                     {
@@ -152,9 +153,9 @@ public class FramedFlowerPotGeometry extends Geometry
     private static void addDirtQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
     {
         BakedModel dirtModel = ModelUtils.getModel(Blocks.DIRT.defaultBlockState());
-        if (dirtModel.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))
+        if (ModelBridge.getRenderTypes(dirtModel, Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))
         {
-            dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, ModelData.EMPTY, layer).forEach(q ->
+            ModelBridge.getQuads(dirtModel, Blocks.DIRT.defaultBlockState(), Direction.UP, rand, ModelData.EMPTY, layer).forEach(q ->
                     QuadModifier.of(q)
                             .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
                             .apply(Modifiers.setPosition(4F/16F))
@@ -164,7 +165,7 @@ public class FramedFlowerPotGeometry extends Geometry
             FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
             if (fbData != null && !fbData.getCamoContent().canOcclude())
             {
-                for (BakedQuad quad : dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer))
+                for (BakedQuad quad : ModelBridge.getQuads(dirtModel, Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer))
                 {
                     QuadModifier.of(quad)
                             .apply(Modifiers.cutTopBottom(6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
@@ -174,7 +175,7 @@ public class FramedFlowerPotGeometry extends Geometry
 
                 Utils.forHorizontalDirections(dir ->
                 {
-                    for (BakedQuad quad : dirtModel.getQuads(Blocks.AIR.defaultBlockState(), dir, rand, ModelData.EMPTY, layer))
+                    for (BakedQuad quad : ModelBridge.getQuads(dirtModel, Blocks.AIR.defaultBlockState(), dir, rand, ModelData.EMPTY, layer))
                     {
                         QuadModifier.of(quad)
                                 .apply(Modifiers.cutSide(6F / 16F, 1F / 16F, 10F / 16F, 4F / 16F))

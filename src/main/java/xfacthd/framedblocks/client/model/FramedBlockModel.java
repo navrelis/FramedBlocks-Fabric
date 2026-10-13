@@ -10,11 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.BakedModelWrapper;
-import net.neoforged.neoforge.client.model.QuadTransformers;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.camo.CamoContainerHelper;
@@ -35,6 +30,8 @@ import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.platform.model.*;
+import xfacthd.framedblocks.platform.util.TriState;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -132,7 +129,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (isBaseCube && (fbData == null || fbData.getCamoContent().isEmpty()))
         {
-            return originalModel.getRenderTypes(state, rand, data);
+            return ModelBridge.getRenderTypes(originalModel, state, rand, data);
         }
         if (fbData == null)
         {
@@ -226,7 +223,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             List<BakedQuad> quads = List.of();
             if (camoInRenderType)
             {
-                quads = camoModel.getQuads(camoContent.getAppearanceState(), side, rand, camoData, renderType);
+                quads = ModelBridge.getQuads(camoModel, camoContent.getAppearanceState(), side, rand, camoData, renderType);
                 if (quads.isEmpty())
                 {
                     // Try extracting useful quads from the list of (supposedly) uncullable quads if querying cullable
@@ -260,7 +257,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         }
         else
         {
-            Object ctCtx = needCtCtx ? ConTexDataHandler.extractConTexData(camoData) : null;
+            Object ctCtx = needCtCtx ? extractConTexData(camoData) : null;
             QuadCacheKey key = geometry.makeCacheKey(camoContent, ctCtx, extraData);
             QuadTable quadTable = quadCache.get(key);
             if (quadTable == null)
@@ -271,6 +268,16 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             }
             return nullLayer ? quadTable.getAllQuads(side) : quadTable.getQuads(renderType, side);
         }
+    }
+
+    /**
+     * {@return the connected textures context to key cached quads by} Models implementing the Fabric Rendering API
+     * provide the snapshot of their context-dependent quads, others provide their data via registered properties
+     */
+    private static Object extractConTexData(ModelData camoData)
+    {
+        Object ctCtx = ModelBridge.extractCapturedContext(camoData);
+        return ctCtx != null ? ctCtx : ConTexDataHandler.extractConTexData(camoData);
     }
 
     private static boolean needCtContext(boolean noProcessing, ConTexMode minMode)
@@ -394,18 +401,9 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         if (!camoContent.isEmpty() && needCtContext(stateCache.hasAnyFullFace(), type.getMinimumConTexMode()))
         {
             BakedModel model = CamoContainerHelper.Client.getOrCreateModel(camoContent);
-            try
-            {
-                // Try getting camo data with the enclosing state, some mods may not like that
-                // This option provides better CT behaviour
-                camoData = model.getModelData(level, pos, state, ModelData.EMPTY);
-            }
-            catch (Throwable t)
-            {
-                // Fall back to getting camo data with the camo state if a mod didn't like it
-                // This option may cause some CT weirdness
-                camoData = model.getModelData(level, pos, camoContent.getAppearanceState(), ModelData.EMPTY);
-            }
+            // Models implementing the Fabric Rendering API are handed the given state as the state being rendered
+            // and therefore can't be queried with the enclosing state
+            camoData = ModelBridge.getModelData(model, level, pos, camoContent.getAppearanceState(), ModelData.EMPTY);
         }
         ModelData auxData = geometry.getAuxModelData(level, pos, state, tileData);
         // Avoid copying the entire data if the camo model and geometry didn't produce any additional model data

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import xfacthd.framedblocks.platform.model.ExtendedBakedQuad;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public final class QuadModifier
      */
     public static QuadModifier of(BakedQuad quad)
     {
-        return new QuadModifier(new QuadData(quad), -1, quad.isShade(), quad.hasAmbientOcclusion(), false, false);
+        return new QuadModifier(new QuadData(quad), -1, quad.isShade(), ExtendedBakedQuad.hasAmbientOcclusion(quad), false, false);
     }
 
     private QuadModifier(QuadData data, int tintIndex, boolean shade, boolean ao, boolean modified, boolean failed)
@@ -86,7 +87,7 @@ public final class QuadModifier
 
     public QuadModifier ambientOcclusion(boolean ao)
     {
-        if (ao != data.quad.hasAmbientOcclusion())
+        if (ao != ExtendedBakedQuad.hasAmbientOcclusion(data.quad))
         {
             this.ao = ao;
             modified = true;
@@ -111,7 +112,7 @@ public final class QuadModifier
             return;
         }
 
-        BakedQuad newQuad = new BakedQuad(
+        BakedQuad newQuad = ExtendedBakedQuad.create(
                 data.vertexData,
                 tintIndex == -1 ? data.quad.getTintIndex() : tintIndex,
                 ModelUtils.fillNormal(data),
@@ -131,7 +132,7 @@ public final class QuadModifier
     {
         Preconditions.checkState(tintIndex == -1, "In-place modification can't change tintIndex but a tintIndex has been set");
         Preconditions.checkState(shade == data.quad.isShade(), "In-place modification can't change shading but shade has been modified");
-        Preconditions.checkState(ao == data.quad.hasAmbientOcclusion(), "In-place modification can't change AO but AO has been modified");
+        Preconditions.checkState(ao == ExtendedBakedQuad.hasAmbientOcclusion(data.quad), "In-place modification can't change AO but AO has been modified");
 
         if (failed)
         {

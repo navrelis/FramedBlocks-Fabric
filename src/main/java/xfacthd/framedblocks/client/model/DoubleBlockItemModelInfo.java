@@ -3,7 +3,7 @@ package xfacthd.framedblocks.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;

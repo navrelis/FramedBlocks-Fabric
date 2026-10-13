@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.model.data;
 
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.client.model.data.*;
+import xfacthd.framedblocks.platform.model.*;
 import xfacthd.framedblocks.api.camo.CamoContent;
 
 public final class FramedBlockData

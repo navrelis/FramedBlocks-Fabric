@@ -8,8 +8,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -91,7 +92,7 @@ public class FramedChestLidGeometry extends Geometry
     @Override
     public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
     {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, layer);
+        List<BakedQuad> quads = ModelBridge.getQuads(baseModel, state, null, rand, data, layer);
         for (BakedQuad quad : quads)
         {
             quadMap.get(null).add(quad);

@@ -1,0 +1,14 @@
+{
+    "required": true,
+    "package": "xfacthd.framedblocks.mixin.client.render",
+    "compatibilityLevel": "JAVA_21",
+    "client": [
+        "AccessorModelBakery",
+        "InvokerModelBakerImpl",
+        "MixinItemRenderer"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8"
+}

@@ -11,8 +11,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -65,7 +66,8 @@ public class FramedOneWayWindowGeometry extends Geometry
         if (face != NullableDirection.NONE && renderType == RenderType.translucent())
         {
             Direction side = face.toDirection();
-            quadMap.get(side).addAll(tintedGlassModel.getQuads(
+            quadMap.get(side).addAll(ModelBridge.getQuads(
+                    tintedGlassModel,
                     Blocks.TINTED_GLASS.defaultBlockState(),
                     side,
                     rand,
@@ -82,7 +84,7 @@ public class FramedOneWayWindowGeometry extends Geometry
         {
             if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
             {
-                return tintedGlassModel.getModelData(level, pos, state, ModelData.EMPTY);
+                return ModelBridge.getModelData(tintedGlassModel, level, pos, state, ModelData.EMPTY);
             }
         }
         catch (Throwable ignored) { }

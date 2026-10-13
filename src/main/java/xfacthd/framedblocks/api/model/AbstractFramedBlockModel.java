@@ -1,20 +1,24 @@
 package xfacthd.framedblocks.api.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.BakedModelWrapper;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.platform.model.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 public abstract class AbstractFramedBlockModel extends BakedModelWrapper<BakedModel>
 {
@@ -35,13 +39,49 @@ public abstract class AbstractFramedBlockModel extends BakedModelWrapper<BakedMo
     }
 
     @Override
-    public BakedModel applyTransform(ItemDisplayContext ctx, PoseStack poseStack, boolean leftHand)
+    public final boolean isVanillaAdapter()
     {
-        super.applyTransform(ctx, poseStack, leftHand);
+        return false;
+    }
+
+    @Override
+    public void emitBlockQuads(BlockAndTintGetter level, BlockState state, BlockPos pos, Supplier<RandomSource> randSupplier, RenderContext context)
+    {
+        ModelData data = getModelData(level, pos, state, ModelDataHelper.get(level, pos));
+        ModelBridge.emitBlockQuads(this, state, data, randSupplier, context);
+    }
+
+    @Override
+    @SuppressWarnings("ForLoopReplaceableByForEach")
+    public void emitItemQuads(ItemStack stack, Supplier<RandomSource> randSupplier, RenderContext context)
+    {
+        List<BakedModel> renderPasses = getRenderPasses(stack, true);
+        if (renderPasses == defaultItemRenderPass)
+        {
+            ModelBridge.emitVanillaQuads(this, null, BlendMode.CUTOUT, randSupplier, context);
+            return;
+        }
+
+        for (int i = 0; i < renderPasses.size(); i++)
+        {
+            renderPasses.get(i).emitItemQuads(stack, randSupplier, context);
+        }
+    }
+
+    @Override
+    public void applyAdditionalTransform(ItemDisplayContext ctx, PoseStack poseStack, boolean leftHand)
+    {
         if (itemModelInfo != null)
         {
             itemModelInfo.applyItemTransform(poseStack, ctx, leftHand);
         }
+    }
+
+    @Override
+    public BakedModel applyTransform(ItemDisplayContext ctx, PoseStack poseStack, boolean leftHand)
+    {
+        super.applyTransform(ctx, poseStack, leftHand);
+        applyAdditionalTransform(ctx, poseStack, leftHand);
         return this;
     }
 
@@ -54,7 +94,7 @@ public abstract class AbstractFramedBlockModel extends BakedModelWrapper<BakedMo
             return defaultItemRenderPass;
         }
 
-        CamoList camos = showCamo ? stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST, CamoList.EMPTY) : CamoList.EMPTY;
+        CamoList camos = showCamo ? stack.getOrDefault(Utils.DC_TYPE_CAMO_LIST.get(), CamoList.EMPTY) : CamoList.EMPTY;
         if (!dataRequired && camos.isEmpty()) return defaultItemRenderPass;
 
         List<BakedModel> models = itemModelCache.get(camos);

@@ -7,8 +7,9 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -19,10 +20,10 @@ import java.util.*;
 
 public class FramedMarkedCubeGeometry extends FramedCubeGeometry
 {
-    public static final ModelResourceLocation SLIME_FRAME_LOCATION = ModelResourceLocation.standalone(
+    public static final ModelResourceLocation SLIME_FRAME_LOCATION = ModelBridge.standalone(
             Utils.rl("block/slime_frame")
     );
-    public static final ModelResourceLocation REDSTONE_FRAME_LOCATION = ModelResourceLocation.standalone(
+    public static final ModelResourceLocation REDSTONE_FRAME_LOCATION = ModelBridge.standalone(
             Utils.rl("block/redstone_frame")
     );
 
@@ -53,7 +54,7 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (fbData != null && !fbData.getCamoContent().isEmpty())
         {
-            Utils.copyAll(frameModel.getQuads(state, side, rand, data, renderType), quads);
+            Utils.copyAll(ModelBridge.getQuads(frameModel, state, side, rand, data, renderType), quads);
         }
     }
 

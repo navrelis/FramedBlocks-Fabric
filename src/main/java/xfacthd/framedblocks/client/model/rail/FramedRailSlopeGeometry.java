@@ -7,8 +7,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.data.QuadMap;
@@ -57,7 +58,7 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
 
     private List<BakedQuad> getRailQuads(@Nullable Direction side, RandomSource rand, RenderType layer)
     {
-        return ModelUtils.getModel(railState).getQuads(railState, side, rand, ModelData.EMPTY, layer);
+        return ModelBridge.getQuads(ModelUtils.getModel(railState), railState, side, rand, ModelData.EMPTY, layer);
     }
 
     private static BlockState getSlopeState(BlockState state)

@@ -7,8 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -260,7 +261,7 @@ public class FramedItemFrameGeometry extends Geometry
     {
         if (leather)
         {
-            List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, renderType);
+            List<BakedQuad> quads = ModelBridge.getQuads(baseModel, state, null, rand, data, renderType);
             for (BakedQuad quad : quads)
             {
                 if (!ClientUtils.isDummyTexture(quad))

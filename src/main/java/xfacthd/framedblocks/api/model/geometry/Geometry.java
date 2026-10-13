@@ -10,10 +10,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.extensions.IBakedModelExtension;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.common.util.TriState;
+import xfacthd.framedblocks.platform.model.*;
+import xfacthd.framedblocks.platform.util.TriState;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.camo.*;
@@ -183,7 +181,7 @@ public abstract class Geometry
         if (fbData != null && !(camoContent = fbData.getCamoContent()).isEmpty())
         {
             BakedModel model = CamoContainerHelper.Client.getOrCreateModel(camoContent);
-            TriState camoAO = model.useAmbientOcclusion(camoContent.getAppearanceState(), ModelData.EMPTY, renderType);
+            TriState camoAO = ModelBridge.useAmbientOcclusion(model, camoContent.getAppearanceState(), ModelData.EMPTY, renderType);
             if (camoAO != TriState.DEFAULT)
             {
                 return camoAO;

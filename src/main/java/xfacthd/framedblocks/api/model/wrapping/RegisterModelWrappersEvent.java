@@ -1,9 +1,10 @@
 package xfacthd.framedblocks.api.model.wrapping;
 
-import net.neoforged.bus.api.Event;
-import net.neoforged.fml.event.IModBusEvent;
-
-public final class RegisterModelWrappersEvent extends Event implements IModBusEvent
+/**
+ * Posted through {@link xfacthd.framedblocks.platform.event.ModEvents} once during client setup to collect
+ * the model wrappers of all framed blocks, see {@link WrapHelper}
+ */
+public final class RegisterModelWrappersEvent
 {
 
 }

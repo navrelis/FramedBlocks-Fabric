@@ -7,8 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -85,7 +86,7 @@ public class FramedCeilingHangingSignGeometry extends Geometry
             Utils.forAllDirections(dir ->
             {
                 List<BakedQuad> quads = quadMap.get(dir);
-                for (BakedQuad quad : baseModel.getQuads(state, dir, rand, data, renderType))
+                for (BakedQuad quad : ModelBridge.getQuads(baseModel, state, dir, rand, data, renderType))
                 {
                     QuadModifier.of(quad)
                             .applyIf(Modifiers.rotateCentered(Direction.Axis.Y, rotDegrees, false), attached)

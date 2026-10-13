@@ -5,7 +5,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.QuadMap;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class FramedCollapsibleCopycatBlockGeometry extends Geometry
 {
-    public static final ModelResourceLocation ALT_BASE_MODEL_LOC = ModelResourceLocation.standalone(
+    public static final ModelResourceLocation ALT_BASE_MODEL_LOC = ModelBridge.standalone(
             Utils.rl("block/framed_collapsible_copycat_block_alt")
     );
     private static final int UP = Direction.UP.ordinal();

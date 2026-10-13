@@ -9,8 +9,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -52,7 +53,7 @@ public class FramedLeverGeometry extends Geometry
     @Override
     public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType)
     {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, renderType);
+        List<BakedQuad> quads = ModelBridge.getQuads(baseModel, state, null, rand, data, renderType);
         for (BakedQuad quad : quads)
         {
             if (!ClientUtils.isDummyTexture(quad))

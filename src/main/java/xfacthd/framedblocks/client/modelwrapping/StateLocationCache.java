@@ -14,12 +14,12 @@ public final class StateLocationCache
 {
     private static final BiMap<ModelResourceLocation, BlockState> STATE_LOCATIONS = HashBiMap.create();
 
-    public static void clear()
+    public static synchronized void clear()
     {
         STATE_LOCATIONS.clear();
     }
 
-    public static BlockState getStateFromLocation(ResourceLocation blockId, Block block, ModelResourceLocation id)
+    public static synchronized BlockState getStateFromLocation(ResourceLocation blockId, Block block, ModelResourceLocation id)
     {
         if (!STATE_LOCATIONS.containsKey(id))
         {
@@ -28,7 +28,7 @@ public final class StateLocationCache
         return STATE_LOCATIONS.get(id);
     }
 
-    public static ModelResourceLocation getLocationFromState(BlockState state, @Nullable ResourceLocation blockId)
+    public static synchronized ModelResourceLocation getLocationFromState(BlockState state, @Nullable ResourceLocation blockId)
     {
         BiMap<BlockState, ModelResourceLocation> inverse = STATE_LOCATIONS.inverse();
         if (!inverse.containsKey(state))

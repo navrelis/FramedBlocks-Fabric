@@ -8,8 +8,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -50,7 +51,7 @@ public class FramedWallTorchGeometry extends Geometry
     @Override
     public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData extraData, RenderType renderType)
     {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, renderType);
+        List<BakedQuad> quads = ModelBridge.getQuads(baseModel, state, null, rand, extraData, renderType);
         for (BakedQuad quad : quads)
         {
             if (!ClientUtils.isDummyTexture(quad))

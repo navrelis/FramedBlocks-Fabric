@@ -7,8 +7,9 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 public class FramedTargetGeometry extends Geometry
 {
-    public static final ModelResourceLocation OVERLAY_LOCATION = ModelResourceLocation.standalone(
+    public static final ModelResourceLocation OVERLAY_LOCATION = ModelBridge.standalone(
             Utils.rl("block/target_overlay")
     );
     public static final int OVERLAY_TINT_IDX = 1024;
@@ -45,6 +46,6 @@ public class FramedTargetGeometry extends Geometry
     @Override
     public void getAdditionalQuads(ArrayList<BakedQuad> quads, Direction side, RandomSource rand, ModelData data, RenderType renderType)
     {
-        Utils.copyAll(overlayModel.getQuads(state, side, rand, data, renderType), quads);
+        Utils.copyAll(ModelBridge.getQuads(overlayModel, state, side, rand, data, renderType), quads);
     }
 }

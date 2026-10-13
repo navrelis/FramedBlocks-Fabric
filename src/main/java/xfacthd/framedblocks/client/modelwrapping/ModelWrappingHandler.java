@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.model.AbstractFramedBlockModel;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
@@ -39,9 +40,25 @@ public final class ModelWrappingHandler
         {
             counter.increment(mergedState == state);
         }
-        return visitedStates.computeIfAbsent(mergedState, keyState ->
-                blockModelFactory.create(new GeometryFactory.Context(keyState, srcModel, modelLookup, textureLookup))
-        );
+        // The factory may look up and thereby wrap other models of this block, the map must not be modified while computing
+        BakedModel model = visitedStates.get(mergedState);
+        if (model == null)
+        {
+            model = blockModelFactory.create(new GeometryFactory.Context(mergedState, srcModel, modelLookup, textureLookup));
+            visitedStates.put(mergedState, model);
+        }
+        return model;
+    }
+
+    public synchronized void clearModelCaches()
+    {
+        for (BakedModel model : visitedStates.values())
+        {
+            if (model instanceof AbstractFramedBlockModel framedModel)
+            {
+                framedModel.clearCache();
+            }
+        }
     }
 
     public synchronized BakedModel replaceItemModel(ModelLookup modelLookup, TextureLookup textureLookup, @Nullable ModelCounter counter)
