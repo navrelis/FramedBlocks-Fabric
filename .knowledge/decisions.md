@@ -12,3 +12,11 @@
 - Datagen: the committed generated resources are kept and patched; the NeoForge datagen DSL is not ported unless something needs regenerating.
 - Precision override B1 (Opus): rendering core, errors are subtle and only visible in game.
 - Precision override C2 (Opus): light engine mixins, mistakes cause persistent light corruption in worlds.
+- Compat compile versions capped by Loom 1.15.5 (rejects jars built with a newer Loom): JEI 19.56.0.441 instead of 19.64, Amendments 2.0.15 instead of 2.1.11; Puzzles Lib and Moonlight not on the classpath (not needed to compile). All integrations are compile-only and optional (`suggests`).
+- Athena hook removed: Fabric Athena models compute connections in `emitBlockQuads`, there is no model-data property to forward. Connected textures on camo depend on the foreign-model capture in `ModelBridge`.
+- AE2 framing saw pattern encoder (item, menu, screen, payload, `saw_encoder` block property, `fallback` model loader) removed with the AE2 integration.
+- `compat_runtime` gradle property (false by default) adds JEI/EMI/REI/Jade to the dev runtime for testing.
+- Block entity sync: update packet and chunk update tag carry marker keys (`fb_client_sync`, `fb_initial_sync`) and are dispatched by a mixin on `BlockEntity.loadWithComponents`, because vanilla has no `onDataPacket`/`handleUpdateTag`.
+- Former common-setup work runs once on the first `TAGS_LOADED`; registries are registered eagerly in `FBContent.init()` in a fixed order.
+- Powered framing saw energy: Fabric has no energy API and no dependency is added; the internal buffer stays, a server config `poweredSawRequiresEnergy` (default false) makes the saw usable without an energy mod. Exposure to Team Reborn Energy is left as a hook only.
+- Shared files (mixin jsons, access widener, lang) are edited append-only by parallel agents; each task with risky mixins gets its own mixin config (render, light).

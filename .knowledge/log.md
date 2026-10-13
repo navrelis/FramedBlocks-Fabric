@@ -4,3 +4,18 @@
 - M2 research versions/APIs/prior art — Sonnet, long — done. No Fabric 1.21.1 build of Create, AE2, Building Gadgets. Sodium 0.6+ implements FRAPI natively.
 - A1 build setup + id rename — Sonnet, long — accepted with one defect: mixin config `package`/`plugin` were wrongly renamed to `xfacthd.framedblocks_fabric...` (fix folded into B2a). Build configures; javac: 2328 errors (expected, NeoForge/compat imports). PressurePlateBlock.sensitivity AW entry dropped (field gone in 1.21.1).
 - A2 logo/docs/license — Sonnet, long — running
+- A2 logo/docs/license — Sonnet, long — texts, licence files, banner accepted and committed; icon rejected (correction 1: muddled slope facet, noisy ray-cast braces) — in progress
+- B1 rendering core on FRAPI — Opus, long — running
+- B2a platform layer, registration, bootstrap, BE render data — Sonnet, long — running
+- Session 1 stopped by auto-handoff; B1, B2a and the A2 icon correction were killed mid-task. State and next steps: see handoff.md in the repo root.
+- Session 2: handoff checked against repo; matches. Icon (correction 2 state on disk) regenerated, viewed at 512 and 32 px, accepted and committed.
+- B2a leftovers (platform util, Platform, mixin json package fix, mixin plugin) — reviewed, accepted, committed.
+- B1 rendering core on FRAPI — Opus, long — running (re-delegated)
+- B2a platform registry/event, import rewrite, FBContent, ModInitializer, BE render data — Sonnet, long — running (re-delegated)
+- E1 compat port + datagen removal — Sonnet, long — running
+- B2a — Sonnet, long — report received (857 errors left tree-wide, all in later-task areas). Review: registry/event/bootstrap/BE sync design accepted; correction 1 sent (DeferredHolder fails vanilla identity checks like ItemStack.is(Holder); common-setup race; verify sync markers never reach save data).
+- E1 compat + datagen removal — Sonnet, long — accepted and committed. 6 errors left in its dirs, all from symbols of other tasks. Follow-ups outside its dirs (AE2 encoder leftovers, fallback loader, api/compat/create, ShapeRotationRecipeBuilder) queued as cleanup task X1.
+- B2a correction 1 — Sonnet — accepted and committed (3 ItemStack.is(Holder) call sites fixed, setup synchronized, sync markers client-only). 786 errors tree-wide.
+- C2 light emission — Opus, short — running
+- B2b networking, data maps, config sync check, leftover cleanup — Sonnet, long — running
+- C3 Transfer API storage — Sonnet, long — running
