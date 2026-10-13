@@ -20,3 +20,6 @@
 - Former common-setup work runs once on the first `TAGS_LOADED`; registries are registered eagerly in `FBContent.init()` in a fixed order.
 - Powered framing saw energy: Fabric has no energy API and no dependency is added; the internal buffer stays, a server config `poweredSawRequiresEnergy` (default false) makes the saw usable without an energy mod. Exposure to Team Reborn Energy is left as a hook only.
 - Shared files (mixin jsons, access widener, lang) are edited append-only by parallel agents; each task with risky mixins gets its own mixin config (render, light).
+- Light: cached `BlockState.getLightEmission()` of framed blocks stays at the declared value; the per-position value is injected at each vanilla reader (own `required: false` mixin config). Fabric data attachments rejected (plain non-volatile map, unsafe for the light thread).
+- Server config sync: none added, FCAP 21.1.6 already syncs SERVER configs in the configuration phase.
+- Camo rotator data map: read from `data/<ns>/data_maps/block/block_camo_rotators.json` (NeoForge format) by a reload listener, resolved on `TAGS_LOADED`, synced with an own payload.

@@ -92,7 +92,7 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     @SuppressWarnings("deprecation")
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return Math.max(state.getLightEmission(), super.getLightEmission(state, level, pos));
+        return Math.max(state.getLightEmission(), IFramedBlock.super.getLightEmission(state, level, pos));
     }
 
     @Override

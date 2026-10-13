@@ -1,0 +1,23 @@
+{
+    "required": false,
+    "package": "xfacthd.framedblocks.mixin.light",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "InvokerLightEngine",
+        "MixinBlockLightEngine",
+        "MixinChunkAccess",
+        "MixinChunkSerializer",
+        "MixinImposterProtoChunk",
+        "MixinLevelChunk",
+        "MixinLightEngine",
+        "compat.MixinBlockStarLightEngine"
+    ],
+    "client": [
+        "client.AccessorRenderChunkRegion",
+        "client.MixinLevelRendererLight"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8"
+}

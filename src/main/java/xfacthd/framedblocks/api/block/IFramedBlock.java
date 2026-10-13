@@ -30,7 +30,7 @@ import xfacthd.framedblocks.platform.model.ModelDataHelper;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import xfacthd.framedblocks.platform.util.TriState;
-import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
+import xfacthd.framedblocks.platform.light.AuxLight;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -177,25 +177,17 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         return ItemInteractionResult.FAIL;
     }
 
-    @Override
-    default boolean hasDynamicLightEmission(BlockState state)
-    {
-        return state.getValue(FramedProperties.GLOWING);
-    }
-
-    @Override
+    /**
+     * Position-dependent light emission, consulted by the light engine instead of {@link BlockState#getLightEmission()}
+     * for all blocks implementing this interface (see {@link AuxLight})
+     */
     default int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
-        if (!state.getValue(FramedProperties.GLOWING))
+        if (!AuxLight.isGlowing(state))
         {
             return 0;
         }
-        AuxiliaryLightManager lightManager = level.getAuxLightManager(pos);
-        if (lightManager != null)
-        {
-            return lightManager.getLightAt(pos);
-        }
-        return 0;
+        return AuxLight.get(level, pos);
     }
 
     @Override

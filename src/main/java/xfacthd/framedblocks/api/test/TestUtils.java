@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.common.CommonHooks;
 import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.light.AuxLight;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -358,7 +359,8 @@ public final class TestUtils
 
     public static void assertBlockLightEmission(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, int light)
     {
-        int emission = helper.getLevel().getLightEmission(helper.absolutePos(blockPos));
+        BlockPos absPos = helper.absolutePos(blockPos);
+        int emission = AuxLight.getEmission(helper.getLevel().getBlockState(absPos), helper.getLevel(), absPos);
         if (emission != light)
         {
             BlockState state = helper.getBlockState(blockPos);

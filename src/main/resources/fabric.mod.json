@@ -43,7 +43,8 @@
   },
   "mixins": [
     "framedblocks_fabric.mixins.json",
-    "framedblocks_fabric.render.mixins.json"
+    "framedblocks_fabric.render.mixins.json",
+    "framedblocks_fabric.light.mixins.json"
   ],
   "accessWidener": "framedblocks_fabric.accesswidener",
   "depends": {

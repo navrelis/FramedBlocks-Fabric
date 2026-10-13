@@ -30,7 +30,7 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import xfacthd.framedblocks.platform.model.ModelData;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import xfacthd.framedblocks.platform.util.TriState;
-import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
+import xfacthd.framedblocks.platform.light.AuxLight;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -655,11 +655,17 @@ public class FramedBlockEntity extends BlockEntity
 
     protected final void doLightUpdate()
     {
-        AuxiliaryLightManager lightManager = level().getAuxLightManager(worldPosition);
-        if (lightManager != null)
-        {
-            lightManager.setLightAt(worldPosition, getLightValue());
-        }
+        // Also re-checks the light at this position if the stored emission changed
+        AuxLight.set(level(), worldPosition, getLightValue());
+    }
+
+    /**
+     * {@return the light emission to be stored for this block, used to rebuild the stored emissions of a chunk}
+     */
+    @ApiStatus.Internal
+    public final int getAuxLightEmission()
+    {
+        return getLightValue();
     }
 
     public IFramedBlock getBlock()
