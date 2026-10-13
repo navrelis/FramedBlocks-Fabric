@@ -10,20 +10,15 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 
 @SuppressWarnings("ConstantConditions")
-public record SingleBlockFakeLevel(BlockPos realPos, BlockState state, BlockEntity blockEntity) implements BlockAndTintGetter
+public record SingleBlockFakeLevel(BlockPos realPos, BlockState state, BlockEntity blockEntity, boolean renderCamo) implements BlockAndTintGetter
 {
     @Override
     public float getShade(Direction side, boolean shade)
     {
         return blockEntity.getLevel().getShade(side, shade);
-    }
-
-    @Override
-    public float getShade(float normalX, float normalY, float normalZ, boolean shade)
-    {
-        return blockEntity.getLevel().getShade(normalX, normalY, normalZ, shade);
     }
 
     @Override
@@ -51,6 +46,17 @@ public record SingleBlockFakeLevel(BlockPos realPos, BlockState state, BlockEnti
         if (pos == BlockPos.ZERO)
         {
             return blockEntity;
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Object getBlockEntityRenderData(BlockPos pos)
+    {
+        if (renderCamo && pos == BlockPos.ZERO && blockEntity instanceof FramedBlockEntity be)
+        {
+            return be.getModelData(false);
         }
         return null;
     }

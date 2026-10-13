@@ -24,6 +24,21 @@
     ],
     "client": [
       "xfacthd.framedblocks.client.FBClient"
+    ],
+    "jei_mod_plugin": [
+      "xfacthd.framedblocks.common.compat.jei.FramedJeiPlugin"
+    ],
+    "rei_client": [
+      "xfacthd.framedblocks.common.compat.rei.FramedReiPlugin"
+    ],
+    "emi": [
+      "xfacthd.framedblocks.common.compat.emi.FramedEmiPlugin"
+    ],
+    "jade": [
+      "xfacthd.framedblocks.common.compat.jade.FramedJadePlugin"
+    ],
+    "additional-placements-generators": [
+      "xfacthd.framedblocks.common.compat.additionalplacements.AdditionalPlacementsCompat"
     ]
   },
   "mixins": [
@@ -37,5 +52,17 @@
     "java": ">=21",
     "fabric-api": "*",
     "forgeconfigapiport": "*"
+  },
+  "suggests": {
+    "jei": "*",
+    "roughlyenoughitems": "*",
+    "emi": "*",
+    "jade": "*",
+    "athena": "*",
+    "diagonalblocks": "*",
+    "amendments": "*",
+    "searchables": "*",
+    "additionalplacements": "*",
+    "atlasviewer": "*"
   }
 }

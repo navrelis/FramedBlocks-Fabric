@@ -3,11 +3,11 @@ package xfacthd.framedblocks.common.compat.jei;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.*;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
@@ -84,7 +84,7 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
 
             if (doTransfer && menu.clickMenuButton(player, idx))
             {
-                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
+                ClientPlayNetworking.send(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
             }
             // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
             return new RecipeTransferErrorTransferNotImplemented();

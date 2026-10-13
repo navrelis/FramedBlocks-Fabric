@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
 
-import me.shedaniel.rei.plugincompatibilities.api.REIPluginCompatIgnore;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -13,7 +12,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
-import xfacthd.framedblocks.client.screen.FramingSawWithEncoderScreen;
 import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.jei.camo.CamoCraftingHelper;
@@ -25,7 +23,6 @@ import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 
 @JeiPlugin
-@REIPluginCompatIgnore
 public final class FramedJeiPlugin implements IModPlugin
 {
     private static final ResourceLocation ID = Utils.rl("jei_plugin");
@@ -115,17 +112,9 @@ public final class FramedJeiPlugin implements IModPlugin
     public void registerGuiHandlers(IGuiHandlerRegistration registration)
     {
         IIngredientManager ingredientManager = registration.getJeiHelpers().getIngredientManager();
-        registration.addGhostIngredientHandler(
-                FramingSawWithEncoderScreen.class,
-                new FramingSawGhostIngredientHandler()
-        );
-        registration.addGuiContainerHandler(
-                FramingSawWithEncoderScreen.class,
-                new FramingSawWithEncoderGuiContainerHandler(ingredientManager)
-        );
         registration.addGuiContainerHandler(
                 FramingSawScreen.class,
-                new FramingSawGuiContainerHandler<>(ingredientManager)
+                new FramingSawGuiContainerHandler(ingredientManager)
         );
         registration.addGhostIngredientHandler(
                 PoweredFramingSawScreen.class,

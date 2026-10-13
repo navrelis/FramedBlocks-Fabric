@@ -10,7 +10,6 @@ import xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
 import java.util.HashSet;
 import java.util.Set;
 
-@WailaPlugin
 public final class FramedJadePlugin implements IWailaPlugin
 {
     @Override

@@ -4,9 +4,10 @@ import net.mehvahdjukaar.amendments.Amendments;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
-import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.model.ModelBridge;
 
 public final class AmendmentsCompat
 {
@@ -15,7 +16,7 @@ public final class AmendmentsCompat
 
     public static void init()
     {
-        loaded = ModList.get().isLoaded(MOD_ID);
+        loaded = Platform.isModLoaded(MOD_ID);
     }
 
     public static boolean isLoaded()
@@ -63,7 +64,7 @@ public final class AmendmentsCompat
 
     public static final class Client
     {
-        public static final ModelResourceLocation HANGING_MODEL_LOCATION = ModelResourceLocation.standalone(
+        public static final ModelResourceLocation HANGING_MODEL_LOCATION = ModelBridge.standalone(
                 Utils.rl(MOD_ID, "block/hanging_flower_pot_rope")
         );
 

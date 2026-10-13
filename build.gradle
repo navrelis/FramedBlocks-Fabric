@@ -47,6 +47,54 @@ repositories {
             includeGroupByRegex('fuzs.*')
         }
     }
+    maven {
+        name = "Jared's maven"
+        url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup('mezz.jei')
+            includeGroup('com.blamejared.searchables')
+        }
+    }
+    maven {
+        name = "Shedaniel's maven"
+        url = 'https://maven.shedaniel.me/'
+        content {
+            includeGroupAndSubgroups('me.shedaniel')
+        }
+    }
+    maven {
+        name = 'Architectury maven'
+        url = 'https://maven.architectury.dev/'
+        content {
+            includeGroup('dev.architectury')
+        }
+    }
+    maven {
+        name = 'TerraformersMC maven'
+        url = 'https://maven.terraformersmc.com/'
+        content {
+            includeGroup('dev.emi')
+        }
+    }
+    maven {
+        name = 'Team Resourceful maven'
+        url = 'https://maven.teamresourceful.com/repository/maven-public/'
+        content {
+            includeGroupAndSubgroups('earth.terrarium')
+            includeGroupAndSubgroups('com.teamresourceful')
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth maven'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter {
+            includeGroup('maven.modrinth')
+        }
+    }
 }
 
 dependencies {
@@ -61,6 +109,49 @@ dependencies {
 
     modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
     include "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+
+    // Optional integrations, none of these are required at runtime
+    modCompileOnly "mezz.jei:jei-${jei_mc_version}-fabric-api:${jei_version}"
+
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
+
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}+${emi_mc_version}:api"
+
+    modCompileOnly "maven.modrinth:jade:${jade_version}"
+
+    modCompileOnly "earth.terrarium.athena:athena-fabric-${athena_mc_version}:${athena_version}"
+
+    modCompileOnly("fuzs.diagonalblocks:diagonalblocks-fabric:${diag_blocks_version}") { transitive = false }
+
+    modCompileOnly "maven.modrinth:amendments:${amendments_version}"
+
+    modCompileOnly "com.blamejared.searchables:Searchables-fabric-${searchables_mc_version}:${searchables_version}"
+
+    modCompileOnly "maven.modrinth:additional-placements-fabric:${additionalplacements_version}"
+
+    modCompileOnly "maven.modrinth:atlasviewer:${atlasviewer_version}"
+
+    // Set compat_runtime=true to run JEI, EMI, REI and Jade in the dev client, or a comma-separated subset (e.g. jei,jade)
+    var compatRuntime = findProperty('compat_runtime')?.toString()?.toLowerCase() ?: 'false'
+    var compatRuntimeAll = compatRuntime == 'true'
+    var compatRuntimeSet = compatRuntime.split(',').collect { it.trim() }
+    if (compatRuntimeAll || compatRuntimeSet.contains('jei'))
+    {
+        modLocalRuntime "mezz.jei:jei-${jei_mc_version}-fabric:${jei_version}"
+    }
+    if (compatRuntimeAll || compatRuntimeSet.contains('emi'))
+    {
+        modLocalRuntime "dev.emi:emi-fabric:${emi_version}+${emi_mc_version}"
+    }
+    if (compatRuntimeAll || compatRuntimeSet.contains('rei'))
+    {
+        modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    }
+    if (compatRuntimeAll || compatRuntimeSet.contains('jade'))
+    {
+        modLocalRuntime "maven.modrinth:jade:${jade_version}"
+    }
 }
 
 tasks.withType(ProcessResources).configureEach {

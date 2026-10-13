@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.common.compat.rei;
 
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.common.compat.jei.JeiConstants;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.menu.IFramingSawMenu;
@@ -29,7 +29,7 @@ public final class FramingSawTransferHandler implements TransferHandler
             //noinspection ConstantConditions
             if (ctx.isActuallyCrafting() && menu.clickMenuButton(minecraft.player, idx))
             {
-                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
+                ClientPlayNetworking.send(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
                 minecraft.setScreen(ctx.getContainerScreen());
             }
             return Result.createSuccessful().tooltip(JeiConstants.MSG_TRANSFER_NOT_IMPLEMENTED).color(0x80FFA500);

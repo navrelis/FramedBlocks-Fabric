@@ -7,9 +7,9 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.registry.DeferredHolder;
 
 public final class NonTrivialCamoLootCondition implements LootItemCondition
 {

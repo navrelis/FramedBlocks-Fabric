@@ -7,7 +7,7 @@ import xfacthd.framedblocks.client.screen.FramingSawScreen;
 
 import java.util.Optional;
 
-public sealed class FramingSawGuiContainerHandler<T extends FramingSawScreen> implements IGuiContainerHandler<T> permits FramingSawWithEncoderGuiContainerHandler
+public final class FramingSawGuiContainerHandler implements IGuiContainerHandler<FramingSawScreen>
 {
     private final IIngredientManager ingredientManager;
 
@@ -17,7 +17,7 @@ public sealed class FramingSawGuiContainerHandler<T extends FramingSawScreen> im
     }
 
     @Override
-    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(T screen, double mouseX, double mouseY)
+    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(FramingSawScreen screen, double mouseX, double mouseY)
     {
         FramingSawScreen.PointedRecipe recipe = screen.getRecipeAt(mouseX, mouseY);
         if (recipe != null)

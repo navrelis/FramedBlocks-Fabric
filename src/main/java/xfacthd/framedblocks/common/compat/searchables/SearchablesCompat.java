@@ -2,10 +2,9 @@ package xfacthd.framedblocks.common.compat.searchables;
 
 import com.blamejared.searchables.api.SearchableComponent;
 import com.blamejared.searchables.api.SearchableType;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
+import xfacthd.framedblocks.platform.Platform;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +17,11 @@ public final class SearchablesCompat
 
     public static void init()
     {
-        if (ModList.get().isLoaded("searchables"))
+        if (Platform.isModLoaded("searchables"))
         {
             try
             {
-                if (FMLEnvironment.dist.isClient())
+                if (Platform.isClient())
                 {
                     GuardedAccess.init();
                     loaded = true;

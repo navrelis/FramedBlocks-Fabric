@@ -2,10 +2,10 @@ package xfacthd.framedblocks.common.compat.emi;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.handler.*;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.menu.*;
@@ -69,7 +69,7 @@ public final class FramedEmiRecipeHandler<T extends AbstractContainerMenu & IFra
             //noinspection ConstantConditions
             if (menu.clickMenuButton(Minecraft.getInstance().player, idx))
             {
-                PacketDistributor.sendToServer(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
+                ClientPlayNetworking.send(new ServerboundSelectFramingSawRecipePayload(menu.containerId, idx));
             }
         }
         return true;
