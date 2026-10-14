@@ -78,14 +78,31 @@ public final class AuxLight
             return false;
         }
 
-        AuxLightMap oldLights = holder.framedblocks$getAuxLight();
-        AuxLightMap newLights = AuxLightMap.with(oldLights, pos.asLong(), Mth.clamp(value, 0, 15));
-        if (newLights == oldLights)
+        int light = Mth.clamp(value, 0, 15);
+        AuxLightMap lights = holder.framedblocks$getAuxLight();
+        if (lights == null)
+        {
+            if (light == 0)
+            {
+                return false;
+            }
+            lights = new AuxLightMap(chunk, chunk.getPos());
+            if (!lights.set(pos.asLong(), light))
+            {
+                return false;
+            }
+            holder.framedblocks$setAuxLight(lights);
+        }
+        else if (!lights.set(pos.asLong(), light))
         {
             return false;
         }
+        else if (lights.isEmpty())
+        {
+            holder.framedblocks$setAuxLight(null);
+        }
 
-        holder.framedblocks$setAuxLight(newLights);
+        // The light check is queued after the store was modified, see AuxLightMap for the threading model
         chunk.setUnsaved(true);
         chunk.getLevel().getLightEngine().checkBlock(pos);
         return true;
@@ -134,7 +151,7 @@ public final class AuxLight
             return;
         }
 
-        Long2ByteOpenHashMap collected = null;
+        AuxLightMap newLights = null;
         for (BlockEntity be : chunk.getBlockEntities().values())
         {
             if (be instanceof FramedBlockEntity framedBe)
@@ -142,18 +159,23 @@ public final class AuxLight
                 int light = Mth.clamp(framedBe.getAuxLightEmission(), 0, 15);
                 if (light > 0)
                 {
-                    if (collected == null)
+                    if (newLights == null)
                     {
-                        collected = new Long2ByteOpenHashMap();
+                        newLights = new AuxLightMap(chunk, chunk.getPos());
                     }
-                    collected.put(be.getBlockPos().asLong(), (byte) light);
+                    newLights.set(be.getBlockPos().asLong(), light);
                 }
             }
         }
+        if (newLights != null && newLights.isEmpty())
+        {
+            newLights = null;
+        }
 
         AuxLightMap oldLights = holder.framedblocks$getAuxLight();
-        AuxLightMap newLights = AuxLightMap.wrap(collected);
-        if (AuxLightMap.equals(oldLights, newLights))
+        LongList changed = new LongArrayList();
+        AuxLightMap.forEachDifference(oldLights, newLights, changed::add);
+        if (changed.isEmpty())
         {
             return;
         }
@@ -161,30 +183,11 @@ public final class AuxLight
         holder.framedblocks$setAuxLight(newLights);
         if (recheckLight)
         {
-            LongSet changed = new LongOpenHashSet();
-            collectChanged(oldLights, newLights, changed);
-            collectChanged(newLights, oldLights, changed);
-
             chunk.setUnsaved(true);
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-            for (long packedPos : changed)
+            for (int i = 0; i < changed.size(); i++)
             {
-                chunk.getLevel().getLightEngine().checkBlock(pos.set(packedPos));
-            }
-        }
-    }
-
-    private static void collectChanged(@Nullable AuxLightMap lights, @Nullable AuxLightMap other, LongSet changed)
-    {
-        if (lights == null)
-        {
-            return;
-        }
-        for (long packedPos : lights.positions())
-        {
-            if (other == null || other.get(packedPos) != lights.get(packedPos))
-            {
-                changed.add(packedPos);
+                chunk.getLevel().getLightEngine().checkBlock(pos.set(changed.getLong(i)));
             }
         }
     }
@@ -194,7 +197,7 @@ public final class AuxLight
         if ((Object) chunk instanceof AuxLightHolder holder)
         {
             AuxLightMap lights = holder.framedblocks$getAuxLight();
-            if (lights != null)
+            if (lights != null && !lights.isEmpty())
             {
                 chunkTag.put(CHUNK_DATA_KEY, lights.save());
             }
@@ -205,7 +208,7 @@ public final class AuxLight
     {
         if ((Object) chunk instanceof AuxLightHolder holder && chunkTag.contains(CHUNK_DATA_KEY, Tag.TAG_COMPOUND))
         {
-            holder.framedblocks$setAuxLight(AuxLightMap.load(chunkTag.getCompound(CHUNK_DATA_KEY), chunk.getPos()));
+            holder.framedblocks$setAuxLight(AuxLightMap.load(chunkTag.getCompound(CHUNK_DATA_KEY), chunk));
         }
     }
 
