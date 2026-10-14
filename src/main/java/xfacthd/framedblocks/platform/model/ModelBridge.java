@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.platform.light.AuxLight;
 import xfacthd.framedblocks.platform.util.TriState;
 
 import java.util.Arrays;
@@ -245,7 +246,7 @@ public final class ModelBridge
             IBakedModelExtension model, BlockState state, ModelData data, Supplier<RandomSource> randSupplier, RenderContext context
     )
     {
-        emitBlockQuads(model, state, data, randSupplier, context, true, null);
+        emitBlockQuads(model, state, data, randSupplier, context, true, null, AuxLight.isGlowing(state));
     }
 
     /**
@@ -255,6 +256,9 @@ public final class ModelBridge
      * @param data The fully resolved model data, see {@link IBakedModelExtension#getModelData(BlockAndTintGetter, BlockPos, BlockState, ModelData)}
      * @param emitUncullable Whether the quads without a cull-face are to be emitted
      * @param tintMapper Optional mapper applied to the tint index of tinted quads
+     * @param noDefaultAo Whether quads using the default ambient occlusion mode are to be rendered without ambient
+     *                    occlusion, as is the case for emissive blocks. The emission of a framed block is not visible
+     *                    to the renderer, quads which explicitly request ambient occlusion are not affected
      */
     public static void emitBlockQuads(
             IBakedModelExtension model,
@@ -263,7 +267,8 @@ public final class ModelBridge
             Supplier<RandomSource> randSupplier,
             RenderContext context,
             boolean emitUncullable,
-            @Nullable TintIndexMapper tintMapper
+            @Nullable TintIndexMapper tintMapper,
+            boolean noDefaultAo
     )
     {
         int culledFaces = emitUncullable ? 0 : (1 << DIRECTIONS.length);
@@ -285,6 +290,10 @@ public final class ModelBridge
             RenderType renderType = renderTypes.get(i);
             int blendMode = RenderTypeHelper.getBlendMode(renderType).ordinal();
             int ambientOcclusion = aoIndex(model.useAmbientOcclusion(state, data, renderType));
+            if (noDefaultAo && ambientOcclusion == AO_DEFAULT)
+            {
+                ambientOcclusion = AO_FALSE;
+            }
             for (int j = 0; j <= DIRECTIONS.length; j++)
             {
                 if ((culledFaces & (1 << j)) != 0) continue;

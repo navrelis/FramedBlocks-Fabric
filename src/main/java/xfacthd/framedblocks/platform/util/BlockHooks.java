@@ -74,7 +74,7 @@ public final class BlockHooks
         {
             return block.isFlammable(state, level, pos, face);
         }
-        return state.ignitedByLava();
+        return ((InvokerFireBlock) Blocks.FIRE).framedblocks$callGetBurnOdds(state) > 0;
     }
 
     public static int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)

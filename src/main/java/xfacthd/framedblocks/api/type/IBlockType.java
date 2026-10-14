@@ -62,9 +62,10 @@ public interface IBlockType
     ConTexMode getMinimumConTexMode();
 
     /**
-     * @implNote If this method returns true, then the associated block must override {@link Block#initializeClient(java.util.function.Consumer)}
-     * and pass an instance of {@link FramedBlockRenderProperties} to the consumer to avoid crashing when the block is
-     * hit while it can be passed through
+     * @implNote If this method returns true, then the associated block must use an {@code IClientBlockEffects}
+     * implementation based on {@link FramedBlockRenderProperties}, either the default used for framed blocks without a
+     * handler or one registered through {@code ClientBlockEffects.register()} (see {@code FBClient.registerBlockEffects()}),
+     * to avoid crashing when the block is hit while it can be passed through
      */
     boolean allowMakingIntangible();
 

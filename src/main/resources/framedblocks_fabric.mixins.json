@@ -17,7 +17,6 @@
         "InvokerFireBlock",
         "MixinAbstractHorse",
         "MixinBeaconBlockEntity",
-        "MixinBlock",
         "MixinBlockItem",
         "MixinBoat",
         "MixinEnderDragon",
@@ -37,12 +36,15 @@
         "MixinWitherBoss",
         "MixinWitherSkull",
         "MixinAbstractMinecart",
-        "MixinRailState"
+        "MixinRailState",
+        "MixinChorusPlantBlock",
+        "MixinCocoaBlock"
     ],
     "client": [
         "client.AccessorMultiPlayerGameMode",
         "client.AccessorWeightedBakedModel",
         "client.DevMixinLevelRenderer",
+        "client.MixinBlockFaceHiding",
         "client.MixinClientPacketListener",
         "client.MixinLevelRenderer",
         "client.MixinLevelRendererBreakSound",
