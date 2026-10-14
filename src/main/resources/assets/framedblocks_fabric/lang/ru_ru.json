@@ -408,7 +408,7 @@
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.up": "Вв",
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.west": "З",
   "tooltip.framedblocks_fabric.one_way_window.set_face": "Ударьте рамным ключом, чтобы установить прозрачную сторону на %s",
-  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s FE",
+  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s E",
   "tooltip.framedblocks_fabric.powered_saw.status.no_recipe": "Рецепт не выбран; нажмите на целевой слот любым рамным блоком, чтобы выбрать рецепт",
   "tooltip.framedblocks_fabric.prism_offset.false": "Текстура треугольника не смещена.",
   "tooltip.framedblocks_fabric.prism_offset.true": "Текстура треугольника смещена на полблока.",

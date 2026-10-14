@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.compat.jei;
 
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IClickableIngredientFactory;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -42,13 +43,16 @@ public final class PoweredFramingSawGuiContainerHandler implements IGuiContainer
     }
 
     @Override
-    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(PoweredFramingSawScreen screen, double mouseX, double mouseY)
+    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(
+            IClickableIngredientFactory factory, PoweredFramingSawScreen screen, double mouseX, double mouseY
+    )
     {
         RecipeHolder<FramingSawRecipe> recipe = screen.getMenu().getSelectedRecipe();
         if (screen.isMouseOverRecipeSlot(mouseX, mouseY) && recipe != null)
         {
-            return ingredientManager.createTypedIngredient(recipe.value().getResult())
-                    .map(stack -> new ClickableStack(stack, screen.getTargetStackArea()));
+            return factory.createBuilder(recipe.value().getResult())
+                    .buildWithArea(screen.getTargetStackArea())
+                    .map(ing -> ing);
         }
         return Optional.empty();
     }
@@ -67,7 +71,7 @@ public final class PoweredFramingSawGuiContainerHandler implements IGuiContainer
         public void onClick(IFocusFactory focusFactory, IRecipesGui recipesGui)
         {
             Optional<ITypedIngredient<ItemStack>> optIng = ingredients.createTypedIngredient(
-                    VanillaTypes.ITEM_STACK, new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.value())
+                    VanillaTypes.ITEM_STACK, new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.value()), false
             );
             optIng.ifPresent(ing -> recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.CATALYST, ing)));
         }

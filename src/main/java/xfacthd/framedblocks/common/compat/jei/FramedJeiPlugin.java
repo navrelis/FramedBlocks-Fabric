@@ -114,7 +114,7 @@ public final class FramedJeiPlugin implements IModPlugin
         IIngredientManager ingredientManager = registration.getJeiHelpers().getIngredientManager();
         registration.addGuiContainerHandler(
                 FramingSawScreen.class,
-                new FramingSawGuiContainerHandler(ingredientManager)
+                new FramingSawGuiContainerHandler()
         );
         registration.addGhostIngredientHandler(
                 PoweredFramingSawScreen.class,

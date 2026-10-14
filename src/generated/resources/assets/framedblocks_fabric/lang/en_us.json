@@ -411,7 +411,7 @@
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.up": "U",
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.west": "W",
   "tooltip.framedblocks_fabric.one_way_window.set_face": "Hit with a Framed Wrench to set the see-through side to %s",
-  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s FE",
+  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s E",
   "tooltip.framedblocks_fabric.powered_saw.status.no_recipe": "No recipe selected, click the target slot with any framed block to select a recipe",
   "tooltip.framedblocks_fabric.prism_offset.false": "Triangle texture is not offset.",
   "tooltip.framedblocks_fabric.prism_offset.true": "Triangle texture is offset by half a block.",

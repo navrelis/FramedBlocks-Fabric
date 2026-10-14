@@ -1,29 +1,23 @@
 package xfacthd.framedblocks.common.compat.jei;
 
+import mezz.jei.api.gui.builder.IClickableIngredientFactory;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.runtime.IClickableIngredient;
-import mezz.jei.api.runtime.IIngredientManager;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 
 import java.util.Optional;
 
 public final class FramingSawGuiContainerHandler implements IGuiContainerHandler<FramingSawScreen>
 {
-    private final IIngredientManager ingredientManager;
-
-    public FramingSawGuiContainerHandler(IIngredientManager ingredientManager)
-    {
-        this.ingredientManager = ingredientManager;
-    }
-
     @Override
-    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(FramingSawScreen screen, double mouseX, double mouseY)
+    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(
+            IClickableIngredientFactory factory, FramingSawScreen screen, double mouseX, double mouseY
+    )
     {
         FramingSawScreen.PointedRecipe recipe = screen.getRecipeAt(mouseX, mouseY);
         if (recipe != null)
         {
-            return ingredientManager.createTypedIngredient(recipe.recipe().getResult())
-                    .map(stack -> new ClickableStack(stack, recipe.area()));
+            return factory.createBuilder(recipe.recipe().getResult()).buildWithArea(recipe.area()).map(ing -> ing);
         }
         return Optional.empty();
     }

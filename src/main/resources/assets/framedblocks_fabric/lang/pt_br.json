@@ -409,7 +409,7 @@
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.up": "C",
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.west": "O",
   "tooltip.framedblocks_fabric.one_way_window.set_face": "Bata com uma Chave Inglesa Emoldurada para definir o lado transparente para %s",
-  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s FE",
+  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s E",
   "tooltip.framedblocks_fabric.powered_saw.status.no_recipe": "Nenhuma receita selecionada, clique no slot alvo com qualquer bloco emoldurado para selecionar uma receita",
   "tooltip.framedblocks_fabric.prism_offset.false": "A textura do triângulo não está deslocada.",
   "tooltip.framedblocks_fabric.prism_offset.true": "A textura do triângulo está deslocada por meio bloco.",

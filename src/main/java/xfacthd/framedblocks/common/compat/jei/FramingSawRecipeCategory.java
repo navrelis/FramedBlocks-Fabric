@@ -61,9 +61,15 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     }
 
     @Override
-    public IDrawable getBackground()
+    public int getWidth()
     {
-        return background;
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight()
+    {
+        return HEIGHT;
     }
 
     @Override
@@ -175,6 +181,8 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     @Override
     public void draw(FramingSawRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX, double mouseY)
     {
+        background.draw(graphics);
+
         ItemStack input = slots.findSlotByName("input")
                 .orElseThrow()
                 .getDisplayedItemStack()

@@ -384,7 +384,7 @@
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.up": "Y",
   "tooltip.framedblocks_fabric.one_way_window.face_abbr.west": "B",
   "tooltip.framedblocks_fabric.one_way_window.set_face": "Görünür tarafı %s olarak ayarlamak için Çerçeveli İngiliz Anahtarı ile vurun",
-  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s FE",
+  "tooltip.framedblocks_fabric.powered_saw.energy": "%s / %s E",
   "tooltip.framedblocks_fabric.powered_saw.status.no_recipe": "Tarif seçilmedi, bir tarif seçmek için hedef yuvaya herhangi bir çerçeveli blok ile tıklayın",
   "tooltip.framedblocks_fabric.prism_offset.false": "Üçgen dokusu kaydırılmamış.",
   "tooltip.framedblocks_fabric.prism_offset.true": "Üçgen dokusu yarım blok kaydırılmış.",

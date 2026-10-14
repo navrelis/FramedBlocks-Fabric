@@ -61,7 +61,21 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
 
     @Override
     @Nullable
+    public IRecipeTransferError transferRecipe(IRecipeTransferContext<FramingSawRecipe, C> context, boolean doTransfer)
+    {
+        return handleTransfer(context.getContainer(), context.getRecipe(), context.getPlayer(), doTransfer);
+    }
+
+    @Override
+    @Nullable
+    @SuppressWarnings("removal")
     public IRecipeTransferError transferRecipe(C menu, FramingSawRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer)
+    {
+        return handleTransfer(menu, recipe, player, doTransfer);
+    }
+
+    @Nullable
+    private IRecipeTransferError handleTransfer(C menu, FramingSawRecipe recipe, Player player, boolean doTransfer)
     {
         int idx = -1;
         List<RecipeHolder<FramingSawRecipe>> recipes = FramingSawRecipeCache.get(true).getRecipes();
