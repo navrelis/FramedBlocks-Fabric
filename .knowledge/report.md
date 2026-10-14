@@ -70,3 +70,30 @@ Delegated work (long = 2, short = 1, killed runs included): Sonnet ≈ 57, Opus 
 - Creative tab position relative to spawn eggs dropped.
 - `testSignDying` documents an upstream bug (waxed sign wax removal unreachable); 2 duplicate recipe patterns are upstream.
 - LGPL: the repository is private. Anyone who distributes the jar must make the corresponding source available (e.g. make the repository public or ship the `-sources` jar).
+
+## 8. Session 7: automated verification and optimisation (2026-10-14)
+
+**Automated tests (final state, merged code):**
+- `gradlew build`: "All 901 required tests passed", 27 known optional failures. Also green with `-Dfabric.log.level=debug`, which previously caused light test timeouts.
+- New `gradlew runClientTest` (dev only, `src/gametest/.../clienttest`): it creates a superflat world and runs the client self-test plus the recipe self-test. It then places all 234 block types × 4–5 camo variants (1032 cells) plus 12 water camos, renders 14 viewpoints (day and night), every mod item and 139 camo item stacks, and the creative tab. It also runs `/fbtest stateinfo` and `/fbtest modelperf`. It captures WARN+ logs and crashes, writes `run/clienttest/clienttest/report.md` + `result.json`, and exits with 0 (PASS), 1 (FAIL) or 2 (TIMEOUT). `-Pcompat_runtime=sodium` runs it with Sodium 0.6.13; Sodium 0.8.x needs Loom 1.16+.
+- Result on Indigo and on Sodium: PASS, 0 log events from our code, 0 self-test findings, 0 crashes, 0 skipped blocks. The screenshots show correct camo textures, translucency, double blocks and water camo, glowing camo lit at night without dark AO, and correct items.
+
+**Profiling (JFR plus a static audit of all 60 mixins):** at runtime our code accounts for under 1 % of CPU samples and 0.14 % of allocations (outside init). Port regressions found and fixed:
+- O1: the per-chunk light store used copy-on-write, O(n²). It now uses per-section byte arrays with O(1) writes. 16k glowing blocks in one chunk now take 4 ms instead of 3 s. The NBT format is unchanged, and the new `AuxLightStoreTests` covers it.
+- O2: framed block entity model data was rebuilt on every render-data query. It is now cached and invalidated at every input change.
+- O3: four mixins on vanilla hot paths (face hiding while meshing, plant/cocoa survival, hit particles, `LevelChunk.setBlockState`) now do the cheap framed-block check first, or use `@ModifyReturnValue`.
+
+**Test infrastructure:**
+- T2: light waits no longer use up game test ticks. The test server ticks in about 0.3 ms, so slow light workers used to exhaust the 100-tick budget.
+- The self-test moved to a later `CLIENT_STARTED` phase, because the order of the client entrypoints varies.
+- The `/fbtest` result chat message uses copy-to-clipboard instead of OPEN_FILE, which 1.21.1 rejects from a server.
+
+**Deferred** (inherited from upstream, medium risk): parallel state-cache build (about 1.7 s of startup), lazy beacon occlusion, transfer `toStack` hoisting, and a bounded quad cache.
+
+**Model usage, session 7:**
+- Sonnet: CT1, P1, O2 (long), O3, FX1 (short) = 8.
+- Opus: O1, T2 (long) = 4.
+- Running total: Sonnet ≈ 65, Opus ≈ 18, so Opus ≈ 22 %.
+- Precision overrides: O1 (light store read concurrently by light workers) and T2 (same area as T1).
+
+**Graphify:** `graphify update .` (PowerShell) → 16,227 nodes, 66,224 edges (local only).

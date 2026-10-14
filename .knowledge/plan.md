@@ -47,4 +47,4 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 
 Parallel now: none.
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 57 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3, C5 short), Opus 14 (B1 x2, C2 x2, F1 review x3, F1-C, T1). Opus share ~20 %.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 65 (session 7: CT1, P1, O2, O3 short, FX1 short; … D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3, C5 short), Opus 18 (B1 x2, C2 x2, F1 review x3, F1-C, T1, session 7: O1, T2). Opus share ~22 %.

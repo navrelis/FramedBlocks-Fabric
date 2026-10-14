@@ -83,3 +83,4 @@
 - Merged into 1.21.1-fabric (0f885ac23). Lead: build green 901/27; runClientTest Indigo PASS, Sodium PASS (0 events from our code, 0 self-test findings, 0 crashes, 0 skipped blocks). Remaining "other" error: /fbtest chat OPEN_FILE rejected by 1.21.1 (test tool; user saw it in the window).
 - FX1 /fbtest chat OPEN_FILE -> COPY_TO_CLIPBOARD — Sonnet, short — running in main checkout.
 - FX1 — Sonnet, short — diff read (COPY_TO_CLIPBOARD + hover, normalized path). Build green 901/27; lead runClientTest Indigo PASS, 0 'Action not allowed'. Accepted, committed.
+- Session 7 acceptance — lead — build 901/27, runClientTest Indigo+Sodium PASS, Graphify updated (16,227 nodes), report.md §8 added.
