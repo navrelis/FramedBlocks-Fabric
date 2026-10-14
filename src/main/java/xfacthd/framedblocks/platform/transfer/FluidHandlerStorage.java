@@ -18,8 +18,9 @@ import java.util.function.BooleanSupplier;
  * The whole handler is snapshotted on the first modification within a transaction level and restored when the
  * transaction is aborted. Amounts are converted between millibuckets and droplets through {@link FluidUnits}:
  * only whole multiples of {@link FluidUnits#DROPLETS_PER_MB} are ever accepted or extracted, so no fluid is created
- * or destroyed by the conversion. The handler's own change notifications fire immediately on every modification,
- * including the restoring of snapshots, so listeners always end up seeing the final state.
+ * or destroyed by the conversion. Modifications and restores made by the adapter are silent
+ * (see {@link IFluidHandlerModifiable#beginSilentChanges()}), the handler is notified once when the outermost
+ * transaction is committed after it was modified.
  * <p>
  * Extraction assumes that {@link IFluidHandler#drain(FluidStack, IFluidHandler.FluidAction)} drains the tank that holds
  * the requested fluid, which holds for all handlers of this mod
@@ -69,7 +70,16 @@ public final class FluidHandlerStorage extends SnapshotParticipant<FluidStack[]>
         }
 
         updateSnapshots(transaction);
-        int filled = Math.min(handler.fill(stack, IFluidHandler.FluidAction.EXECUTE), amount);
+        int filled;
+        handler.beginSilentChanges();
+        try
+        {
+            filled = Math.min(handler.fill(stack, IFluidHandler.FluidAction.EXECUTE), amount);
+        }
+        finally
+        {
+            handler.endSilentChanges();
+        }
         return FluidUnits.toDroplets(Math.max(0, filled));
     }
 
@@ -96,7 +106,16 @@ public final class FluidHandlerStorage extends SnapshotParticipant<FluidStack[]>
         }
 
         updateSnapshots(transaction);
-        FluidStack drained = handler.drain(stack.copyWithAmount(Math.min(simulated.getAmount(), amount)), IFluidHandler.FluidAction.EXECUTE);
+        FluidStack drained;
+        handler.beginSilentChanges();
+        try
+        {
+            drained = handler.drain(stack.copyWithAmount(Math.min(simulated.getAmount(), amount)), IFluidHandler.FluidAction.EXECUTE);
+        }
+        finally
+        {
+            handler.endSilentChanges();
+        }
         if (drained.isEmpty() || !FluidUnits.matches(resource, drained))
         {
             return 0;
@@ -124,9 +143,26 @@ public final class FluidHandlerStorage extends SnapshotParticipant<FluidStack[]>
     @Override
     protected void readSnapshot(FluidStack[] snapshot)
     {
-        for (int i = 0; i < snapshot.length; i++)
+        handler.beginSilentChanges();
+        try
         {
-            handler.setFluidInTank(i, snapshot[i]);
+            for (int i = 0; i < snapshot.length; i++)
+            {
+                handler.setFluidInTank(i, snapshot[i]);
+            }
+        }
+        finally
+        {
+            handler.endSilentChanges();
+        }
+    }
+
+    @Override
+    protected void onFinalCommit()
+    {
+        if (valid.getAsBoolean())
+        {
+            handler.notifyContentsChanged();
         }
     }
 

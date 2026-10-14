@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -302,6 +303,7 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
     private final class HopperItemStorage implements Storage<ItemVariant>
     {
         private final Storage<ItemVariant> inner;
+        private final InsertCooldown insertCooldown = new InsertCooldown();
 
         private HopperItemStorage(Storage<ItemVariant> inner)
         {
@@ -316,7 +318,7 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
 
         /**
          * Mirrors the cooldown handling of the vanilla hopper for insertion into an empty hopper from the outside,
-         * the cooldown is only applied if the outermost transaction is committed
+         * the cooldown is only applied if the transaction performing the insertion and all its parents are committed
          */
         @Override
         public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
@@ -325,13 +327,7 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
             long inserted = inner.insert(resource, maxAmount, transaction);
             if (wasEmpty && inserted > 0)
             {
-                transaction.addOuterCloseCallback(result ->
-                {
-                    if (result.wasCommitted() && !isOnCustomCooldown())
-                    {
-                        setCooldown(HopperBlockEntity.MOVE_ITEM_SPEED);
-                    }
-                });
+                insertCooldown.updateSnapshots(transaction);
             }
             return inserted;
         }
@@ -364,6 +360,27 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
         public long getVersion()
         {
             return inner.getVersion();
+        }
+    }
+
+    private final class InsertCooldown extends SnapshotParticipant<Boolean>
+    {
+        @Override
+        protected Boolean createSnapshot()
+        {
+            return Boolean.TRUE;
+        }
+
+        @Override
+        protected void readSnapshot(Boolean snapshot) { }
+
+        @Override
+        protected void onFinalCommit()
+        {
+            if (!isOnCustomCooldown())
+            {
+                setCooldown(HopperBlockEntity.MOVE_ITEM_SPEED);
+            }
         }
     }
 }

@@ -1,7 +1,13 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.SlottedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -10,7 +16,6 @@ import net.minecraft.sounds.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,13 +25,15 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.cube.FramedChestBlock;
-import xfacthd.framedblocks.common.capability.CompoundStorageBlockItemHandler;
 import xfacthd.framedblocks.common.capability.IStorageBlockItemHandler;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.platform.transfer.IItemHandlerModifiable;
-import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 public class FramedChestBlockEntity extends FramedStorageBlockEntity
 {
@@ -37,8 +44,9 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         @Override
         public ChestLayout acceptDouble(FramedChestBlockEntity first, FramedChestBlockEntity second)
         {
+            // Same slot order as the CompoundStorageBlockItemHandler used by the menu
             return new ChestLayout(
-                    new CompoundStorageBlockItemHandler(first.getItemHandler(), second.getItemHandler()),
+                    new CombinedSlottedStorage<>(List.of(first.getOwnItemStorage(), second.getOwnItemStorage())),
                     first,
                     second
             );
@@ -47,7 +55,7 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         @Override
         public ChestLayout acceptSingle(FramedChestBlockEntity single)
         {
-            return new ChestLayout(single.getItemHandler(), single, null);
+            return new ChestLayout(single.getOwnItemStorage(), single, null);
         }
 
         @Override
@@ -57,7 +65,7 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         }
     };
 
-    private final ItemHandlerStorage chestStorage = new ItemHandlerStorage(new ChestItemHandlerView(), () -> !isRemoved());
+    private final ChestStorage chestStorage = new ChestStorage();
     private ChestLayout layout = null;
     private int openCount = 0;
     private long closeStart = 0;
@@ -160,9 +168,11 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     }
 
     /**
-     * The returned storage always reflects the current single/double chest layout, it resolves the underlying handler
+     * The returned storage always reflects the current single/double chest layout, it resolves the underlying storage
      * lazily and re-resolves whenever the chest type or facing of this chest or its partner changed or the partner
-     * was removed. A reference retained across a layout change can therefore never address a stale or removed half
+     * was removed. A reference retained across a layout change can therefore never address a stale or removed half.
+     * A double chest combines the storages owned by both halves (first half's slots first), so every slot is backed
+     * by exactly one transaction participant regardless of which half the storage was obtained from
      */
     @Override
     public Storage<ItemVariant> getItemStorage()
@@ -171,15 +181,20 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     }
 
     @Nullable
-    private IStorageBlockItemHandler resolveStorageHandler()
+    private SlottedStorage<ItemVariant> resolveStorage()
     {
+        if (isRemoved())
+        {
+            return null;
+        }
+
         ChestLayout current = layout;
         if (current == null || !current.isValid())
         {
             current = FramedChestBlock.combine(this, true).apply(LAYOUT_COMBINER);
             layout = current;
         }
-        return current.handler;
+        return current.storage;
     }
 
     @Override
@@ -228,7 +243,7 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
 
 
     private record ChestLayout(
-            @Nullable IStorageBlockItemHandler handler,
+            @Nullable SlottedStorage<ItemVariant> storage,
             @Nullable FramedChestBlockEntity first,
             @Nullable FramedChestBlockEntity second,
             int firstKey,
@@ -237,9 +252,9 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     {
         private static final ChestLayout NONE = new ChestLayout(null, null, null, 0, 0);
 
-        private ChestLayout(IStorageBlockItemHandler handler, FramedChestBlockEntity first, @Nullable FramedChestBlockEntity second)
+        private ChestLayout(SlottedStorage<ItemVariant> storage, FramedChestBlockEntity first, @Nullable FramedChestBlockEntity second)
         {
-            this(handler, first, second, layoutKey(first), second != null ? layoutKey(second) : 0);
+            this(storage, first, second, layoutKey(first), second != null ? layoutKey(second) : 0);
         }
 
         private boolean isValid()
@@ -256,58 +271,50 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         }
     }
 
-    private final class ChestItemHandlerView implements IItemHandlerModifiable
+    private final class ChestStorage implements SlottedStorage<ItemVariant>
     {
         @Override
-        public int getSlots()
+        public int getSlotCount()
         {
-            IStorageBlockItemHandler handler = resolveStorageHandler();
-            return handler == null ? 0 : handler.getSlots();
+            SlottedStorage<ItemVariant> storage = resolveStorage();
+            return storage == null ? 0 : storage.getSlotCount();
         }
 
         @Override
-        public ItemStack getStackInSlot(int slot)
+        public SingleSlotStorage<ItemVariant> getSlot(int slot)
         {
-            IStorageBlockItemHandler handler = resolveStorageHandler();
-            return handler == null ? ItemStack.EMPTY : handler.getStackInSlot(slot);
+            SlottedStorage<ItemVariant> storage = resolveStorage();
+            Objects.checkIndex(slot, storage == null ? 0 : storage.getSlotCount());
+            return Objects.requireNonNull(storage).getSlot(slot);
         }
 
         @Override
-        public void setStackInSlot(int slot, ItemStack stack)
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
         {
-            IStorageBlockItemHandler handler = resolveStorageHandler();
-            if (handler != null)
-            {
-                handler.setStackInSlot(slot, stack);
-            }
+            StoragePreconditions.notBlankNotNegative(resource, maxAmount);
+            SlottedStorage<ItemVariant> storage = resolveStorage();
+            return storage == null ? 0 : storage.insert(resource, maxAmount, transaction);
         }
 
         @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
         {
-            IStorageBlockItemHandler handler = resolveStorageHandler();
-            return handler == null ? stack : handler.insertItem(slot, stack, simulate);
+            StoragePreconditions.notBlankNotNegative(resource, maxAmount);
+            SlottedStorage<ItemVariant> storage = resolveStorage();
+            return storage == null ? 0 : storage.extract(resource, maxAmount, transaction);
         }
 
         @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate)
+        public Iterator<StorageView<ItemVariant>> iterator()
         {
-            IStorageBlockItemHandler handler = resolveStorageHandler();
-            return handler == null ? ItemStack.EMPTY : handler.extractItem(slot, amount, simulate);
+            SlottedStorage<ItemVariant> storage = resolveStorage();
+            return storage == null ? Collections.emptyIterator() : storage.iterator();
         }
 
         @Override
-        public int getSlotLimit(int slot)
+        public String toString()
         {
-            IStorageBlockItemHandler handler = resolveStorageHandler();
-            return handler == null ? 0 : handler.getSlotLimit(slot);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack)
-        {
-            IStorageBlockItemHandler handler = resolveStorageHandler();
-            return handler != null && handler.isItemValid(slot, stack);
+            return "FramedChestBlockEntity.ChestStorage[" + worldPosition + "]";
         }
     }
 }

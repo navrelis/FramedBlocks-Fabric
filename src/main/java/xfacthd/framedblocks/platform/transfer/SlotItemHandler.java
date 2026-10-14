@@ -73,9 +73,19 @@ public class SlotItemHandler extends Slot
         ItemStack currentStack = itemHandler.getStackInSlot(index);
         if (itemHandler instanceof IItemHandlerModifiable modifiable)
         {
-            modifiable.setStackInSlot(index, ItemStack.EMPTY);
-            ItemStack remainder = itemHandler.insertItem(index, maxAdd, true);
-            modifiable.setStackInSlot(index, currentStack);
+            // The slot is only emptied temporarily, listeners must not observe it
+            ItemStack remainder;
+            modifiable.beginSilentChanges();
+            try
+            {
+                modifiable.setStackInSlot(index, ItemStack.EMPTY);
+                remainder = itemHandler.insertItem(index, maxAdd, true);
+            }
+            finally
+            {
+                modifiable.setStackInSlot(index, currentStack);
+                modifiable.endSilentChanges();
+            }
             return maxInput - remainder.getCount();
         }
 
