@@ -7,6 +7,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.*;
+import net.minecraft.server.level.ThreadedLevelLightEngine;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -25,19 +26,20 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import xfacthd.framedblocks.platform.Platform;
 import xfacthd.framedblocks.platform.light.AuxLight;
 import xfacthd.framedblocks.platform.util.BlockHooks;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.block.render.IClientBlockEffects;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.test.TestDelay;
 import xfacthd.framedblocks.api.test.TestRunnable;
 import xfacthd.framedblocks.client.render.particle.ClientBlockEffects;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.EventHandler;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.*;
 
 public final class TestUtils
@@ -267,6 +269,20 @@ public final class TestUtils
         return delay;
     }
 
+    /**
+     * Chains the given tasks like {@link #chainTasks(GameTestHelper, List)}, except that an {@link AwaitLight} entry
+     * holds back the following tasks until the light engine has processed all light updates queued so far for the
+     * chunk containing its position.
+     * <p>
+     * The light engine runs on worker threads while the test server ticks as fast as it can, a fixed delay in ticks
+     * therefore does not guarantee that a light change was applied by the time the light level is checked
+     */
+    private static void chainLightTasks(GameTestHelper helper, List<TestRunnable> tasks)
+    {
+        LightTaskChain chain = new LightTaskChain(helper, tasks);
+        helper.onEachTick(chain::tick);
+    }
+
     public static <T extends BlockEntity> T getBlockEntity(GameTestHelper helper, BlockPos relPos, Class<T> beClass)
     {
         BlockEntity be = helper.getBlockEntity(relPos);
@@ -374,16 +390,16 @@ public final class TestUtils
         helper.assertBlockPresent(Blocks.AIR, blockPos);
         helper.assertBlockPresent(Blocks.GLASS, lightPos);
 
-        chainTasks(helper, List.of(
+        chainLightTasks(helper, List.of(
                 () -> helper.setBlock(blockPos, state),
-                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(blockPos),
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
                     assertBlockLight(helper, blockPos, lightPos, 13);
                 },
                 () -> applyCamo(helper, blockPos, Blocks.GLASS, camoSides),
-                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(blockPos),
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
@@ -391,7 +407,7 @@ public final class TestUtils
                 },
                 () -> applyCamo(helper, blockPos, Blocks.AIR, camoSides),
                 () -> applyCamo(helper, blockPos, Blocks.GRANITE, camoSides),
-                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(blockPos),
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, true);
@@ -415,29 +431,30 @@ public final class TestUtils
         //noinspection deprecation
         int glowstoneLight = Blocks.GLOWSTONE.defaultBlockState().getLightEmission();
 
-        chainTasks(helper, List.of(
+        chainLightTasks(helper, List.of(
                 () -> helper.setBlock(EMISSION_BLOCK, state),
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check base emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLOWSTONE, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, glowstoneLight), //Check camo emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check camo emission reset
                 () -> clickWithItem(helper, EMISSION_BLOCK, Items.GLOWSTONE_DUST),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission without camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLASS, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with non-solid camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after non-solid camo removed
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GRANITE, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with solid camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new AwaitLight(EMISSION_BLOCK),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after solid camo removed
                 helper::succeed
         ));
@@ -656,6 +673,66 @@ public final class TestUtils
                 "Block '%s' applies incorrect beacon color multiplier for camo '%s', expected %s, got %s",
                 state.getBlock(), camo, expected, tint
         ));
+    }
+
+    /**
+     * Marker for {@link #chainLightTasks(GameTestHelper, List)}, waits for the light engine to process the light
+     * updates queued for the chunk containing the given test-relative position
+     */
+    private record AwaitLight(BlockPos pos) implements TestRunnable
+    {
+        @Override
+        public void run() { }
+    }
+
+    private static final class LightTaskChain
+    {
+        private final GameTestHelper helper;
+        private final List<TestRunnable> tasks;
+        private int index = 0;
+        private long nextTick;
+        @Nullable
+        private CompletableFuture<?> pendingLight = null;
+
+        private LightTaskChain(GameTestHelper helper, List<TestRunnable> tasks)
+        {
+            this.helper = helper;
+            this.tasks = tasks;
+            this.nextTick = helper.getTick();
+        }
+
+        private void tick()
+        {
+            long tick = helper.getTick();
+            while (index < tasks.size() && tick >= nextTick)
+            {
+                TestRunnable task = tasks.get(index);
+                if (task instanceof AwaitLight awaitLight)
+                {
+                    if (pendingLight == null)
+                    {
+                        // Completes once all light tasks queued before it for the same chunk were processed
+                        BlockPos pos = helper.absolutePos(awaitLight.pos());
+                        ThreadedLevelLightEngine lightEngine = helper.getLevel().getChunkSource().getLightEngine();
+                        pendingLight = lightEngine.waitForPendingTasks(
+                                SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ())
+                        );
+                    }
+                    if (!pendingLight.isDone())
+                    {
+                        return;
+                    }
+                    pendingLight = null;
+                    index++;
+                }
+                else
+                {
+                    index++;
+                    nextTick = tick + task.getDuration();
+                    task.run();
+                }
+            }
+        }
     }
 
 
