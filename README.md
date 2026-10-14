@@ -43,7 +43,7 @@ Integrations with the following mods are optional and only active if the respect
 
 JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer, Team Reborn Energy.
 
-All integrations compile against the respective mod's API for Minecraft 1.21.1 on Fabric. At startup, Jade and REI were confirmed to load the FramedBlocks plugin. The remaining integrations have not been tested in game yet. Please report problems on the issue tracker.
+All integrations compile against the respective mod's API for Minecraft 1.21.1 on Fabric. In a world, JEI, REI, EMI and Jade load the FramedBlocks plugin (automated client test). The remaining integrations have not been tested in game yet. Please report problems on the issue tracker.
 
 Not included, because no Fabric build for Minecraft 1.21.1 of these mods exists: Create, Applied Energistics 2, Building Gadgets. Their integrations were removed from the port.
 

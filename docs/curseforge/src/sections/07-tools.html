@@ -1,24 +1,19 @@
-<section class="cf-section" id="tools" data-alt="Tools and upgrades. Each shown with its item. Framed Hammer: removes the camo and toggles options such as waterlogging. Framed Wrench: rotates blocks and switches some shape variants. Framed Screwdriver: rotates the camo texture. Framed Key: locks the state of a block. Framed Blueprint: copies a framed block with its camo; the materials must be in your inventory. Upgrades, each shown with its item: glowstone dust, the block gives off light. Framed Reinforcement: a pickaxe that can mine obsidian takes it off. Phantom Paste: the block becomes intangible (server config option).">
+<section class="cf-section" id="tools" data-alt="Tools and upgrades. Each shown with its item. Framed Hammer: removes the camo and toggles options such as waterlogging. Framed Wrench: rotates blocks and switches some shape variants. Framed Screwdriver: rotates the camo texture. Framed Key: locks the state of a block. Framed Blueprint: copies a framed block with its camo; the materials must be in your inventory. Upgrades, each shown with its item: glowstone dust, the block gives off light. Framed Reinforcement: blast resistance of obsidian, and the camo no longer burns; a pickaxe that can mine obsidian removes it. Phantom Paste: the block becomes intangible (server config option).">
 <style>
-  #tools .rules { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  #tools .rules { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
   #tools .rowcard {
-    display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 22px; align-items: center;
-    padding: 12px 22px 12px 16px; background: var(--surface);
+    display: grid; grid-template-columns: 64px minmax(0, 1fr); column-gap: 22px; align-items: center;
+    padding: 8px 22px 8px 12px; background: var(--surface);
     border: 3px solid var(--border); border-left: 8px solid var(--oak); box-shadow: var(--hard-shadow);
   }
+  #tools .rowcard .slot { width: 64px; height: 64px; }
   #tools .rowcard h3 { margin: 0 0 2px; font: 600 28px/34px var(--font-pixel); color: var(--heading); }
-  #tools .rowcard p { margin: 0; color: var(--text-2); }
+  #tools .rowcard p { margin: 0; line-height: 31px; color: var(--text-2); }
   #tools .slot .px-icon { color: var(--glow); }
   #tools .sub-title { display: flex; align-items: center; gap: 12px; margin: 28px 0 16px; }
   #tools .sub-title .px-icon { width: 30px; height: 30px; color: var(--gold-2); }
-  /* three upgrades: (748 - 2 x 16) / 3 = 238.67, so the tiles are set to whole pixels */
-  #tools .ups { display: grid; grid-template-columns: 238px 238px 240px; gap: 16px; margin: 0; padding: 0; list-style: none; }
-  #tools .tile {
-    display: flex; flex-direction: column; align-items: center; padding: 18px 14px 16px; text-align: center;
-    background: var(--surface); border: 3px solid var(--border); border-top: 8px solid var(--gold-2); box-shadow: var(--hard-shadow);
-  }
-  #tools .tile h4 { margin: 14px 0 4px; font: 600 26px/32px var(--font-pixel); color: var(--heading); }
-  #tools .tile p { margin: 0; line-height: 31px; color: var(--text-2); }
+  /* upgrades: the same rows as the tools, with a gold edge */
+  #tools .ups .rowcard { border-left-color: var(--gold-2); }
 </style>
   <header class="sec-head">
     <p class="eyebrow"><svg class="px-icon"><use href="#i-gear"/></svg>Tools</p>
@@ -52,21 +47,21 @@
     </li>
   </ul>
   <h3 class="sub-title"><svg class="px-icon"><use href="#i-star"/></svg>Upgrades</h3>
-  <ul class="ups">
-    <li class="tile">
-      <span class="slot"><svg class="px-icon"><use href="#i-sun"/></svg></span>
-      <h4>Glowstone dust</h4>
-      <p>The block gives off light.</p>
+  <ul class="rules ups">
+    <li class="rowcard">
+      <div class="slot"><svg class="px-icon"><use href="#i-sun"/></svg></div>
+      <div><h3>Glowstone dust</h3>
+      <p>The block gives off light.</p></div>
     </li>
-    <li class="tile">
-      <span class="slot"><img class="item" src="assets/items/framed_reinforcement.png" width="48" height="48" alt=""></span>
-      <h4>Reinforcement</h4>
-      <p>A pickaxe that can mine obsidian takes it off.</p>
+    <li class="rowcard">
+      <div class="slot"><img class="item" src="assets/items/framed_reinforcement.png" width="48" height="48" alt=""></div>
+      <div><h3>Framed Reinforcement</h3>
+      <p>Blast resistance of obsidian, and the camo no longer burns. A&nbsp;pickaxe that can mine obsidian removes it.</p></div>
     </li>
-    <li class="tile">
-      <span class="slot"><img class="item" src="assets/items/phantom_paste.png" width="48" height="48" alt=""></span>
-      <h4>Phantom Paste</h4>
-      <p>The block becomes intangible (server option).</p>
+    <li class="rowcard">
+      <div class="slot"><img class="item" src="assets/items/phantom_paste.png" width="48" height="48" alt=""></div>
+      <div><h3>Phantom Paste</h3>
+      <p>The block becomes intangible (server option).</p></div>
     </li>
   </ul>
 </section>

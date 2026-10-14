@@ -46,3 +46,6 @@
 - Session 8: H6 to Opus (short) instead of waiting: both Sonnet slots busy and the user asked for more parallel work; budget stays ~25 %.
 - Session 8: Loom upgrade target 1.18.4 (needed for JEI 19.6x); the JDK 25 requirement for the Gradle daemon is handled by gradle/gradle-daemon-jvm.properties (Gradle daemon toolchain), the mod toolchain stays Java 21.
 - Session 8: CF2 goes to the CF1 Opus agent (resumed with its context) instead of a fresh Sonnet: faster and it owns the card layout.
+- Session 9: CF2 to a fresh Opus short agent (the CF1 agent is not resumable across sessions); visual layout judgement, budget ~27 %.
+- Session 9: no retake of functional_blocks (weak but usable; alt lists visible blocks) to keep game-window runs few.
+- Session 9: integration status text updated to JEI/REI/EMI/Jade loading their plugin in the automated client test; GUIs still on the manual checklist.

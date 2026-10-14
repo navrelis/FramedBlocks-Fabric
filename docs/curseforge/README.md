@@ -50,7 +50,7 @@ Edge with a temporary profile and closes only that one. A full build takes about
 | `04-double.png` | Two camos in one block | `double_blocks`, `detail_closeup` |
 | `05-light-fluids.png` | Glowstone dust and glowing camos, fluid camos | `glow_night`, `fluid_camo` |
 | `06-functional.png` | Ten functional blocks with their item textures, the rest as chips | `functional_blocks` |
-| `07-tools.png` | Five tools and three upgrades with their item textures | |
+| `07-tools.png` | Five tools and three upgrades with their item textures, one row each | |
 | `08-saw.png` | Framing Saw, Powered Framing Saw, Team Reborn Energy, `poweredSawRequiresEnergy` | `framing_saw_gui` |
 | `09-compat.png` | Ten optional integrations, what was tested, removed integrations | |
 | `10-install.png` | Three steps, requirements, NeoForge worlds not compatible | |
@@ -63,12 +63,26 @@ framed block glow (`FramedBlockEntity.getLightValue`).
 
 ## Screenshots
 
-Real screenshots from the game, 1920x1080 PNG, go into `assets/shots/` under exactly these names
+Real screenshots from the game, 1920x1080 PNG. They are taken by the client test in showcase mode,
+which builds each scene in a test world and saves a screenshot of it:
+
+```
+./gradlew runClientTest -Pshowcase=true                          # all scenes
+./gradlew runClientTest -Pshowcase=true -Pshowcase_only=a,b      # only the named scenes
+```
+
+The output lands in `run/clienttest/clienttest/showcase/`: one PNG per screenshot and
+`manifest.json` (per file: scene, what it shows, time of day, GUI scale, camera). Copy the PNGs
+together with `manifest.json` to `assets/shots/`. Write captions and alt texts from the picture
+and the manifest, never from the scene name alone.
+
+The screenshots go into `assets/shots/` under exactly these names
 (also listed in `tools/config.mjs`, `SHOTS.names`):
 
 `hero_cottage.png`, `camo_before.png`, `camo_after.png`, `shapes_showroom.png`, `double_blocks.png`,
 `detail_closeup.png`, `glow_night.png`, `fluid_camo.png`, `functional_blocks.png`,
-`framing_saw_gui.png`, `tools_items.png` (not used by a card yet).
+`framing_saw_gui.png`, `tools_items.png` (not used by a card; card 07 shows the item textures
+from `assets/items/` instead).
 
 While a file is missing, the build draws a dark checker with the file name in its place, the same
 size as the real picture, and lists it at the end (`screenshots still placeholders`);
@@ -80,10 +94,17 @@ files, run `node tools/build.mjs`, then look at the cards again and adjust the c
   width is its box (730 px inside a framed picture, two of 346 px on card 02), its height is
   `--h` in CSS px (set per card). The screenshot covers the window, scaled down smoothly.
 - `--pos` moves the crop, like `background-position`: `--pos: 50% 30%` shows more of the top.
+- `.shot.zoom` crops tighter than cover: the screenshot is `--zoom` times as wide as the window
+  (`--zoom: 1.4` shows 1920/1.4 = 1371 screenshot pixels across), and `--pos` picks the part. The
+  window must stay covered: 1080/1920 x window width x `--zoom` >= `--h`. Pick the crop as a
+  rectangle in screenshot pixels (x0, y0, width w; height w x `--h` / window width), then
+  `--zoom` = 1920 / w and `--pos` = x0 / (1920 - w) and y0 / (1080 - height), in percent. Above
+  about 1.3 on a 730 px window the screenshot is enlarged, so keep `--zoom` moderate.
 - `.shot.native` shows the screenshot 1:1 (one screenshot pixel per device pixel) instead of
   scaled, for GUI text that must stay sharp. Only 1460x(2 x `--h`) pixels of the 1920x1080 picture
-  fit, so `--pos` picks the part. Card 08 uses the scaled mode because a tall GUI would be cut at
-  the top and bottom; switch to `.native` if the real Framing Saw screen fits.
+  fit, so `--pos` picks the part; give it in CSS px (half the screenshot offset, for example
+  `--pos: -114.5px -94px` starts at screenshot pixel 229, 188). Card 08 uses it: the Framing Saw
+  screen (GUI scale 3) is 762x693 pixels and fits a 730x350 window.
 - The build warns if a screenshot is not 1920x1080 or has a name that is not in the list.
 
 ## Card contract

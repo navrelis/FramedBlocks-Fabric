@@ -1,8 +1,9 @@
-<section class="cf-section" id="light-fluids" data-alt="Light and fluids. A picture of framed blocks glowing at night: glowstone dust makes a framed block give off light, and so does a camo that glows. A picture of framed blocks with a fluid as camo: fluids work as a camo too.">
+<section class="cf-section" id="light-fluids" data-alt="Light and fluids. A picture of framed lamp heads along a path at night: heads with a glowstone, shroomlight or sea lantern camo give off light, and glowstone dust makes the other heads glow too. A picture of framed slabs, slopes, stairs and other shapes with fluid camos: water in the back row, lava in the middle row, oak planks in the front row for comparison.">
 <style>
   #light-fluids .pic { position: relative; margin: 0; }
   #light-fluids .pic + .pic { margin-top: 22px; }
-  #light-fluids .pic .shot { --h: 300; }
+  #light-fluids .pic.glow .shot { --h: 420; --zoom: 1.3984; --pos: 28.06% 100%; }
+  #light-fluids .pic.water .shot { --h: 280; --zoom: 1.2; --pos: 65.62% 61.15%; }
   #light-fluids .pic .tag { position: absolute; left: 10px; top: 10px; z-index: 1; }
   #light-fluids .tag.glow { color: var(--glow); border-color: var(--glow); }
   #light-fluids .tag.water { color: var(--water); border-color: var(--water); }
@@ -16,13 +17,13 @@
     <h2 class="sec-title">Glowing frames, fluid camos</h2>
   </header>
   <figure class="pic glow">
-    <div class="shot" style="background-image:url(assets/shots/glow_night.png)"></div>
+    <div class="shot zoom" style="background-image:url(assets/shots/glow_night.png)"></div>
     <span class="tag glow">Light</span>
-    <figcaption><strong>Glowstone dust</strong> makes a framed block give off light. So does a camo that glows.</figcaption>
+    <figcaption><strong>Glowing camos</strong> like glowstone, shroomlight and sea lantern give off light. <strong>Glowstone dust</strong> makes the other lamp heads glow.</figcaption>
   </figure>
   <figure class="pic water">
-    <div class="shot" style="background-image:url(assets/shots/fluid_camo.png)"></div>
+    <div class="shot zoom" style="background-image:url(assets/shots/fluid_camo.png)"></div>
     <span class="tag water">Fluid</span>
-    <figcaption><strong>Fluids</strong> work as a camo too.</figcaption>
+    <figcaption><strong>Fluids</strong> work as a camo too: water at the back, lava in the middle, oak planks in front.</figcaption>
   </figure>
 </section>

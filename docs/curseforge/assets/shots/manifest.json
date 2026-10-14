@@ -1,0 +1,190 @@
+[
+  {
+    "file": "hero_cottage.png",
+    "scene": "cottage",
+    "description": "A small cottage built from framed blocks with camos: stone brick base, oak plank walls, glass windows, a hip roof of framed slopes and corner slopes in dark oak and a brick chimney, seen from the front right at a low morning sun",
+    "resolution": "1920x1080",
+    "dayTime": 2000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 11.21,
+      "y": -49.75,
+      "z": 14.58,
+      "yaw": 145.0,
+      "pitch": 30.0,
+      "fov": 70,
+      "sceneOrigin": "0, -60, 0"
+    }
+  },
+  {
+    "file": "detail_closeup.png",
+    "scene": "cottage",
+    "description": "Close-up of the cottage roof where the roof of the front wing meets the main roof: slopes, outer and inner corner slopes and the slope edge hoods over the windows",
+    "resolution": "1920x1080",
+    "dayTime": 2000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 8.32,
+      "y": -52.76,
+      "z": 11.55,
+      "yaw": 140.0,
+      "pitch": 24.0,
+      "fov": 70,
+      "sceneOrigin": "0, -60, 0"
+    }
+  },
+  {
+    "file": "camo_before.png",
+    "scene": "camo",
+    "description": "Eight different framed shapes as empty frames: slope, stairs, corner slope, double slope, pillar, panel, slab, vertical stairs",
+    "resolution": "1920x1080",
+    "dayTime": 4000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 404.21,
+      "y": -56.11,
+      "z": 4.82,
+      "yaw": 168.0,
+      "pitch": 45.0,
+      "fov": 70,
+      "sceneOrigin": "400, -60, 0"
+    }
+  },
+  {
+    "file": "camo_after.png",
+    "scene": "camo",
+    "description": "The same eight framed shapes with camos: oak planks, stone bricks, quartz, cherry planks, mossy cobblestone, copper, deepslate tiles, sandstone",
+    "resolution": "1920x1080",
+    "dayTime": 4000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 404.21,
+      "y": -56.11,
+      "z": 4.82,
+      "yaw": 168.0,
+      "pitch": 45.0,
+      "fov": 70,
+      "sceneOrigin": "400, -60, 0"
+    }
+  },
+  {
+    "file": "shapes_showroom.png",
+    "scene": "showroom",
+    "description": "A showroom of 48 different framed shapes on pedestals, all with a smooth quartz camo so that the geometry reads",
+    "resolution": "1920x1080",
+    "dayTime": 4000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 807.5,
+      "y": -50.61,
+      "z": 11.24,
+      "yaw": 180.0,
+      "pitch": 55.0,
+      "fov": 70,
+      "sceneOrigin": "800, -60, 0"
+    }
+  },
+  {
+    "file": "double_blocks.png",
+    "scene": "double",
+    "description": "Framed double blocks and divided blocks (double slope, double stairs, double corner, checkered, masonry, divided) with two contrasting camos each",
+    "resolution": "1920x1080",
+    "dayTime": 4000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 1205.13,
+      "y": -53.75,
+      "z": 6.51,
+      "yaw": 172.0,
+      "pitch": 48.0,
+      "fov": 70,
+      "sceneOrigin": "1200, -60, 0"
+    }
+  },
+  {
+    "file": "glow_night.png",
+    "scene": "glow",
+    "description": "The cottage at night, lit by framed lamp heads with glowstone, sea lantern and shroomlight camos and by framed blocks (windows, lamp heads, a stoop step, the chimney cap) made to glow with glowstone dust",
+    "resolution": "1920x1080",
+    "dayTime": 18000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 1613.04,
+      "y": -48.67,
+      "z": 23.79,
+      "yaw": 150.0,
+      "pitch": 26.0,
+      "fov": 70,
+      "sceneOrigin": "1600, -60, 0"
+    }
+  },
+  {
+    "file": "fluid_camo.png",
+    "scene": "fluid",
+    "description": "Framed slabs, slopes, stairs, panels, corner slopes and cubes with a water camo (back row) and a lava camo (middle row) next to oak plank camos (front row)",
+    "resolution": "1920x1080",
+    "dayTime": 5000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 2006.36,
+      "y": -54.1,
+      "z": 7.38,
+      "yaw": 170.0,
+      "pitch": 48.0,
+      "fov": 70,
+      "sceneOrigin": "2000, -60, 0"
+    }
+  },
+  {
+    "file": "functional_blocks.png",
+    "scene": "functional",
+    "description": "Camo'd framed functional blocks: sign with text, item frame with an item, lever, buttons, wall torch, trapdoor, chest, flower pot, pressure plate, powered and detector rail slopes, door, fence gate and lanterns",
+    "resolution": "1920x1080",
+    "dayTime": 4000,
+    "guiVisible": false,
+    "guiScale": 2,
+    "camera": {
+      "x": 2404.5,
+      "y": -54.79,
+      "z": -2.32,
+      "yaw": 0.0,
+      "pitch": 38.0,
+      "fov": 70,
+      "sceneOrigin": "2400, -60, 0"
+    }
+  },
+  {
+    "file": "framing_saw_gui.png",
+    "scene": "saw",
+    "description": "The Framing Saw screen with empty framed cubes in the input slot and the slope recipe selected",
+    "resolution": "1920x1080",
+    "dayTime": 4000,
+    "guiVisible": true,
+    "guiScale": 3,
+    "camera": {
+      "x": 2800.5,
+      "y": -57.8,
+      "z": 3.5,
+      "yaw": 180.0,
+      "pitch": 23.03,
+      "fov": 70,
+      "sceneOrigin": "2800, -60, 0"
+    }
+  },
+  {
+    "file": "tools_items.png",
+    "scene": "tools",
+    "description": "The tools and utility items of the mod rendered large on a plain dark background: framed hammer, wrench, screwdriver, key, blueprint, reinforcement, phantom paste and glowstone dust",
+    "resolution": "1920x1080",
+    "guiVisible": false,
+    "guiScale": 1
+  }
+]

@@ -4,35 +4,35 @@ Last updated: October 2026
 
 ![FramedBlocks Fabric. Over 200 framed shapes that take on the look of any block. For Fabric, Minecraft 1.21.1. Unofficial port of FramedBlocks by XFactHD. In the background, a cottage built from framed blocks.](dist/img/01-hero.png)
 
-![Any block, any shape. A new framed block is an empty wooden frame. Two pictures of the same framed blocks: before, empty frames; after, each frame shows the look of a block. Right-click with a block: the framed block takes the look of the block in your hand. Fluids work too. Take it off: the Framed Hammer removes the camo again. Not accepted as camo: blocks with block entities and untagged non-solid blocks.](dist/img/02-camo.png)
+![Any block, any shape. A new framed block is an empty wooden frame. Two pictures of the same eight framed shapes, among them a slope, stairs and a corner slope: before, empty wooden frames; after, each one has a different camo, such as oak planks, stone bricks, copper, cherry planks and sandstone. Right-click with a block: the framed block takes the look of the block in your hand. Fluids work too. Take it off: the Framed Hammer removes the camo again. Not accepted as camo: blocks with block entities and untagged non-solid blocks.](dist/img/02-camo.png)
 
 Place a framed block and right-click it with a block item: the frame now looks like that block and also uses its sounds. Fluids can be applied the same way. The Framed Hammer takes the camo off again. Blocks with block entities and untagged non-solid blocks cannot be used as a camo.
 
-![About 230 framed shapes. 236 blocks in the registry. 231 framed shapes with an item. 2 Framing Saws to switch between shapes. A picture of many framed shapes side by side. Every shape takes any camo. Shapes include cubes, slabs, panels, slopes, stairs, corner and prism pieces, pillars, slope edges, slope panel and slab corners, pyramids, checkered and layered variants, collapsible blocks and double blocks.](dist/img/03-shapes.png)
+![About 230 framed shapes. 236 blocks in the registry. 231 framed shapes with an item. 2 Framing Saws to switch between shapes. A picture of 48 different framed shapes on pedestals, all with the same smooth quartz camo. Shapes include cubes, slabs, panels, slopes, stairs, corner and prism pieces, pillars, slope edges, slope panel and slab corners, pyramids, checkered and layered variants, collapsible blocks and double blocks.](dist/img/03-shapes.png)
 
 The block registry of the mod holds 236 blocks. 231 of them are framed shapes with their own item; the rest are three wall-mounted torch variants and the two saws. The shapes range from simple cubes, slabs and panels to slope edges, pyramids and collapsible blocks.
 
-![Two camos in one block. Double blocks hold two framed parts in one block space, and each part takes its own camo. A picture of double blocks with two different camos. Up close: a framed block shows the textures of its camo.](dist/img/04-double.png)
+![Two camos in one block. Double blocks hold two framed parts in one block space, and each part takes its own camo. A picture of ten double blocks, each with two different camos. Up close: the roof of a cottage, built from framed slopes and inner and outer corner slopes with wood plank camos.](dist/img/04-double.png)
 
 Double blocks combine two framed parts in the space of one block, for example two slabs or two panels, and every part can take a different camo.
 
-![Light and fluids. A picture of framed blocks glowing at night: glowstone dust makes a framed block give off light, and so does a camo that glows. A picture of framed blocks with a fluid as camo: fluids work as a camo too.](dist/img/05-light-fluids.png)
+![Light and fluids. A picture of framed lamp heads along a path at night: heads with a glowstone, shroomlight or sea lantern camo give off light, and glowstone dust makes the other heads glow too. A picture of framed slabs, slopes, stairs and other shapes with fluid camos: water in the back row, lava in the middle row, oak planks in the front row for comparison.](dist/img/05-light-fluids.png)
 
 Use glowstone dust on a framed block to make it emit light. A camo that emits light, such as glowstone, also makes the framed block glow. Fluids work as a camo as well.
 
-![Framed blocks that work. A picture of working framed blocks. Doors, iron doors, signs, hanging signs, item frames, lanterns, torches, levers, flower pots and bars, each shown with its item. Also: trapdoors, gates, fences, walls, ladders, buttons, pressure plates, bookshelves, chests, hoppers, secret storage, tanks, panes, a lightning rod, a target block, a bouncy cube, a redstone block, rails and rail slopes.](dist/img/06-functional.png)
+![Framed blocks that work. A picture of framed functional blocks with wood and stone camos: a sign with text, an item frame holding a Framed Hammer, a door, a button, a wall torch, a lever, a chest, a flower pot with a poppy, a pressure plate, two rail slopes, a fence gate and three lanterns. Doors, iron doors, signs, hanging signs, item frames, lanterns, torches, levers, flower pots and bars, each shown with its item. Also: trapdoors, gates, fences, walls, ladders, buttons, pressure plates, bookshelves, chests, hoppers, secret storage, tanks, panes, a lightning rod, a target block, a bouncy cube, a redstone block, rails and rail slopes.](dist/img/06-functional.png)
 
 Besides building shapes there are framed versions of functional blocks, from doors and signs to chests, hoppers, tanks and rails. They take a camo like any other framed block.
 
-![Tools and upgrades. Each shown with its item. Framed Hammer: removes the camo and toggles options such as waterlogging. Framed Wrench: rotates blocks and switches some shape variants. Framed Screwdriver: rotates the camo texture. Framed Key: locks the state of a block. Framed Blueprint: copies a framed block with its camo; the materials must be in your inventory. Upgrades, each shown with its item: glowstone dust, the block gives off light. Framed Reinforcement: a pickaxe that can mine obsidian takes it off. Phantom Paste: the block becomes intangible (server config option).](dist/img/07-tools.png)
+![Tools and upgrades. Each shown with its item. Framed Hammer: removes the camo and toggles options such as waterlogging. Framed Wrench: rotates blocks and switches some shape variants. Framed Screwdriver: rotates the camo texture. Framed Key: locks the state of a block. Framed Blueprint: copies a framed block with its camo; the materials must be in your inventory. Upgrades, each shown with its item: glowstone dust, the block gives off light. Framed Reinforcement: blast resistance of obsidian, and the camo no longer burns; a pickaxe that can mine obsidian removes it. Phantom Paste: the block becomes intangible (server config option).](dist/img/07-tools.png)
 
 Five tools change framed blocks after placing them: the Framed Hammer, Wrench, Screwdriver, Key and Blueprint. Glowstone dust, Framed Reinforcement and Phantom Paste upgrade a single block.
 
-![Switch shapes with the Framing Saw. A picture of the Framing Saw screen, which has a searchable recipe list. Framing Saw: turns framed blocks into other framed shapes, by material value. Powered Framing Saw: works without energy by default. With the optional Team Reborn Energy installed, other mods can feed energy into the Powered Framing Saw from every side except the top. It never outputs energy. The server config option poweredSawRequiresEnergy, false by default, makes energy required.](dist/img/08-saw.png)
+![Switch shapes with the Framing Saw. A picture of the Framing Saw screen: framed cubes in the input slot, the slope recipe selected in the searchable recipe list, framed slopes in the output slot. Framing Saw: turns framed blocks into other framed shapes, by material value. Powered Framing Saw: works without energy by default. With the optional Team Reborn Energy installed, other mods can feed energy into the Powered Framing Saw from every side except the top. It never outputs energy. The server config option poweredSawRequiresEnergy, false by default, makes energy required.](dist/img/08-saw.png)
 
 The Framing Saw converts one framed shape into another using a material-value system, with a searchable recipe screen. The Powered Framing Saw does the same and runs without energy by default.
 
-![Optional integrations. Each one is only active when the other mod is installed: JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer and Team Reborn Energy. Jade and REI were confirmed to load at startup. The others are not tested in game yet. Removed in this port: Create, Applied Energistics 2 and Building Gadgets, because no Fabric builds of them exist for Minecraft 1.21.1.](dist/img/09-compat.png)
+![Optional integrations. Each one is only active when the other mod is installed: JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer and Team Reborn Energy. JEI, REI, EMI and Jade load their plugin in the automated client test. The others are not tested in game yet. Removed in this port: Create, Applied Energistics 2 and Building Gadgets, because no Fabric builds of them exist for Minecraft 1.21.1.](dist/img/09-compat.png)
 
 Ten optional integrations are built in and only switch on when the other mod is installed. Create, Applied Energistics 2 and Building Gadgets are not supported in this port.
 
@@ -74,7 +74,7 @@ The block registry contains 236 blocks: 231 framed shapes that have an item, thr
 | **Framed Key** | Locks the state of a block. |
 | **Framed Blueprint** | Copies a framed block including its camo. The required materials must be in your inventory. |
 | **Glowstone dust** | Makes a framed block emit light. |
-| **Framed Reinforcement** | Reinforces a framed block. A pickaxe that can mine obsidian removes it again. |
+| **Framed Reinforcement** | Gives a framed block at least the blast resistance of obsidian and makes its camo non-flammable. A pickaxe that can mine obsidian removes it again. |
 | **Phantom Paste** | Makes a framed block intangible. This is a server config option. |
 
 ## Framing Saw and Powered Framing Saw
@@ -110,7 +110,7 @@ The mod has to be installed on both the client and the server.
 
 These integrations are optional and only active if the other mod is installed: JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer and Team Reborn Energy.
 
-All integrations compile against the API of the other mod for Minecraft 1.21.1 on Fabric. At startup, Jade and REI were confirmed to load the FramedBlocks plugin. The remaining integrations have not been tested in game yet. Please report problems on the [issue tracker](https://github.com/navrelis/FramedBlocks-Fabric/issues).
+All integrations compile against the API of the other mod for Minecraft 1.21.1 on Fabric. In a world, JEI, REI, EMI and Jade load the FramedBlocks plugin (automated client test). The remaining integrations have not been tested in game yet. Please report problems on the [issue tracker](https://github.com/navrelis/FramedBlocks-Fabric/issues).
 
 Not included, because no Fabric build of these mods exists for Minecraft 1.21.1: Create, Applied Energistics 2 and Building Gadgets. Their integrations were removed from the port.
 

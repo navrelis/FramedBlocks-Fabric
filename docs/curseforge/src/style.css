@@ -220,13 +220,16 @@ strong { color: var(--heading); font-weight: 700; }
    so a placeholder and the real screenshot give the same layout. Default: the 1920x1080
    screenshot covers the window (scaled down, smooth), --pos moves the crop (default centre).
    .native: one screenshot pixel per device pixel (960x540 CSS px for the whole picture),
-   for GUI shots whose text must stay sharp; --pos picks the part shown. */
+   for GUI shots whose text must stay sharp; --pos picks the part shown.
+   .zoom: crop tighter than cover; the screenshot is --zoom times as wide as the window
+   (--zoom >= 1, and 1080/1920 x width x --zoom must be at least --h), --pos picks the part. */
 .shot {
   --h: 411; --pos: 50% 50%;
   position: relative; display: block; width: 100%; height: calc(var(--h) * 1px);
   background-color: #000; background-repeat: no-repeat; background-size: cover; background-position: var(--pos);
 }
 .shot.native { background-size: 960px 540px; image-rendering: pixelated; }
+.shot.zoom { --zoom: 1; background-size: calc(var(--zoom) * 100%) auto; }
 /* drawn by tools/build.mjs while assets/shots/NAME.png is missing */
 .shot.shot-missing {
   display: grid; place-items: center;

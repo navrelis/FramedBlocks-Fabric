@@ -1,8 +1,9 @@
-<section class="cf-section" id="camo" data-alt="Any block, any shape. A new framed block is an empty wooden frame. Two pictures of the same framed blocks: before, empty frames; after, each frame shows the look of a block. Right-click with a block: the framed block takes the look of the block in your hand. Fluids work too. Take it off: the Framed Hammer removes the camo again. Not accepted as camo: blocks with block entities and untagged non-solid blocks.">
+<section class="cf-section" id="camo" data-alt="Any block, any shape. A new framed block is an empty wooden frame. Two pictures of the same eight framed shapes, among them a slope, stairs and a corner slope: before, empty wooden frames; after, each one has a different camo, such as oak planks, stone bricks, copper, cherry planks and sandstone. Right-click with a block: the framed block takes the look of the block in your hand. Fluids work too. Take it off: the Framed Hammer removes the camo again. Not accepted as camo: blocks with block entities and untagged non-solid blocks.">
 <style>
   #camo .duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); margin: 0; }
   #camo .pic { position: relative; margin: 0; }
-  #camo .pic .shot { --h: 218; }
+  /* the same crop on both pictures, so they read as a before/after pair */
+  #camo .pic .shot { --h: 200; --zoom: 1.4328; --pos: 58.62% 42.47%; }
   #camo .pic .tag { position: absolute; left: 10px; top: 10px; z-index: 1; }
   #camo .pic.after figcaption { border-top-color: var(--gold-2); }
   #camo .pic.before figcaption strong { color: var(--text); }
@@ -23,12 +24,12 @@
   <p class="lead">A new framed block is an empty wooden frame. Give it the look of almost any block.</p>
   <div class="duo">
     <figure class="pic before">
-      <div class="shot" style="background-image:url(assets/shots/camo_before.png)"></div>
+      <div class="shot zoom" style="background-image:url(assets/shots/camo_before.png)"></div>
       <span class="tag off">Before</span>
       <figcaption><strong>Empty frames</strong></figcaption>
     </figure>
     <figure class="pic after">
-      <div class="shot" style="background-image:url(assets/shots/camo_after.png)"></div>
+      <div class="shot zoom" style="background-image:url(assets/shots/camo_after.png)"></div>
       <span class="tag on">After</span>
       <figcaption><strong>With camos</strong></figcaption>
     </figure>

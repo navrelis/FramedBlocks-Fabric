@@ -55,7 +55,8 @@ for (const f of pngs) {
 for (const f of Object.keys(alt)) if (!pngs.includes(f)) errors.push(`alt.json: entry for ${f}, which is not in dist/img`);
 
 // screenshots: which are real, which are still drawn as placeholders
-const present = fs.existsSync(shotDir) ? fs.readdirSync(shotDir).filter((f) => !f.startsWith('.')) : [];
+// (manifest.json comes with the screenshots from the showcase run, see README)
+const present = fs.existsSync(shotDir) ? fs.readdirSync(shotDir).filter((f) => !f.startsWith('.') && f !== 'manifest.json') : [];
 const used = new Set();
 for (const f of fs.readdirSync(path.join(ROOT, 'src', 'sections'))) {
   for (const m of fs.readFileSync(path.join(ROOT, 'src', 'sections', f), 'utf8').matchAll(/assets\/shots\/([A-Za-z0-9_.-]+\.png)/g)) used.add(m[1]);

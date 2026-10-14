@@ -26,7 +26,7 @@ A new framed block is an empty wooden frame. Right-click it with a suitable bloc
 
 ## Compatibility
 
-Optional integrations, only active if the other mod is installed: JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer, Team Reborn Energy. All compile against the respective mod's API for Minecraft 1.21.1 Fabric. At startup, Jade and REI were confirmed to load the FramedBlocks plugin; the others have not been tested in game yet. Please report problems on the issue tracker.
+Optional integrations, only active if the other mod is installed: JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer, Team Reborn Energy. All compile against the respective mod's API for Minecraft 1.21.1 Fabric. In a world, JEI, REI, EMI and Jade load the FramedBlocks plugin (automated client test); the others have not been tested in game yet. Please report problems on the issue tracker.
 
 ## Known differences
 
