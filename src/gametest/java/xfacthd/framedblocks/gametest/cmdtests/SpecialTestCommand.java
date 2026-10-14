@@ -13,6 +13,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.gametest.cmdtests.client.ModelPerformanceTest;
 import xfacthd.framedblocks.gametest.cmdtests.tests.*;
@@ -135,9 +136,10 @@ public final class SpecialTestCommand
         {
             Files.writeString(path, data, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-            String pathText = path.toAbsolutePath().toString();
+            String pathText = path.toAbsolutePath().normalize().toString();
             Component pathComponent = Component.literal(pathText).withStyle(style ->
-                    style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, pathText))
+                    style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, pathText))
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to copy the path")))
                             .applyFormat(ChatFormatting.UNDERLINE)
             );
             return Component.literal("Tests results exported to ").append(pathComponent);
