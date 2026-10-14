@@ -37,8 +37,8 @@ public class MixinBlockFaceHiding
         {
             return true;
         }
-        return ItemBlockRenderTypes.getChunkRenderType(state) != RenderType.solid()
-                && adjState.getBlock() instanceof IFramedBlock block
+        return adjState.getBlock() instanceof IFramedBlock block
+                && ItemBlockRenderTypes.getChunkRenderType(state) != RenderType.solid()
                 && block.hidesNeighborFace(level, adjPos, adjState, state, face.getOpposite());
     }
 }
