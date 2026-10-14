@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
@@ -20,6 +21,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -33,6 +35,8 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockColor;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.block.render.IClientBlockEffects;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -43,6 +47,8 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.*;
+import xfacthd.framedblocks.client.data.extensions.block.NoEffectsClientBlockExtensions;
+import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlockExtensions;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.cube.*;
@@ -69,17 +75,23 @@ import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
 import xfacthd.framedblocks.client.render.debug.FramedBlockDebugRenderer;
 import xfacthd.framedblocks.client.render.debug.impl.*;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
+import xfacthd.framedblocks.client.render.item.TankItemRenderer;
+import xfacthd.framedblocks.client.render.particle.ClientBlockEffects;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import xfacthd.framedblocks.client.render.special.*;
+import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlayLayer;
 import xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.cube.FramedMiniCubeBlock;
+import xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
 import xfacthd.framedblocks.common.block.door.FramedDoorBlock;
 import xfacthd.framedblocks.common.block.door.FramedFenceGateBlock;
 import xfacthd.framedblocks.common.block.interactive.button.FramedButtonBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
 import xfacthd.framedblocks.common.block.interactive.button.FramedLargeButtonBlock;
 import xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
@@ -90,6 +102,7 @@ import xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
 import xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
+import xfacthd.framedblocks.common.data.doubleblock.FramedDoubleBlockRenderProperties;
 import xfacthd.framedblocks.common.data.doubleblock.NullCullPredicate;
 import xfacthd.framedblocks.platform.event.ModEvents;
 
@@ -123,6 +136,9 @@ public final class FBClient implements ClientModInitializer
         registerColorProviders();
         registerRenderLayers();
         registerParticleProviders();
+        registerBlockEffects();
+        registerItemRenderers();
+        registerSpriteSources();
         registerTooltipComponents();
         registerReloadListeners();
         registerEventHandlers();
@@ -203,6 +219,35 @@ public final class FBClient implements ClientModInitializer
         ParticleFactoryRegistry.getInstance().register(FBContent.FLUID_PARTICLE.get(), new FluidSpriteParticle.Provider());
     }
 
+    private static void registerBlockEffects()
+    {
+        FBContent.getRegisteredBlocks()
+                .stream()
+                .map(Holder::value)
+                .filter(IFramedBlock.class::isInstance)
+                .forEach(block ->
+                {
+                    IClientBlockEffects effects = switch (block)
+                    {
+                        case FramedItemFrameBlock ignored -> NoEffectsClientBlockExtensions.INSTANCE;
+                        case FramedOneWayWindowBlock ignored -> new OneWayWindowClientBlockExtensions();
+                        case IFramedDoubleBlock ignored -> FramedDoubleBlockRenderProperties.INSTANCE;
+                        default -> FramedBlockRenderProperties.INSTANCE;
+                    };
+                    ClientBlockEffects.register(effects, block);
+                });
+    }
+
+    private static void registerItemRenderers()
+    {
+        BuiltinItemRendererRegistry.INSTANCE.register(FBContent.BLOCK_FRAMED_TANK.value().asItem(), new TankItemRenderer());
+    }
+
+    private static void registerSpriteSources()
+    {
+        SpriteSources.TYPES.put(Utils.rl("anim_splitter"), AnimationSplitterSource.TYPE);
+    }
+
     private static void registerTooltipComponents()
     {
         TooltipComponentCallback.EVENT.register(data ->
@@ -236,8 +281,8 @@ public final class FBClient implements ClientModInitializer
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> ClientEventHandler.onClientDisconnect());
         ClientLifecycleEvents.CLIENT_STARTED.register(FBClient::onClientStarted);
 
-        WorldRenderEvents.BLOCK_OUTLINE.register(BlockOutlineRenderer::onBlockOutline);
         WorldRenderEvents.BLOCK_OUTLINE.register(CollapsibleBlockIndicatorRenderer::onBlockOutline);
+        WorldRenderEvents.BLOCK_OUTLINE.register(BlockOutlineRenderer::onBlockOutline);
         WorldRenderEvents.AFTER_TRANSLUCENT.register(GhostBlockRenderer::onAfterTranslucent);
 
         BlockInteractOverlayLayer overlayLayer = new BlockInteractOverlayLayer();

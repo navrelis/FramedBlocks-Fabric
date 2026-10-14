@@ -20,7 +20,9 @@
         "client.AccessorWeightedBakedModel",
         "client.DevMixinLevelRenderer",
         "client.MixinClientPacketListener",
-        "client.MixinLevelRenderer"
+        "client.MixinLevelRenderer",
+        "client.MixinLevelRendererBreakSound",
+        "client.MixinParticleEngine"
     ],
     "injectors": {
         "defaultRequire": 1

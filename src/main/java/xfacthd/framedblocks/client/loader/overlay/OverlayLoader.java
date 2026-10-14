@@ -1,24 +1,102 @@
 package xfacthd.framedblocks.client.loader.overlay;
 
 import com.google.gson.*;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import org.joml.Vector3f;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.model.cube.FramedMarkedCubeGeometry;
+import xfacthd.framedblocks.client.model.cube.FramedTargetGeometry;
 
-public final class OverlayLoader implements IGeometryLoader<OverlayGeometry>
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+
+/**
+ * Serves the models whose JSON contains {@code "loader": "framedblocks_fabric:overlay"}. Such a model wraps a regular
+ * model in the {@code "model"} key and renders it slightly scaled up around the (optional) {@code "center"}, in
+ * order to avoid z-fighting with the camo model it is rendered on top of.
+ * <p>
+ * Models are served by a model resolver which takes precedence over the vanilla model loading, the files are read
+ * and parsed at the start of each model reload.
+ */
+public final class OverlayLoader
 {
     public static final ResourceLocation ID = Utils.rl("overlay");
+    private static final FileToIdConverter MODEL_LISTER = FileToIdConverter.json("models");
+    private static final List<ResourceLocation> OVERLAY_MODELS = List.of(
+            FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION.id(),
+            FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION.id(),
+            FramedTargetGeometry.OVERLAY_LOCATION.id()
+    );
     private static final Vector3f CENTER = new Vector3f(.5F, .5F, .5F);
     private static final Vector3f DEFAULT_SCALE = new Vector3f(1.001F, 1.001F, 1.001F);
 
-    @Override
-    public OverlayGeometry read(JsonObject obj, JsonDeserializationContext ctx) throws JsonParseException
+    public static void init()
     {
-        BlockModel model = ctx.deserialize(GsonHelper.getAsJsonObject(obj, "model"), BlockModel.class);
+        PreparableModelLoadingPlugin.register(OverlayLoader::loadModels, OverlayLoader::onInitializeModelLoader);
+    }
+
+    private static CompletableFuture<Map<ResourceLocation, UnbakedModel>> loadModels(
+            ResourceManager resourceManager, Executor executor
+    )
+    {
+        return CompletableFuture.supplyAsync(() ->
+        {
+            Map<ResourceLocation, UnbakedModel> models = new HashMap<>();
+            for (ResourceLocation id : OVERLAY_MODELS)
+            {
+                ResourceLocation file = MODEL_LISTER.idToFile(id);
+                Resource resource = resourceManager.getResource(file).orElse(null);
+                if (resource == null)
+                {
+                    FramedBlocks.LOGGER.error("Overlay model '{}' not found", file);
+                    continue;
+                }
+
+                try (BufferedReader reader = resource.openAsReader())
+                {
+                    JsonObject obj = GsonHelper.parse(reader);
+                    models.put(id, read(obj));
+                }
+                catch (IOException | JsonParseException e)
+                {
+                    FramedBlocks.LOGGER.error("Failed to load overlay model '{}'", file, e);
+                }
+            }
+            return Map.copyOf(models);
+        }, executor);
+    }
+
+    private static void onInitializeModelLoader(
+            Map<ResourceLocation, UnbakedModel> models, ModelLoadingPlugin.Context context
+    )
+    {
+        context.resolveModel().register(ctx -> models.get(ctx.id()));
+    }
+
+    private static OverlayGeometry read(JsonObject obj) throws JsonParseException
+    {
+        String loader = GsonHelper.getAsString(obj, "loader");
+        if (!ID.toString().equals(loader))
+        {
+            throw new JsonSyntaxException("Expected loader '" + ID + "', got '" + loader + "'");
+        }
+
+        BlockModel model = BlockModel.fromString(GsonHelper.getAsJsonObject(obj, "model").toString());
 
         Vector3f offset = OverlayGeometry.VEC_ZERO;
         Vector3f scale = new Vector3f(DEFAULT_SCALE);
@@ -48,4 +126,8 @@ public final class OverlayLoader implements IGeometryLoader<OverlayGeometry>
 
         return new OverlayGeometry(model, offset, scale);
     }
+
+
+
+    private OverlayLoader() { }
 }

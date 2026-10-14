@@ -2,6 +2,7 @@ package xfacthd.framedblocks.client.render.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.Minecraft;
@@ -20,18 +21,14 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.model.FramedTankItemModel;
 import xfacthd.framedblocks.client.render.block.FramedTankRenderer;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import xfacthd.framedblocks.platform.transfer.FluidUnits;
 import xfacthd.framedblocks.platform.transfer.SimpleFluidContent;
 
-public final class TankItemRenderer extends BlockEntityWithoutLevelRenderer
+public final class TankItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer
 {
-    public TankItemRenderer()
-    {
-        super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-    }
-
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay)
+    public void render(ItemStack stack, ItemDisplayContext ctx, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay)
     {
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
@@ -50,13 +47,13 @@ public final class TankItemRenderer extends BlockEntityWithoutLevelRenderer
             model = ErrorModel.get();
             validModel = false;
         }
-        model = model.applyTransform(ctx, poseStack, ClientUtils.isLeftHand(ctx));
+        model = ModelBridge.applyTransform(model, ctx, poseStack, ClientUtils.isLeftHand(ctx));
         poseStack.translate(-.5, -.5, -.5); // Replicate ItemRenderer's translation
 
         boolean glint = stack.hasFoil();
-        for (BakedModel pass : model.getRenderPasses(stack, true))
+        for (BakedModel pass : ModelBridge.getRenderPasses(model, stack, true))
         {
-            for (RenderType type : pass.getRenderTypes(stack, true))
+            for (RenderType type : ModelBridge.getRenderTypes(pass, stack, true))
             {
                 VertexConsumer consumer = ItemRenderer.getFoilBufferDirect(buffer, type, true, glint);
                 renderer.renderModelLists(pass, stack, light, overlay, poseStack, consumer);

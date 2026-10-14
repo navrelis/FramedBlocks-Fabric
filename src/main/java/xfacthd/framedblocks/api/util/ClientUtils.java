@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 public final class ClientUtils
 {
-    public static final ResourceLocation DUMMY_TEXTURE = Utils.rl("neoforge", "white");
+    public static final ResourceLocation DUMMY_TEXTURE = Utils.rl("block/white");
 
     @Deprecated(forRemoval = true)
     public static final Supplier<Boolean> OPTIFINE_LOADED = () -> false;

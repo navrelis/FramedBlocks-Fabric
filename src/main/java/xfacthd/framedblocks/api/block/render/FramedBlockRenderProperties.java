@@ -9,12 +9,11 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 
-public class FramedBlockRenderProperties implements IClientBlockExtensions
+public class FramedBlockRenderProperties implements IClientBlockEffects
 {
     public static final FramedBlockRenderProperties INSTANCE = new FramedBlockRenderProperties();
 

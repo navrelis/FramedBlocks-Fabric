@@ -30,3 +30,4 @@
 - C1 block/item hooks — Sonnet, long — running. C4b client effects/loaders/resources — Sonnet, long — running.
 - Session 3 stopped by auto-handoff; C1 and C4b were stopped before writing anything. State and next steps: see handoff.md in the repo root.
 - Session 4: handoff checked against repo (no source changes pending). C1 and C4b re-delegated in parallel (Sonnet long each).
+- C4b client pieces + resources — Sonnet, long — full diff read, accepted and committed. Overlay loader = PreparableModelLoadingPlugin + ModelResolver; hit/destroy/break-sound effects via own registry + ParticleEngine/LevelRenderer mixins; tank item via BuiltinItemRendererRegistry; anim_splitter via AW on SpriteSources.TYPES; own white + warning textures. BLOCK_OUTLINE invoker calls all listeners (order irrelevant, changed anyway). 0 errors in client areas, 40 left elsewhere (C1). Untested at runtime.

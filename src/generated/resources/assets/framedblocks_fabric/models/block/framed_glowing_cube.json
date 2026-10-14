@@ -93,6 +93,6 @@
   "textures": {
     "frame": "framedblocks_fabric:block/framed_block",
     "particle": "framedblocks_fabric:block/framed_block",
-    "underlay": "neoforge:white"
+    "underlay": "framedblocks_fabric:block/white"
   }
 }

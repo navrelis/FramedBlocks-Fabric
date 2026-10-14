@@ -23,3 +23,6 @@
 - Light: cached `BlockState.getLightEmission()` of framed blocks stays at the declared value; the per-position value is injected at each vanilla reader (own `required: false` mixin config). Fabric data attachments rejected (plain non-volatile map, unsafe for the light thread).
 - Server config sync: none added, FCAP 21.1.6 already syncs SERVER configs in the configuration phase.
 - Camo rotator data map: read from `data/<ns>/data_maps/block/block_camo_rotators.json` (NeoForge format) by a reload listener, resolved on `TAGS_LOADED`, synced with an own payload.
+- Hit/destroy particles and break sound: own `IClientBlockEffects` registry + mixins on `ParticleEngine.crack/destroy` and the 2001 level event sound; hit handlers get a synthesized `BlockHitResult` (pos + side only).
+- Overlay models (`"loader": "framedblocks_fabric:overlay"`): fixed list of 3 ids served by a preparable model resolver instead of scanning all model JSONs.
+- `neoforge:white` / NeoForge warning icon replaced by own textures; `neoforge_data` keys left in JSON (ignored, emissivity handled in code); `render_type` keys ignored by vanilla.

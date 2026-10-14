@@ -51,7 +51,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     public static final String TOOLTIP_USE_INTERMEDIATE = Utils.translationKey("tooltip", "framing_saw.use_intermediate");
     public static final Component MSG_HINT_SEARCH = Utils.translate("msg", "framing_saw.search");
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw.png");
-    public static final ResourceLocation WARNING_ICON = Utils.rl("neoforge", "textures/gui/experimental_warning.png");
+    public static final ResourceLocation WARNING_ICON = Utils.rl("textures/gui/experimental_warning.png");
     private static final int IMAGE_WIDTH = 256;
     private static final int IMAGE_HEIGHT = 233;
     private static final int RECIPES_X = 48;
