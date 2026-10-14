@@ -26,7 +26,7 @@ Suggested values for the Modrinth and CurseForge project pages.
 ## Dependencies
 
 - Required: Fabric API
-- Optional (integrations, unverified): JEI, REI, EMI, Jade, Athena, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer
+- Optional (integrations, not all tested in game): JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer, Team Reborn Energy (`team_reborn_energy`, energy input of the Powered Framing Saw)
 - Bundled: Forge Config API Port (MPL-2.0, Fuzs)
 
 ## Links

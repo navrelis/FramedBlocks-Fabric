@@ -14,7 +14,7 @@ A new framed block is an empty wooden frame. Right-click it with a suitable bloc
 
 - Tools: Framed Hammer, Wrench, Screwdriver, Key and Blueprint
 - Glowstone dust to make a framed block emit light, Framed Reinforcement, Phantom Paste (intangible blocks, server config option)
-- Framing Saw and Powered Framing Saw to convert framed blocks between shapes
+- Framing Saw and Powered Framing Saw to convert framed blocks between shapes. The Powered Framing Saw works without energy by default; with Team Reborn Energy installed it accepts energy from other mods (never from the top, never output), and the server config option `poweredSawRequiresEnergy` can make energy mandatory.
 - Client, server and developer-debug configuration
 
 ## Requirements
@@ -22,16 +22,18 @@ A new framed block is an empty wooden frame. Right-click it with a suitable bloc
 - Minecraft 1.21.1, Java 21
 - Fabric Loader 0.19 or newer, Fabric API
 - Required on both client and server. Forge Config API Port is bundled.
+- Optional: Team Reborn Energy (not bundled)
 
 ## Compatibility
 
-Planned integrations: JEI, REI, EMI, Jade, Athena, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer. Their state in this port is not verified one by one.
+Optional integrations, only active if the other mod is installed: JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer, Team Reborn Energy. All compile against the respective mod's API for Minecraft 1.21.1 Fabric. At startup, Jade and REI were confirmed to load the FramedBlocks plugin; the others have not been tested in game yet. Please report problems on the issue tracker.
 
 ## Known differences
 
 - Create, Applied Energistics 2 and Building Gadgets integrations are removed (no Fabric 1.21.1 builds exist).
 - The mod id is `framedblocks_fabric`: worlds and items from the NeoForge version are not compatible.
 - Rendering and item/fluid transfer were rewritten for the Fabric APIs.
+- The Athena integration is removed: Fabric Athena computes connected textures while emitting quads, so there is nothing to forward. Camos with connected textures depend on the general model capture instead.
 
 ## Credits and license
 
