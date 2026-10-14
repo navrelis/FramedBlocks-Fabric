@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.client.render.special;
 
 import com.mojang.blaze3d.vertex.*;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -10,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
@@ -20,38 +21,47 @@ import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEnt
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 
+import java.util.Objects;
+
 public final class CollapsibleBlockIndicatorRenderer
 {
     private static final float[] VERTEX_NO_OFFSET = new float[] { 1F, 1F, 1F, 1F };
 
-    public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
+    /**
+     * Always returns true, this renderer is an addition to the outline and must not cancel the vanilla outline
+     */
+    public static boolean onBlockOutline(WorldRenderContext context, WorldRenderContext.BlockOutlineContext outlineContext)
     {
         //noinspection ConstantConditions
         ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
         if (heldItem.getItem() != FBContent.ITEM_FRAMED_HAMMER.value())
         {
-            return;
+            return true;
         }
 
-        BlockHitResult hit = event.getTarget();
+        if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hit))
+        {
+            return true;
+        }
         Level level = Minecraft.getInstance().level;
         //noinspection ConstantConditions
         BlockState state = level.getBlockState(hit.getBlockPos());
         if (state.getBlock() != FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value())
         {
-            return;
+            return true;
         }
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         Direction faceDir = hit.getDirection();
         if (face != NullableDirection.NONE && face.toDirection() != faceDir)
         {
-            return;
+            return true;
         }
 
-        PoseStack poseStack = event.getPoseStack();
-        Vec3 offset = Vec3.atLowerCornerOf(hit.getBlockPos()).subtract(event.getCamera().getPosition());
-        VertexConsumer builder = event.getMultiBufferSource().getBuffer(FramedRenderTypes.LINES_NO_DEPTH);
+        PoseStack poseStack = Objects.requireNonNull(context.matrixStack());
+        MultiBufferSource buffers = Objects.requireNonNull(context.consumers());
+        Vec3 offset = Vec3.atLowerCornerOf(hit.getBlockPos()).subtract(context.camera().getPosition());
+        VertexConsumer builder = buffers.getBuffer(FramedRenderTypes.LINES_NO_DEPTH);
 
         poseStack.pushPose();
         poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
@@ -71,6 +81,7 @@ public final class CollapsibleBlockIndicatorRenderer
         drawCornerMarkers(builder, poseStack, faceDir, hit, vY);
 
         poseStack.popPose();
+        return true;
     }
 
     private static float[] getVertexHeights(Level level, BlockPos pos, NullableDirection face)

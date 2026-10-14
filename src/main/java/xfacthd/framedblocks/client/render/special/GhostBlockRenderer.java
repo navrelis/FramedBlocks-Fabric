@@ -7,30 +7,31 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import xfacthd.framedblocks.platform.event.ModEvents;
-import net.neoforged.neoforge.client.NeoForgeRenderTypes;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import xfacthd.framedblocks.platform.model.ModelData;
 import org.joml.Vector3fc;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
-import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.ghost.RegisterGhostRenderBehavioursEvent;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.render.util.FramedRenderTypes;
+import xfacthd.framedblocks.client.render.util.GhostBlockAndTintGetter;
 import xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
 import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings("ConstantConditions")
 public final class GhostBlockRenderer
@@ -41,9 +42,13 @@ public final class GhostBlockRenderer
     private static final String PROFILER_KEY = FramedConstants.MOD_ID + "_ghost_block";
     private static final float SCALE = 1.0001F;
 
-    public static void onRenderLevelStage(final RenderLevelStageEvent event)
+    /**
+     * Fires at the same point of the frame as NeoForge's "after particles" stage, right after the translucent terrain
+     * and particles were rendered. With fabulous graphics the ghost block is rendered through the particles target
+     */
+    public static void onAfterTranslucent(WorldRenderContext context)
     {
-        if (!ClientConfig.VIEW.showGhostBlocks() || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
+        if (!ClientConfig.VIEW.showGhostBlocks())
         {
             return;
         }
@@ -52,7 +57,7 @@ public final class GhostBlockRenderer
         profiler.push(PROFILER_KEY);
         try
         {
-            tryDrawGhostBlock(event.getPoseStack(), profiler);
+            tryDrawGhostBlock(Objects.requireNonNull(context.matrixStack()), profiler);
         }
         catch (Throwable t)
         {
@@ -183,7 +188,7 @@ public final class GhostBlockRenderer
     {
         RenderType bufferType = ClientConfig.VIEW.useAltGhostRenderer() ?
                 Sheets.translucentCullBlockSheet() :
-                NeoForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get();
+                FramedRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET;
         int opacity = ClientConfig.VIEW.getGhostRenderOpacity();
 
         profiler.push("buffer");
@@ -192,16 +197,12 @@ public final class GhostBlockRenderer
         profiler.pop(); //buffer
 
         profiler.push("draw");
-        BakedModel model = ModelUtils.getModel(renderState);
         poseStack.pushPose();
         poseStack.translate(renderOffset.x(), renderOffset.y(), renderOffset.z());
         poseStack.translate(offset.x + .5, offset.y + .5, offset.z + .5);
         poseStack.scale(SCALE, SCALE, SCALE); // Scale up very slightly to avoid z-fighting with replaceable blocks like snow layers
         poseStack.translate(-.5F, -.5F, -.5F);
-        for (RenderType type : model.getRenderTypes(renderState, RANDOM, modelData))
-        {
-            doRenderGhostBlockInLayer(poseStack, builder, renderPos, renderState, type, modelData);
-        }
+        doRenderGhostBlockQuads(poseStack, builder, renderPos, renderState, modelData);
         poseStack.popPose();
         profiler.pop(); //draw
 
@@ -211,25 +212,25 @@ public final class GhostBlockRenderer
         profiler.pop(); //upload
     }
 
-    private static void doRenderGhostBlockInLayer(
+    private static void doRenderGhostBlockQuads(
             PoseStack poseStack,
             VertexConsumer builder,
             BlockPos renderPos,
             BlockState renderState,
-            RenderType layer,
             ModelData modelData
     )
     {
+        // The Fabric Rendering API emits the quads of all render types into the same consumer, the model data is
+        // provided to the model through the wrapped level as there is no block entity at the render position
+        BlockAndTintGetter level = new GhostBlockAndTintGetter(mc().level, renderPos, modelData);
         mc().getBlockRenderer().renderBatched(
                 renderState,
                 renderPos,
-                mc().level,
+                level,
                 poseStack,
                 builder,
                 false,
-                RANDOM,
-                modelData,
-                layer
+                RANDOM
         );
     }
 

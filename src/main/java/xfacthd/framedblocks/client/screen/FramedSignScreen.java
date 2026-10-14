@@ -31,11 +31,13 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
-import xfacthd.framedblocks.platform.model.RenderTypeHelper;
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.RenderTypeHelper;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.render.Quaternions;
+import xfacthd.framedblocks.api.render.RenderUtils;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedHangingSignBlock;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -220,14 +222,16 @@ public class FramedSignScreen extends Screen
         float green = FastColor.ARGB32.green(color) / 255F;
         float blue = FastColor.ARGB32.blue(color) / 255F;
 
-        for (RenderType renderType : model.getRenderTypes(state, RandomSource.create(42), modelData))
+        RandomSource random = RandomSource.create(42);
+        for (RenderType renderType : ModelBridge.getRenderTypes(model, state, random, modelData))
         {
             VertexConsumer consumer = buffer.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false));
-            renderer.getModelRenderer().renderModel(
+            RenderUtils.renderModel(
                     pose,
                     consumer,
                     state,
                     model,
+                    random,
                     red, green, blue,
                     LightTexture.FULL_BRIGHT,
                     OverlayTexture.NO_OVERLAY,

@@ -27,6 +27,11 @@ public final class ConTexDataHandler
         prelimProperties = null;
     }
 
+    /**
+     * Register a {@link ModelProperty} holding the connected textures data of another mod. Must be called
+     * from the client initializer of the mod, the registration is locked once the client has finished starting.
+     * Replaces the "add_ct_property" inter-mod message of the NeoForge version
+     */
     public static void addConTexProperty(String modId, ModelProperty<?> property)
     {
         Preconditions.checkState(!locked, "ModelProperty registration is locked");

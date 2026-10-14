@@ -10,14 +10,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import xfacthd.framedblocks.platform.model.RenderTypeHelper;
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.RenderTypeHelper;
 
 import java.util.List;
 
 public final class RenderUtils
 {
     private static final Direction[] DIRECTIONS = Direction.values();
+    private static final float[] FULL_BRIGHTNESS = new float[] { 1F, 1F, 1F, 1F };
 
     public static RenderType getEntityRenderType(RenderType blockRenderType)
     {
@@ -46,11 +48,11 @@ public final class RenderUtils
         for (Direction side : DIRECTIONS)
         {
             random.setSeed(42L);
-            renderQuadList(pose, buffer, red, green, blue, model.getQuads(state, side, random, modelData, renderType), light, overlay);
+            renderQuadList(pose, buffer, red, green, blue, ModelBridge.getQuads(model, state, side, random, modelData, renderType), light, overlay);
         }
 
         random.setSeed(42L);
-        renderQuadList(pose, buffer, red, green, blue, model.getQuads(state, null, random, modelData, renderType), light, overlay);
+        renderQuadList(pose, buffer, red, green, blue, ModelBridge.getQuads(model, state, null, random, modelData, renderType), light, overlay);
     }
 
     public static void renderQuadList(
@@ -76,7 +78,7 @@ public final class RenderUtils
                 blueF = Mth.clamp(blue, 0F, 1F);
             }
 
-            consumer.putBulkData(pose, quad, redF, greenF, blueF, 1F, light, overlay, true);
+            consumer.putBulkData(pose, quad, FULL_BRIGHTNESS, redF, greenF, blueF, 1F, new int[] { light, light, light, light }, overlay, true);
         }
     }
 

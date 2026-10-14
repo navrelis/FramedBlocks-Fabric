@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.platform.model.BakedModelWrapper;
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -53,7 +54,7 @@ final class OverlayModel extends BakedModelWrapper<BakedModel>
             BakedModel model, Vector3f offset, Vector3f scale, RandomSource random
     )
     {
-        return untranslateQuads(model.getQuads(null, null, random, ModelData.EMPTY, null), offset, scale);
+        return untranslateQuads(ModelBridge.getQuads(model, null, null, random, ModelData.EMPTY, null), offset, scale);
     }
 
     private static Map<Direction, List<BakedQuad>> makeCulledQuads(
@@ -63,7 +64,7 @@ final class OverlayModel extends BakedModelWrapper<BakedModel>
         Map<Direction, List<BakedQuad>> quadMap = new EnumMap<>(Direction.class);
         for (Direction side : Direction.values())
         {
-            List<BakedQuad> quads = model.getQuads(null, side, random, ModelData.EMPTY, null);
+            List<BakedQuad> quads = ModelBridge.getQuads(model, null, side, random, ModelData.EMPTY, null);
             quadMap.put(side, untranslateQuads(quads, offset, scale));
         }
         return quadMap;

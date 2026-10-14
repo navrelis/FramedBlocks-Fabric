@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
 import xfacthd.framedblocks.platform.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
@@ -27,17 +26,17 @@ public final class KeyMappings
         );
     }
 
-    public static void onClientTick(@SuppressWarnings("unused") final ClientTickEvent.Pre event)
+    public static void onClientTick(Minecraft mc)
     {
-        Level level = Minecraft.getInstance().level;
-        if (level == null || Minecraft.getInstance().screen != null)
+        Level level = mc.level;
+        if (level == null || mc.screen != null)
         {
             return;
         }
 
         if (KEYMAPPING_UPDATE_CULLING.get().consumeClick())
         {
-            HitResult hit = Minecraft.getInstance().hitResult;
+            HitResult hit = mc.hitResult;
             if (hit instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof FramedBlockEntity be)
             {
                 try
@@ -64,7 +63,7 @@ public final class KeyMappings
                         ));
 
                 //noinspection ConstantConditions
-                Minecraft.getInstance().player.displayClientMessage(msg, true);
+                mc.player.displayClientMessage(msg, true);
             }
         }
 
@@ -73,7 +72,7 @@ public final class KeyMappings
             FramedClientUtils.clearModelCaches();
 
             //noinspection ConstantConditions
-            Minecraft.getInstance().player.displayClientMessage(Component.literal("Model cache cleared"), true);
+            mc.player.displayClientMessage(Component.literal("Model cache cleared"), true);
         }
     }
 

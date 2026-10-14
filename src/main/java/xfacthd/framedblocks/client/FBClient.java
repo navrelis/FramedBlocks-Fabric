@@ -1,44 +1,48 @@
 package xfacthd.framedblocks.client;
 
-import com.mojang.datafixers.util.Pair;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.client.ConfigScreenFactoryRegistry;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.*;
-import net.neoforged.neoforge.client.event.*;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import xfacthd.framedblocks.platform.model.ModelProperty;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockColor;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
-import xfacthd.framedblocks.api.model.ErrorModel;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.ghost.RegisterGhostRenderBehavioursEvent;
+import xfacthd.framedblocks.api.render.RegisterOutlineRenderersEvent;
 import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.*;
-import xfacthd.framedblocks.client.data.extensions.block.NoEffectsClientBlockExtensions;
-import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlockExtensions;
-import xfacthd.framedblocks.client.data.extensions.item.TankClientItemExtensions;
-import xfacthd.framedblocks.client.loader.fallback.FallbackLoader;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.cube.*;
@@ -57,7 +61,7 @@ import xfacthd.framedblocks.client.model.slopeslab.*;
 import xfacthd.framedblocks.client.model.stairs.*;
 import xfacthd.framedblocks.client.model.torch.*;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
-import xfacthd.framedblocks.client.modelwrapping.StateLocationCache;
+import xfacthd.framedblocks.client.net.ClientNetworkHandler;
 import xfacthd.framedblocks.client.overlaygen.OverlayQuadGenerator;
 import xfacthd.framedblocks.client.render.block.*;
 import xfacthd.framedblocks.client.render.color.FramedFlowerPotColor;
@@ -67,18 +71,14 @@ import xfacthd.framedblocks.client.render.debug.impl.*;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
 import xfacthd.framedblocks.client.render.special.*;
-import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlayLayer;
 import xfacthd.framedblocks.client.screen.widget.BlockPreviewTooltipComponent;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.cube.FramedMiniCubeBlock;
-import xfacthd.framedblocks.common.block.cube.FramedOneWayWindowBlock;
 import xfacthd.framedblocks.common.block.door.FramedDoorBlock;
 import xfacthd.framedblocks.common.block.door.FramedFenceGateBlock;
-import xfacthd.framedblocks.common.block.interactive.FramedItemFrameBlock;
 import xfacthd.framedblocks.common.block.interactive.button.FramedButtonBlock;
 import xfacthd.framedblocks.common.block.interactive.button.FramedLargeButtonBlock;
 import xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
@@ -89,108 +89,78 @@ import xfacthd.framedblocks.common.block.slopeslab.FramedFlatDoubleSlopeSlabCorn
 import xfacthd.framedblocks.common.block.stairs.standard.FramedStairsBlock;
 import xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.StateCacheBuilder;
 import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
-import xfacthd.framedblocks.common.data.doubleblock.FramedDoubleBlockRenderProperties;
 import xfacthd.framedblocks.common.data.doubleblock.NullCullPredicate;
+import xfacthd.framedblocks.platform.event.ModEvents;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
-@Mod(value = FramedConstants.MOD_ID, dist = Dist.CLIENT)
-public final class FBClient
+public final class FBClient implements ClientModInitializer
 {
-    public FBClient(IEventBus modBus, ModContainer container)
+    @Override
+    public void onInitializeClient()
     {
-        modBus.addListener(FBClient::onClientSetup);
-        modBus.addListener(FBClient::onRegisterMenuScreens);
-        modBus.addListener(FBClient::onImcMessageReceived);
-        modBus.addListener(FBClient::onLoadComplete);
-        modBus.addListener(FBClient::onRegisterKeyMappings);
-        modBus.addListener(FBClient::onAttachDebugRenderers);
-        modBus.addListener(FBClient::onRegisterRenderers);
-        modBus.addListener(FBClient::onBlockColors);
-        modBus.addListener(FBClient::onItemColors);
-        modBus.addListener(FBClient::onOverlayRegister);
-        modBus.addListener(FBClient::onGeometryLoaderRegister);
-        modBus.addListener(FBClient::onRegisterModelWrappers);
-        modBus.addListener(FBClient::onModelRegister);
-        modBus.addListener(FBClient::onModifyBakingResult);
-        modBus.addListener(FBClient::onModelsLoaded);
-        modBus.addListener(FBClient::onRegisterReloadListener);
-        modBus.addListener(FBClient::onRegisterSpriteSources);
-        modBus.addListener(FBClient::onTexturesStitched);
-        modBus.addListener(FBClient::onRegisterParticleProviders);
-        modBus.addListener(FBClient::onRegisterClientExtensions);
-        modBus.addListener(FBClient::onRegisterClientTooltipComponentFactories);
-        modBus.addListener(BlockOutlineRenderers::onRegisterOutlineRenderers);
-        modBus.addListener(GhostRenderBehaviours::onRegisterGhostRenderBehaviours);
+        // Listeners of the events fired by the mod itself must be added before the events are posted
+        ModEvents.addListener(RegisterModelWrappersEvent.class, FBClient::onRegisterModelWrappers);
+        ModEvents.addListener(AttachDebugRenderersEvent.class, FBClient::onAttachDebugRenderers);
+        ModEvents.addListener(RegisterOutlineRenderersEvent.class, BlockOutlineRenderers::onRegisterOutlineRenderers);
+        ModEvents.addListener(RegisterGhostRenderBehavioursEvent.class, GhostRenderBehaviours::onRegisterGhostRenderBehaviours);
 
-        NeoForge.EVENT_BUS.addListener(ClientTaskQueue::onClientTick);
-        NeoForge.EVENT_BUS.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
-        NeoForge.EVENT_BUS.addListener(KeyMappings::onClientTick);
-        NeoForge.EVENT_BUS.addListener(GhostBlockRenderer::onRenderLevelStage);
-        NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
-        NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
-        NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
-
-        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-    }
-
-    private static void onClientSetup(final FMLClientSetupEvent event)
-    {
-        event.enqueueWork(BlueprintPropertyOverride::register);
-    }
-
-    private static void onRegisterMenuScreens(final RegisterMenuScreensEvent event)
-    {
-        event.register(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), FramedStorageScreen::new);
-        event.register(FBContent.MENU_TYPE_FRAMED_DOUBLE_CHEST.value(), FramedStorageScreen::new);
-        event.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::create);
-        event.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
-    }
-
-    private static void onImcMessageReceived(final InterModProcessEvent event)
-    {
-        event.getIMCStream(FramedConstants.IMC_METHOD_ADD_PROPERTY::equals).forEach(msg ->
+        if (AmendmentsCompat.isLoaded())
         {
-            if (msg.messageSupplier().get() instanceof ModelProperty<?> prop)
-            {
-                ConTexDataHandler.addConTexProperty(msg.senderModId(), prop);
-            }
-        });
+            ModelWrappingManager.registerAdditionalModel(AmendmentsCompat.Client.HANGING_MODEL_LOCATION);
+        }
+        // Posts the RegisterModelWrappersEvent, additional listeners must be added during the main entrypoint phase
+        ModelWrappingManager.init();
+
+        ClientNetworkHandler.initClient();
+
+        registerMenuScreens();
+        registerKeyMappings();
+        registerBlockEntityRenderers();
+        registerColorProviders();
+        registerRenderLayers();
+        registerParticleProviders();
+        registerTooltipComponents();
+        registerReloadListeners();
+        registerEventHandlers();
+
+        // Config screen provided by Forge Config API Port, shown through Mod Menu
+        ConfigScreenFactoryRegistry.INSTANCE.register(FramedConstants.MOD_ID, ConfigurationScreen::new);
+
+        BlueprintPropertyOverride.register();
+
+        // Hooks the "framedblocks_fabric:overlay" model type into model loading
+        OverlayLoader.init();
     }
 
-    private static void onLoadComplete(final FMLLoadCompleteEvent event)
+    private static void registerMenuScreens()
     {
-        ConTexDataHandler.lockRegistration();
+        MenuScreens.register(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), FramedStorageScreen::new);
+        MenuScreens.register(FBContent.MENU_TYPE_FRAMED_DOUBLE_CHEST.value(), FramedStorageScreen::new);
+        MenuScreens.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::create);
+        MenuScreens.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
     }
 
-    private static void onRegisterKeyMappings(final RegisterKeyMappingsEvent event)
+    private static void registerKeyMappings()
     {
-        event.register(KeyMappings.KEYMAPPING_UPDATE_CULLING.get());
-        event.register(KeyMappings.KEYMAPPING_WIPE_CACHE.get());
+        KeyBindingHelper.registerKeyBinding(KeyMappings.KEYMAPPING_UPDATE_CULLING.get());
+        KeyBindingHelper.registerKeyBinding(KeyMappings.KEYMAPPING_WIPE_CACHE.get());
     }
 
-    private static void onAttachDebugRenderers(final AttachDebugRenderersEvent event)
+    private static void registerBlockEntityRenderers()
     {
-        FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), ConnectionPredicateDebugRenderer.INSTANCE));
-        FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), QuadWindingDebugRenderer.INSTANCE));
-        FBContent.getDoubleBlockEntities().forEach(type -> event.attach(type.value(), DoubleBlockPartDebugRenderer.INSTANCE));
+        BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignRenderer::new);
+        BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedHangingSignRenderer::new);
+        BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
+        BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
+        BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
     }
 
-    private static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event)
+    private static void registerColorProviders()
     {
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedHangingSignRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
-    }
-
-    private static void onBlockColors(final RegisterColorHandlersEvent.Block event)
-    {
-        //noinspection SuspiciousToArrayCall
         Block[] blocks = FBContent.getRegisteredBlocks()
                 .stream()
                 .map(Holder::value)
@@ -199,16 +169,11 @@ public final class FBClient
                 .filter(FBClient::useDefaultColorHandler)
                 .toArray(Block[]::new);
 
-        event.register(FramedBlockColor.INSTANCE, blocks);
+        ColorProviderRegistry.BLOCK.register(FramedBlockColor.INSTANCE, blocks);
+        ColorProviderRegistry.BLOCK.register(FramedFlowerPotColor.INSTANCE, FBContent.BLOCK_FRAMED_FLOWER_POT.value());
+        ColorProviderRegistry.BLOCK.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
 
-        event.register(FramedFlowerPotColor.INSTANCE, FBContent.BLOCK_FRAMED_FLOWER_POT.value());
-        event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
-    }
-
-    private static void onItemColors(final RegisterColorHandlersEvent.Item event)
-    {
-        //noinspection SuspiciousToArrayCall
-        ItemLike[] blocks = FBContent.getRegisteredBlocks()
+        ItemLike[] items = FBContent.getRegisteredBlocks()
                 .stream()
                 .map(Holder::value)
                 .filter(IFramedBlock.class::isInstance)
@@ -216,20 +181,95 @@ public final class FBClient
                 .filter(FBClient::useDefaultColorHandler)
                 .toArray(ItemLike[]::new);
 
-        event.register(FramedBlockColor.INSTANCE, blocks);
-
-        event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
+        ColorProviderRegistry.ITEM.register(FramedBlockColor.INSTANCE, items);
+        ColorProviderRegistry.ITEM.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
     }
 
-    private static void onOverlayRegister(final RegisterGuiLayersEvent event)
+    // The "render_type" key of the model JSONs is ignored by the Fabric Rendering API
+    private static void registerRenderLayers()
     {
-        event.registerAboveAll(Utils.rl("block_interact"), new BlockInteractOverlayLayer());
+        FBContent.getRegisteredBlocks()
+                .stream()
+                .map(Holder::value)
+                .filter(IFramedBlock.class::isInstance)
+                .forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout()));
+
+        BlockRenderLayerMap.INSTANCE.putBlock(FBContent.BLOCK_FRAMING_SAW.value(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(FBContent.BLOCK_POWERED_FRAMING_SAW.value(), RenderType.cutout());
     }
 
-    private static void onGeometryLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
+    private static void registerParticleProviders()
     {
-        event.register(OverlayLoader.ID, new OverlayLoader());
-        event.register(FallbackLoader.ID, new FallbackLoader());
+        ParticleFactoryRegistry.getInstance().register(FBContent.FLUID_PARTICLE.get(), new FluidSpriteParticle.Provider());
+    }
+
+    private static void registerTooltipComponents()
+    {
+        TooltipComponentCallback.EVENT.register(data ->
+        {
+            if (data instanceof BlockPreviewTooltipComponent.Component component)
+            {
+                return new BlockPreviewTooltipComponent(component);
+            }
+            return null;
+        });
+    }
+
+    private static void registerReloadListeners()
+    {
+        ResourceManagerHelper resources = ResourceManagerHelper.get(PackType.CLIENT_RESOURCES);
+        resources.registerReloadListener(new ClientReloadListener(
+                "block_interact_overlay", BlockInteractOverlayLayer::onResourceReload
+        ));
+        resources.registerReloadListener(new ClientReloadListener(
+                "overlay_quad_cache", OverlayQuadGenerator::onResourceReload
+        ));
+        resources.registerReloadListener(new ClientReloadListener(
+                "models_loaded", FBClient::onModelsLoaded, List.of(ResourceReloadListenerKeys.MODELS)
+        ));
+    }
+
+    private static void registerEventHandlers()
+    {
+        ClientTickEvents.START_CLIENT_TICK.register(KeyMappings::onClientTick);
+        ClientTickEvents.END_CLIENT_TICK.register(ClientTaskQueue::onClientTick);
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> ClientEventHandler.onClientDisconnect());
+        ClientLifecycleEvents.CLIENT_STARTED.register(FBClient::onClientStarted);
+
+        WorldRenderEvents.BLOCK_OUTLINE.register(BlockOutlineRenderer::onBlockOutline);
+        WorldRenderEvents.BLOCK_OUTLINE.register(CollapsibleBlockIndicatorRenderer::onBlockOutline);
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(GhostBlockRenderer::onAfterTranslucent);
+
+        BlockInteractOverlayLayer overlayLayer = new BlockInteractOverlayLayer();
+        HudRenderCallback.EVENT.register(overlayLayer::render);
+    }
+
+    // Runs after the client initializers of all mods
+    private static void onClientStarted(Minecraft mc)
+    {
+        ConTexDataHandler.lockRegistration();
+
+        FramedBlockDebugRenderer.init();
+        BlockOutlineRenderer.init();
+        GhostBlockRenderer.init();
+    }
+
+    private static void onModelsLoaded(@SuppressWarnings("unused") ResourceManager resourceManager)
+    {
+        Minecraft mc = Minecraft.getInstance();
+
+        ModelWrappingManager.onModelsLoaded();
+        FluidCamoClientHandler.clearModelCache();
+        FramedChestRenderer.onModelsLoaded(mc.getModelManager());
+        //noinspection deprecation
+        ConnectionPredicateDebugRenderer.captureDummySprite(mc.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS));
+    }
+
+    private static void onAttachDebugRenderers(final AttachDebugRenderersEvent event)
+    {
+        FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), ConnectionPredicateDebugRenderer.INSTANCE));
+        FBContent.getBlockEntities().forEach(type -> event.attach(type.value(), QuadWindingDebugRenderer.INSTANCE));
+        FBContent.getDoubleBlockEntities().forEach(type -> event.attach(type.value(), DoubleBlockPartDebugRenderer.INSTANCE));
     }
 
     private static void onRegisterModelWrappers(final RegisterModelWrappersEvent event)
@@ -470,102 +510,6 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PATH, FramedPathGeometry::new, WrapHelper.IGNORE_SOLID);
     }
 
-    private static void onModelRegister(final ModelEvent.RegisterAdditional event)
-    {
-        event.register(FluidModel.BARE_MODEL);
-        event.register(ReinforcementModel.LOCATION);
-        event.register(FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION);
-        event.register(FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION);
-        event.register(FramedTargetGeometry.OVERLAY_LOCATION);
-        event.register(FramedCollapsibleBlockGeometry.ALT_BASE_MODEL_LOC);
-        event.register(FramedCollapsibleCopycatBlockGeometry.ALT_BASE_MODEL_LOC);
-        event.register(FramedLanternGeometry.STANDING_CHAIN_LOCATION);
-        event.register(FramedLanternGeometry.HANGING_CHAIN_LOCATION);
-        event.register(ErrorModel.LOCATION);
-
-        if (AmendmentsCompat.isLoaded())
-        {
-            event.register(AmendmentsCompat.Client.HANGING_MODEL_LOCATION);
-        }
-
-        ModelWrappingManager.reset();
-    }
-
-    private static void onModifyBakingResult(final ModelEvent.ModifyBakingResult event)
-    {
-        StateCacheBuilder.ensureStateCachesInitialized();
-
-        Map<ModelResourceLocation, BakedModel> registry = event.getModels();
-        TextureLookup textureLookup = TextureLookup.bindBlockAtlas(event.getTextureGetter());
-
-        ModelWrappingManager.handleAll(registry, textureLookup);
-
-        FramedTankItemModel.wrap(registry);
-    }
-
-    private static void onModelsLoaded(final ModelEvent.BakingCompleted event)
-    {
-        StateLocationCache.clear();
-        FluidCamoClientHandler.clearModelCache();
-        FramedChestRenderer.onModelsLoaded(event.getModels());
-        ReinforcementModel.reload(event.getModels());
-        ErrorModel.reload(event.getModels());
-    }
-
-    private static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
-    {
-        event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlayLayer::onResourceReload);
-        event.registerReloadListener((ResourceManagerReloadListener) OverlayQuadGenerator::onResourceReload);
-
-        ModelWrappingManager.fireRegistration();
-        FramedBlockDebugRenderer.init();
-        BlockOutlineRenderer.init();
-        GhostBlockRenderer.init();
-    }
-
-    private static void onRegisterSpriteSources(final RegisterSpriteSourceTypesEvent event)
-    {
-        event.register(Utils.rl("anim_splitter"), AnimationSplitterSource.TYPE);
-    }
-
-    private static void onTexturesStitched(final TextureAtlasStitchedEvent event)
-    {
-        //noinspection deprecation
-        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
-        {
-            ConnectionPredicateDebugRenderer.captureDummySprite(event.getAtlas());
-        }
-    }
-
-    private static void onRegisterParticleProviders(final RegisterParticleProvidersEvent event)
-    {
-        event.registerSpecial(FBContent.FLUID_PARTICLE.get(), new FluidSpriteParticle.Provider());
-    }
-
-    private static void onRegisterClientExtensions(final RegisterClientExtensionsEvent event)
-    {
-        FBContent.getRegisteredBlocks()
-                .stream()
-                .map(Holder::value)
-                .filter(IFramedBlock.class::isInstance)
-                .map(block -> Pair.of(block, switch (block)
-                {
-                    case FramedItemFrameBlock ignored -> NoEffectsClientBlockExtensions.INSTANCE;
-                    case FramedOneWayWindowBlock ignored -> new OneWayWindowClientBlockExtensions();
-                    case IFramedDoubleBlock ignored -> FramedDoubleBlockRenderProperties.INSTANCE;
-                    default -> FramedBlockRenderProperties.INSTANCE;
-                }))
-                .forEach(pair -> event.registerBlock(pair.getSecond(), pair.getFirst()));
-
-        event.registerItem(new TankClientItemExtensions(), FBContent.BLOCK_FRAMED_TANK.value().asItem());
-    }
-
-    private static void onRegisterClientTooltipComponentFactories(RegisterClientTooltipComponentFactoriesEvent event)
-    {
-        event.register(BlockPreviewTooltipComponent.Component.class, BlockPreviewTooltipComponent::new);
-    }
-
-
 
     private static void wrapDoubleModel(
             Holder<Block> block,
@@ -594,5 +538,38 @@ public final class FBClient
     {
         IBlockType type = block.getBlockType();
         return type != BlockType.FRAMED_FLOWER_POT && type != BlockType.FRAMED_TARGET;
+    }
+
+    private record ClientReloadListener(
+            ResourceLocation id, ResourceManagerReloadListener delegate, Collection<ResourceLocation> dependencies
+    ) implements SimpleSynchronousResourceReloadListener
+    {
+        private ClientReloadListener(String name, ResourceManagerReloadListener delegate)
+        {
+            this(Utils.rl(name), delegate, List.of());
+        }
+
+        private ClientReloadListener(String name, ResourceManagerReloadListener delegate, Collection<ResourceLocation> dependencies)
+        {
+            this(Utils.rl(name), delegate, dependencies);
+        }
+
+        @Override
+        public ResourceLocation getFabricId()
+        {
+            return id;
+        }
+
+        @Override
+        public Collection<ResourceLocation> getFabricDependencies()
+        {
+            return dependencies;
+        }
+
+        @Override
+        public void onResourceManagerReload(ResourceManager resourceManager)
+        {
+            delegate.onResourceManagerReload(resourceManager);
+        }
     }
 }

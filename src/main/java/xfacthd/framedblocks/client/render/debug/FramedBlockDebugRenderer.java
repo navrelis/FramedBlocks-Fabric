@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.*;
 import xfacthd.framedblocks.platform.event.ModEvents;
 import xfacthd.framedblocks.platform.Platform;
-import net.neoforged.neoforge.client.event.RenderFrameEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.render.debug.AttachDebugRenderersEvent;
 import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
@@ -25,9 +23,16 @@ public final class FramedBlockDebugRenderer
 {
     private static final Map<BlockEntityType<? extends FramedBlockEntity>, Set<BlockDebugRenderer<? extends FramedBlockEntity>>> RENDERERS_BY_TYPE = new IdentityHashMap<>();
 
+    private static boolean outlineEffectRequested = false;
+
     @SuppressWarnings("unchecked")
     public static void render(DeltaTracker delta, Camera camera, PoseStack poseStack)
     {
+        if (DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled())
+        {
+            outlineEffectRequested = true;
+        }
+
         HitResult hit = Minecraft.getInstance().hitResult;
         if (!(hit instanceof BlockHitResult blockHit)) return;
 
@@ -56,12 +61,15 @@ public final class FramedBlockDebugRenderer
         buffer.endBatch();
     }
 
-    private static void onRenderFramePre(final RenderFrameEvent.Pre event)
+    /**
+     * {@return whether the entity outline post-processing effect needs to be run for the current frame even if
+     * vanilla did not request it} Resets the request
+     */
+    public static boolean consumeOutlineEffectRequest()
     {
-        if (DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled())
-        {
-            Minecraft.getInstance().levelRenderer.requestOutlineEffect();
-        }
+        boolean requested = outlineEffectRequested;
+        outlineEffectRequested = false;
+        return requested;
     }
 
     public static void init()
@@ -71,8 +79,6 @@ public final class FramedBlockDebugRenderer
         ModEvents.post(new AttachDebugRenderersEvent((type, renderer) ->
                 RENDERERS_BY_TYPE.computeIfAbsent(type, $ -> new ReferenceOpenHashSet<>()).add(renderer)
         ));
-
-        NeoForge.EVENT_BUS.addListener(FramedBlockDebugRenderer::onRenderFramePre);
     }
 
     private FramedBlockDebugRenderer() { }

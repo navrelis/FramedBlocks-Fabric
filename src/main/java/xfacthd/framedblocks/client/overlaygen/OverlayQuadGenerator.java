@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import xfacthd.framedblocks.platform.model.IQuadTransformer;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.config.ClientConfig;

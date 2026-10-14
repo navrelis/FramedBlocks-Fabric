@@ -5,10 +5,10 @@ import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.model.SimpleModelState;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import org.joml.Vector3f;
+import xfacthd.framedblocks.client.util.SimpleModelState;
 
 import java.util.function.Function;
 

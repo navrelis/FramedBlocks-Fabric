@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
@@ -16,6 +17,7 @@ import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.render.RenderUtils;
 import xfacthd.framedblocks.api.render.debug.BlockDebugRenderer;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.config.DevToolsConfig;
@@ -62,11 +64,12 @@ public class DoubleBlockPartDebugRenderer implements BlockDebugRenderer<FramedDo
 
         //noinspection deprecation
         VertexConsumer consumer = outlineBuffer.getBuffer(RenderType.outline(TextureAtlas.LOCATION_BLOCKS));
-        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
+        RenderUtils.renderModel(
                 poseStack.last(),
                 consumer,
                 partState,
                 model,
+                RandomSource.create(),
                 1F, 1F, 1F,
                 LightTexture.FULL_BRIGHT,
                 OverlayTexture.NO_OVERLAY,

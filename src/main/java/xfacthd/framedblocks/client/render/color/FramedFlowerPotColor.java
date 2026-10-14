@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.platform.model.ModelDataHelper;
 import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 
 public final class FramedFlowerPotColor extends FramedBlockColor
@@ -22,7 +23,7 @@ public final class FramedFlowerPotColor extends FramedBlockColor
     {
         if (tintIndex < -1 && level != null && pos != null)
         {
-            Block plantBlock = level.getModelData(pos).get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
+            Block plantBlock = ModelDataHelper.get(level, pos).get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
             if (plantBlock != null && plantBlock != Blocks.AIR)
             {
                 BlockState plantState = plantBlock.defaultBlockState();

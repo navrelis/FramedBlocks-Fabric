@@ -292,7 +292,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             tooltip = Optional.of(new BlockPreviewTooltipComponent.Component(stack));
         }
 
-        graphics.renderTooltip(font, components, tooltip, stack, mouseX, mouseY);
+        graphics.renderTooltip(font, components, tooltip, mouseX, mouseY);
     }
 
     private void appendRecipeFailure(List<Component> components, FramingSawMenu.FramedRecipeHolder recipeHolder)

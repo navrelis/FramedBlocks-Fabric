@@ -3,7 +3,6 @@ package xfacthd.framedblocks.client.screen.overlay;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
@@ -32,6 +31,8 @@ abstract class BlockInteractOverlay
     private static final int TOOLTIP_MARGIN = 10;
     private static final int PADDING = 10;
     private static final int DEFAULT_Y_OFF = 80;
+    // Height occupied by the health and food bars above the hotbar, the NeoForge overlay layout tracking is not available
+    private static final int STATUS_BARS_HEIGHT = 39;
 
     private final String name;
     private final List<Component> linesFalse;
@@ -116,7 +117,6 @@ abstract class BlockInteractOverlay
             updateTextWidth(font);
         }
 
-        Gui gui = Minecraft.getInstance().gui;
         int lineHeight = font.lineHeight + LINE_DIST;
         int count = lines.size();
         int contentHeight = count * lineHeight - LINE_DIST;
@@ -124,7 +124,7 @@ abstract class BlockInteractOverlay
         int width = textWidth + tex.width + PADDING;
         int height = Math.max(contentHeight, tex.height);
         int minY = screenHeight / 2 + tex.height / 2;
-        int maxY = screenHeight - Math.min(gui.leftHeight, gui.rightHeight);
+        int maxY = screenHeight - STATUS_BARS_HEIGHT;
         int x = centerX - (width / 2);
         int y = Math.max(screenHeight - DEFAULT_Y_OFF - height, minY + TOOLTIP_MARGIN);
         if (y + height > maxY - TOOLTIP_MARGIN)

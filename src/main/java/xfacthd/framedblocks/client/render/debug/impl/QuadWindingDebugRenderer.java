@@ -12,7 +12,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelDataHelper;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.quad.QuadData;
@@ -35,14 +37,14 @@ public class QuadWindingDebugRenderer implements BlockDebugRenderer<FramedBlockE
         Vector3f norm = new Vector3f();
         Vec3 viewVector = Objects.requireNonNull(Minecraft.getInstance().player).getViewVector(partialTick).normalize();
 
-        ModelData beModelData = Objects.requireNonNull(be.getLevel()).getModelData(be.getBlockPos());
-        ModelData modelData = model.getModelData(be.getLevel(), be.getBlockPos(), be.getBlockState(), beModelData);
+        ModelData beModelData = ModelDataHelper.get(Objects.requireNonNull(be.getLevel()), be.getBlockPos());
+        ModelData modelData = ModelBridge.getModelData(model, be.getLevel(), be.getBlockPos(), be.getBlockState(), beModelData);
 
         Utils.forAllDirections(side ->
         {
-            for (RenderType renderType : model.getRenderTypes(be.getBlockState(), RANDOM, modelData))
+            for (RenderType renderType : ModelBridge.getRenderTypes(model, be.getBlockState(), RANDOM, modelData))
             {
-                for (BakedQuad quad : model.getQuads(be.getBlockState(), side, RANDOM, modelData, renderType))
+                for (BakedQuad quad : ModelBridge.getQuads(model, be.getBlockState(), side, RANDOM, modelData, renderType))
                 {
                     QuadData data = new QuadData(quad);
 

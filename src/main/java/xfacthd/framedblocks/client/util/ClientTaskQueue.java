@@ -3,7 +3,6 @@ package xfacthd.framedblocks.client.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import java.util.*;
 
@@ -25,11 +24,11 @@ public final class ClientTaskQueue
         tasks.add(new ClientTask(time, task));
     }
 
-    public static void onClientTick(@SuppressWarnings("unused") ClientTickEvent.Post event)
+    public static void onClientTick(Minecraft mc)
     {
         if (tasks.isEmpty()) { return; }
 
-        Level level = Minecraft.getInstance().level;
+        Level level = mc.level;
         if (level == null || level.dimension() != lastDimension)
         {
             lastDimension = level != null ? level.dimension() : null;

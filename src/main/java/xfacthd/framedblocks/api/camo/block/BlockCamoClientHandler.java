@@ -8,6 +8,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.camo.CamoClientHandler;
 
@@ -20,7 +21,7 @@ final class BlockCamoClientHandler extends CamoClientHandler<BlockCamoContent>
     @Override
     public ChunkRenderTypeSet getRenderTypes(BlockCamoContent camo, RandomSource random, ModelData data)
     {
-        return getOrCreateModel(camo).getRenderTypes(camo.getState(), random, data);
+        return ModelBridge.getRenderTypes(getOrCreateModel(camo), camo.getState(), random, data);
     }
 
     @Override
