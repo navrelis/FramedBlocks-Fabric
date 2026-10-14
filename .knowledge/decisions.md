@@ -34,3 +34,4 @@
 - BE onLoad is deferred to the next world tick start (queue), mirroring NeoForge freshBlockEntities; Fabric's BLOCK_ENTITY_LOAD fires inside LevelChunk.setBlockEntity.
 - Precision override T1 (Opus): flaky required light/occlusion gametests, cause unclear; a naive wait-longer fix could hide a real per-position light bug.
 - Duplicate recipe pairs found by /fbtest recipecollision (framed_sloped_stairs vs framed_sliced_sloped_stairs_slab, framed_vertical_sloped_stairs vs framed_vertical_sliced_sloped_stairs_panel) are upstream; kept as is to stay recipe-compatible with upstream.
+- Upstream src/test tree deleted (session 6): all of it except codegen/ is ported to src/gametest; codegen (upstream skip-predicate generator) is not used by the port; upstream history keeps the originals.
