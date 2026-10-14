@@ -1,0 +1,55 @@
+<section class="cf-section" id="functional" data-alt="Framed blocks that work. A picture of working framed blocks. Doors, iron doors, signs, hanging signs, item frames, lanterns, torches, levers, flower pots and bars, each shown with its item. Also: trapdoors, gates, fences, walls, ladders, buttons, pressure plates, bookshelves, chests, hoppers, secret storage, tanks, panes, a lightning rod, a target block, a bouncy cube, a redstone block, rails and rail slopes.">
+<style>
+  #functional .pic { margin: 0 0 24px; }
+  #functional .pic .shot { --h: 280; }
+  /* ten items with their real textures: 5 per row, (748 - 4 x 12) / 5 = 140 px, so the textures land on whole pixels */
+  #functional .tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+  #functional .tile {
+    display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 6px 10px;
+    background: var(--surface); border: 3px solid var(--border); box-shadow: var(--hard-shadow);
+    text-align: center; line-height: 26px; color: var(--text-2);
+  }
+  #functional .tile .slot { width: 64px; height: 64px; }
+  #functional .chips { margin: 22px 0 0; }
+</style>
+  <header class="sec-head">
+    <p class="eyebrow"><svg class="px-icon"><use href="#i-chest"/></svg>Functional blocks</p>
+    <h2 class="sec-title">Framed blocks that work</h2>
+  </header>
+  <figure class="pic">
+    <div class="shot" style="background-image:url(assets/shots/functional_blocks.png)"></div>
+  </figure>
+  <ul class="tiles">
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_door.png" width="48" height="48" alt=""></span>Doors</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_iron_door.png" width="48" height="48" alt=""></span>Iron doors</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_sign.png" width="48" height="48" alt=""></span>Signs</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_hanging_sign.png" width="48" height="48" alt=""></span>Hanging signs</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_item_frame.png" width="48" height="48" alt=""></span>Item frames</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_lantern.png" width="48" height="48" alt=""></span>Lanterns</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_torch.png" width="48" height="48" alt=""></span>Torches</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_lever.png" width="48" height="48" alt=""></span>Levers</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_flower_pot.png" width="48" height="48" alt=""></span>Flower pots</li>
+    <li class="tile"><span class="slot"><img class="item" src="assets/items/framed_bars.png" width="48" height="48" alt=""></span>Bars</li>
+  </ul>
+  <div class="chips">
+    <span class="chip">Trapdoors</span>
+    <span class="chip">Gates</span>
+    <span class="chip">Fences</span>
+    <span class="chip">Walls</span>
+    <span class="chip">Ladders</span>
+    <span class="chip">Buttons</span>
+    <span class="chip">Pressure plates</span>
+    <span class="chip">Bookshelves</span>
+    <span class="chip">Chests</span>
+    <span class="chip">Hoppers</span>
+    <span class="chip">Secret storage</span>
+    <span class="chip">Tanks</span>
+    <span class="chip">Panes</span>
+    <span class="chip">Lightning rod</span>
+    <span class="chip">Target</span>
+    <span class="chip">Bouncy cube</span>
+    <span class="chip">Redstone block</span>
+    <span class="chip">Rails</span>
+    <span class="chip">Rail slopes</span>
+  </div>
+</section>

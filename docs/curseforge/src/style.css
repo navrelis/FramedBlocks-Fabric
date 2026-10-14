@@ -1,0 +1,335 @@
+/* ==========================================================================
+   FramedBlocks Fabric – CurseForge cards
+   Design system for the pictures on the project page. Same look as the cards of
+   Unified Xaero Worldmap and the Nytheria modpack page (same author): fonts,
+   digit font, gold pixel frame and navy panels. The accents are the oak browns of
+   the FramedBlocks Fabric logo (an empty wooden frame). Every section is ONE card:
+   836 CSS px wide, rendered at DPR 2, captured as its own picture.
+
+   Readability rule: text >= 22 CSS px, card titles (h1, .sec-title) >= 44 CSS px.
+   Card rule: a card carries its own page colour and its own edge line on all
+   four sides, so it looks finished on a dark and on a light page.
+
+   Sections: fonts · tokens · base · card · headings · text · frame · cards ·
+   stats · pictures · screenshots · item icons · tables · lists · callouts ·
+   chips · tags · hero · missing assets
+   ========================================================================== */
+
+/* ---------- Fonts (SIL OFL 1.1, see static/fonts/*-OFL.txt) ---------- */
+@font-face {
+  font-family: "Pixelify Sans"; font-style: normal; font-weight: 400 700; font-display: block;
+  src: url("static/fonts/pixelify-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Pixelify Sans"; font-style: normal; font-weight: 400 700; font-display: block;
+  src: url("static/fonts/pixelify-sans-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Silkscreen digits are hard to read, so 0-9 are left out here and fall through to the digit font. */
+@font-face {
+  font-family: "Silkscreen"; font-style: normal; font-weight: 400; font-display: block;
+  src: url("static/fonts/silkscreen-latin.woff2") format("woff2");
+  unicode-range: U+0000-002F, U+003A-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: "Silkscreen"; font-style: normal; font-weight: 700; font-display: block;
+  src: url("static/fonts/silkscreen-bold-latin.woff2") format("woff2");
+  unicode-range: U+0000-002F, U+003A-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+
+/* Pixel Digits: the author's own 5x7 digit font (files nytheria-digits-*.ttf, made for
+   the Nytheria page), digits 0-9 only. In Pixelify Sans the 5 looks like S and the 2
+   like Z ("512" reads "S12"), so the display stacks below list this font FIRST: digits
+   come from here, letters still come from Pixelify Sans / Silkscreen. */
+@font-face {
+  font-family: "Pixel Digits"; font-style: normal; font-weight: 100 549; font-display: block;
+  src: url("static/fonts/nytheria-digits-regular.ttf") format("truetype");
+  unicode-range: U+0030-0039;
+}
+@font-face {
+  font-family: "Pixel Digits"; font-style: normal; font-weight: 550 900; font-display: block;
+  src: url("static/fonts/nytheria-digits-bold.ttf") format("truetype");
+  unicode-range: U+0030-0039;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  --gold: #ffd852;
+  --gold-2: #e0a324;
+  --brown: #92501f;
+  --plum: #bc71c2;
+  --plum-deep: #7b3148;
+
+  --bg: #0f1329;          /* card colour */
+  --bg-2: #141a35;
+  --surface: #1a2042;
+  --surface-2: #212850;
+  --surface-3: #2a3261;
+  --border: #36407a;
+  --border-strong: #5563a6;
+  --text: #e9ecf8;
+  --text-2: #c9cfe9;
+  --muted: #a7b0d6;
+  --heading: #f2eefe;
+  --title-solid: #f2cf4a;
+  --title-shadow: 4px 4px 0 var(--oak-shadow);
+  --nav-title: #f0c95a;
+  --hard-shadow: 6px 6px 0 rgba(3, 4, 12, .6);
+  --tip: #7fe0b8;     --tip-bg: #13302e;
+  --note: #9fcdf0;    --note-bg: #152a48;
+  --warn: #ffb68a;    --warn-bg: #3a1f1c;
+
+  /* oak, sampled from the logo (assets/art/icon-512.png = docs/images/icon.png):
+     face, light edge, shaded side, outline. -hi = lifted so it reads as text on navy */
+  --oak: #cfae6a;
+  --oak-light: #fbeec6;
+  --oak-dark: #8e7048;
+  --oak-deep: #2a1a10;
+  --oak-shadow: #5e3a1c;     /* hard shadow under gold titles: dark oak instead of plum */
+  --wood-bg-2: #2b2018;      /* dark wood from the banner, behind oak chips */
+  /* two effect colours, used only where the card is about them (card 05) */
+  --glow: #ffd96a;
+  --water: #5aa2f0;
+  --p-green: #2ec43a;
+
+  --font-pixel: "Pixel Digits", "Pixelify Sans", "Trebuchet MS", system-ui, sans-serif;
+  --font-label: "Pixel Digits", "Silkscreen", "Pixelify Sans", "Trebuchet MS", monospace;
+  --font-num: "Pixel Digits", "Pixelify Sans", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+
+  --page-w: 836px;       /* CurseForge description column */
+  --pad: 44px;           /* side padding of a card -> content width 748px */
+  --gap: 20px;
+  --px: 3px;             /* one "art pixel" of the gold frame */
+
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; width: var(--page-w); background: var(--bg); }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  color: var(--text);
+  font: 400 22px/35px var(--font-body);   /* line heights are whole px so pictures land on whole pixels */
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { max-width: 100%; }
+img { height: auto; }
+h1, h2, h3, h4 { margin: 0; font-family: var(--font-pixel); font-weight: 600; line-height: 1.2; color: var(--heading); letter-spacing: .01em; }
+p { margin: 0 0 18px; text-wrap: pretty; }   /* no single word alone on the last line */
+strong { color: var(--heading); font-weight: 700; }
+.px-icon { display: inline-block; flex: none; max-width: none; width: 1em; height: 1em; vertical-align: -0.12em; image-rendering: pixelated; }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.center { text-align: center; }
+.muted { color: var(--muted); }
+.pixelated { image-rendering: pixelated; }
+
+/* ---------- Card (one section = one picture) ---------- */
+.poster { width: var(--page-w); margin: 0; }
+.cf-section { position: relative; isolation: isolate; overflow: hidden; padding: 56px var(--pad) 60px; background: var(--bg); }
+.cf-section > :last-child { margin-bottom: 0; }
+/* the edge line of the card: brown outside, gold inside, drawn over everything */
+.cf-section::after {
+  content: ""; position: absolute; inset: 0; z-index: 9; pointer-events: none;
+  border: 4px solid var(--brown); box-shadow: inset 0 0 0 3px var(--gold-2);
+}
+.cf-section.flush { padding-left: 0; padding-right: 0; }
+.cf-section.flush-top { padding-top: 0; }
+.bleed { margin-left: calc(-1 * var(--pad)); margin-right: calc(-1 * var(--pad)); }
+
+/* ---------- Card heading ---------- */
+.sec-head { margin: 0 0 28px; }
+.eyebrow {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 10px;
+  font: 400 22px/28px var(--font-label); letter-spacing: .06em; text-transform: uppercase; color: var(--nav-title);
+}
+.eyebrow .px-icon { width: 24px; height: 24px; color: var(--gold-2); }
+.sec-title {
+  position: relative; margin: 0; padding-bottom: 16px;
+  font: 700 52px/58px var(--font-pixel); color: var(--title-solid); text-shadow: var(--title-shadow);
+  border-bottom: 3px solid var(--border); text-wrap: balance;
+}
+.sec-title::after { content: ""; position: absolute; left: 0; bottom: -3px; width: 108px; height: 3px; background: var(--gold-2); }
+.sec-title.small { font-size: 46px; line-height: 52px; }
+.sec-head.center .eyebrow { justify-content: center; }
+.sec-head.center .sec-title::after { left: 50%; margin-left: -54px; }
+.sub-title { margin: 34px 0 14px; font: 600 34px/40px var(--font-pixel); color: var(--heading); }
+
+/* ---------- Text ---------- */
+.lead { margin: 0 0 24px; font-size: 27px; line-height: 40px; color: var(--text-2); }
+.lead strong { color: var(--heading); }
+.label { font: 400 22px/28px var(--font-label); letter-spacing: .05em; text-transform: uppercase; color: var(--nav-title); }
+/* one closing line under a picture or table, with a small gold pixel in front */
+.note-line { display: flex; align-items: baseline; gap: 14px; margin: 22px 0 0; color: var(--text-2); }
+.note-line::before { content: ""; flex: none; width: 10px; height: 10px; background: var(--gold-2); box-shadow: 2px 2px 0 var(--brown); transform: translateY(-3px); }
+
+/* ---------- Pixel frame (frame.svg, 3px per art pixel) ---------- */
+.framed, .card, .stat, .pic, .table, .tagline {
+  border: calc(3 * var(--px)) solid transparent;
+  border-image: url("static/frame.svg") 7 / calc(7 * var(--px)) / 0 stretch;
+  background-clip: padding-box;
+}
+
+/* ---------- Cards ---------- */
+.card { padding: 22px 26px 24px; background-color: var(--surface); }
+.card.plain { border: 3px solid var(--border); border-image: none; box-shadow: var(--hard-shadow); }
+.card-title {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 10px;
+  font: 600 30px/36px var(--font-pixel); color: var(--heading);
+}
+.card-title .px-icon { width: 30px; height: 30px; color: var(--gold-2); }
+.card p { margin: 0 0 10px; color: var(--text-2); }
+.card > :last-child { margin-bottom: 0; }
+.grid-2, .grid-3 { display: grid; gap: var(--gap); margin: 26px 0; }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* ---------- Stat tiles ---------- */
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); margin: 26px 0; }
+.stat {
+  display: grid; grid-template-columns: auto 1fr; column-gap: 12px; align-items: center;
+  padding: 14px 14px; background-color: var(--surface); box-shadow: var(--hard-shadow);
+}
+.stat .px-icon { grid-row: span 2; width: 36px; height: 36px; color: var(--gold-2); }
+.stat-value { font: 700 40px/40px var(--font-num); letter-spacing: .02em; color: var(--title-solid); }
+/* Units and small words next to pixel digits use the bold body font (in Pixelify Sans
+   G reads as 6 and B as 8 at phone size): 5<span class="unit">s</span>. */
+.unit { font-family: var(--font-body); font-weight: 800; font-size: .62em; letter-spacing: 0; text-transform: none; margin-left: .12em; }
+.stat-label { margin-top: 6px; font-size: 22px; line-height: 28px; color: var(--muted); }
+/* stacked variant: value on top, label below, no icon column */
+.stats.tall .stat { display: block; padding: 16px 16px 16px; }
+.stats.tall .stat-value { display: block; font-size: 48px; line-height: 48px; }
+.stats.tall .stat-value .unit { line-height: 1; }
+.stats.tall .stat-label { display: block; margin-top: 10px; }
+
+/* ---------- Framed picture with caption strip ---------- */
+.pic { margin: 28px 0; background-color: #000; }
+.pic > img { display: block; width: 100%; }
+.pic figcaption {
+  padding: 10px 18px 12px; font-size: 22px; line-height: 31px; color: var(--text-2);
+  background: var(--surface-3); border-top: 3px solid var(--brown);
+}
+.pic figcaption strong { color: var(--title-solid); }
+
+/* ---------- Screenshot window ----------
+   <div class="shot" style="background-image:url(assets/shots/NAME.png); --h:300"></div>
+   The window size comes from CSS (width of its box, --h in CSS px), never from the picture,
+   so a placeholder and the real screenshot give the same layout. Default: the 1920x1080
+   screenshot covers the window (scaled down, smooth), --pos moves the crop (default centre).
+   .native: one screenshot pixel per device pixel (960x540 CSS px for the whole picture),
+   for GUI shots whose text must stay sharp; --pos picks the part shown. */
+.shot {
+  --h: 411; --pos: 50% 50%;
+  position: relative; display: block; width: 100%; height: calc(var(--h) * 1px);
+  background-color: #000; background-repeat: no-repeat; background-size: cover; background-position: var(--pos);
+}
+.shot.native { background-size: 960px 540px; image-rendering: pixelated; }
+/* drawn by tools/build.mjs while assets/shots/NAME.png is missing */
+.shot.shot-missing {
+  display: grid; place-items: center;
+  background-color: #12162d;
+  background-image: repeating-conic-gradient(#1c2244 0 25%, #12162d 0 50%);
+  background-size: 48px 48px; background-position: 0 0; background-repeat: repeat;
+}
+.shot-label {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 18px 12px;
+  color: var(--warn); background: rgba(10, 13, 31, .94); border: 3px dashed var(--warn); text-align: center;
+}
+.shot-kind { font: 400 22px/28px var(--font-label); letter-spacing: .06em; text-transform: uppercase; }
+.shot-name { font: 600 22px/30px ui-monospace, Consolas, monospace; color: var(--text); }
+
+/* ---------- Item icons: real 16x16 mod textures, nearest neighbour, whole multiples ----------
+   <img class="item" src="assets/items/framed_hammer.png" width="48" height="48" alt="">
+   Use 32 (4 device px per texture pixel), 48 (6x) or 64 (8x); the build warns otherwise. */
+img.item { display: block; flex: none; max-width: none; image-rendering: pixelated; }
+/* a slot behind an item: a lighter navy than the panel (the textures are dark oak), an oak inset line, a hard shadow */
+.slot {
+  display: grid; place-items: center; flex: none; width: 72px; height: 72px;
+  background: var(--surface-3); box-shadow: inset 0 0 0 3px var(--oak-dark), 5px 5px 0 rgba(3, 4, 12, .6);
+}
+.slot .px-icon { width: 40px; height: 40px; color: var(--oak); }
+.code { font: 600 22px/1 ui-monospace, Consolas, monospace; color: var(--oak-light); }
+
+/* ---------- Framed table ---------- */
+.table { margin: 26px 0; background-color: var(--surface); }
+.table table { width: 100%; border-collapse: collapse; font-size: 22px; line-height: 30px; }
+.table th, .table td { padding: 12px 18px; text-align: left; vertical-align: middle; border-bottom: 2px solid var(--border); }
+.table th { font: 600 22px/30px var(--font-pixel); color: var(--heading); background: var(--surface-3); letter-spacing: .02em; }
+.table tbody tr:nth-child(even) { background: var(--surface-2); }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table td:first-child { color: var(--heading); font-weight: 600; }
+.table .num { font-family: var(--font-num); color: var(--title-solid); font-size: 26px; }
+/* yes / no marks: a green tick block and a dim dash, drawn from pixels (no emoji) */
+.yes, .no { display: inline-block; width: 28px; height: 28px; vertical-align: middle; }
+.yes { background: #174a2a; box-shadow: inset 0 0 0 3px var(--p-green); color: #b9ffc1; }
+.yes .px-icon { display: block; width: 20px; height: 20px; margin: 4px; }
+.no { position: relative; }
+.no::before { content: ""; position: absolute; left: 6px; top: 12px; width: 16px; height: 4px; background: var(--border-strong); }
+
+/* ---------- Feature list with pixel bullets ---------- */
+.features { margin: 22px 0; padding: 0 0 0 30px; list-style: none; }
+.features > li { position: relative; margin: 0 0 14px; }
+.features > li::before {
+  content: ""; position: absolute; left: -28px; top: .62em; width: 10px; height: 10px;
+  background: var(--gold-2); box-shadow: 2px 2px 0 var(--brown);
+}
+
+/* ---------- Callouts ---------- */
+.callout { margin: 26px 0; padding: 18px 24px; background: var(--note-bg); border-left: 8px solid var(--note); box-shadow: var(--hard-shadow); }
+.callout-title { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font: 600 26px/34px var(--font-pixel); color: var(--note); }
+.callout-title .px-icon { width: 26px; height: 26px; }
+.callout p { margin: 0; text-wrap: balance; }
+.callout.tip { background: var(--tip-bg); border-left-color: var(--tip); }
+.callout.tip .callout-title { color: var(--tip); }
+.callout.warn { background: var(--warn-bg); border-left-color: var(--warn); }
+.callout.warn .callout-title { color: var(--warn); }
+
+/* ---------- Chips ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.chips.center { justify-content: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px;
+  font: 400 22px/30px var(--font-label); letter-spacing: .04em; text-transform: uppercase;
+  color: var(--text-2); background: var(--surface-3); border: 2px solid var(--border-strong);
+}
+.chip.gold { color: #2a1706; background: var(--gold); border-color: var(--brown); }
+.chip .px-icon { width: 22px; height: 22px; }
+
+/* ---------- Tags: small caps labels on pictures (Before / After) ---------- */
+.tag {
+  display: inline-flex; align-items: center; gap: 10px; padding: 3px 12px 4px;
+  font: 400 22px/28px var(--font-label); letter-spacing: .05em; text-transform: uppercase;
+  color: var(--heading); background: rgba(10, 13, 31, .92); border: 2px solid var(--border-strong);
+}
+.tag::before { content: ""; flex: none; width: 12px; height: 12px; background: currentColor; }
+.tag.off { color: var(--muted); border-color: var(--border-strong); }
+.tag.on { color: var(--oak); border-color: var(--oak); }
+.tag.plain::before { display: none; }
+
+/* ---------- Hero ---------- */
+.tagline {
+  margin: 0; padding: 16px 26px 18px;
+  font: 400 27px/40px var(--font-body); color: #f7f1e3; text-align: center;
+  background-color: rgba(15, 19, 41, .92);
+}
+/* The logo (assets/art/icon-512.png, 32x32 art pixels at 16x; icon-128.png at 4x) has a
+   transparent background, so it sits on navy inside the gold frame, with a hard shadow.
+   width/height are the size of the PICTURE; the frame adds 9 px on each side. Use icon-512
+   at 256 (1 device px per file px) or icon-128 at 128 (2 device px per file px). */
+.logo {
+  display: block; flex: none; box-sizing: content-box; max-width: none; image-rendering: pixelated;
+  border: calc(3 * var(--px)) solid transparent;
+  border-image: url("static/frame.svg") 7 / calc(7 * var(--px)) / 0 stretch;
+  box-shadow: 8px 8px 0 rgba(3, 4, 12, .6); background-color: var(--surface); background-clip: padding-box;
+}
+
+/* ---------- Missing assets (drawn by the build instead of a broken image) ---------- */
+.missing-asset {
+  display: grid; place-items: center; overflow: hidden; min-height: 32px;
+  font: 600 13px/1.2 ui-monospace, Consolas, monospace; color: #ffb68a; text-align: center; word-break: break-all; padding: 4px;
+  background: repeating-linear-gradient(45deg, #3a1f1c 0 10px, #2b1a20 10px 20px);
+  outline: 3px dashed #ffb68a; outline-offset: -3px;
+}

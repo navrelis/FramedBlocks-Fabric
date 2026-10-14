@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- Shell for the CurseForge cards of FramedBlocks Fabric. tools/build.mjs fills
+     the markers below and writes the result to build/page.html. Do not put content
+     here: content lives in src/sections/NN-slug.html. Every section is captured as
+     its own picture; the gap between the sections is never part of a picture. -->
+<base href="{{BASE}}">
+<meta name="viewport" content="width=836">
+<title>FramedBlocks Fabric – CurseForge cards</title>
+<link rel="stylesheet" href="src/style.css">
+<style>
+  html, body { background: #0d0d0d; }                       /* CurseForge page colour, between the cards */
+  main.poster > .cf-section + .cf-section { margin-top: {{GUTTER}}px; }
+</style>
+</head>
+<body>
+{{SPRITE}}
+<main class="poster">
+{{SECTIONS}}
+</main>
+</body>
+</html>

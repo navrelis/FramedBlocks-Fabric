@@ -1,0 +1,39 @@
+<section class="cf-section flush flush-top" id="hero" data-alt="FramedBlocks Fabric. Over 200 framed shapes that take on the look of any block. For Fabric, Minecraft 1.21.1. Unofficial port of FramedBlocks by XFactHD. In the background, a cottage built from framed blocks.">
+<style>
+  #hero { padding-bottom: 0; }
+  #hero .hero-art { position: relative; height: 500px; padding: 46px var(--pad) 0; overflow: hidden; }
+  /* backdrop: an in-game screenshot, dimmed with one flat warm tone */
+  #hero .hero-art > .shot { position: absolute; left: 0; top: 0; z-index: -2; --h: 500; }
+  #hero .hero-art::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(20, 14, 9, .5); }
+  #hero .hero-art::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: var(--brown); box-shadow: inset 0 4px 0 var(--gold-2); }
+  /* placeholder label in the free corner under the tagline, not behind the title */
+  #hero .hero-art > .shot-missing { place-items: end start; padding: 0 0 22px var(--pad); }
+  #hero .hero-art > .shot-missing .shot-label { flex-direction: row; gap: 14px; padding: 2px 14px 4px; }
+  #hero .hero-row { display: flex; align-items: center; gap: 36px; }
+  #hero .hero-title {
+    font: 700 80px/86px var(--font-pixel); color: var(--title-solid); letter-spacing: .01em;
+    text-shadow: 5px 5px 0 var(--oak-shadow), 10px 10px 0 rgba(3, 4, 12, .6);
+  }
+  #hero .hero-title .fabric { color: var(--oak-light); }
+  #hero .tagline { margin-top: 28px; }
+  #hero .hero-foot { padding: 26px var(--pad) 32px; }
+  #hero .chips { margin: 0; }
+  #hero .chip { padding: 5px 16px; }
+  #hero .port { margin: 18px 0 0; color: var(--muted); text-align: center; }
+</style>
+  <div class="hero-art">
+    <div class="shot" style="background-image:url(assets/shots/hero_cottage.png)"></div>
+    <div class="hero-row">
+      <img class="logo" src="assets/art/icon-512.png" width="256" height="256" alt="">
+      <h1 class="hero-title">Framed<br>Blocks<br><span class="fabric">Fabric</span></h1>
+    </div>
+    <p class="tagline">Over 200 framed shapes. Any block's look.</p>
+  </div>
+  <div class="hero-foot">
+    <div class="chips center">
+      <span class="chip">Fabric</span>
+      <span class="chip gold"><svg class="px-icon"><use href="#i-frame"/></svg>Minecraft 1.21.1</span>
+    </div>
+    <p class="port">Unofficial port of FramedBlocks by XFactHD.</p>
+  </div>
+</section>

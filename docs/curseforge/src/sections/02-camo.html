@@ -1,0 +1,49 @@
+<section class="cf-section" id="camo" data-alt="Any block, any shape. A new framed block is an empty wooden frame. Two pictures of the same framed blocks: before, empty frames; after, each frame shows the look of a block. Right-click with a block: the framed block takes the look of the block in your hand. Fluids work too. Take it off: the Framed Hammer removes the camo again. Not accepted as camo: blocks with block entities and untagged non-solid blocks.">
+<style>
+  #camo .duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); margin: 0; }
+  #camo .pic { position: relative; margin: 0; }
+  #camo .pic .shot { --h: 218; }
+  #camo .pic .tag { position: absolute; left: 10px; top: 10px; z-index: 1; }
+  #camo .pic.after figcaption { border-top-color: var(--gold-2); }
+  #camo .pic.before figcaption strong { color: var(--text); }
+  #camo .rules { display: grid; gap: 16px; margin: 26px 0 0; padding: 0; list-style: none; }
+  #camo .rowcard {
+    display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 22px; align-items: center;
+    padding: 16px 22px 16px 16px; background: var(--surface);
+    border: 3px solid var(--border); border-left: 8px solid var(--oak); box-shadow: var(--hard-shadow);
+  }
+  #camo .rowcard h3 { margin: 0 0 2px; font: 600 28px/34px var(--font-pixel); color: var(--heading); }
+  #camo .rowcard p { margin: 0; color: var(--text-2); }
+  #camo .note-line { margin-top: 24px; }
+</style>
+  <header class="sec-head">
+    <p class="eyebrow"><svg class="px-icon"><use href="#i-frame"/></svg>Camouflage</p>
+    <h2 class="sec-title">Any block, any shape</h2>
+  </header>
+  <p class="lead">A new framed block is an empty wooden frame. Give it the look of almost any block.</p>
+  <div class="duo">
+    <figure class="pic before">
+      <div class="shot" style="background-image:url(assets/shots/camo_before.png)"></div>
+      <span class="tag off">Before</span>
+      <figcaption><strong>Empty frames</strong></figcaption>
+    </figure>
+    <figure class="pic after">
+      <div class="shot" style="background-image:url(assets/shots/camo_after.png)"></div>
+      <span class="tag on">After</span>
+      <figcaption><strong>With camos</strong></figcaption>
+    </figure>
+  </div>
+  <ul class="rules">
+    <li class="rowcard">
+      <div class="slot"><img class="item" src="assets/items/framed_block.png" width="48" height="48" alt=""></div>
+      <div><h3>Right-click with a block</h3>
+      <p>The framed block takes the look of the block in your hand. Fluids work too.</p></div>
+    </li>
+    <li class="rowcard">
+      <div class="slot"><img class="item" src="assets/items/framed_hammer.png" width="48" height="48" alt=""></div>
+      <div><h3>Take it off</h3>
+      <p>The Framed Hammer removes the camo again.</p></div>
+    </li>
+  </ul>
+  <p class="note-line">Not accepted: blocks with block entities and untagged non-solid blocks.</p>
+</section>

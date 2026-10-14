@@ -1,0 +1,28 @@
+<section class="cf-section" id="light-fluids" data-alt="Light and fluids. A picture of framed blocks glowing at night: glowstone dust makes a framed block give off light, and so does a camo that glows. A picture of framed blocks with a fluid as camo: fluids work as a camo too.">
+<style>
+  #light-fluids .pic { position: relative; margin: 0; }
+  #light-fluids .pic + .pic { margin-top: 22px; }
+  #light-fluids .pic .shot { --h: 300; }
+  #light-fluids .pic .tag { position: absolute; left: 10px; top: 10px; z-index: 1; }
+  #light-fluids .tag.glow { color: var(--glow); border-color: var(--glow); }
+  #light-fluids .tag.water { color: var(--water); border-color: var(--water); }
+  #light-fluids .pic.glow figcaption { border-top-color: var(--glow); }
+  #light-fluids .pic.glow figcaption strong { color: var(--glow); }
+  #light-fluids .pic.water figcaption { border-top-color: var(--water); }
+  #light-fluids .pic.water figcaption strong { color: var(--water); }
+</style>
+  <header class="sec-head">
+    <p class="eyebrow"><svg class="px-icon"><use href="#i-sun"/></svg>Light and fluids</p>
+    <h2 class="sec-title">Glowing frames, fluid camos</h2>
+  </header>
+  <figure class="pic glow">
+    <div class="shot" style="background-image:url(assets/shots/glow_night.png)"></div>
+    <span class="tag glow">Light</span>
+    <figcaption><strong>Glowstone dust</strong> makes a framed block give off light. So does a camo that glows.</figcaption>
+  </figure>
+  <figure class="pic water">
+    <div class="shot" style="background-image:url(assets/shots/fluid_camo.png)"></div>
+    <span class="tag water">Fluid</span>
+    <figcaption><strong>Fluids</strong> work as a camo too.</figcaption>
+  </figure>
+</section>

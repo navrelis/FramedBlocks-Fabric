@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FramedBlocks Fabric cards – CurseForge preview</title>
+<style>
+  /* mimics the CurseForge description column: #0d0d0d page, 836 px column, every card its own paragraph */
+  html, body { margin: 0; background: #0d0d0d; color: #e0e0e0; font: 16px/1.5 system-ui, sans-serif; }
+  body.light, body.light .page { background: #f4f4f4; color: #222; }
+  .bar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; padding: 10px 16px; background: #1b1b1b; color: #e0e0e0; border-bottom: 1px solid #333; font-size: 14px; }
+  .bar button { font: inherit; padding: 4px 10px; color: #eee; background: #2b2b2b; border: 1px solid #555; cursor: pointer; }
+  .bar button[aria-pressed="true"] { background: #e0a324; color: #1b1b1b; border-color: #e0a324; }
+  .bar label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+  .page { padding: 24px 0 80px; }
+  .description { width: 836px; max-width: 100%; margin: 0 auto; }
+  .description p { margin: 0 0 16px; }
+  .description img { max-width: 100%; height: auto; vertical-align: top; }
+  .txt { opacity: .6; }
+</style></head>
+<body>
+<div class="bar">
+  <span>Column width:</span>
+  <button data-w="836" aria-pressed="true">836 px</button><button data-w="700">700 px</button><button data-w="375">375 px</button><button data-w="360">360 px</button>
+  <label><input type="checkbox" id="light"> light page</label>
+  <span>11 cards</span>
+</div>
+<div class="page"><div class="description" id="col">
+<p><img src="img/01-hero.png" alt="FramedBlocks Fabric. Over 200 framed shapes that take on the look of any block. For Fabric, Minecraft 1.21.1. Unofficial port of FramedBlocks by XFactHD. In the background, a cottage built from framed blocks." title="01-hero.png"></p>
+<p class="txt">Card above: 01-hero.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/02-camo.png" alt="Any block, any shape. A new framed block is an empty wooden frame. Two pictures of the same framed blocks: before, empty frames; after, each frame shows the look of a block. Right-click with a block: the framed block takes the look of the block in your hand. Fluids work too. Take it off: the Framed Hammer removes the camo again. Not accepted as camo: blocks with block entities and untagged non-solid blocks." title="02-camo.png"></p>
+<p class="txt">Card above: 02-camo.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/03-shapes.png" alt="About 230 framed shapes. 236 blocks in the registry. 231 framed shapes with an item. 2 Framing Saws to switch between shapes. A picture of many framed shapes side by side. Every shape takes any camo. Shapes include cubes, slabs, panels, slopes, stairs, corner and prism pieces, pillars, slope edges, slope panel and slab corners, pyramids, checkered and layered variants, collapsible blocks and double blocks." title="03-shapes.png"></p>
+<p class="txt">Card above: 03-shapes.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/04-double.png" alt="Two camos in one block. Double blocks hold two framed parts in one block space, and each part takes its own camo. A picture of double blocks with two different camos. Up close: a framed block shows the textures of its camo." title="04-double.png"></p>
+<p class="txt">Card above: 04-double.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/05-light-fluids.png" alt="Light and fluids. A picture of framed blocks glowing at night: glowstone dust makes a framed block give off light, and so does a camo that glows. A picture of framed blocks with a fluid as camo: fluids work as a camo too." title="05-light-fluids.png"></p>
+<p class="txt">Card above: 05-light-fluids.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/06-functional.png" alt="Framed blocks that work. A picture of working framed blocks. Doors, iron doors, signs, hanging signs, item frames, lanterns, torches, levers, flower pots and bars, each shown with its item. Also: trapdoors, gates, fences, walls, ladders, buttons, pressure plates, bookshelves, chests, hoppers, secret storage, tanks, panes, a lightning rod, a target block, a bouncy cube, a redstone block, rails and rail slopes." title="06-functional.png"></p>
+<p class="txt">Card above: 06-functional.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/07-tools.png" alt="Tools and upgrades. Each shown with its item. Framed Hammer: removes the camo and toggles options such as waterlogging. Framed Wrench: rotates blocks and switches some shape variants. Framed Screwdriver: rotates the camo texture. Framed Key: locks the state of a block. Framed Blueprint: copies a framed block with its camo; the materials must be in your inventory. Upgrades, each shown with its item: glowstone dust, the block gives off light. Framed Reinforcement: a pickaxe that can mine obsidian takes it off. Phantom Paste: the block becomes intangible (server config option)." title="07-tools.png"></p>
+<p class="txt">Card above: 07-tools.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/08-saw.png" alt="Switch shapes with the Framing Saw. A picture of the Framing Saw screen, which has a searchable recipe list. Framing Saw: turns framed blocks into other framed shapes, by material value. Powered Framing Saw: works without energy by default. With the optional Team Reborn Energy installed, other mods can feed energy into the Powered Framing Saw from every side except the top. It never outputs energy. The server config option poweredSawRequiresEnergy, false by default, makes energy required." title="08-saw.png"></p>
+<p class="txt">Card above: 08-saw.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/09-compat.png" alt="Optional integrations. Each one is only active when the other mod is installed: JEI, REI, EMI, Jade, Diagonal Blocks, Amendments, Searchables, Additional Placements, AtlasViewer and Team Reborn Energy. Jade and REI were confirmed to load at startup. The others are not tested in game yet. Removed in this port: Create, Applied Energistics 2 and Building Gadgets, because no Fabric builds of them exist for Minecraft 1.21.1." title="09-compat.png"></p>
+<p class="txt">Card above: 09-compat.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/10-install.png" alt="Install in three steps. 1, Fabric: install Fabric Loader 0.19 or newer for Minecraft 1.21.1, and Fabric API. 2, Mods folder: put the mod into the mods folder of the game, and of the server for multiplayer. 3, Play: start the game. Requirements: Java 21. Needed on both the client and the server. Forge Config API Port is bundled. Not compatible with NeoForge worlds: the mod id is framedblocks_fabric, so worlds and items from the NeoForge version do not carry over." title="10-install.png"></p>
+<p class="txt">Card above: 10-install.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+<p><img src="img/11-credits.png" alt="FramedBlocks Fabric. Unofficial Fabric port of FramedBlocks by XFactHD. All credit for the concept and the original code goes to XFactHD and contributors. Port by Navrelis. License: LGPL-3.0. Not affiliated with or endorsed by XFactHD. Report bugs of the port at github.com/navrelis/FramedBlocks-Fabric/issues, not to upstream." title="11-credits.png"></p>
+<p class="txt">Card above: 11-credits.png. The text between the cards is in description.template.md (node tools/preview-description.mjs).</p>
+</div></div>
+<script>
+  const col = document.getElementById('col');
+  document.querySelectorAll('[data-w]').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('[data-w]').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    col.style.width = b.dataset.w + 'px';
+  }));
+  document.getElementById('light').addEventListener('change', (e) => document.body.classList.toggle('light', e.target.checked));
+</script>
+</body></html>

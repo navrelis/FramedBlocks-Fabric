@@ -1,0 +1,56 @@
+<section class="cf-section" id="install" data-alt="Install in three steps. 1, Fabric: install Fabric Loader 0.19 or newer for Minecraft 1.21.1, and Fabric API. 2, Mods folder: put the mod into the mods folder of the game, and of the server for multiplayer. 3, Play: start the game. Requirements: Java 21. Needed on both the client and the server. Forge Config API Port is bundled. Not compatible with NeoForge worlds: the mod id is framedblocks_fabric, so worlds and items from the NeoForge version do not carry over.">
+<style>
+  /* three numbered steps joined by a dotted pixel line */
+  #install .steps { position: relative; display: grid; gap: 22px; margin: 0; padding: 0; list-style: none; }
+  #install .steps::before {
+    content: ""; position: absolute; left: 39px; top: 40px; bottom: 40px; width: 6px;
+    background: repeating-linear-gradient(180deg, var(--gold-2) 0 6px, transparent 6px 14px);
+  }
+  #install .step { position: relative; display: grid; grid-template-columns: 84px minmax(0, 1fr); column-gap: 24px; align-items: center; }
+  #install .step-no {
+    display: grid; place-items: center; width: 84px; height: 84px;
+    font: 700 52px/52px var(--font-num); color: #2a1706; background: var(--gold);
+    box-shadow: inset 0 0 0 4px var(--brown), inset -8px -8px 0 rgba(146, 80, 31, .35), 6px 6px 0 rgba(3, 4, 12, .6);
+  }
+  #install .step-text { padding: 14px 20px 16px; background: var(--surface); border: 3px solid var(--border); }
+  #install .step-text p { margin: 0; color: var(--text-2); }
+  #install .step-text .big { font: 600 28px/34px var(--font-pixel); color: var(--heading); margin-bottom: 2px; }
+  #install .callout { margin: 28px 0 0; }
+  #install .callout + .callout { margin-top: 20px; }
+</style>
+  <header class="sec-head">
+    <p class="eyebrow"><svg class="px-icon"><use href="#i-download"/></svg>Setup</p>
+    <h2 class="sec-title">Install in three steps</h2>
+  </header>
+  <ol class="steps">
+    <li class="step">
+      <span class="step-no">1</span>
+      <div class="step-text">
+        <p class="big">Fabric</p>
+        <p>Install Fabric Loader 0.19 or newer for Minecraft 1.21.1, and Fabric API.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-no">2</span>
+      <div class="step-text">
+        <p class="big">Mods folder</p>
+        <p>Put the mod into the mods folder of the game, and of the server for multiplayer.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-no">3</span>
+      <div class="step-text">
+        <p class="big">Play</p>
+        <p>Start the game.</p>
+      </div>
+    </li>
+  </ol>
+  <div class="callout tip">
+    <p class="callout-title"><svg class="px-icon"><use href="#i-check"/></svg>Requirements</p>
+    <p>Java 21. Needed on both the client and the server. Forge Config API Port is bundled.</p>
+  </div>
+  <div class="callout warn">
+    <p class="callout-title"><svg class="px-icon"><use href="#i-warning"/></svg>Not compatible with NeoForge worlds</p>
+    <p>The mod id is <span class="code">framedblocks_fabric</span>, so worlds and items from the NeoForge version do not carry over.</p>
+  </div>
+</section>

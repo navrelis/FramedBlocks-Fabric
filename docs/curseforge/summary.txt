@@ -1,0 +1,11 @@
+CurseForge project summary (field limit: 250 characters; it becomes the page meta description).
+Counts are characters, counted by script. Paste the line under the heading you choose.
+
+Recommended (218 characters)
+Unofficial Fabric port of FramedBlocks by XFactHD for Minecraft 1.21.1. About 230 framed block shapes, from slopes and stairs to doors and chests, that take on the look of any block. Includes tools and the Framing Saw.
+
+Alternative 2 (209 characters)
+Framed blocks in over 200 shapes that copy the look of almost any block: slopes, corners, panels, pillars, doors and more. Unofficial Fabric port of FramedBlocks by XFactHD, Minecraft 1.21.1, needs Fabric API.
+
+Alternative 3 (201 characters)
+Build any shape in any material. Right-click a framed block with a block to give it that look; fluids work too. About 230 shapes. Unofficial Fabric port of FramedBlocks by XFactHD for Minecraft 1.21.1.
