@@ -50,17 +50,17 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | ID | Task | Definition of done | Depends | Model / size | Status |
 |----|------|--------------------|---------|--------------|--------|
 | PUB1 | New public GitHub repo with rewritten author email | Public repo, no personal email in author/committer fields, tree identical; local branch tracks it | - | lead | done (github.com/navrelis/FramedBlocks-Fabric; old repo = remote `private`) |
-| SC1 | Showcase mode for the dev-only client test: build pretty scenes, capture high-res screenshots | `runClientTest -Pshowcase=true` writes named PNGs; release jar unchanged; build green | - | Sonnet long | in progress (worktree F:/wt/sc1) |
+| SC1 | Showcase mode for the dev-only client test: build pretty scenes, capture high-res screenshots | `runClientTest -Pshowcase=true` writes named PNGs; release jar unchanged; build green | - | Sonnet long | done (merged 2a70e5499; 11 shots, 7 client runs; lead viewed hero, camo, glow, showroom) |
 | CF1 | CurseForge card pipeline in `docs/curseforge` (UXW style): cards, alt texts, description template, summary, checks | `node tools/build.mjs` renders all cards; check passes; lead viewed every card | - | Opus long (override: visual quality) | done (11 cards, check passes, screenshots still placeholders) |
-| CF2 | Put SC1 screenshots into CF1 cards, final render, review | All cards use real screenshots; lead viewed every card | SC1, CF1 | Sonnet short | open |
+| CF2 | Put SC1 screenshots into CF1 cards, final render, review | All cards use real screenshots; lead viewed every card | SC1, CF1 | Opus short (continues CF1 with its context) | in progress |
 | H6 | Bound `FramedBlockModel` quad/render-type caches (clear on overflow) | Cap constant, both caches bounded, build + client test green | - | Opus short (Sonnet slots full, user asked for speed) | done (merged, build 901/27; client test pending after SC1) |
 | H1 | Parallel state-cache build with serial warm-up and determinism check | Same caches as serial build (self-test), cold start measured, build green | - | Opus long (concurrency) | done (lead build 901/27, cold 125 ms, 0 mismatches) |
 | H3, H5 | Lazy beacon occlusion, ItemHandlerStorage toStack hoist | Skipped: benefit unmeasured/negligible, H5 dupe-sensitive | - | - | skipped |
 | UP1 | Loom/Gradle upgrade research | Report with verified target versions | - | Sonnet long | done (Loom 1.18.4 + Gradle 9.7 + daemon JDK 25 verified in a copy: build 901, client test PASS with JEI 19.64, Sodium 0.8.13) |
 | UP2 | Replace 9 JEI removal-marked APIs; saw energy unit FE -> E | 0 removal warnings, 901/27, no behaviour change | - | Sonnet long | done (merged 12750eb84, lint 9->0, build 901/27; JEI GUI untested in game) |
-| UP3 | Loom 1.18.4, Gradle 9.7.0, daemon JVM criteria 25, JEI 19.64, MezzConfig 0.6.8 (maven), Sodium 0.8.13, Amendments 2.1.11 | Build 901/27, runClientTest PASS (Indigo + Sodium), compat runtime starts | UP2 | Sonnet long | in progress (F:/wt/up3) |
+| UP3 | Loom 1.18.4, Gradle 9.7.0, daemon JVM criteria 25, JEI 19.64, MezzConfig 0.6.8 (maven), Sodium 0.8.13, Amendments 2.1.11 | Build 901/27, runClientTest PASS (Indigo + Sodium), compat runtime starts | UP2 | Sonnet long | done (merged 8fccef08d; lead build 901/27; agent client test PASS with JEI 19.64 + Sodium 0.8.13) |
 
-Parallel now: SC1 (Sonnet), UP3 (Sonnet).
+Parallel now: CF2 (Opus). Lead: merged client test run.
 
 Usage tally session 8 so far: Sonnet +2 (H mapping long) → 67 + running SC1 2, UP1 2; Opus +4 running (CF1, H1) → 22. Opus share ~24 %.
 

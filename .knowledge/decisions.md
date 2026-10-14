@@ -45,3 +45,4 @@
 - Session 8: CF1 to Opus (override): the user explicitly wants pictures matching their other mods' look; visual design quality is hard to spec for Sonnet.
 - Session 8: H6 to Opus (short) instead of waiting: both Sonnet slots busy and the user asked for more parallel work; budget stays ~25 %.
 - Session 8: Loom upgrade target 1.18.4 (needed for JEI 19.6x); the JDK 25 requirement for the Gradle daemon is handled by gradle/gradle-daemon-jvm.properties (Gradle daemon toolchain), the mod toolchain stays Java 21.
+- Session 8: CF2 goes to the CF1 Opus agent (resumed with its context) instead of a fresh Sonnet: faster and it owns the card layout.

@@ -96,3 +96,6 @@
 - UP2 JEI deprecations + FE->E — Sonnet, long — running in F:/wt/up2.
 - UP2 — Sonnet, long — diff read (factory-built clickable ingredients, ClickableStack removed, getWidth/getHeight + background in draw, transfer context + delegate, normalize=false; FE->E in 4 lang files). Lead build 901/27. Accepted, merged. JEI screens go on the manual checklist.
 - UP3 Loom 1.18.4 upgrade — Sonnet, long — running in F:/wt/up3.
+- UP3 — Sonnet, long — diff read (Loom 1.18.4, Gradle 9.7.0 wrapper, gradle-daemon-jvm.properties toolchainVersion=25 with foojay URLs, JEI 19.64, MezzConfig 0.6.8 from Jared's maven, Sodium 0.8.13, Amendments cFt8Z1aS, README build note). Lead build 901/27. Accepted, merged.
+- SC1 — Sonnet, long — diff read (showcase phase, ShowcaseDirector/Scenes/Builder/ItemsScreen in src/gametest, gradle showcase props). 7 client runs (over the 5 budget). Lead viewed 4 shots: usable, glow light verified on ground. Lead build 901/27. Accepted, merged; shots copied to docs/curseforge/assets/shots.
+- CF2 — Opus (CF1 agent resumed) — crops, captions, reinforcement wording, README.
