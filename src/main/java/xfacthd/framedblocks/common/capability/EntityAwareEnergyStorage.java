@@ -37,6 +37,28 @@ public class EntityAwareEnergyStorage extends EnergyStorage
         onContentsChanged(maxExtract, false);
     }
 
+    /**
+     * Adds energy without firing the change notifier, used by wrappers which fire it once their transaction commits
+     * @return the amount of energy that was actually added
+     */
+    public int receiveEnergySilently(int maxReceive)
+    {
+        return super.receiveEnergy(maxReceive, false);
+    }
+
+    /**
+     * Sets the stored energy without firing the change notifier, used by wrappers to restore a snapshot
+     */
+    public void setEnergySilently(int energy)
+    {
+        this.energy = Math.max(0, Math.min(capacity, energy));
+    }
+
+    public void notifyChanged()
+    {
+        changeNotifier.run();
+    }
+
     private void onContentsChanged(int diff, boolean simulate)
     {
         if (!simulate && diff > 0)
