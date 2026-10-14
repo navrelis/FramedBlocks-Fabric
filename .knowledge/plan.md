@@ -30,6 +30,21 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | done (all accepted findings merged into 1.21.1-fabric) |
 | G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | done (report.md) |
 
-Parallel now: none. Project complete pending the manual test checklist (report.md §5).
+## Session 7: automated verification and optimisation
+
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| S1 | Run the automated server game test suite, scan logs | 900 required pass, 27 known optional, no errors from our code; repeated for stability | - | lead | done (run 1 green, 22 s, only expected warnings) |
+| CT1 | Automated client smoke test (`runClientTest`): fresh world, self-tests, every framed block with camo variants rendered, items/BERs, screenshots, error capture, exit code; Indigo and Sodium | Harness only in `src/gametest` + Loom run + optional Sodium dev runtime; green or findings with root cause; release jar unchanged | S1 | Sonnet long | done (merged; Indigo + Sodium PASS on merged code) |
+| P1 | JFR profiling of the game test server run: hotspots, allocations, startup cost in our code | Ranked findings with file paths and evidence; no code changes | S1 | Sonnet long | done (runtime share of our code <1 %; port regressions F1, F2, F3 + nits; upstream H1–H6) |
+| O1 | F2: AuxLight per-chunk store without copy-on-write (O(1) set, light-thread-safe reads) | 16k sets in one chunk well under 50 ms; save/load/rebuild unchanged; light gametests green; reasoning on thread safety documented | P1 | Opus long (precision override) | done (merged 0f885ac23) |
+| O2 | F1: cache `FramedBlockEntity` model data, invalidate at every mutation point (upstream `requestModelDataUpdate` sites) | `getRenderData` returns cached instance; every input of `attachAdditionalModelData`/camo/culling invalidates; build green | P1 | Sonnet long | done (merged 0f885ac23) |
+| O3 | Mixin hot-path nits: F3 face hiding order, F5 plant/cocoa `@ModifyReturnValue`, F6 particle crack early-out, F11 `@ModifyReturnValue` | Semantics identical; build green | P1 | Sonnet short | done (merged 0f885ac23) |
+| T2 | Required occlusion/light gametests time out (100 ticks) with `-Dfabric.log.level=debug` | Root cause; fix if test-side, report if mod-side; suite green with and without debug logging | P1 | Opus long (same area as T1) | done (merged 0f885ac23) |
+| — | H1 parallel state-cache build (1.7 s startup), H3 lazy beacon occlusion, H5, H6 | Deferred: inherited from upstream, medium risk, recorded as recommendation | — | — | deferred |
+
+| FX1 | `/fbtest` result chat message uses OPEN_FILE, rejected by 1.21.1 ("Can't deliver chat message") | COPY_TO_CLIPBOARD, no encoder error in logs, build green | CT1 | Sonnet short | done (client run: 0 "Action not allowed") |
+
+Parallel now: none.
 
 Usage tally (long = 2, short = 1), including killed runs: Sonnet 57 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3, C5 short), Opus 14 (B1 x2, C2 x2, F1 review x3, F1-C, T1). Opus share ~20 %.

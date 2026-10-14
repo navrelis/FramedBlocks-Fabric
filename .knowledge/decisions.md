@@ -36,3 +36,6 @@
 - Duplicate recipe pairs found by /fbtest recipecollision (framed_sloped_stairs vs framed_sliced_sloped_stairs_slab, framed_vertical_sloped_stairs vs framed_vertical_sliced_sloped_stairs_panel) are upstream; kept as is to stay recipe-compatible with upstream.
 - Upstream src/test tree deleted (session 6): all of it except codegen/ is ported to src/gametest; codegen (upstream skip-predicate generator) is not used by the port; upstream history keeps the originals.
 - Graphify graph (graphify-out/, ~98 MB) is not committed; it is excluded locally via .git/info/exclude and rebuilt with `graphify update .` (no LLM needed).
+- Session 7: precision override O1 (Opus): AuxLight store is read by light worker threads while the server writes; a subtle race gives wrong light that is hard to detect.
+- Session 7: T2 to Opus: same light-timing area as T1, unclear whether test-side or mod-side.
+- Session 7: H1 (parallel state caches), H3, H5, H6 deferred: inherited from upstream, medium risk, not port regressions.
