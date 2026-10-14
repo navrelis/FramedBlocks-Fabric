@@ -58,6 +58,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
         if (secondary)
         {
             this.camoContainer = camo;
+            invalidateModelData();
         }
         else
         {
@@ -390,6 +391,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
         {
             int oldLight = getLightValue();
             camoContainer = newCamo;
+            invalidateModelData();
             if (oldLight != getLightValue())
             {
                 doLightUpdate();
@@ -420,6 +422,7 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
+            invalidateModelData();
             changed = true;
         }
         return changed;
@@ -498,5 +501,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
     {
         super.loadAdditional(nbt, provider);
         camoContainer = loadAndValidateCamo(nbt, CAMO_TWO_NBT_KEY);
+        invalidateModelData();
     }
 }

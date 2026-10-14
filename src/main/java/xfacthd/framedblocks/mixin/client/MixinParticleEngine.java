@@ -5,8 +5,6 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,9 +22,7 @@ public class MixinParticleEngine
     private void framedblocks$handleHitEffects(BlockPos pos, Direction side, CallbackInfo ci)
     {
         BlockState state = level.getBlockState(pos);
-        // Only the position and side of the hit are used by the handlers
-        BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(pos), side, pos, false);
-        if (ClientBlockEffects.addHitEffects(state, level, hit, (ParticleEngine) (Object) this))
+        if (ClientBlockEffects.addHitEffects(state, level, pos, side, (ParticleEngine) (Object) this))
         {
             ci.cancel();
         }

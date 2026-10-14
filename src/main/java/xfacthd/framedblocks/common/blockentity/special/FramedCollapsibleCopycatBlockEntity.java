@@ -77,6 +77,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         int idx = rotation.rotate(side).ordinal() * 4;
         int mask = 0x0F << idx;
         packedOffsets = (packedOffsets & ~mask) | (offset << idx);
+        invalidateModelData();
     }
 
     public int getFaceOffset(Direction side, Rotation rotation)
@@ -171,6 +172,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         if (packed != packedOffsets)
         {
             packedOffsets = packed;
+            invalidateModelData();
 
             needUpdate = true;
             updateCulling(true, false);
@@ -194,6 +196,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         packedOffsets = nbt.getInt("offsets");
+        invalidateModelData();
         occludesBeacon = nbt.getBoolean("occludesBeacon");
 
         super.handleUpdateTag(nbt, provider);
@@ -211,6 +214,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         if (auxData instanceof CollapsibleCopycatBlockData(int offsets))
         {
             packedOffsets = offsets;
+            invalidateModelData();
         }
     }
 
@@ -234,6 +238,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
         if (blockData != null)
         {
             packedOffsets = blockData.offsets();
+            invalidateModelData();
             updateFaceSolidity();
             updateBeaconOcclusion();
         }
@@ -251,6 +256,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity imple
     {
         super.loadAdditional(nbt, provider);
         packedOffsets = nbt.getInt("offsets");
+        invalidateModelData();
         updateBeaconOcclusion();
     }
 

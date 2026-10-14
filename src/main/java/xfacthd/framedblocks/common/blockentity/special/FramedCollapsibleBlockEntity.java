@@ -160,6 +160,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         int idx = vertex * BIT_PER_VERTEX;
         int mask = VERTEX_MASK << idx;
         packedOffsets = (packedOffsets & ~mask) | (offset << idx);
+        invalidateModelData();
     }
 
     public static int vertexFromHit(Direction faceHit, Vec3 loc)
@@ -249,6 +250,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         if (packed != packedOffsets)
         {
             packedOffsets = packed;
+            invalidateModelData();
 
             needUpdate = true;
             updateCulling(true, false);
@@ -269,6 +271,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         packedOffsets = nbt.getInt("offsets");
+        invalidateModelData();
         super.handleUpdateTag(nbt, provider);
     }
 
@@ -292,6 +295,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         if (auxData instanceof CollapsibleBlockData(int offsets))
         {
             packedOffsets = offsets;
+            invalidateModelData();
         }
     }
 
@@ -314,6 +318,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
         if (blockData != null)
         {
             packedOffsets = blockData.offsets();
+            invalidateModelData();
         }
     }
 
@@ -329,6 +334,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity implements I
     {
         super.loadAdditional(nbt, provider);
         packedOffsets = nbt.getInt("offsets");
+        invalidateModelData();
     }
 
 
