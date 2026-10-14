@@ -88,6 +88,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
             }
             if (changed)
             {
+                invalidateModelData();
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
                 setChangedWithoutSignalUpdate();
             }
@@ -178,6 +179,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
         if (height != firstHeight)
         {
             firstHeight = height;
+            invalidateModelData();
 
             needUpdate = true;
             updateCulling(true, false);
@@ -199,6 +201,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
     {
         super.handleUpdateTag(nbt, provider);
         firstHeight = nbt.getInt("first_height");
+        invalidateModelData();
     }
 
     @Override
@@ -213,6 +216,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
         if (auxData instanceof AdjustableDoubleBlockData(int height))
         {
             firstHeight = height;
+            invalidateModelData();
         }
     }
 
@@ -236,6 +240,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
         if (blockData != null)
         {
             firstHeight = blockData.firstHeight();
+            invalidateModelData();
         }
     }
 
@@ -251,6 +256,7 @@ public class FramedAdjustableDoubleBlockEntity extends FramedDoubleBlockEntity i
     {
         super.loadAdditional(nbt, provider);
         firstHeight = nbt.getInt("first_height");
+        invalidateModelData();
     }
 
 

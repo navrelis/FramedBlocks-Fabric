@@ -81,6 +81,7 @@ public class FramedBlockEntity extends BlockEntity
     private boolean recheckStates = false;
     private boolean forceLightUpdate = false;
     private boolean cullStateDirty = false;
+    private volatile ModelData cachedModelData = null;
 
     /**
      * @apiNote internal, addons must use their own {@link BlockEntityType} with the three-arg constructor
@@ -334,6 +335,7 @@ public class FramedBlockEntity extends BlockEntity
     protected void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary)
     {
         this.camoContainer = camo;
+        invalidateModelData();
     }
 
     public boolean isSolidSide(Direction side)
@@ -498,6 +500,7 @@ public class FramedBlockEntity extends BlockEntity
         if (wasHidden != hidden)
         {
             culledFaces[side.ordinal()] = hidden;
+            invalidateModelData();
             if (rerender)
             {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -644,6 +647,7 @@ public class FramedBlockEntity extends BlockEntity
         if (this.reinforced != reinforced)
         {
             this.reinforced = reinforced;
+            invalidateModelData();
 
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             setChangedWithoutSignalUpdate();
@@ -807,6 +811,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         super.setBlockState(state);
         this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
+        invalidateModelData();
     }
 
     /*
@@ -873,6 +878,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             int oldLight = getLightValue();
             camoContainer = newCamo;
+            invalidateModelData();
             if (oldLight != getLightValue())
             {
                 doLightUpdate();
@@ -905,6 +911,7 @@ public class FramedBlockEntity extends BlockEntity
         if (newReinforced != reinforced)
         {
             reinforced = newReinforced;
+            invalidateModelData();
             needUpdate = true;
         }
 
@@ -944,6 +951,8 @@ public class FramedBlockEntity extends BlockEntity
         {
             reinforced = newReinforced;
         }
+
+        invalidateModelData();
     }
 
     protected boolean readCamoFromUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
@@ -952,6 +961,7 @@ public class FramedBlockEntity extends BlockEntity
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
+            invalidateModelData();
             return true;
         }
         return false;
@@ -982,7 +992,23 @@ public class FramedBlockEntity extends BlockEntity
             updateCulling(false, false);
             cullStateDirty = false;
         }
-        return getModelData(true);
+
+        ModelData data = cachedModelData;
+        if (data == null)
+        {
+            data = getModelData(true);
+            cachedModelData = data;
+        }
+        return data;
+    }
+
+    /**
+     * Discards the cached {@link ModelData}. Must be called whenever state that is read by
+     * {@link #getModelData(boolean)} or {@link #attachAdditionalModelData(ModelData.Builder)} changes
+     */
+    protected final void invalidateModelData()
+    {
+        cachedModelData = null;
     }
 
     @Override
@@ -1003,6 +1029,9 @@ public class FramedBlockEntity extends BlockEntity
         return builder.build();
     }
 
+    /**
+     * Subclasses must call {@link #invalidateModelData()} whenever state read here changes
+     */
     protected void attachAdditionalModelData(ModelData.Builder builder) { }
 
     /*
@@ -1123,6 +1152,7 @@ public class FramedBlockEntity extends BlockEntity
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
         reinforced = nbt.getBoolean("reinforced");
+        invalidateModelData();
 
         if (glowing)
         {

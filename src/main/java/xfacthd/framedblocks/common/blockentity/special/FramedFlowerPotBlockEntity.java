@@ -36,6 +36,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (flowerBlock != this.flowerBlock)
         {
             this.flowerBlock = flowerBlock;
+            invalidateModelData();
 
             setChangedWithoutSignalUpdate();
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
@@ -84,6 +85,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (update)
         {
             flowerBlock = flower;
+            invalidateModelData();
         }
 
         return super.readFromDataPacket(nbt, lookupProvider) || update;
@@ -108,6 +110,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (flower != flowerBlock)
         {
             flowerBlock = flower;
+            invalidateModelData();
         }
     }
 
@@ -123,6 +126,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (auxData instanceof PottedFlower flower && !flower.isEmpty())
         {
             flowerBlock = flower.flower();
+            invalidateModelData();
         }
     }
 
@@ -149,6 +153,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (!flower.isEmpty())
         {
             flowerBlock = flower.flower();
+            invalidateModelData();
         }
     }
 
@@ -164,5 +169,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     {
         super.loadAdditional(nbt, provider);
         flowerBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.tryParse(nbt.getString("flower")));
+        invalidateModelData();
     }
 }
