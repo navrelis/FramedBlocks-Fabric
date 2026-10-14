@@ -28,3 +28,5 @@
 - C3 Transfer API storage — Sonnet, long — adapters, tank, hopper, chest, saw and fluid camo diffs read; accepted and committed. Stand-ins in platform/transfer (mB internally, 81-droplet quantised at the API boundary), snapshot-based adapters, config `poweredSawRequiresEnergy`. Agent's standalone adapter test: 57 checks passed (agent-reported). Untested in game. Follow-up for F1: change notifications fire inside transactions (also on abort) instead of on final commit.
 - C4a client wiring — Sonnet, long — FBClient, new mixins, outline and ghost renderer diffs read; accepted and committed. One correction folded into C4b: register the collapsible indicator BLOCK_OUTLINE listener before the cancelling outline listener. FCAP config screen registered (Mod Menu). Untested in game.
 - C1 block/item hooks — Sonnet, long — running. C4b client effects/loaders/resources — Sonnet, long — running.
+- Session 3 stopped by auto-handoff; C1 and C4b were stopped before writing anything. State and next steps: see handoff.md in the repo root.
+- Session 4: handoff checked against repo (no source changes pending). C1 and C4b re-delegated in parallel (Sonnet long each).
