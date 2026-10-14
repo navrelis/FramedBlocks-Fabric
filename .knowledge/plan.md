@@ -22,9 +22,9 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | D2 | Run client and dedicated server | Both start without errors | D1 | lead + Sonnet fixes | done (title screen, gametest, server to EULA) |
 | E2 | Game tests on Fabric gametest | Upstream game tests run and pass (or documented) | D2 | Sonnet long | done (858 required pass, 27 optional known failures) |
 | E3 | Port client self-test (startup + in-world consistency checks) and command tests as dev-only test code | Self-test runs in runClient, findings listed | E2 | Sonnet long | open |
-| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | review done; accepted on branches f1-beload (H1), f1-transfer (T1–T4), f1-misc (L1, N1–N3) — merge after E2; E+G (R1, R2, B1–B3, M1–M3, Sonnet) running on f1-render |
+| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | review done; H1, T1–T4, L1, N1–N3 merged into 1.21.1-fabric; E+G (R1, R2, B1–B3, M1–M3, Sonnet) running on f1-render |
 | G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | open |
 
-Parallel now: E2 (Sonnet, main checkout), F1-E/G (Sonnet, F:/wt/fbr).
+Parallel now: F1-E/G (Sonnet, F:/wt/fbr), E3 (Sonnet, main checkout).
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 44 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G), Opus 12 (B1 x2, C2 x2, F1 review x3, F1-C). Opus share ~21 %.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 45 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G, merge short), Opus 12 (B1 x2, C2 x2, F1 review x3, F1-C). Opus share ~21 %.

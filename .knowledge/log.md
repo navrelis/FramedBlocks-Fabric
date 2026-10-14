@@ -49,3 +49,5 @@
 - F1-D/F (L1, N1–N3) — Sonnet, long — diff read; build green; L1 mixin bytecode-verified at all 4 call sites and applied at runtime with ScalableLux 0.1.0.1 (light decrease itself not exercised). Accepted, committed on branch f1-misc; merge after E2.
 - F1-E/G (R1, R2, B1–B3, M1–M3) — Sonnet, long — running in worktree F:/wt/fbr (branch f1-render).
 - E2 game tests — Sonnet, long — files read (mod json, beacon-tint exclusions vs upstream). 884 ported tests: 858 required pass; 26 optional OcclusionTests fail (upstream-documented known failures) + testSignDying (upstream bug: waxed sign returns PASS before REMOVE_WAX, made optional). Harness changes: lazy generated tests, setupTicks 20 for light settling, TestUtils copy with CONSUME/fallback interaction. Accepted.
+- Merged f1-misc into 1.21.1-fabric (clean). Merge of f1-beload + f1-transfer (gametest mod json conflicts) delegated — Sonnet, short — running in main checkout.
+- Merged f1-beload and f1-transfer (merge agent resolved gametest json conflicts; lead validated JSON). Build green, 893 required gametests pass, 27 known optional failures.
