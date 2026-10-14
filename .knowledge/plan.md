@@ -56,9 +56,11 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | H6 | Bound `FramedBlockModel` quad/render-type caches (clear on overflow) | Cap constant, both caches bounded, build + client test green | - | Opus short (Sonnet slots full, user asked for speed) | done (merged, build 901/27; client test pending after SC1) |
 | H1 | Parallel state-cache build with serial warm-up and determinism check | Same caches as serial build (self-test), cold start measured, build green | - | Opus long (concurrency) | done (lead build 901/27, cold 125 ms, 0 mismatches) |
 | H3, H5 | Lazy beacon occlusion, ItemHandlerStorage toStack hoist | Skipped: benefit unmeasured/negligible, H5 dupe-sensitive | - | - | skipped |
-| UP1 | Loom/Gradle upgrade research (lift JEI/Sodium pins), saw tooltip FE -> E | Research report; implement if low risk | - | Sonnet | research running |
+| UP1 | Loom/Gradle upgrade research | Report with verified target versions | - | Sonnet long | done (Loom 1.18.4 + Gradle 9.7 + daemon JDK 25 verified in a copy: build 901, client test PASS with JEI 19.64, Sodium 0.8.13) |
+| UP2 | Replace 9 JEI removal-marked APIs; saw energy unit FE -> E | 0 removal warnings, 901/27, no behaviour change | - | Sonnet long | done (merged 12750eb84, lint 9->0, build 901/27; JEI GUI untested in game) |
+| UP3 | Loom 1.18.4, Gradle 9.7.0, daemon JVM criteria 25, JEI 19.64, MezzConfig 0.6.8 (maven), Sodium 0.8.13, Amendments 2.1.11 | Build 901/27, runClientTest PASS (Indigo + Sodium), compat runtime starts | UP2 | Sonnet long | in progress (F:/wt/up3) |
 
-Parallel now: UP1 research (Sonnet), SC1 (Sonnet), CF1 (Opus), H1 (Opus). H6 queued for the next free Sonnet slot.
+Parallel now: SC1 (Sonnet), UP3 (Sonnet).
 
 Usage tally session 8 so far: Sonnet +2 (H mapping long) → 67 + running SC1 2, UP1 2; Opus +4 running (CF1, H1) → 22. Opus share ~24 %.
 

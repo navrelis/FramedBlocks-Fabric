@@ -92,3 +92,7 @@
 - CF1 — Opus, long — 11 cards viewed by lead (hero, tools sampled; style matches UXW), check.mjs 0 errors, link update to new repo reviewed. Accepted, committed. Placeholders until SC1. Card 07 reinforcement wording to fix in CF2.
 - H6 quad cache bound — Opus, short — running in F:/wt/h6.
 - H6 — Opus, short — diff read (MAX_CACHE_SIZE 1024, putBounded clear-on-overflow, one debug log per model; consumers verified read-only). Lead build 901/27. Accepted, merged (fast-forward).
+- UP1 Loom research — Sonnet, long — Loom 1.18.4 needs Gradle >= 9.7 and JDK 25 for the Gradle JVM (mod stays Java 21); verified in a copy (901 tests, client test PASS with compat + Sodium 0.8.13). JEI 19.6x needs Loom 1.18.2+. 9 JEI removal call sites listed. Note: it ran a client window itself.
+- UP2 JEI deprecations + FE->E — Sonnet, long — running in F:/wt/up2.
+- UP2 — Sonnet, long — diff read (factory-built clickable ingredients, ClickableStack removed, getWidth/getHeight + background in draw, transfer context + delegate, normalize=false; FE->E in 4 lang files). Lead build 901/27. Accepted, merged. JEI screens go on the manual checklist.
+- UP3 Loom 1.18.4 upgrade — Sonnet, long — running in F:/wt/up3.
