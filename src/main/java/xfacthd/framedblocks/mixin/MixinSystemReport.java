@@ -18,7 +18,7 @@ public abstract class MixinSystemReport
     @Inject(method = "<init>", at = @At("RETURN"))
     private void framedblocks$addBlockEntityWarning(CallbackInfo ci)
     {
-        if (ServerConfig.VIEW.allowBlockEntities())
+        if (FramedBlocks.isInitialized() && ServerConfig.VIEW.allowBlockEntities())
         {
             setDetail("FramedBlocks BlockEntity Warning", FramedBlocks.getBlockEntityWarning());
         }

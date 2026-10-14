@@ -19,11 +19,11 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | C1 | Block/item behaviour hooks (sound, friction, explosion, fire, plants, beacon, ladder, effects, pick block, appearance, tool actions) | Each upstream hook has a Fabric path; listed in a table | C2, B2b, C3 | Sonnet long | done (untested in game) |
 | C4 | Client wiring: FBClient, BERs, ghost + outline renderers, colours, particles, overlays, screens, hit/destroy effects, sprite source, loaders, loader-specific JSON | Client compiles; no NeoForge-only JSON keys unhandled | B1, B2b | Sonnet long | done (C4a + C4b; untested in game) |
 | D1 | First full compile + fix rounds | `gradlew build` passes | B, C | Sonnet per error cluster | done |
-| D2 | Run client and dedicated server | Both start without errors | D1 | lead + Sonnet fixes | open (interrupted; partial uncommitted edits) |
+| D2 | Run client and dedicated server | Both start without errors | D1 | lead + Sonnet fixes | done (title screen, gametest, server to EULA) |
 | E2 | Game tests on Fabric gametest | Upstream game tests run and pass (or documented) | D2 | Sonnet long | open |
-| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | open (review interrupted, nothing written) |
+| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | in progress (review) |
 | G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | open |
 
-Parallel now: none (session 4 stopped by auto-handoff, see handoff.md).
+Parallel now: F1 review (Opus long, read-only); E2 (Sonnet long).
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 35 (M1, M2, A1, A2, B2a x2, E1, B2b x2, C3 x2, C4a, C4b x2, C1 x2, C1 corr 1 short, D2), Opus 8 (B1 x2, C2 x2, F1 review x2). Opus share ~19 %.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 37 (M1, M2, A1, A2, B2a x2, E1, B2b x2, C3 x2, C4a, C4b x2, C1 x2, C1 corr 1 short, D2 x2), Opus 10 (B1 x2, C2 x2, F1 review x3). Opus share ~21 %.

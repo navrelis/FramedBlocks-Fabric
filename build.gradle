@@ -20,6 +20,15 @@ loom {
     accessWidenerPath = file('src/main/resources/framedblocks_fabric.accesswidener')
 }
 
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = 'framedblocks_fabric_gametest'
+        enableGameTests = true
+        enableClientGameTests = false
+    }
+}
+
 sourceSets {
     main.resources {
         srcDir 'src/generated/resources'

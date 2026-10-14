@@ -8,6 +8,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,7 +38,8 @@ public class MixinHopperBlockEntity
         operation.call(destHopper, cooldown);
     }
 
-    @Inject(method = "tryMoveInItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setChanged()V"))
+    // Injected at the check of the "destination was empty" flag, the frames of the vanilla method drop the locals before the setChanged() call
+    @Inject(method = "tryMoveInItem", at = @At(value = "JUMP", opcode = Opcodes.IFEQ, ordinal = 4))
     private static void framedblocks$handleHopperCooldownCustomToVanillaOrCustom(
             @Nullable Container source,
             Container destination,

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "framedblocks_fabric_gametest",
+  "version": "1.0.0",
+  "name": "FramedBlocks Fabric Game Tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "xfacthd.framedblocks.gametest.FramedBlocksSmokeTest"
+    ]
+  }
+}

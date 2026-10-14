@@ -354,6 +354,7 @@
   "msg.framedblocks_fabric.split_line.switch": "Hit with a Framed Wrench to switch the orientation of the split-line",
   "tag.block.framedblocks_fabric.group.full": "Full Framed Blocks",
   "tag.item.c.tools.wrench": "Wrenches",
+  "tag.item.framedblocks_fabric.complex_wrench": "Complex Wrenches",
   "tag.item.framedblocks_fabric.disable_intangible": "Disable Intangibility",
   "title.framedblocks_fabric.framed_chest": "Framed Chest",
   "title.framedblocks_fabric.framed_hopper": "Framed Item Hopper",

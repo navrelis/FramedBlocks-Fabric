@@ -47,6 +47,7 @@ public final class FramedBlocks implements ModInitializer
 {
     public static final Logger LOGGER = LogUtils.getLogger();
     private static boolean commonSetupDone = false;
+    private static volatile boolean initialized = false;
 
     @Override
     public void onInitialize()
@@ -92,6 +93,14 @@ public final class FramedBlocks implements ModInitializer
         // Tags are loaded on both sides after all mods were initialized and all registries are complete, which makes
         // this the closest equivalent to NeoForge's common setup
         CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> onCommonSetup());
+
+        initialized = true;
+    }
+
+    // Plain flag so that early users (SystemReport is created before Minecraft's bootstrap) can check it without loading any config or registry classes
+    public static boolean isInitialized()
+    {
+        return initialized;
     }
 
     // Synchronized so that concurrent callers (integrated server and client thread) only return once the setup is complete
