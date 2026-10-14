@@ -63,3 +63,4 @@
 - Merge f1-energy (gametest json conflict resolved by Sonnet, short; lead validated JSON). Main build green: 900 required, 27 known optional. Pushed; worktree F:/wt/fbe removed.
 - V1 compat runtime — Sonnet, long, read-only — Jade and REI register our plugin at startup; EMI loads plugins only in a world; JEI dev runtime fails (JEI 19.56 needs mezz_config, not on dev runtime); no-compat client starts clean without TR Energy. JEI 19.56 [removal] deprecation warnings noted (pinned version, no action).
 - T1 flaky light/occlusion gametests — Opus, long (precision override: unclear cause, may hide a light-store bug) — running. D3 docs — Sonnet, short — running (no Gradle).
+- D3 docs — Sonnet, short — README, description, metadata diff read; Athena removed from lists, energy + integration status + test tasks documented. Accepted, committed.
