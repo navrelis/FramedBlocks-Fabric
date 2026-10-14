@@ -40,6 +40,8 @@ import xfacthd.framedblocks.common.util.EventHandler;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.*;
 
 public final class TestUtils
@@ -58,6 +60,9 @@ public final class TestUtils
     private static final int BEACON_COLOR_RED = DyeColor.RED.getTextureDiffuseColor();
     // Double blocks multiply the tints of both of their components
     private static final int BEACON_COLOR_RED_DOUBLE = FastColor.ARGB32.multiply(BEACON_COLOR_RED, BEACON_COLOR_RED);
+    private static final long LIGHT_TIMEOUT_SECONDS = 10;
+    private static final long LIGHT_TIMEOUT_NANOS = TimeUnit.SECONDS.toNanos(LIGHT_TIMEOUT_SECONDS);
+    private static final long LIGHT_POLL_INTERVAL_NANOS = TimeUnit.MICROSECONDS.toNanos(100);
 
     public static boolean assertFramedBlock(GameTestHelper helper, Block block)
     {
@@ -693,6 +698,7 @@ public final class TestUtils
         private long nextTick;
         @Nullable
         private CompletableFuture<?> pendingLight = null;
+        private long pendingLightStart;
 
         private LightTaskChain(GameTestHelper helper, List<TestRunnable> tasks)
         {
@@ -709,19 +715,21 @@ public final class TestUtils
                 TestRunnable task = tasks.get(index);
                 if (task instanceof AwaitLight awaitLight)
                 {
+                    BlockPos pos = helper.absolutePos(awaitLight.pos());
+                    ThreadedLevelLightEngine lightEngine = helper.getLevel().getChunkSource().getLightEngine();
                     if (pendingLight == null)
                     {
-                        // Completes once all light tasks queued before it for the same chunk were processed
-                        BlockPos pos = helper.absolutePos(awaitLight.pos());
-                        ThreadedLevelLightEngine lightEngine = helper.getLevel().getChunkSource().getLightEngine();
+                        // Completes once all light tasks queued before it for the same chunk were processed.
+                        // The wait starts in the next tick to let the other tests of the batch queue their light tasks
+                        // first, a single pass of the light engine then completes the waits of all of them
                         pendingLight = lightEngine.waitForPendingTasks(
                                 SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ())
                         );
-                    }
-                    if (!pendingLight.isDone())
-                    {
+                        pendingLightStart = System.nanoTime();
+                        nextTick = tick + 1;
                         return;
                     }
+                    awaitLight(lightEngine, pendingLight, pendingLightStart, pos, awaitLight.pos());
                     pendingLight = null;
                     index++;
                 }
@@ -731,6 +739,34 @@ public final class TestUtils
                     nextTick = tick + task.getDuration();
                     task.run();
                 }
+            }
+        }
+
+        /**
+         * Blocks the server thread until the given light future completes.
+         * <p>
+         * Waiting for the light engine over multiple ticks is not viable: the test server ticks without pausing and
+         * a tick only takes a fraction of a millisecond, a light worker which is not scheduled for a few milliseconds
+         * would use up the whole timeout of the test
+         */
+        private void awaitLight(
+                ThreadedLevelLightEngine lightEngine, CompletableFuture<?> future, long start, BlockPos pos, BlockPos relPos
+        )
+        {
+            while (!future.isDone())
+            {
+                if (System.nanoTime() - start > LIGHT_TIMEOUT_NANOS)
+                {
+                    throw new GameTestAssertPosException(
+                            String.format("Light engine did not process the pending light updates within %d seconds", LIGHT_TIMEOUT_SECONDS),
+                            pos,
+                            relPos,
+                            helper.getTick()
+                    );
+                }
+                // Queued light tasks are only processed once an update is scheduled, which is otherwise done by the server thread
+                lightEngine.tryScheduleUpdate();
+                LockSupport.parkNanos(LIGHT_POLL_INTERVAL_NANOS);
             }
         }
     }
