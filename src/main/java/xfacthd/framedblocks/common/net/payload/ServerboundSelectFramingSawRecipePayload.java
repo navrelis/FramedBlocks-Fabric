@@ -32,7 +32,7 @@ public record ServerboundSelectFramingSawRecipePayload(int containerId, int reci
     {
         Player player = ctx.player();
         AbstractContainerMenu menu = player.containerMenu;
-        if (menu.containerId == containerId && menu instanceof IFramingSawMenu)
+        if (menu.containerId == containerId && menu instanceof IFramingSawMenu && menu.stillValid(player))
         {
             menu.clickMenuButton(player, recipeIdx);
         }

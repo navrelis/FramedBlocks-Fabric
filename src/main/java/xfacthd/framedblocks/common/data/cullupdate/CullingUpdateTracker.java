@@ -47,7 +47,7 @@ public final class CullingUpdateTracker
     public static void enqueueCullingUpdate(Level level, BlockPos pos)
     {
         UPDATED_POSITIONS.computeIfAbsent(level.dimension(), $ -> new Long2ObjectOpenHashMap<>())
-                .computeIfAbsent(ChunkPos.asLong(pos), $ -> new LongArraySet())
+                .computeIfAbsent(ChunkPos.asLong(pos), $ -> new LongOpenHashSet())
                 .add(pos.asLong());
     }
 

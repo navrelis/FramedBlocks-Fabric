@@ -10,7 +10,8 @@
         "MixinImposterProtoChunk",
         "MixinLevelChunk",
         "MixinLightEngine",
-        "compat.MixinBlockStarLightEngine"
+        "compat.MixinBlockStarLightEngine",
+        "compat.MixinStarLightEngine"
     ],
     "client": [
         "client.AccessorRenderChunkRegion",

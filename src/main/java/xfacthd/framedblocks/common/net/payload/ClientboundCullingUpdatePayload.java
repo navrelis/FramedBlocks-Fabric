@@ -14,7 +14,7 @@ public record ClientboundCullingUpdatePayload(long chunk, LongSet positions) imp
     public static final StreamCodec<FriendlyByteBuf, ClientboundCullingUpdatePayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_LONG,
             ClientboundCullingUpdatePayload::chunk,
-            FramedByteBufCodecs.longCollection(LongArraySet::new),
+            FramedByteBufCodecs.longCollection(LongOpenHashSet::new, 16 * 16 * 4096),
             ClientboundCullingUpdatePayload::positions,
             ClientboundCullingUpdatePayload::new
     );

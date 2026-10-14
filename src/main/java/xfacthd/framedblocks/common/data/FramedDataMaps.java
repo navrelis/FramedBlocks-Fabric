@@ -70,8 +70,9 @@ public final class FramedDataMaps
             if (!client)
             {
                 camoRotators = resolveCamoRotators(rotatorLayers);
-                BlockCamoRotators.reload();
             }
+            // Depends on tags, on a remote client the synced map is received before the new tags are applied
+            BlockCamoRotators.reload();
         });
 
         // Fired for each player on join and for every player after a data pack reload

@@ -10,6 +10,8 @@ import java.util.function.IntFunction;
 
 public final class FramedByteBufCodecs
 {
+    private static final int MAX_PREALLOCATED_SIZE = 65536;
+
     public static <B extends ByteBuf, V> StreamCodec<B, V[]> array(StreamCodec<? super B, V> wrapped, IntFunction<V[]> arrayFactory, int maxSize)
     {
         return new StreamCodec<>()
@@ -55,7 +57,7 @@ public final class FramedByteBufCodecs
             public C decode(B buf)
             {
                 int size = ByteBufCodecs.readCount(buf, maxSize);
-                C collection = collectionFactory.apply(size);
+                C collection = collectionFactory.apply(Math.min(size, MAX_PREALLOCATED_SIZE));
                 for (int i = 0; i < size; i++)
                 {
                     collection.add(VarLong.read(buf));
