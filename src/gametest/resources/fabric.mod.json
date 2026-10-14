@@ -5,6 +5,12 @@
   "name": "FramedBlocks Fabric Game Tests",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "xfacthd.framedblocks.gametest.FramedBlocksTestMod"
+    ],
+    "client": [
+      "xfacthd.framedblocks.gametest.FramedBlocksTestClient"
+    ],
     "fabric-gametest": [
       "xfacthd.framedblocks.gametest.FramedBlocksSmokeTest",
       "xfacthd.framedblocks.gametest.tests.BeaconTintTests",
@@ -13,7 +19,8 @@
       "xfacthd.framedblocks.gametest.tests.LightSourceTests",
       "xfacthd.framedblocks.gametest.tests.OcclusionTests",
       "xfacthd.framedblocks.gametest.BlockEntityLoadTests",
-      "xfacthd.framedblocks.gametest.TransferTests"
+      "xfacthd.framedblocks.gametest.TransferTests",
+      "xfacthd.framedblocks.gametest.TestCommandTests"
     ]
   },
   "depends": {

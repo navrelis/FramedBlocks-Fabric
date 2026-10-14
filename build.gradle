@@ -18,6 +18,15 @@ java {
 
 loom {
     accessWidenerPath = file('src/main/resources/framedblocks_fabric.accesswidener')
+
+    runs {
+        // runClient only loads the main mod, this additionally loads the game test mod including the self-test and /fbtest commands
+        clientDev {
+            inherit client
+            source 'gametest'
+            ideConfigGenerated true
+        }
+    }
 }
 
 fabricApi {
