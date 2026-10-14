@@ -72,6 +72,7 @@ public final class SelfTest
             }
             SkipPredicatePresenceConsistency.checkSkipPredicateConsistency(reporter);
             StateCacheValidity.checkStateCacheValid(reporter, blocks);
+            StateCacheDeterminism.checkStateCacheDeterminism(reporter, blocks);
             DoubleBlockCamoConnectionConsistency.checkConnectionConsistency(reporter, blocks);
             DoubleBlockSolidSideConsistency.checkSolidSideConsistency(reporter, blocks);
             RotateMirrorErrors.checkRotateMirrorErrors(reporter, blocks);

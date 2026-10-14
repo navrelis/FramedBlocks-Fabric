@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
@@ -39,35 +38,74 @@ public final class StateCacheBuilder
     {
         FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
-        long[] counts = new long[] { 0, 1 }; // +1 for the empty instance
-        BuiltInRegistries.BLOCK.entrySet()
-                .stream()
-                .map(Map.Entry::getValue)
-                .filter(block -> block instanceof IFramedBlock)
-                .map(Block::getStateDefinition)
-                .map(StateDefinition::getPossibleStates)
-                .forEach(states ->
-                {
-                    Map<StateCache, StateCache> cacheDedup = new HashMap<>();
-                    for (BlockState state : states)
-                    {
-                        StateCache cache = ((IFramedBlock) state.getBlock()).initCache(state);
-                        if (cache.equals(StateCache.EMPTY))
-                        {
-                            ((IStateCacheAccessor) state).framedblocks$initCache(StateCache.EMPTY);
-                        }
-                        else
-                        {
-                            ((IStateCacheAccessor) state).framedblocks$initCache(
-                                    Objects.requireNonNullElse(cacheDedup.putIfAbsent(cache, cache), cache)
-                            );
-                        }
-                    }
-                    counts[0] += states.size();
-                    counts[1] += cacheDedup.size();
-                });
+        List<Block> blocks = BuiltInRegistries.BLOCK.stream()
+                .filter(IFramedBlock.class::isInstance)
+                .toList();
+
+        // Builds one cache per block on the calling thread first, so the classes reached by the cache builders are
+        // initialized before the parallel build uses them and class initialization can't deadlock between workers
+        for (Block block : blocks)
+        {
+            buildCache(block, block.defaultBlockState());
+        }
+
+        // The terminal operation only returns once every worker is done, which publishes the assigned caches to
+        // the calling thread before the caller sets the volatile flag
+        CacheCounts counts = blocks.parallelStream()
+                .map(StateCacheBuilder::initializeBlockCaches)
+                .reduce(CacheCounts.ZERO, CacheCounts::add);
+
         watch.stop();
-        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", counts[1], counts[0], watch);
+        long uniqueCount = counts.unique + 1; // +1 for the empty instance
+        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", uniqueCount, counts.states, watch);
+    }
+
+    private static CacheCounts initializeBlockCaches(Block block)
+    {
+        List<BlockState> states = block.getStateDefinition().getPossibleStates();
+        Map<StateCache, StateCache> cacheDedup = new HashMap<>();
+        for (BlockState state : states)
+        {
+            StateCache cache = buildCache(block, state);
+            if (cache.equals(StateCache.EMPTY))
+            {
+                ((IStateCacheAccessor) state).framedblocks$initCache(StateCache.EMPTY);
+            }
+            else
+            {
+                ((IStateCacheAccessor) state).framedblocks$initCache(
+                        Objects.requireNonNullElse(cacheDedup.putIfAbsent(cache, cache), cache)
+                );
+            }
+        }
+        return new CacheCounts(states.size(), cacheDedup.size());
+    }
+
+    private static StateCache buildCache(Block block, BlockState state)
+    {
+        try
+        {
+            return ((IFramedBlock) block).initCache(state);
+        }
+        catch (RuntimeException e)
+        {
+            throw new IllegalStateException(
+                    "Failed to initialize state cache of block '%s' for state %s".formatted(
+                            BuiltInRegistries.BLOCK.getKey(block), state
+                    ),
+                    e
+            );
+        }
+    }
+
+    private record CacheCounts(long states, long unique)
+    {
+        static final CacheCounts ZERO = new CacheCounts(0, 0);
+
+        CacheCounts add(CacheCounts other)
+        {
+            return new CacheCounts(states + other.states, unique + other.unique);
+        }
     }
 
 
