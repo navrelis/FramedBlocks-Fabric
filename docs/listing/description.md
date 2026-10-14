@@ -1,6 +1,6 @@
-![FramedBlocks Fabric](https://raw.githubusercontent.com/navrelis/FramedBlocksFabric/1.21.1-fabric/docs/images/banner.png)
+![FramedBlocks Fabric](https://raw.githubusercontent.com/navrelis/FramedBlocks-Fabric/1.21.1-fabric/docs/images/banner.png)
 
-**Unofficial port.** This is a community port of [FramedBlocks](https://github.com/XFactHD/FramedBlocks) by XFactHD to Fabric. It is not affiliated with or endorsed by the original author. Report bugs of this port at the [port's issue tracker](https://github.com/navrelis/FramedBlocksFabric/issues), not to upstream.
+**Unofficial port.** This is a community port of [FramedBlocks](https://github.com/XFactHD/FramedBlocks) by XFactHD to Fabric. It is not affiliated with or endorsed by the original author. Report bugs of this port at the [port's issue tracker](https://github.com/navrelis/FramedBlocks-Fabric/issues), not to upstream.
 
 ## What it adds
 
@@ -39,4 +39,4 @@ Optional integrations, only active if the other mod is installed: JEI, REI, EMI,
 
 All credit for the concept and original code goes to XFactHD and contributors. Port by navrelis. Licensed under LGPL-3.0; the bundled Forge Config API Port by Fuzs is MPL-2.0.
 
-Source: https://github.com/navrelis/FramedBlocksFabric
+Source: https://github.com/navrelis/FramedBlocks-Fabric

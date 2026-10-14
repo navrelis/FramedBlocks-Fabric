@@ -31,11 +31,11 @@ Suggested values for the Modrinth and CurseForge project pages.
 
 ## Links
 
-- Source: https://github.com/navrelis/FramedBlocksFabric
-- Issues: https://github.com/navrelis/FramedBlocksFabric/issues
+- Source: https://github.com/navrelis/FramedBlocks-Fabric
+- Issues: https://github.com/navrelis/FramedBlocks-Fabric/issues
 - Original mod (upstream): https://github.com/XFactHD/FramedBlocks
 - Wiki: none
-- Banner URL used in the description: https://raw.githubusercontent.com/navrelis/FramedBlocksFabric/1.21.1-fabric/docs/images/banner.png
+- Banner URL used in the description: https://raw.githubusercontent.com/navrelis/FramedBlocks-Fabric/1.21.1-fabric/docs/images/banner.png
 - Icon: `docs/images/icon.png` (512x512)
 
 ## Notes

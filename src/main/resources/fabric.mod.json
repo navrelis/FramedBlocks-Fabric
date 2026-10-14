@@ -11,9 +11,9 @@
     "navrelis (Fabric port)"
   ],
   "contact": {
-    "homepage": "https://github.com/navrelis/FramedBlocksFabric",
-    "sources": "https://github.com/navrelis/FramedBlocksFabric",
-    "issues": "https://github.com/navrelis/FramedBlocksFabric"
+    "homepage": "https://github.com/navrelis/FramedBlocks-Fabric",
+    "sources": "https://github.com/navrelis/FramedBlocks-Fabric",
+    "issues": "https://github.com/navrelis/FramedBlocks-Fabric/issues"
   },
   "license": "LGPL-3.0-only",
   "icon": "assets/framedblocks_fabric/icon.png",

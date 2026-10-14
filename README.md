@@ -4,7 +4,7 @@
 
 # FramedBlocks Fabric (Unofficial)
 
-> **This is an unofficial, community port.** It is not affiliated with and not endorsed by the original author, XFactHD. Please report problems with this port in [this repository](https://github.com/navrelis/FramedBlocksFabric/issues), not to the upstream project.
+> **This is an unofficial, community port.** It is not affiliated with and not endorsed by the original author, XFactHD. Please report problems with this port in [this repository](https://github.com/navrelis/FramedBlocks-Fabric/issues), not to the upstream project.
 
 FramedBlocks Fabric is a port of [FramedBlocks](https://github.com/XFactHD/FramedBlocks) by XFactHD (upstream version 10.5.3, NeoForge) to the Fabric mod loader for Minecraft 1.21.1. FramedBlocks adds "framed" versions of many block shapes. A framed block starts out as an empty wooden frame and can be given the appearance of almost any other block, which makes it useful for building with shapes that vanilla Minecraft does not offer in every material.
 
@@ -81,4 +81,4 @@ Original mod: https://github.com/XFactHD/FramedBlocks. Credit for the concept, t
 
 ## Reporting issues
 
-Report bugs of this port at https://github.com/navrelis/FramedBlocksFabric/issues. Please include the Minecraft, Fabric Loader, Fabric API and mod versions, the log file and, for rendering issues, the list of other installed mods. Do not report issues of this port to the upstream project.
+Report bugs of this port at https://github.com/navrelis/FramedBlocks-Fabric/issues. Please include the Minecraft, Fabric Loader, Fabric API and mod versions, the log file and, for rendering issues, the list of other installed mods. Do not report issues of this port to the upstream project.

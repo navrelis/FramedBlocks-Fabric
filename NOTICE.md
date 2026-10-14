@@ -24,7 +24,7 @@ The complete list of changes is the git history of this repository compared with
 
 ## Sources
 
-- This port: https://github.com/navrelis/FramedBlocksFabric
+- This port: https://github.com/navrelis/FramedBlocks-Fabric
 - Original (upstream): https://github.com/XFactHD/FramedBlocks
 
 ## Bundled third-party software
@@ -33,4 +33,4 @@ The complete list of changes is the git history of this repository compared with
 
 ## Not affiliated
 
-This port is not affiliated with and not endorsed by XFactHD. Bugs found in the Fabric port must be reported to the issue tracker of the port repository (https://github.com/navrelis/FramedBlocksFabric/issues), not to the upstream project.
+This port is not affiliated with and not endorsed by XFactHD. Bugs found in the Fabric port must be reported to the issue tracker of the port repository (https://github.com/navrelis/FramedBlocks-Fabric/issues), not to the upstream project.
