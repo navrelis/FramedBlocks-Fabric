@@ -20,10 +20,11 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | C4 | Client wiring: FBClient, BERs, ghost + outline renderers, colours, particles, overlays, screens, hit/destroy effects, sprite source, loaders, loader-specific JSON | Client compiles; no NeoForge-only JSON keys unhandled | B1, B2b | Sonnet long | done (C4a + C4b; untested in game) |
 | D1 | First full compile + fix rounds | `gradlew build` passes | B, C | Sonnet per error cluster | done |
 | D2 | Run client and dedicated server | Both start without errors | D1 | lead + Sonnet fixes | done (title screen, gametest, server to EULA) |
-| E2 | Game tests on Fabric gametest | Upstream game tests run and pass (or documented) | D2 | Sonnet long | open |
-| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | in progress (review) |
+| E2 | Game tests on Fabric gametest | Upstream game tests run and pass (or documented) | D2 | Sonnet long | done (858 required pass, 27 optional known failures) |
+| E3 | Port client self-test (startup + in-world consistency checks) and command tests as dev-only test code | Self-test runs in runClient, findings listed | E2 | Sonnet long | open |
+| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | review done; accepted on branches f1-beload (H1), f1-transfer (T1–T4), f1-misc (L1, N1–N3) — merge after E2; E+G (R1, R2, B1–B3, M1–M3, Sonnet) running on f1-render |
 | G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | open |
 
-Parallel now: F1 review (Opus long, read-only); E2 (Sonnet long).
+Parallel now: E2 (Sonnet, main checkout), F1-E/G (Sonnet, F:/wt/fbr).
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 37 (M1, M2, A1, A2, B2a x2, E1, B2b x2, C3 x2, C4a, C4b x2, C1 x2, C1 corr 1 short, D2 x2), Opus 10 (B1 x2, C2 x2, F1 review x3). Opus share ~21 %.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 44 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G), Opus 12 (B1 x2, C2 x2, F1 review x3, F1-C). Opus share ~21 %.

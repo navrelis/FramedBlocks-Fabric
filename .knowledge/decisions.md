@@ -29,3 +29,6 @@
 - Block hooks (C1): NeoForge IBlockExtension hooks kept as IFramedBlock methods, dispatched by MixinExtras wrappers at the vanilla call sites (fb/mixin, fb/mixin/client/hooks); defaults for non-framed blocks in `platform/util/BlockHooks`. FabricBlock#getAppearance used directly. ItemAbility stand-in (`platform/util/ItemAbility*`) recognises vanilla axe/pickaxe classes + tags and own tools. Static FlammableBlockRegistry not used (camo-dependent flammability).
 - Rails: NeoForge `isPoweredRail`/`isValidRailShape` replaced by `IPoweredRailBlock` + mixins on PoweredRailBlock, AbstractMinecart and RailState.
 - Game tests run from a separate `src/gametest` source set and test mod via Loom `fabricApi.configureTests` (vanilla refuses a gametest server with zero tests; keeps test code out of the mod jar).
+- Parallel fix agents work in short-path git worktrees (F:/wt/*, core.longpaths) so their Gradle runs do not collide; lead applies the diff to the main branch after review. The harness worktree isolation fails on Windows path length.
+- F1-C transfer fixes go to Opus: dupe-sensitive nested-transaction semantics (precision).
+- BE onLoad is deferred to the next world tick start (queue), mirroring NeoForge freshBlockEntities; Fabric's BLOCK_ENTITY_LOAD fires inside LevelChunk.setBlockEntity.

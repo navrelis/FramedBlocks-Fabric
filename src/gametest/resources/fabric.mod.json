@@ -6,7 +6,15 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
-      "xfacthd.framedblocks.gametest.FramedBlocksSmokeTest"
+      "xfacthd.framedblocks.gametest.FramedBlocksSmokeTest",
+      "xfacthd.framedblocks.gametest.tests.BeaconTintTests",
+      "xfacthd.framedblocks.gametest.tests.IntangibilityTests",
+      "xfacthd.framedblocks.gametest.tests.InteractionTests",
+      "xfacthd.framedblocks.gametest.tests.LightSourceTests",
+      "xfacthd.framedblocks.gametest.tests.OcclusionTests"
     ]
+  },
+  "depends": {
+    "framedblocks_fabric": "*"
   }
 }
