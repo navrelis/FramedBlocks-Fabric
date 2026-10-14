@@ -1,5 +1,5 @@
 # Handoff: FramedBlocks → Fabric 1.21.1 port
-Written: 2026-10-14 (session 4, auto-handoff at context limit) · Branch: `1.21.1-fabric` · Last commit: `fe1807e66 Port NeoForge block and item hooks to Fabric mixins and add rail, minecart and item ability stand-ins` · **Pushed**: `origin/1.21.1-fabric` is at `fe1807e66` (first push happened this session).
+Written: 2026-10-14 (session 5, auto-handoff at context limit) · Branch: `1.21.1-fabric` · Last commit: `2c5ac1f5e Update status board` · **Pushed**: `origin/1.21.1-fabric` is at `2c5ac1f5e` (in sync).
 
 ## 1. Goal
 Original task text: "look at https://github.com/XFactHD/FramedBlocks/tree/1.21 and then download it and port it fully to Fabric mc version 1.21.1. then make a logo in pixelart style. summary and description and also add image assets and correct license".
@@ -9,98 +9,97 @@ Success criteria (user: "everything needs to work"): `gradlew build` passes; dev
 ## 2. Requirements and constraints
 Full detail: `.knowledge/requirements.md`, `.knowledge/decisions.md`, `.knowledge/plan.md`, `.knowledge/log.md`.
 
-- Working mode: the lead (Opus 5.5) writes no project code; subagents implement (Sonnet default, Opus ≤ ~50 % unless precision override). Lead may write `.knowledge/`, run builds/tests/git. Subagents never commit.
-- Stack: Minecraft 1.21.1, Java 21 (JDK 21.0.10), Gradle wrapper 9.2.1, Fabric Loom 1.15.5 (`net.fabricmc.fabric-loom-remap`), Fabric Loader 0.19.5 (Mixin + MixinExtras), Fabric API 0.116.17+1.21.1 (old FRAPI), Mojang mappings + Parchment 2024.11.17, Forge Config API Port (FCAP) 21.1.6 jar-in-jar. Allowed `net.neoforged` imports (FCAP): `ModConfigSpec`, `fml.config.ModConfig`, `client.gui.ConfigurationScreen`.
+- Working mode: the lead (Opus 5.5) writes no project code and does not resolve merge conflicts itself; subagents implement (Sonnet default, Opus ≤ ~50 % unless precision override). Lead may write `.knowledge/`, run builds/tests/git. Subagents never commit.
+- **No attribution lines** in commit messages or PR descriptions (system instruction from this session).
+- Stack: Minecraft 1.21.1, Java 21 (JDK 21.0.10), Gradle wrapper 9.2.1, Fabric Loom 1.15.5 (`net.fabricmc.fabric-loom-remap`), Fabric Loader 0.19.5 (Mixin + MixinExtras), Fabric API 0.116.17+1.21.1, Mojang mappings + Parchment 2024.11.17, Forge Config API Port 21.1.6 jar-in-jar.
 - Mod id `framedblocks_fabric`; package `xfacthd.framedblocks`; version `10.5.3-fabric.1`. License LGPL v3 (+ GPL text, NOTICE.md).
-- Remotes: `origin` = https://github.com/navrelis/FramedBlocksFabric (private), `upstream` = XFactHD/FramedBlocks. Upstream base commit for comparisons: `377748c118fa3bff5c42659bd0c23135fd0274ff`. Never force-push; only push code that builds.
-- Machine: Windows 11, Git Bash + PowerShell, Node 24, no Python. javac prints German unless `JAVA_TOOL_OPTIONS=-Duser.language=en`. `sed -i` converts files to LF (git autocrlf warnings are cosmetic; prefer the Edit tool for source files).
-- **Do not accept the Minecraft EULA** on the user's behalf (no `eula.txt=true`); use Fabric gametest mode for server world-load checks instead.
-- Code style: Allman braces, 4 spaces, sparse comments, `final` utility classes with private ctor after three blank lines, no TODO comments.
+- Remotes: `origin` = https://github.com/navrelis/FramedBlocksFabric (private), `upstream` = XFactHD/FramedBlocks, upstream base commit `377748c118fa3bff5c42659bd0c23135fd0274ff`. Never force-push; only push code that builds.
+- Machine: Windows 11, Git Bash + PowerShell, Node 24, **no Python**. Use `JAVA_TOOL_OPTIONS=-Duser.language=en`. Repo local git config has `core.longpaths=true` (needed for worktrees; generated recipe advancement paths are very long).
+- **Never accept the Minecraft EULA.** Server checks: `runGametest` (Fabric gametest mode skips the EULA) and `runServer` until the EULA message.
+- **Never use `@Local(name = ...)` against Minecraft classes** (production MC jar locals are `$$N`, Loader does not rename); ordinal/type captures only. Names are fine against mod jars with LVT (ScalableLux).
+- Code style: Allman braces, 4 spaces, sparse comments, no TODO comments, `final` utility classes with private ctor after three blank lines.
 - `fb/` = `src/main/java/xfacthd/framedblocks`.
+- Build helper: init script `C:/Users/nikol/AppData/Local/Temp/claude/F--Coding-FramedBlocksFabric/64ad324e-caaa-4006-9838-34f3a85c1e19/scratchpad/maxerrs.gradle` (`allprojects { tasks.withType(JavaCompile).configureEach { options.compilerArgs += ['-Xmaxerrs','100000','-Xmaxwarns','0'] } }`); recreate it if the scratchpad is gone. Command: `JAVA_TOOL_OPTIONS=-Duser.language=en ./gradlew build --console=plain -I <init script> > <log> 2>&1`. **`build` also runs all gametests** (`fabricApi.configureTests` hooks them into `check`).
 
-## 3. Done (all committed and pushed unless stated)
-- Sessions 1–3: research, build setup, docs/licence/logo, platform layer, compat port, rendering core (FRAPI), networking + data map, per-position light, Transfer API storage, client wiring (C4a). See git log and `.knowledge/log.md`.
-- **C4b** (`882c33c60`, Sonnet): `OverlayLoader` (PreparableModelLoadingPlugin + ModelResolver for 3 fixed overlay models), `OverlayGeometry` as `UnbakedModel`; `IClientBlockEffects` + `fb/client/render/particle/ClientBlockEffects` registry + `fb/mixin/client/MixinParticleEngine` (crack/destroy) + `MixinLevelRendererBreakSound` (level event 2001); `TankItemRenderer` via `BuiltinItemRendererRegistry`; `anim_splitter` via AW on `SpriteSources.TYPES`; own `textures/block/white.png` and `textures/gui/experimental_warning.png` replacing `neoforge:` ones; BLOCK_OUTLINE order changed (Fabric invoker calls all listeners anyway). **Verified by reading** (full diff); untested at runtime.
-- **C1** (`fe1807e66`, Sonnet + 1 correction): `IFramedBlock extends FabricBlock` (getAppearance), ~25 hook mixins in `fb/mixin/*.java` (Entity, LivingEntity, AbstractHorse, BlockItem, ItemEntity, ExperienceOrb, FlyingMob, Boat, ExplosionDamageCalculator, FireBlock + InvokerFireBlock, LavaFluid, Block#shouldRenderFace, LevelChunk#setBlockState, BeaconBlockEntity, plant canSurvive, WitherBoss/WitherSkull/EnderDragon, ServerPlayerGameMode, PoweredRailBlock, RailDefaultState, RailState, AbstractMinecart, BlockStateBase map colour) and client `fb/mixin/client/hooks/{HookMultiPlayerGameMode,HookLiquidBlockRenderer}`; `fb/platform/util/{BlockHooks,ItemAbility,ItemAbilities,ItemAbilityProvider}`; `fb/common/block/rail/IPoweredRailBlock`; AW lines (FlowerPotBlock.POTTED_BY_CONTENT, WallBlock makeShapes/connectsTo extendable, BlockSetType.register, RailState.pos). **Verified by reading** (all new mixins; lead javap-checked LiquidBlockRenderer ordinal-7 getBlockState and beacon tick); the correction's hand-back report never arrived, its files were read from disk. Untested at runtime.
-- **D1** (lead): `gradlew build` BUILD SUCCESSFUL (**verified**, log in session scratchpad). Built jar: mixin targets remapped in place to intermediary (e.g. `method_6091`), no refmap needed; FCAP jar-in-jar present (**verified** with javap/unzip).
+## 3. Done (committed and pushed unless stated)
+- Sessions 1–4: research, build setup, docs/licence/logo, platform layer, compat, rendering (FRAPI), networking, light, transfer, client wiring, block hooks, first green build. See git log / `.knowledge/log.md`.
+- **D2 startup fix** (`c90142585`, Sonnet): `FramedBlocks.isInitialized()` guard in `fb/mixin/MixinSystemReport.java` (SystemReport built before Bootstrap); `fb/mixin/MixinHopperBlockEntity.java` second handler now `@At(value="JUMP", opcode=IFEQ, ordinal=4)` + `@Local(ordinal=1) boolean` (vanilla frames drop locals at `setChanged`); `complex_wrench` tag translation; gametest source set `src/gametest` via `fabricApi.configureTests` in `build.gradle` (test mod `framedblocks_fabric_gametest`, never in the release jar). **Verified**: lead re-ran build + `runGametest`; client title screen and `runServer` to EULA verified from agent logs.
+- **E2 game tests** (`45c16f789`, Sonnet): 5 upstream classes ported to `src/gametest/java/xfacthd/framedblocks/gametest/tests/`, helpers in `gametest/util/{TestUtils,TestedType}`, 9 structures in `src/gametest/resources/data/framedblocks_fabric/structure/` (no id conversion needed). Lazy generated tests, `setupTicks = 20` for light settling, test-side interaction fallback. **Verified** by build: all required pass; 27 optional failures = 26 upstream-documented `OcclusionTests` + `testSignDying` (upstream bug: `AbstractFramedSignBlock.useItemOn` ~l.84-87 returns PASS for waxed signs before REMOVE_WAX; made optional). BeaconTint test excludes CORNER_SLOPE_EDGE, THREEWAY_CORNER_SLOPE_EDGE, CHAIN, LANTERN, SOUL_LANTERN, LIGHTNING_ROD (non-occluding beam shapes) — in-game check listed in §8.
+- **F1 review** (Opus): report at scratchpad `f1/f1_report.md` (18 findings, fix specs). H2 (hopper `@Local` name) was already fixed by D2.
+- **F1-A H1** (merged `7c20da029`, Sonnet): new `fb/platform/event/FreshBlockEntityQueue.java`; BE `onLoad` deferred from Fabric `BLOCK_ENTITY_LOAD` (fires inside `LevelChunk.setBlockEntity`, could hang chunk loading) to `START_WORLD_TICK` (server + client), cleared on server stop / disconnect; `gametest/BlockEntityLoadTests`. **Verified**: diff read, build + gametests green.
+- **F1-C T1–T4 transfer** (merged `87f940420`, Opus): silent-change depth + notify on `onFinalCommit` in `platform/transfer/*` and `common/capability/*`; double chest = `CombinedSlottedStorage` of each half's own storage (`FramedChestBlockEntity.ChestStorage`, `FramedStorageBlockEntity.getOwnItemStorage`); hopper cooldown via `SnapshotParticipant` (`InsertCooldown`); saw max-stack probe silent; `gametest/TransferTests` (5 tests, fail on old code per agent). **Verified**: full diff read, build + 893 required gametests pass.
+- **F1-D/F L1, N1–N3** (merged `1eee45143`, Sonnet): new `fb/mixin/light/compat/MixinStarLightEngine.java` (ScalableLux `performLightDecrease`, `@Local(name="offX/offY/offZ")`, verified against ScalableLux 0.3.0-alpha.0.7 and 0.1.0.1 bytecode; applied at runtime with 0.1.0.1); `FramedDataMaps` calls `BlockCamoRotators.reload()` on both sides; `LongOpenHashSet` + capped decode prealloc in `CullingUpdateTracker`, `ClientboundCullingUpdatePayload`, `FramedByteBufCodecs`; `stillValid` in `ServerboundSelectFramingSawRecipePayload`. **Verified**: diff read, build green. Light decrease itself not exercised.
 
 ## 4. In progress when stopped
-Both subagents were stopped by this handoff.
-
-1. **D2 – startup fix loop** (Sonnet long). Uncommitted, **partial, unverified (not compiled, not run)**:
-   - `fb/FramedBlocks.java`: `private static volatile boolean initialized`, set at end of `onInitialize`, `public static boolean isInitialized()`.
-   - `fb/mixin/MixinSystemReport.java`: `if (FramedBlocks.isInitialized() && ServerConfig.VIEW.allowBlockEntities())`. Fixes the known crash (see section 6) *if* loading `FramedBlocks` itself does not pull in Minecraft registry classes before bootstrap — check its static fields.
-   - `fb/mixin/MixinHopperBlockEntity.java`: `@Local(ordinal = 1) boolean flag1` → `@Local(name = "bl2") boolean flag1`. **Suspicious**: name-based `@Local` needs a local variable table; the Mojang-named jar may not have one. The agent probably hit an injection error here but its reasoning is lost. Re-check by running the client; prefer an ordinal/type-based capture verified with `javap -p -c -l`.
-   - Not yet done: gametest run config, runServer check, rest of the loop.
-2. **F1 – read-only bug/optimisation review** (Opus long). Wrote nothing; report lost. Must be re-run.
-
-Also uncommitted: `.knowledge/plan.md`, `.knowledge/log.md` (status sync).
+1. **F1-E/G** (Sonnet) in worktree **`F:/wt/fbr`** (branch `f1-render`, based on `c90142585`), **uncommitted**. Findings R1, R2, B1, B2, B3, M1, M2, M3. Files: `fb/platform/model/{ModelBridge,CapturedQuads}.java`, `fb/client/model/FramedDoubleBlockModel.java`, `fb/client/modelwrapping/ModelWrappingManager.java`, `fb/mixin/MixinBlock.java` → renamed `fb/mixin/client/MixinBlockFaceHiding.java` (client list, solid-layer gate), `fb/platform/util/BlockHooks.java` (burn odds), `fb/mixin/MixinPlantSurvival.java` (+BigDripleaf, SmallDripleaf, ChorusFlower), new `fb/mixin/MixinChorusPlantBlock.java` (ModifyExpressionValue `is(Block)` ordinal 4) and `fb/mixin/MixinCocoaBlock.java`, `src/main/resources/framedblocks_fabric.mixins.json`, `fb/client/screen/overlay/BlockInteractOverlay.java`, `fb/api/util/Utils.java` (`TOOL_WRENCH_LEGACY` `c:wrenches`), `fb/api/type/IBlockType.java`.
+   - Lead reviewed the full diff: **accepted except M1**. Original agent build was green, `runServer` to EULA OK, `runClient` no mixin errors.
+   - Correction 1 (M1: creative/no-bars branch must return `STATUS_BARS_HEIGHT` 39 like NeoForge, drop `HOTBAR_HEIGHT`) was sent; agent stopped mid-way. On disk the file already returns `STATUS_BARS_HEIGHT` and `HOTBAR_HEIGHT` is gone, but **not compiled/verified after the correction**.
+   - Left: verify M1 edit (no leftover constant/comment), build in `F:/wt/fbr`, commit on `f1-render`, merge into `1.21.1-fabric` (no gametest json touched → expected clean except possibly nothing), run build, push, `git worktree remove F:/wt/fbr`, delete branch.
+2. **E3** (Sonnet) in the main checkout, **uncommitted, partial, unverified (state unknown, possibly not compiling)**: port of upstream `src/test/java/xfacthd/framedblocks/{selftest,cmdtests,util}` into `src/gametest/java/xfacthd/framedblocks/gametest/{selftest,cmdtests}/` plus `gametest/util/{AsyncTypeTest,MarkdownTable}.java` (untracked files). No wiring into `src/gametest/resources/fabric.mod.json` or `build.gradle` yet as far as git shows (both unmodified). Its report never arrived.
+   - Uncommitted in main checkout: the untracked E3 files above + `.knowledge/log.md`, `.knowledge/plan.md` (status sync).
 
 ## 5. Open work (ordered)
-Compile-check helper (recreate outside the repo, e.g. in the session scratchpad): init script `maxerrs.gradle` with `allprojects { tasks.withType(JavaCompile).configureEach { options.compilerArgs += ['-Xmaxerrs','100000','-Xmaxwarns','0'] } }`; run `JAVA_TOOL_OPTIONS=-Duser.language=en ./gradlew build --console=plain -I <init script> > <log> 2>&1`.
-
 | # | Task | Depends | Definition of done | Model |
 |---|------|---------|--------------------|-------|
-| D2 | Re-delegate the startup loop. Start from the uncommitted partial edits (keep or redo). Steps: (1) `runClient` in background to the title screen (`Sound engine started` + first resource reload), stop only the `KnotClient`/devlaunchinjector java process, never the Gradle daemon; (2) fix every mod ERROR/WARN (mixin apply, `@Local`, missing models/textures, recipe/tag/registry errors; light mixins are `required: false` so read WARN lines); (3) add a Loom `gametest` server run with `-Dfabric-api.gametest` (+ report file, runDir `build/gametest`), zero tests, must load a world and exit cleanly; (4) `runServer` must reach the EULA prompt with no earlier mod error; (5) `gradlew build` green. Known harmless: FCAP refmap warning, missing optional `ca/spottedleaf/starlight/...` and `com/electronwill/nightconfig/core/io/IoUtils` classes. | - | Client title screen, gametest server exit and EULA stop all without mod errors; build green | Sonnet long |
-| F1 | Re-run the read-only review (same brief: mixins, platform layer, transfer, light, model bridge, networking/security, BE sync, data map, FCAP init order, client wiring; known inputs in section 6), then Sonnet fix tasks per finding cluster | can run in parallel with D2 (read-only) | Ranked, verified findings list; fixes reviewed and committed | Opus review, Sonnet fixes |
-| E2 | Port the 5 game-test classes in `src/test` (excluded from compilation; `.nbt` structures still use old `framedblocks:` ids) to Fabric gametest, using D2's run config | D2 | Game tests run and pass, or failures documented | Sonnet long |
-| G1 | Final acceptance: full build, no TODO/debug leftovers, README/listing wording on integrations and energy, Graphify graph (none exists yet; create per Graphify docs), `.knowledge/report.md`, final commit + push | all | per role prompt step 8 | lead |
+| F1-E/G finish | See §4.1: verify M1 correction in `F:/wt/fbr`, build, commit, merge, build, push | – | Build + 893 required gametests green on `1.21.1-fabric`; worktree removed | Sonnet short (only if the build fails; otherwise lead just builds/commits) |
+| E3 | Re-delegate the self-test + `/fbtest` command port, starting from the partial untracked files (keep or redo). Spec (same as this session's brief): common self-test checks run on the gametest server (`SERVER_STARTED`) and client checks (`ClientBlockEffectsPresence` ← upstream `ClientBlockExtensionsPresence`, `SpecialShapeRendererPresence`, Jade if client) on the client via `main`/`client` entrypoints in the test mod; `RecipePresence` on first join and on gametest `SERVER_STARTED`; commands via `CommandRegistrationCallback`; `ChunkBanTest` via world tick; add a separate Loom client run (e.g. `runClientDev`) with the gametest source set if `runClient` does not include it; skip `codegen/`; do not modify `src/main`; classify every finding (port bug with root cause / upstream / false positive) | F1-E/G merged (both build in main checkout) | Self-test runs on gametest server + client dev run, commands register, build green with same gametest result, release jar has no test classes, findings table | Sonnet long |
+| E3 fixes | Sonnet fix tasks for any port bugs E3 finds | E3 | Fixed + build green | Sonnet |
+| Cleanup | Decide on upstream `src/test` tree (all ported except `codegen/`): delete it or keep as reference; test source set is already emptied in `build.gradle` | E3 | Decision in decisions.md; tree consistent | lead / Sonnet short |
+| G1 | Final acceptance: full build; no TODO/debug leftovers; README/listing wording on integrations and energy (still says unverified/planned); Graphify graph (none exists; create per Graphify docs); `.knowledge/report.md` (per role step 8, incl. LGPL source-availability note since repo is private); final commit + push | all | Role prompt step 8 | lead |
+
+Parallel: E3 can start in the main checkout while F1-E/G is finished in its worktree only if the lead does not build in the main checkout at the same time.
 
 ## 6. Known problems and blockers
-- **Client crash at startup (before D2 partial fix)**: `NoClassDefFoundError: Could not initialize class xfacthd.framedblocks.common.config.ServerConfig`, root `ExceptionInInitializerError` in `SoundEvents.<clinit>` via `FramedProperties` ← `Utils` ← `ConfigView$Server` ← `ServerConfig` ← `MixinSystemReport.addBlockEntityWarning` ← `SystemReport.<init>` ← `CrashReport.preload` (client `Main.main` line 125, before `Bootstrap`). Log: session scratchpad `d2_client1.log`.
-- Nothing has run in game yet: all mixins, AW lines, networking, transfer adapters, light, rendering untested at runtime.
-- F1 inputs not yet reviewed: glowing framed blocks keep AO; Sodium ignores the `LevelRenderer.getLightColor` mixin; ScalableLux gap in `performLightDecrease`; Transfer adapters notify inside transactions (also on abort); tank block-update spam with buckets; HUD overlay fixed 39 px status-bar height; chest/sign BERs lost NeoForge's enlarged render bounding box; B1 risks (capture reset via `MeshBuilder.getEmitter()`, `BakingModelLookup` with ModernFix, `CapturedQuads` cache cleared only on reload); `MixinFireBlock` keeps the burn face in a field on the FireBlock singleton; `MixinBlock#shouldRenderFace` ignores NeoForge `supportsExternalFaceHiding`; `MixinParticleEngine.crack` allocates a `BlockHitResult` for every block; wrench tag `c:tools/wrench` only (consider optional `#c:wrenches`); stale `initializeClient` javadoc in `fb/api/type/IBlockType.java`; `MixinLevelRendererBreakSound` and `HookLiquidBlockRenderer` (ordinal 7) only bytecode-verified; plant survival mixin covers only Bush/Cactus/SugarCane/Mushroom/Bamboo(Sapling); `isFlammable` default for non-framed camo = `ignitedByLava()`.
-- Add-on mods must register `RegisterModelWrappersEvent` listeners in their main entrypoint; connected-texture properties via `ConTexDataHandler.addConTexProperty`.
-- New lang key `config.framedblocks_fabric.server.poweredSawRequiresEnergy` only in `en_us.json`. Generated resources (`src/generated/resources`) are now hand-maintained (datagen not ported).
-- Creative tab position (`withTabsBefore(SPAWN_EGGS)`) dropped. README/listing still call energy handling and integrations unverified/planned — update in G1.
-- Repo is private; LGPL source availability matters once jars are distributed (mention in final report).
+- No in-game (visual/gameplay) testing done at all; everything rendering/interaction-related is on §8.
+- 27 optional gametest failures (known, see §3 E2). `testSignDying` = upstream bug (waxed sign wax removal unreachable), not fixed.
+- Accepted limitations: Sodium ignores `LevelRenderer.getLightColor` and never calls `Block.shouldRenderFace` (no framed neighbour face hiding under Sodium); liquid hook has no effect under Sodium; ModernFix dynamic resources + `BakingModelLookup` untested.
+- `FreshBlockEntityQueue` holds strong BE refs until drained/cleared (bounded; dimensions are not unloaded mid-session in vanilla).
+- Hopper cooldown is a flat 8 ticks for inserts from outside (vanilla 7-tick timing adjustment missing; pre-existing).
+- New lang key `config.framedblocks_fabric.server.poweredSawRequiresEnergy` only in `en_us.json`. Generated resources are hand-maintained (datagen not ported).
+- `fb/api/test/TestUtils.java` (upstream API class in main) imports client classes; only loaded when called; gametest uses its own copy in `gametest/util/TestUtils.java`.
+- Creative tab position (`withTabsBefore(SPAWN_EGGS)`) dropped. README/listing still call energy and integrations unverified/planned — update in G1.
 - No open questions for the user.
 
 ## 7. Decisions made
 (Also in `.knowledge/decisions.md`.)
-- New mod id `framedblocks_fabric`, package unchanged; NeoForge worlds not compatible.
-- Loom 1.15.5 / Gradle 9.2.1 / JDK 21; FCAP bundled; no Porting Lib → own platform layer `xfacthd.framedblocks.platform.*`.
-- Rendering on FRAPI with Geometry/QuadTable under `ModelBridge`.
-- Compat compile versions capped by Loom 1.15.5; integrations compile-only and `suggests`. Removed: Create, AE2 (incl. saw pattern encoder), Building Gadgets, Athena hook.
-- NeoForge datagen not ported; generated resources kept and patched.
-- BE sync via marker tags + mixin on `BlockEntity.loadWithComponents`; common setup on first `TAGS_LOADED`.
-- Light: cached emission unchanged, per-position value injected at vanilla readers, own `required: false` mixin config; Fabric data attachments rejected.
-- FCAP already syncs SERVER configs; camo rotator data map = reload listener on the NeoForge path + own sync payload.
-- Storage: mB internally, 81-droplet multiples at the Transfer API boundary; powered saw energy optional (`poweredSawRequiresEnergy`, default false).
-- All framed blocks `RenderType.cutout()`; FCAP config screen registered; IMC replaced by a public method.
-- Block hooks: IFramedBlock methods dispatched by MixinExtras wrappers at vanilla call sites, defaults in `BlockHooks`; static `FlammableBlockRegistry` rejected (camo-dependent flammability).
-- Rails: `IPoweredRailBlock` + mixins on PoweredRailBlock/AbstractMinecart/RailState mirror NeoForge `isPoweredRail`/`isValidRailShape`; the slope `updateDir` override was dropped.
-- Hit/destroy effects: own registry + ParticleEngine/LevelRenderer mixins; overlay models served from a fixed id list.
-- Mixin remap: tiny-remapper mixin extension remaps targets in the jar; no refmap needed.
-- Server checks via gametest mode, not by accepting the EULA.
-- Rejected: first icon; Porting Lib; Fabric data attachments for light; C4 as one task; slope `updateDir` override instead of RailState semantics.
+- New mod id `framedblocks_fabric`; Loom 1.15.5 / Gradle 9.2.1 / JDK 21; FCAP bundled; own platform layer instead of Porting Lib; FRAPI rendering via `ModelBridge`; integrations compile-only; Create/AE2/Building Gadgets/Athena removed; datagen not ported.
+- Game tests in a separate `src/gametest` source set + test mod via `fabricApi.configureTests` (vanilla refuses a gametest server with zero tests; keeps tests out of the release jar).
+- Parallel fix agents work in short-path worktrees `F:/wt/*` (harness `isolation: worktree` fails on Windows path length); lead merges branches; merge conflicts are resolved by a subagent, the lead validates and commits.
+- F1-C transfer fixes went to Opus (dupe-sensitive nested-transaction semantics).
+- BE `onLoad` deferred to next world tick start (mirrors NeoForge `freshBlockEntities`).
+- Transfer: notifications only on final commit; one snapshot participant per underlying slot (double chest = combined storage of halves).
+- Face-hiding mixin moved to the client mixin list with a solid-render-layer gate (NeoForge `supportsExternalFaceHiding` equivalent).
+- Glowing framed blocks: AO DEFAULT → FALSE (state GLOWING property), AO TRUE kept.
+- Refuted F1 inputs (do not retry): chest/sign BER bounding box, `MeshBuilder.getEmitter()` capture reset, FireBlock burn-face field race, `crack` BlockHitResult allocation.
+- Rejected earlier: first icon; Porting Lib; Fabric data attachments for light; slope `updateDir` override; name-based `@Local` on MC classes.
 
 ## 8. Manual test checklist (all untested)
-- Place every category of framed block; apply/remove block and fluid camo; geometry, textures, tint, translucent + cutout camo in one block, emissive camo, AO and shading; with Indigo and with Sodium.
-- Double blocks with two tinted camos; hidden-face culling; Continuity camo connecting across framed blocks.
-- Item models with camo in hand, GUI, item frame; tank item (transforms applied once); reinforcement overlay; slime/redstone/target overlay models; breaking overlay; F3+T reload.
-- Light: glowstone on/off, camo light, removal, `/setblock`, explosion, chunk unload/reload, world restart, client join; with ScalableLux; check log for light mixin warnings.
+- Place every category of framed block; apply/remove block and fluid camo; geometry, textures, tint, translucent + cutout camo, emissive camo, AO and shading; with Indigo and with Sodium.
+- Glowing framed block (glowstone dust / glowstone or sea lantern camo, also double blocks): no dark AO corners.
+- Double blocks with two tinted camos; hidden-face culling (glass/leaves next to a framed block hide faces against solid camo; stone/dirt keep all faces); Continuity camo connecting.
+- Item models with camo in hand, GUI, item frame; tank item; reinforcement overlay; slime/redstone/target overlays; breaking overlay; repeated F3+T (no cache growth; heap check with a CTM pack).
+- Light: glowstone on/off, camo light, removal, `/setblock` with NBT and `/clone` of glowing framed blocks (now handled by the deferred onLoad), explosion, chunk unload/reload, restart, client join; with ScalableLux: break a torch next to a glowing framed block → it keeps its light.
+- Changing `glowstoneLightLevel` config / blacklisting a camo, then reloading the world: no hang on chunk load.
 - Hit/break particles and break sound follow the camo; item frame and one-way window effects.
-- Reinforcement, phantom paste, wrench/hammer/screwdriver/key/blueprint; left-click handling; sneak-use with framed tools in both hands.
-- Sounds (step, fall, place, hit), friction (ice camo) for players, items, XP orbs, boats; ladders and trapdoor-above-ladder; fire spread/burn on wooden camo and fireproof config; lava ignition; beacon beam tint through tinted camo; plants on dirt/sand camo; wither/dragon vs reinforced blocks; fluid overlay next to glass camo; map colours.
-- Framed powered/activator/detector rails and rail slopes next to vanilla rails (no crash, carts boost/activate).
-- Framing saw and powered saw screens and recipes (with and without `poweredSawRequiresEnergy`); JEI/REI/EMI display + transfer (`-Pcompat_runtime=true`); Jade tooltip.
-- Dupe/loss checks with hoppers into/out of framed chest, secret storage, bookshelf, powered saw, framed hopper; double chest split/join while a hopper runs.
-- Tank: buckets both ways, partial/full drain, tank item stacking, persistence; fluid camo with main/off hand, `consumeCamoItem`, creative, dedicated server.
-- Signs, item frame with maps, doors/gates/pressure plates, flower pot, chest lid animation.
+- Reinforcement, phantom paste, wrench/hammer/screwdriver/key/blueprint; a mod wrench tagged `c:wrenches` rotates framed blocks; sneak-use with framed tools in both hands.
+- Sounds, friction (ice camo) for players/items/XP/boats; ladders; fire spread on wooden camo; fire does not persist on crafting-table/note-block camo; lava ignition; beacon beam tint (incl. the 6 excluded types: chain, lanterns, lightning rod, corner slope edges — should they tint?); plants: chorus flower/plant on end-stone camo (incl. stacked/adjacent), big/small dripleaf on clay/moss camo (upper half breaks correctly), cocoa on jungle-log camo; wither/dragon vs reinforced; fluid overlay next to glass camo; map colours.
+- Framed powered/activator/detector rails and rail slopes next to vanilla rails.
+- Framing saw + powered saw screens and recipes (with/without `poweredSawRequiresEnergy`), shift-click material does not reset saw progress; JEI/REI/EMI display + transfer (`-Pcompat_runtime=true`); Jade tooltip.
+- Dupe/loss checks: hoppers and pipes into/out of framed chest (single + double), secret storage, bookshelf, powered saw, framed hopper; double chest split/join while a hopper runs; tank with buckets (one block update per use) and pipes.
+- Tank: buckets both ways, partial/full drain, item stacking, persistence; fluid camo with main/off hand, `consumeCamoItem`, creative, dedicated server.
+- Signs (dye, glow, wax), item frame with maps, doors/gates/pressure plates, flower pot, chest lid animation.
 - Diagonal Blocks variants, Amendments hanging pots, Additional Placements.
-- Ghost block preview, custom outlines + collapsible indicator, HUD interact overlay position.
-- Dedicated server + client join: registry/config/camo rotator sync (also after `/reload`), culling update packets; crash-report note; Mod Menu config screen.
+- Ghost block preview, custom outlines + collapsible indicator; HUD interact overlay position with armor, with air bubbles, and in creative.
+- Dedicated server + client join: registry/config/camo rotator sync (also after `/reload` with a datapack tag change), culling update packets; crash-report note; Mod Menu config screen.
 
 ## 9. Usage so far
-Delegated work (long = 2, short = 1), killed runs included: Sonnet ≈ 35 (… C4b ×2, C1 ×2, C1 correction, D2 killed), Opus ≈ 8 (B1 ×2, C2 ×2, F1 review killed ×2). Opus share ≈ 19 %. Precision overrides: B1 (rendering), C2 (light engine).
+Delegated work (long = 2, short = 1), killed runs included: Sonnet ≈ 48, Opus ≈ 12 → Opus share ≈ 20 %. Precision overrides: B1 (rendering), C2 (light engine), F1-C (transfer transactions).
 
 ## 10. How to resume
 1. Read this file, then `.knowledge/requirements.md`, `plan.md`, `decisions.md`, `log.md`. No Graphify graph exists yet.
-2. `git status --short`: expect `fb/FramedBlocks.java`, `fb/mixin/MixinSystemReport.java`, `fb/mixin/MixinHopperBlockEntity.java` (D2 partial, unverified) plus `.knowledge/plan.md`, `.knowledge/log.md`. Commit the `.knowledge/` files; leave the D2 files for the D2 agent to keep or redo.
-3. Recreate the Gradle init script outside the repo (section 5).
-4. Re-delegate D2 (Sonnet long) and, in parallel, the read-only F1 review (Opus long) per section 5; review each result, commit separately, push when the build is green.
-5. Then E2 → F1 fixes → G1.
+2. `git status --short` in `F:/Coding/FramedBlocksFabric`: expect untracked E3 files under `src/gametest/java/xfacthd/framedblocks/gametest/{selftest,cmdtests}/` and `gametest/util/{AsyncTypeTest,MarkdownTable}.java` plus modified `.knowledge/*`. Commit only `.knowledge/` + this file; leave the E3 files for the E3 agent.
+3. In `F:/wt/fbr`: check `BlockInteractOverlay.getStatusBarsHeight()` (creative branch returns 39, no `HOTBAR_HEIGHT` leftovers), run the build there; if green, commit on `f1-render`, merge into `1.21.1-fabric`, build in the main checkout (all gametests), push, remove the worktree and branch. If the build fails, send a precise correction to a Sonnet agent.
+4. Re-delegate E3 (Sonnet long) per §5, then E3 fixes, cleanup, G1.
 
 ### Task text for the next session
-"Continue the work described in handoff.md in F:\Coding\FramedBlocksFabric. Read it fully, check it against the repo state first (it may be slightly out of date; D2 left three uncommitted, unverified source edits and the F1 review produced nothing), then continue with section 5. All user questions are already answered in .knowledge/requirements.md — do not ask again unless there is a real blocker."
+"Continue the work described in handoff.md in F:\Coding\FramedBlocksFabric. Read it fully, check it against the repo state first (it may be slightly out of date; F1-E/G sits uncommitted in worktree F:\wt\fbr with an unverified M1 correction, and E3 left partial untracked files in src/gametest), then continue with section 5. All user questions are already answered in .knowledge/requirements.md — do not ask again unless there is a real blocker."
