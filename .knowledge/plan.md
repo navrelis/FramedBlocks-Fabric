@@ -28,8 +28,8 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | D3 | README + listing texts: energy via TR Energy, integration status, Athena removed, test tasks | Texts match verified facts | V1 | Sonnet short | done |
 | C5 | JEI dev runtime (`mezz_config`), delete ported upstream `src/test` tree, `gradlew tasks` failure on empty test source set | runClient with compat_runtime=jei reaches title screen; tree removed; tasks works; build green | T1 | Sonnet short | done |
 | F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | done (all accepted findings merged into 1.21.1-fabric) |
-| G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | in progress |
+| G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | done (report.md) |
 
-Parallel now: none (G1 by lead).
+Parallel now: none. Project complete pending the manual test checklist (report.md §5).
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 56 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3), Opus 14 (B1 x2, C2 x2, F1 review x3, F1-C, T1). Opus share ~20 %.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 57 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3, C5 short), Opus 14 (B1 x2, C2 x2, F1 review x3, F1-C, T1). Opus share ~20 %.
