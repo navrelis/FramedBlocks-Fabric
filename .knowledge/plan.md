@@ -54,7 +54,7 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | CF1 | CurseForge card pipeline in `docs/curseforge` (UXW style): cards, alt texts, description template, summary, checks | `node tools/build.mjs` renders all cards; check passes; lead viewed every card | - | Opus long (override: visual quality) | done (11 cards, check passes, screenshots still placeholders) |
 | CF2 | Put SC1 screenshots into CF1 cards, crops, captions, Reinforcement text, README | All cards use real shots; check.mjs 0 errors / 0 placeholders; lead viewed every card | SC1, CF1 | Opus short (fresh agent, session 9) | done (lead viewed all 11 cards; check 0/0; 1 correction: integration status text) |
 | CT2 | Merged client test `runClientTest -Pcompat_runtime=jei,emi,rei,jade` (Indigo) | PASS; H1 cache init on client; no 'reached 1024' spam | H1, H6, UP2, UP3 | lead | done (PASS, 0 events from our code, H1 on Worker-Main 1.1 s, no cache-bound lines) |
-| G9 | Session 8/9 acceptance: build 901/27, Graphify, report §9, push | Per role step 8 | CF2, CT2 | lead | in progress |
+| G9 | Session 8/9 acceptance: build 901/27, Graphify, report §9, push | Per role step 8 | CF2, CT2 | lead | done (build 901/27, Graphify 16,504 nodes, report §9) |
 | H6 | Bound `FramedBlockModel` quad/render-type caches (clear on overflow) | Cap constant, both caches bounded, build + client test green | - | Opus short (Sonnet slots full, user asked for speed) | done (merged, build 901/27; client test pending after SC1) |
 | H1 | Parallel state-cache build with serial warm-up and determinism check | Same caches as serial build (self-test), cold start measured, build green | - | Opus long (concurrency) | done (lead build 901/27, cold 125 ms, 0 mismatches) |
 | H3, H5 | Lazy beacon occlusion, ItemHandlerStorage toStack hoist | Skipped: benefit unmeasured/negligible, H5 dupe-sensitive | - | - | skipped |
@@ -62,7 +62,7 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | UP2 | Replace 9 JEI removal-marked APIs; saw energy unit FE -> E | 0 removal warnings, 901/27, no behaviour change | - | Sonnet long | done (merged 12750eb84, lint 9->0, build 901/27; JEI GUI untested in game) |
 | UP3 | Loom 1.18.4, Gradle 9.7.0, daemon JVM criteria 25, JEI 19.64, MezzConfig 0.6.8 (maven), Sodium 0.8.13, Amendments 2.1.11 | Build 901/27, runClientTest PASS (Indigo + Sodium), compat runtime starts | UP2 | Sonnet long | done (merged 8fccef08d; lead build 901/27; agent client test PASS with JEI 19.64 + Sodium 0.8.13) |
 
-Parallel now (session 9): none; lead doing final acceptance (G9).
+Parallel now: none. Open: CurseForge upload (needs project id + user's yes).
 
 Usage tally session 8 so far: Sonnet +2 (H mapping long) → 67 + running SC1 2, UP1 2; Opus +4 running (CF1, H1) → 22. Opus share ~24 %.
 

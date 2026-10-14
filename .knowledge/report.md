@@ -97,3 +97,48 @@ Delegated work (long = 2, short = 1, killed runs included): Sonnet ≈ 57, Opus 
 - Precision overrides: O1 (light store read concurrently by light workers) and T2 (same area as T1).
 
 **Graphify:** `graphify update .` (PowerShell) → 16,227 nodes, 66,224 edges (local only).
+
+## 9. Sessions 8–9: public source, CurseForge cards, upgrades, optional perf items (2026-10-14)
+
+**Implemented, per request:**
+- **Make the source public (PUB1):** new public repo https://github.com/navrelis/FramedBlocks-Fabric (default branch `1.21.1-fabric`), history rewritten so the personal email appears nowhere (noreply address); tree identical to the private tip. The old private repo is untouched (remote `private`). All repo links (README, NOTICE, listing texts, `fabric.mod.json`) point to the public repo.
+- **CurseForge pictures like the user's other mods (CF1, SC1, CF2):**
+  - `docs/curseforge/`: the UnifiedXaeroWorldmap card pipeline (HTML/CSS, headless Edge, lossless PNG, 1672 px wide). 11 cards (`dist/img/01-hero` … `11-credits`), alt texts (`dist/alt.json`), `description.template.md`, `summary.txt`, checks.
+  - Real screenshots come from a new dev-only showcase mode of the client test (`runClientTest -Pshowcase=true`, code only in `src/gametest/.../clienttest/Showcase*`): it builds scenes (cottage, camo before/after, shape showroom, double blocks, fluids, glowing lamps at night, functional blocks, Framing Saw GUI, items) and saves 1920x1080 PNGs plus `manifest.json`. 11 shots in `docs/curseforge/assets/shots/`.
+  - CF2: real shots in every card, a `.shot.zoom` crop mode, shared before/after crop, Framing Saw GUI at 1:1, captions and alt texts written from the images, Reinforcement text verified against the code (blast resistance of obsidian, camo no longer burns, removed with an obsidian-capable pickaxe). Integration status updated: JEI, REI, EMI and Jade load the plugin in the automated client test (also README and listing text).
+- **Optional perf items:**
+  - H1: parallel state-cache build (serial warm-up, per-block parallel stream), plus a determinism self-test (74,180 states, 0 mismatches). Cold build 425 → 125 ms on the server; 1.1 s on the client during startup (`Worker-Main`).
+  - H6: `FramedBlockModel` quad and render-type caches bounded at 1024 entries (clear on overflow).
+  - H3 (lazy beacon occlusion) and H5 (transfer `toStack` hoist) skipped: no measured benefit; H5 is dupe-sensitive.
+- **Upgrades (UP1–UP3):** Loom 1.18.4 and Gradle 9.7.0 (the Gradle daemon runs on JDK 25 via `gradle/gradle-daemon-jvm.properties`; the mod stays Java 21). JEI 19.64 with MezzConfig 0.6.8, Sodium 0.8.13 and Amendments 2.1.11 as dev runtimes. 9 JEI APIs marked for removal replaced (0 removal warnings). The saw energy unit "FE" became "E".
+
+**Checks run (final state):**
+- `gradlew build`: "All 901 required tests passed", 27 known optional failures.
+- `runClientTest -Pcompat_runtime=jei,emi,rei,jade` (Indigo, merged code): PASS in 65 s. 0 log events from FramedBlocks code, 0 crashes, 0 self-test findings, 0 skipped blocks. All four compat plugins load in a world. The 357 other log events are EMI duplicate recipe ids (JEI and EMI together), JEI subtype warnings and vanilla warnings. No "reached 1024" cache-bound lines.
+- UP3 agent: client test with `jei,emi,rei,jade,sodium` PASS (agent run, not repeated by the lead).
+- Cards: `check.mjs` 11 cards, 0 placeholders, 0 errors, 0 warnings; `fill-urls.mjs --check` all pictures ready. The lead viewed all 11 cards.
+- Graphify: `graphify update .` → 16,504 nodes, 66,989 edges (local only).
+
+**Manual test checklist (adds to §5):**
+- JEI 19.64: saw recipe category background and look; clicking the recipe result in the Framing Saw and Powered Saw screens; recipe transfer; the catalyst click area in the Powered Saw.
+- EMI and REI recipe screens for the saws (plugins load, screens not clicked through).
+- Powered saw tooltip shows "E".
+- Sodium 0.8.13: rendering of camo blocks.
+- Long sessions with many collapsible blocks: no visual glitches when the bounded quad cache clears.
+- CurseForge page: after upload, the description renders with the uploaded images (`tools/fill-urls.mjs`).
+
+**Model usage, sessions 8–9:**
+- Sonnet: H mapping, UP1, SC1, UP2, UP3 (all long) = 10.
+- Opus: CF1, H1 (long), H6, CF2 (short) = 6, plus a short CF2 correction.
+- Running total: Sonnet ≈ 75, Opus ≈ 28, so Opus ≈ 27 %.
+- Precision overrides: CF1 (visual quality the user explicitly asked for). H1 went to Opus as concurrency work, H6 to Opus because both Sonnet slots were busy, CF2 to Opus because it owned the card layout; all within budget.
+
+**Known limitations and recommendations:**
+- Nothing has been play-tested by a human; the compat GUIs are verified only by compilation and plugin loading.
+- `functional_blocks` is the weakest shot (sparse, far camera; the sign text cannot be read). A closer retake with `-Pshowcase_only=functional` would improve card 06. The hero cottage sits behind the title; a retake with the cottage further left would show it beside the title.
+- Card 08 is exactly at the 2400 px card limit; any extra text needs a layout change.
+- The JDK 25 auto-download path of `gradle-daemon-jvm.properties` is untested (a local Temurin 25 was used).
+- Showcase lava camo is applied through `FluidCamoContainer` directly, bypassing config restrictions (dev-only code).
+- Under Sodium there is no framed neighbour face hiding (since session 7).
+- Merged worktrees `F:/wt/*`, the bare `F:/wt/pub.git` and `.claude/worktrees/agent-*` can be removed (the permission policy blocked the lead).
+- **Open, user-dependent:** CurseForge project id, then upload with the `curseforge-upload` skill (jar `build/libs/FramedBlocksFabric-10.5.3-fabric.1.jar`, description from `docs/curseforge/description.template.md` after `fill-urls.mjs`, `summary.txt`, `docs/images/icon.png`). Needs the user's explicit final yes.
