@@ -23,8 +23,7 @@ import java.util.function.Predicate;
  * {@link BlockState#getLightEmission()} directly. All injectors are optional and only depend on the parameters of
  * the targeted methods, if the engine changes in an incompatible way framed blocks merely stop emitting dynamic light.
  * <p>
- * Not covered: the re-propagation of sources in {@code StarLightEngine#performLightDecrease()}, which provides no
- * reliable access to the position being processed
+ * The re-propagation of sources in {@code StarLightEngine#performLightDecrease()} is handled by {@link MixinStarLightEngine}
  */
 @Pseudo
 @Mixin(targets = "ca.spottedleaf.starlight.common.light.BlockStarLightEngine")
