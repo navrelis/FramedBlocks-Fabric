@@ -18,6 +18,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
     private static final String TAG_SLOT = "Slot";
 
     protected NonNullList<ItemStack> stacks;
+    private int silentDepth = 0;
 
     public ItemStackHandler()
     {
@@ -44,7 +45,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
     {
         validateSlotIndex(slot);
         stacks.set(slot, stack);
-        onContentsChanged(slot);
+        notifyChanged(slot);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
             {
                 existing.grow(reachedLimit ? limit : stack.getCount());
             }
-            onContentsChanged(slot);
+            notifyChanged(slot);
         }
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
     }
@@ -125,7 +126,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
             if (!simulate)
             {
                 stacks.set(slot, ItemStack.EMPTY);
-                onContentsChanged(slot);
+                notifyChanged(slot);
                 return existing;
             }
             return existing.copy();
@@ -134,7 +135,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
         if (!simulate)
         {
             stacks.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
-            onContentsChanged(slot);
+            notifyChanged(slot);
         }
         return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
     }
@@ -188,6 +189,32 @@ public class ItemStackHandler implements IItemHandlerModifiable
             }
         }
         onLoad();
+    }
+
+    @Override
+    public void beginSilentChanges()
+    {
+        silentDepth++;
+    }
+
+    @Override
+    public void endSilentChanges()
+    {
+        silentDepth--;
+    }
+
+    @Override
+    public void notifyContentsChanged(int slot)
+    {
+        onContentsChanged(slot);
+    }
+
+    private void notifyChanged(int slot)
+    {
+        if (silentDepth == 0)
+        {
+            onContentsChanged(slot);
+        }
     }
 
     protected void validateSlotIndex(int slot)

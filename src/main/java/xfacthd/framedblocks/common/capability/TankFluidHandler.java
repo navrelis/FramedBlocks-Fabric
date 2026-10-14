@@ -14,6 +14,7 @@ public final class TankFluidHandler implements IFluidHandlerModifiable
 
     private final FramedTankBlockEntity blockEntity;
     private FluidStack fluid = FluidStack.EMPTY;
+    private int silentDepth = 0;
 
     public TankFluidHandler(FramedTankBlockEntity blockEntity)
     {
@@ -124,9 +125,30 @@ public final class TankFluidHandler implements IFluidHandlerModifiable
         return fluid;
     }
 
-    private void onContentsChanged()
+    @Override
+    public void beginSilentChanges()
+    {
+        silentDepth++;
+    }
+
+    @Override
+    public void endSilentChanges()
+    {
+        silentDepth--;
+    }
+
+    @Override
+    public void notifyContentsChanged()
     {
         blockEntity.onTankContentsChanged();
+    }
+
+    private void onContentsChanged()
+    {
+        if (silentDepth == 0)
+        {
+            blockEntity.onTankContentsChanged();
+        }
     }
 
     public void load(CompoundTag tag, HolderLookup.Provider provider)

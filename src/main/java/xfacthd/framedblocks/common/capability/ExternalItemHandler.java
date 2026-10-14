@@ -35,6 +35,24 @@ public abstract class ExternalItemHandler implements IItemHandlerModifiable
     }
 
     @Override
+    public final void beginSilentChanges()
+    {
+        wrapped.beginSilentChanges();
+    }
+
+    @Override
+    public final void endSilentChanges()
+    {
+        wrapped.endSilentChanges();
+    }
+
+    @Override
+    public final void notifyContentsChanged(int slot)
+    {
+        wrapped.notifyContentsChanged(slot);
+    }
+
+    @Override
     public final ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
     {
         return wrapped.insertItem(slot, stack, simulate);

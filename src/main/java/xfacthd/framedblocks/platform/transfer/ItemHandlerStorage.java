@@ -21,11 +21,13 @@ import java.util.function.BooleanSupplier;
  * <p>
  * Every slot is its own {@link SnapshotParticipant}: the first modification of a slot within a transaction level
  * snapshots the slot contents, an aborted transaction restores them through
- * {@link IItemHandlerModifiable#setStackInSlot(int, ItemStack)}. Participants are restored in reverse order of
- * their first modification, which keeps several adapters over the same underlying slots consistent.
+ * {@link IItemHandlerModifiable#setStackInSlot(int, ItemStack)}. The restore order of different participants is not
+ * defined, so there must be at most one adapter per underlying handler slot: storages spanning several handlers
+ * have to combine the adapters of the individual handlers instead of wrapping a combined handler.
  * Insertion and extraction are delegated to the handler, so slot limits, item validity and extraction restrictions
- * of the wrapped handler are honored. The handler's own change notifications fire immediately on every
- * modification, including the restoring of snapshots, so listeners always end up seeing the final state.
+ * of the wrapped handler are honored. Modifications and restores made by the adapter are silent
+ * (see {@link IItemHandlerModifiable#beginSilentChanges()}), every slot that was modified notifies the handler once
+ * when the outermost transaction is committed.
  * <p>
  * The optional validity check allows to turn a retained adapter into an inert empty storage (zero slots) once the
  * owner of the handler is gone, preventing items from being moved into a removed block entity
@@ -161,7 +163,16 @@ public final class ItemHandlerStorage implements SlottedStorage<ItemVariant>
             }
 
             updateSnapshots(transaction);
-            ItemStack remainder = handler.insertItem(slot, stack, false);
+            ItemStack remainder;
+            handler.beginSilentChanges();
+            try
+            {
+                remainder = handler.insertItem(slot, stack, false);
+            }
+            finally
+            {
+                handler.endSilentChanges();
+            }
             return Math.max(0, count - remainder.getCount());
         }
 
@@ -188,7 +199,16 @@ public final class ItemHandlerStorage implements SlottedStorage<ItemVariant>
             }
 
             updateSnapshots(transaction);
-            ItemStack extracted = handler.extractItem(slot, simulated.getCount(), false);
+            ItemStack extracted;
+            handler.beginSilentChanges();
+            try
+            {
+                extracted = handler.extractItem(slot, simulated.getCount(), false);
+            }
+            finally
+            {
+                handler.endSilentChanges();
+            }
             return resource.matches(extracted) ? extracted.getCount() : 0;
         }
 
@@ -236,7 +256,24 @@ public final class ItemHandlerStorage implements SlottedStorage<ItemVariant>
         {
             if (isActive())
             {
-                handler.setStackInSlot(slot, snapshot);
+                handler.beginSilentChanges();
+                try
+                {
+                    handler.setStackInSlot(slot, snapshot);
+                }
+                finally
+                {
+                    handler.endSilentChanges();
+                }
+            }
+        }
+
+        @Override
+        protected void onFinalCommit()
+        {
+            if (isActive())
+            {
+                handler.notifyContentsChanged(slot);
             }
         }
 

@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.SlottedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.*;
 import net.minecraft.nbt.*;
@@ -122,6 +123,16 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     }
 
     public Storage<ItemVariant> getItemStorage()
+    {
+        return itemStorage;
+    }
+
+    /**
+     * {@return the Transfer API view of the inventory owned by this block entity}
+     * This is the only view over the slots of this inventory, views spanning several block entities must be
+     * composed of these
+     */
+    protected final SlottedStorage<ItemVariant> getOwnItemStorage()
     {
         return itemStorage;
     }

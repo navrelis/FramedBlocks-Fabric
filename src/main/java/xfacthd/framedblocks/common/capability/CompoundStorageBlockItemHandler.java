@@ -48,6 +48,34 @@ public final class CompoundStorageBlockItemHandler implements IStorageBlockItemH
     }
 
     @Override
+    public void beginSilentChanges()
+    {
+        innerOne.beginSilentChanges();
+        innerTwo.beginSilentChanges();
+    }
+
+    @Override
+    public void endSilentChanges()
+    {
+        innerOne.endSilentChanges();
+        innerTwo.endSilentChanges();
+    }
+
+    @Override
+    public void notifyContentsChanged(int slot)
+    {
+        int sizeOne = innerOne.getSlots();
+        if (slot < sizeOne)
+        {
+            innerOne.notifyContentsChanged(slot);
+        }
+        else
+        {
+            innerTwo.notifyContentsChanged(slot - sizeOne);
+        }
+    }
+
+    @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
     {
         int sizeOne = innerOne.getSlots();

@@ -6,7 +6,8 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
-      "xfacthd.framedblocks.gametest.FramedBlocksSmokeTest"
+      "xfacthd.framedblocks.gametest.FramedBlocksSmokeTest",
+      "xfacthd.framedblocks.gametest.TransferTests"
     ]
   }
 }
