@@ -10,7 +10,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.items.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
@@ -18,6 +17,8 @@ import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEnt
 import xfacthd.framedblocks.common.capability.RecipeInputItemStackHandler;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
+import xfacthd.framedblocks.platform.transfer.IItemHandler;
+import xfacthd.framedblocks.platform.transfer.SlotItemHandler;
 
 import java.util.List;
 import java.util.Objects;

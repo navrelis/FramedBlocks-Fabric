@@ -2,14 +2,14 @@ package xfacthd.framedblocks.common.capability;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import xfacthd.framedblocks.common.blockentity.special.FramedTankBlockEntity;
+import xfacthd.framedblocks.platform.transfer.FluidStack;
+import xfacthd.framedblocks.platform.transfer.FluidUnits;
+import xfacthd.framedblocks.platform.transfer.IFluidHandlerModifiable;
 
-public final class TankFluidHandler implements IFluidHandler
+public final class TankFluidHandler implements IFluidHandlerModifiable
 {
-    public static final int CAPACITY = 16 * FluidType.BUCKET_VOLUME;
+    public static final int CAPACITY = 16 * FluidUnits.BUCKET_VOLUME;
     public static final String FLUID_NBT_KEY = "fluid";
 
     private final FramedTankBlockEntity blockEntity;
@@ -33,6 +33,15 @@ public final class TankFluidHandler implements IFluidHandler
     }
 
     @Override
+    public void setFluidInTank(int tank, FluidStack stack)
+    {
+        if (tank == 0)
+        {
+            setFluid(stack);
+        }
+    }
+
+    @Override
     public int getTankCapacity(int tank)
     {
         return tank == 0 ? CAPACITY : 0;
@@ -50,18 +59,22 @@ public final class TankFluidHandler implements IFluidHandler
         if (!resource.isEmpty() && (fluid.isEmpty() || FluidStack.isSameFluidSameComponents(resource, fluid)))
         {
             int toFill = Math.min(CAPACITY - fluid.getAmount(), resource.getAmount());
-            if (toFill > 0 && action.execute())
+            if (toFill > 0)
             {
-                if (fluid.isEmpty())
+                if (action.execute())
                 {
-                    fluid = resource.copyWithAmount(toFill);
+                    if (fluid.isEmpty())
+                    {
+                        fluid = resource.copyWithAmount(toFill);
+                    }
+                    else
+                    {
+                        fluid.grow(toFill);
+                    }
+                    onContentsChanged();
                 }
-                else
-                {
-                    fluid.grow(toFill);
-                }
+                return toFill;
             }
-            return toFill;
         }
         return 0;
     }
@@ -82,22 +95,20 @@ public final class TankFluidHandler implements IFluidHandler
         if (maxDrain > 0 && !fluid.isEmpty())
         {
             int toDrain = Math.min(maxDrain, fluid.getAmount());
-            if (toDrain > 0)
+            FluidStack drained = fluid.copyWithAmount(toDrain);
+            if (action.execute())
             {
-                if (action.execute())
+                if (toDrain == fluid.getAmount())
                 {
-                    if (toDrain == fluid.getAmount())
-                    {
-                        fluid = FluidStack.EMPTY;
-                    }
-                    else
-                    {
-                        fluid.shrink(toDrain);
-                    }
-                    onContentsChanged();
+                    fluid = FluidStack.EMPTY;
                 }
-                return fluid.copyWithAmount(toDrain);
+                else
+                {
+                    fluid.shrink(toDrain);
+                }
+                onContentsChanged();
             }
+            return drained;
         }
         return FluidStack.EMPTY;
     }

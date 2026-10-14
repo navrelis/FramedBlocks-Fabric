@@ -19,6 +19,7 @@ public final class ServerConfig
     private static final String KEY_CONSUME_CAMO_ITEM = "consumeCamoItem";
     private static final String KEY_GLOWSTONE_LIGHT_LEVEL = "glowstoneLightLevel";
     private static final String KEY_FIREPROOF_BLOCKS = "fireproofBlocks";
+    private static final String KEY_POWERED_SAW_REQUIRES_ENERGY = "poweredSawRequiresEnergy";
     private static final String KEY_POWERED_SAW_ENERGY_CAPACITY = "energyCapacity";
     private static final String KEY_POWERED_SAW_MAX_RECEIVE = "maxReceive";
     private static final String KEY_POWERED_SAW_CONSUMPTION = "consumption";
@@ -30,6 +31,7 @@ public final class ServerConfig
     public static final String TRANSLATION_CONSUME_CAMO_ITEM = translate(KEY_CONSUME_CAMO_ITEM);
     public static final String TRANSLATION_GLOWSTONE_LIGHT_LEVEL = translate(KEY_GLOWSTONE_LIGHT_LEVEL);
     public static final String TRANSLATION_FIREPROOF_BLOCKS = translate(KEY_FIREPROOF_BLOCKS);
+    public static final String TRANSLATION_POWERED_SAW_REQUIRES_ENERGY = translate(KEY_POWERED_SAW_REQUIRES_ENERGY);
     public static final String TRANSLATION_POWERED_SAW_ENERGY_CAPACITY = translate(KEY_POWERED_SAW_ENERGY_CAPACITY);
     public static final String TRANSLATION_POWERED_SAW_MAX_RECEIVE = translate(KEY_POWERED_SAW_MAX_RECEIVE);
     public static final String TRANSLATION_POWERED_SAW_CONSUMPTION = translate(KEY_POWERED_SAW_CONSUMPTION);
@@ -42,6 +44,7 @@ public final class ServerConfig
     private static int glowstoneLightLevel = 15;
     private static boolean fireproofBlocks = false;
 
+    private static boolean poweredSawRequiresEnergy = false;
     private static int poweredSawEnergyCapacity = 0;
     private static int poweredSawMaxReceive = 0;
     private static int poweredSawConsumption = 0;
@@ -54,6 +57,7 @@ public final class ServerConfig
     private static final ModConfigSpec.IntValue GLOWSTONE_LIGHT_LEVEL_VALUE;
     private static final ModConfigSpec.BooleanValue FIREPROOF_BLOCKS_VALUE;
 
+    private static final ModConfigSpec.BooleanValue POWERED_SAW_REQUIRES_ENERGY_VALUE;
     private static final ModConfigSpec.IntValue POWERED_SAW_ENERGY_CAPACITY_VALUE;
     private static final ModConfigSpec.IntValue POWERED_SAW_MAX_RECEIVE_VALUE;
     private static final ModConfigSpec.IntValue POWERED_SAW_CONSUMPTION_VALUE;
@@ -98,6 +102,14 @@ public final class ServerConfig
         builder.pop();
 
         builder.push("powered_framing_saw");
+        POWERED_SAW_REQUIRES_ENERGY_VALUE = builder
+                .comment(
+                        "If true, the Powered Framing Saw consumes energy and does nothing without it. If false, the saw works without energy " +
+                        "and does not use the energy-related settings below. Fabric has no common energy API, so the energy buffer of the saw " +
+                        "can currently only be filled through addon mods that expose it"
+                )
+                .translation(TRANSLATION_POWERED_SAW_REQUIRES_ENERGY)
+                .define(KEY_POWERED_SAW_REQUIRES_ENERGY, false);
         POWERED_SAW_ENERGY_CAPACITY_VALUE = builder
                 .comment("The amount of power the Powered Framing Saw can store")
                 .translation(TRANSLATION_POWERED_SAW_ENERGY_CAPACITY)
@@ -139,6 +151,7 @@ public final class ServerConfig
             glowstoneLightLevel = GLOWSTONE_LIGHT_LEVEL_VALUE.get();
             fireproofBlocks = FIREPROOF_BLOCKS_VALUE.get();
 
+            poweredSawRequiresEnergy = POWERED_SAW_REQUIRES_ENERGY_VALUE.get();
             poweredSawEnergyCapacity = POWERED_SAW_ENERGY_CAPACITY_VALUE.get();
             poweredSawMaxReceive = POWERED_SAW_MAX_RECEIVE_VALUE.get();
             poweredSawConsumption = POWERED_SAW_CONSUMPTION_VALUE.get();
@@ -194,6 +207,12 @@ public final class ServerConfig
         public boolean areBlocksFireproof()
         {
             return fireproofBlocks;
+        }
+
+        @Override
+        public boolean doesPoweredSawRequireEnergy()
+        {
+            return poweredSawRequiresEnergy;
         }
 
         @Override

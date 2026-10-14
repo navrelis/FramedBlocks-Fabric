@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.capability;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import xfacthd.framedblocks.platform.transfer.IItemHandlerModifiable;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
 public interface IStorageBlockItemHandler extends IItemHandlerModifiable

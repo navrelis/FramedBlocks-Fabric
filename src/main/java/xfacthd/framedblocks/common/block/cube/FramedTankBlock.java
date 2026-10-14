@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.block.cube;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -13,13 +14,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedTankBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.platform.transfer.FluidUnits;
+import xfacthd.framedblocks.platform.transfer.SimpleFluidContent;
 
 import java.util.List;
 
@@ -87,7 +89,7 @@ public class FramedTankBlock extends FramedBlock
         SimpleFluidContent content = stack.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS.value(), SimpleFluidContent.EMPTY);
         if (!content.isEmpty())
         {
-            name = content.getFluid().getFluidType().getDescription().copy().withStyle(ChatFormatting.WHITE);
+            name = FluidVariantAttributes.getName(FluidUnits.toVariant(content.copy())).copy().withStyle(ChatFormatting.WHITE);
         }
         lines.add(Component.translatable(TANK_CONTENTS, name).withStyle(ChatFormatting.GOLD));
     }

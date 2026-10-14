@@ -30,7 +30,7 @@ public class MixinHopperBlockEntity
             @Local(ordinal = 0) HopperBlockEntity destHopper
     )
     {
-        if (cooldown == HopperBlockEntity.MOVE_ITEM_SPEED && source instanceof FramedHopperBlockEntity srcHopper && destHopper.getLastUpdateTime() >= srcHopper.getLastUpdateTime())
+        if (cooldown == HopperBlockEntity.MOVE_ITEM_SPEED && source instanceof FramedHopperBlockEntity srcHopper && destHopper.tickedGameTime >= srcHopper.getLastUpdateTime())
         {
             cooldown--;
         }
@@ -51,7 +51,7 @@ public class MixinHopperBlockEntity
         if (flag1 && destination instanceof FramedHopperBlockEntity destHopper && !destHopper.isOnCustomCooldown())
         {
             int cooldown = HopperBlockEntity.MOVE_ITEM_SPEED;
-            if (source instanceof HopperBlockEntity srcHopper && destHopper.getLastUpdateTime() >= srcHopper.getLastUpdateTime())
+            if (source instanceof HopperBlockEntity srcHopper && destHopper.getLastUpdateTime() >= srcHopper.tickedGameTime)
             {
                 cooldown--;
             }

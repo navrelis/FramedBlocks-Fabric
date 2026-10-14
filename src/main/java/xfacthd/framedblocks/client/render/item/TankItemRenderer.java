@@ -2,17 +2,17 @@ package xfacthd.framedblocks.client.render.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.EmptyBlockGetter;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.ErrorModel;
 import xfacthd.framedblocks.api.util.CamoList;
@@ -20,6 +20,8 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.model.FramedTankItemModel;
 import xfacthd.framedblocks.client.render.block.FramedTankRenderer;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.platform.transfer.FluidUnits;
+import xfacthd.framedblocks.platform.transfer.SimpleFluidContent;
 
 public final class TankItemRenderer extends BlockEntityWithoutLevelRenderer
 {
@@ -69,12 +71,13 @@ public final class TankItemRenderer extends BlockEntityWithoutLevelRenderer
         SimpleFluidContent content = stack.getOrDefault(FBContent.DC_TYPE_TANK_CONTENTS.value(), SimpleFluidContent.EMPTY);
         if (content.isEmpty()) return;
 
-        IClientFluidTypeExtensions fluidExt = IClientFluidTypeExtensions.of(content.getFluid());
-        ResourceLocation stillTex = fluidExt.getStillTexture();
-        ResourceLocation flowTex = fluidExt.getFlowingTexture();
-        int tint = fluidExt.getTintColor();
+        FluidVariant variant = FluidUnits.toVariant(content.copy());
+        TextureAtlasSprite[] sprites = FluidVariantRendering.getSprites(variant);
+        if (sprites == null || sprites.length < 2) return;
+
+        int tint = FluidVariantRendering.getColor(variant);
         RenderType renderType = ItemBlockRenderTypes.getRenderLayer(content.getFluid().defaultFluidState());
 
-        FramedTankRenderer.renderContents(poseStack, buffer, renderType, light, content.getAmount(), stillTex, flowTex, tint);
+        FramedTankRenderer.renderContents(poseStack, buffer, renderType, light, content.getAmount(), sprites[0], sprites[1], tint);
     }
 }

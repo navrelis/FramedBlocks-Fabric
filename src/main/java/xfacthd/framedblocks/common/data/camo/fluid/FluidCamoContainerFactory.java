@@ -1,6 +1,13 @@
 package xfacthd.framedblocks.common.data.camo.fluid;
 
 import com.mojang.serialization.MapCodec;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -8,16 +15,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.camo.TriggerRegistrar;
@@ -50,41 +53,45 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
     @Nullable
     public FluidCamoContainer applyCamo(Level level, BlockPos pos, Player player, ItemStack stack)
     {
-        IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
-        if (handler == null || handler.getTanks() <= 0)
+        Storage<FluidVariant> storage = makeContext(player, stack).find(FluidStorage.ITEM);
+        if (storage == null)
         {
             return null;
         }
 
-        for (int tank = 0; tank < handler.getTanks(); tank++)
+        boolean consume = !player.isCreative() && ServerConfig.VIEW.shouldConsumeCamoItem();
+        for (StorageView<FluidVariant> view : storage)
         {
-            FluidStack fluid = handler.getFluidInTank(tank);
-            if (!isValidFluid(fluid.getFluid(), player) || !fluid.isComponentsPatchEmpty())
+            if (view.isResourceBlank() || view.getAmount() <= 0)
             {
                 continue;
             }
 
-            if (!player.isCreative() && ServerConfig.VIEW.shouldConsumeCamoItem())
+            FluidVariant variant = view.getResource();
+            if (!isValidFluid(variant.getFluid(), player) || !variant.getComponents().isEmpty())
             {
-                fluid = fluid.copyWithAmount(FluidType.BUCKET_VOLUME);
-                if (handler.drain(fluid, IFluidHandler.FluidAction.SIMULATE).getAmount() != fluid.getAmount())
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (!level.isClientSide())
+            if (consume)
+            {
+                // Closing the transaction without committing it rolls the extraction back, which is what
+                // happens on the client where the result is only predicted
+                try (Transaction tx = Transaction.openOuter())
                 {
-                    handler.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
-                    ItemStack result = handler.getContainer();
-                    if (result != stack) // Container holds fluid by type (i.e. bucket) -> got a new stack
+                    if (storage.extract(variant, FluidConstants.BUCKET, tx) != FluidConstants.BUCKET)
                     {
-                        stack.shrink(1);
-                        Utils.giveToPlayer(player, result, true);
+                        continue;
+                    }
+
+                    if (!level.isClientSide())
+                    {
+                        tx.commit();
                     }
                 }
             }
 
-            return new FluidCamoContainer(fluid.getFluid());
+            return new FluidCamoContainer(variant.getFluid());
         }
         return null;
     }
@@ -97,53 +104,70 @@ public final class FluidCamoContainerFactory extends CamoContainerFactory<FluidC
             return false;
         }
 
-        IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
-        if (handler == null)
+        Storage<FluidVariant> storage = makeContext(player, stack).find(FluidStorage.ITEM);
+        if (storage == null)
         {
             return false;
         }
 
-        FluidStack fluid = new FluidStack(container.getFluid(), FluidType.BUCKET_VOLUME);
-        if (!isValidForHandler(handler, fluid))
+        FluidVariant variant = FluidVariant.of(container.getFluid());
+        if (!isValidForStorage(storage, variant))
         {
             return false;
         }
         if (!player.isCreative() && ServerConfig.VIEW.shouldConsumeCamoItem())
         {
-            if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) != FluidType.BUCKET_VOLUME)
+            try (Transaction tx = Transaction.openOuter())
             {
-                return false;
-            }
-            if (!level.isClientSide())
-            {
-                handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
-                ItemStack result = handler.getContainer();
-                if (result != stack) // Container holds fluid by type (i.e. bucket) -> got a new stack
+                if (storage.insert(variant, FluidConstants.BUCKET, tx) != FluidConstants.BUCKET)
                 {
-                    stack.shrink(1);
-                    Utils.giveToPlayer(player, result, true);
+                    return false;
+                }
+
+                if (!level.isClientSide())
+                {
+                    tx.commit();
                 }
             }
         }
         return true;
     }
 
-    private static boolean isValidForHandler(IFluidHandlerItem handler, FluidStack fluid)
+    /**
+     * Uses the actual hand slot when the stack is held by the player, so that container items replacing themselves
+     * (i.e. buckets) are exchanged in the hand or handed to the player, stacks that aren't held are only inspected
+     */
+    private static ContainerItemContext makeContext(Player player, ItemStack stack)
     {
-        for (int tank = 0; tank < handler.getTanks(); tank++)
+        if (stack == player.getMainHandItem())
         {
-            if (!handler.isFluidValid(tank, fluid))
-            {
-                continue;
-            }
+            return ContainerItemContext.forPlayerInteraction(player, InteractionHand.MAIN_HAND);
+        }
+        if (stack == player.getOffhandItem())
+        {
+            return ContainerItemContext.forPlayerInteraction(player, InteractionHand.OFF_HAND);
+        }
+        return ContainerItemContext.withConstant(stack);
+    }
 
-            FluidStack inTank = handler.getFluidInTank(tank);
-            if (inTank.isEmpty() || FluidStack.isSameFluidSameComponents(inTank, fluid))
+    private static boolean isValidForStorage(Storage<FluidVariant> storage, FluidVariant variant)
+    {
+        for (StorageView<FluidVariant> view : storage)
+        {
+            if (!view.isResourceBlank() && view.getResource().equals(variant))
             {
                 return true;
             }
         }
-        return false;
+
+        if (!storage.supportsInsertion())
+        {
+            return false;
+        }
+        try (Transaction tx = Transaction.openOuter())
+        {
+            return storage.insert(variant, FluidConstants.BUCKET, tx) > 0;
+        }
     }
 
     @Override

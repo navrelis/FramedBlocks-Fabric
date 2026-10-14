@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -11,14 +13,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.platform.Platform;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.items.IItemHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.capability.*;
 import xfacthd.framedblocks.common.config.ServerConfig;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
+import xfacthd.framedblocks.platform.transfer.IEnergyStorage;
+import xfacthd.framedblocks.platform.transfer.IItemHandler;
+import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +46,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             return PoweredFramingSawBlockEntity.this.isValidItem(slot, stack);
         }
     };
-    private final IItemHandler externalItemHandler = new ExternalItemHandler(itemHandler)
+    private final ExternalItemHandler externalItemHandler = new ExternalItemHandler(itemHandler)
     {
         @Override
         protected boolean canExtract(int slot)
@@ -51,6 +54,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             return slot == FramingSawMenu.SLOT_RESULT;
         }
     };
+    private final ItemHandlerStorage externalItemStorage = new ItemHandlerStorage(externalItemHandler, () -> !isRemoved());
     private final EntityAwareEnergyStorage energyStorage = new EntityAwareEnergyStorage(
             ServerConfig.VIEW.getPoweredSawEnergyCapacity(),
             ServerConfig.VIEW.getPoweredSawMaxInput(),
@@ -95,7 +99,10 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
                 level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ACTIVE, true));
             }
 
-            be.energyStorage.extractEnergyInternal(be.energyConsumption);
+            if (ServerConfig.VIEW.doesPoweredSawRequireEnergy())
+            {
+                be.energyStorage.extractEnergyInternal(be.energyConsumption);
+            }
             be.progress++;
 
             if (be.progress >= be.craftingDuration)
@@ -139,7 +146,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     private boolean canRun()
     {
         if (selectedRecipe == null || !recipeSatisfied) return false;
-        if (energyStorage.getEnergyStored() < energyConsumption) return false;
+        if (ServerConfig.VIEW.doesPoweredSawRequireEnergy() && energyStorage.getEnergyStored() < energyConsumption) return false;
 
         ItemStack output = itemHandler.getStackInSlot(FramingSawMenu.SLOT_RESULT);
         if (!output.isEmpty())
@@ -255,13 +262,25 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         return externalItemHandler;
     }
 
+    public Storage<ItemVariant> getExternalItemStorage()
+    {
+        return externalItemStorage;
+    }
+
     public IEnergyStorage getEnergyStorage()
     {
         return energyStorage;
     }
 
+    /**
+     * @return The stored energy or, if the saw does not require energy, always the full capacity
+     */
     public int getEnergy()
     {
+        if (!ServerConfig.VIEW.doesPoweredSawRequireEnergy())
+        {
+            return energyStorage.getMaxEnergyStored();
+        }
         return energyStorage.getEnergyStored();
     }
 

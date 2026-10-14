@@ -2,8 +2,9 @@ package xfacthd.framedblocks.common.data.camo;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.world.item.*;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.*;
@@ -30,12 +31,17 @@ public final class CamoContainerFactories
         // Register builtin handling last to make sure the predicates actually act as broad fallbacks after addon ones
 
         TriggerRegistrar fluidRegistrar = new TriggerRegistrarImpl(FBContent.FACTORY_FLUID.value());
-        fluidRegistrar.registerApplicationPredicate(stack -> stack.getCapability(Capabilities.FluidHandler.ITEM) != null);
-        fluidRegistrar.registerRemovalPredicate(stack -> stack.getCapability(Capabilities.FluidHandler.ITEM) != null);
+        fluidRegistrar.registerApplicationPredicate(CamoContainerFactories::hasFluidStorage);
+        fluidRegistrar.registerRemovalPredicate(CamoContainerFactories::hasFluidStorage);
 
         TriggerRegistrar blockRegistrar = new TriggerRegistrarImpl(FBContent.FACTORY_BLOCK.value());
         blockRegistrar.registerApplicationPredicate(stack -> stack.getItem() instanceof BlockItem);
         blockRegistrar.registerRemovalPredicate(TriggerRegistrar.DEFAULT_REMOVAL);
+    }
+
+    private static boolean hasFluidStorage(ItemStack stack)
+    {
+        return !stack.isEmpty() && FluidStorage.ITEM.find(stack, ContainerItemContext.withConstant(stack)) != null;
     }
 
     @Nullable

@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.common.data.camo.fluid;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -42,7 +44,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        return fluid.getExplosionResistance(fluid.defaultFluidState(), level, pos, explosion);
+        return fluid.getExplosionResistance();
     }
 
     @Override
@@ -72,7 +74,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public int getLightEmission()
     {
-        return fluid.getFluidType().getLightLevel();
+        return FluidVariantAttributes.getLuminance(FluidVariant.of(fluid));
     }
 
     @Override
@@ -204,7 +206,7 @@ public final class FluidCamoContent extends CamoContent<FluidCamoContent>
     @Override
     public MutableComponent getCamoName()
     {
-        return (MutableComponent) fluid.getFluidType().getDescription();
+        return FluidVariantAttributes.getName(FluidVariant.of(fluid)).copy();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -8,7 +10,9 @@ import net.minecraft.sounds.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.ChestType;
@@ -16,14 +20,45 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.cube.FramedChestBlock;
+import xfacthd.framedblocks.common.capability.CompoundStorageBlockItemHandler;
 import xfacthd.framedblocks.common.capability.IStorageBlockItemHandler;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.platform.transfer.IItemHandlerModifiable;
+import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
+import org.jetbrains.annotations.Nullable;
 
 public class FramedChestBlockEntity extends FramedStorageBlockEntity
 {
     public static final Component TITLE = Utils.translate("title", "framed_chest");
 
+    private static final DoubleBlockCombiner.Combiner<FramedChestBlockEntity, ChestLayout> LAYOUT_COMBINER = new DoubleBlockCombiner.Combiner<>()
+    {
+        @Override
+        public ChestLayout acceptDouble(FramedChestBlockEntity first, FramedChestBlockEntity second)
+        {
+            return new ChestLayout(
+                    new CompoundStorageBlockItemHandler(first.getItemHandler(), second.getItemHandler()),
+                    first,
+                    second
+            );
+        }
+
+        @Override
+        public ChestLayout acceptSingle(FramedChestBlockEntity single)
+        {
+            return new ChestLayout(single.getItemHandler(), single, null);
+        }
+
+        @Override
+        public ChestLayout acceptNone()
+        {
+            return ChestLayout.NONE;
+        }
+    };
+
+    private final ItemHandlerStorage chestStorage = new ItemHandlerStorage(new ChestItemHandlerView(), () -> !isRemoved());
+    private ChestLayout layout = null;
     private int openCount = 0;
     private long closeStart = 0;
 
@@ -124,6 +159,29 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         return FramedChestBlock.combine(this, override).apply(FramedChestBlock.CHEST_COMBINER).orElse(null);
     }
 
+    /**
+     * The returned storage always reflects the current single/double chest layout, it resolves the underlying handler
+     * lazily and re-resolves whenever the chest type or facing of this chest or its partner changed or the partner
+     * was removed. A reference retained across a layout change can therefore never address a stale or removed half
+     */
+    @Override
+    public Storage<ItemVariant> getItemStorage()
+    {
+        return chestStorage;
+    }
+
+    @Nullable
+    private IStorageBlockItemHandler resolveStorageHandler()
+    {
+        ChestLayout current = layout;
+        if (current == null || !current.isValid())
+        {
+            current = FramedChestBlock.combine(this, true).apply(LAYOUT_COMBINER);
+            layout = current;
+        }
+        return current.handler;
+    }
+
     @Override
     public int getAnalogOutputSignal()
     {
@@ -157,7 +215,99 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         if (state.getValue(FramedProperties.FACING_HOR) != oldState.getValue(FramedProperties.FACING_HOR) ||
             state.getValue(BlockStateProperties.CHEST_TYPE) != oldState.getValue(BlockStateProperties.CHEST_TYPE))
         {
-            invalidateCapabilities();
+            layout = null;
+        }
+    }
+
+    private static int layoutKey(FramedChestBlockEntity be)
+    {
+        BlockState state = be.getBlockState();
+        return state.getValue(BlockStateProperties.CHEST_TYPE).ordinal() * 4 + state.getValue(FramedProperties.FACING_HOR).get2DDataValue();
+    }
+
+
+
+    private record ChestLayout(
+            @Nullable IStorageBlockItemHandler handler,
+            @Nullable FramedChestBlockEntity first,
+            @Nullable FramedChestBlockEntity second,
+            int firstKey,
+            int secondKey
+    )
+    {
+        private static final ChestLayout NONE = new ChestLayout(null, null, null, 0, 0);
+
+        private ChestLayout(IStorageBlockItemHandler handler, FramedChestBlockEntity first, @Nullable FramedChestBlockEntity second)
+        {
+            this(handler, first, second, layoutKey(first), second != null ? layoutKey(second) : 0);
+        }
+
+        private boolean isValid()
+        {
+            if (first == null)
+            {
+                return false;
+            }
+            if (first.isRemoved() || layoutKey(first) != firstKey)
+            {
+                return false;
+            }
+            return second == null || (!second.isRemoved() && layoutKey(second) == secondKey);
+        }
+    }
+
+    private final class ChestItemHandlerView implements IItemHandlerModifiable
+    {
+        @Override
+        public int getSlots()
+        {
+            IStorageBlockItemHandler handler = resolveStorageHandler();
+            return handler == null ? 0 : handler.getSlots();
+        }
+
+        @Override
+        public ItemStack getStackInSlot(int slot)
+        {
+            IStorageBlockItemHandler handler = resolveStorageHandler();
+            return handler == null ? ItemStack.EMPTY : handler.getStackInSlot(slot);
+        }
+
+        @Override
+        public void setStackInSlot(int slot, ItemStack stack)
+        {
+            IStorageBlockItemHandler handler = resolveStorageHandler();
+            if (handler != null)
+            {
+                handler.setStackInSlot(slot, stack);
+            }
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
+        {
+            IStorageBlockItemHandler handler = resolveStorageHandler();
+            return handler == null ? stack : handler.insertItem(slot, stack, simulate);
+        }
+
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate)
+        {
+            IStorageBlockItemHandler handler = resolveStorageHandler();
+            return handler == null ? ItemStack.EMPTY : handler.extractItem(slot, amount, simulate);
+        }
+
+        @Override
+        public int getSlotLimit(int slot)
+        {
+            IStorageBlockItemHandler handler = resolveStorageHandler();
+            return handler == null ? 0 : handler.getSlotLimit(slot);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack)
+        {
+            IStorageBlockItemHandler handler = resolveStorageHandler();
+            return handler != null && handler.isItemValid(slot, stack);
         }
     }
 }

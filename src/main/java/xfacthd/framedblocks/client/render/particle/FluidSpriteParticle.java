@@ -1,5 +1,8 @@
 package xfacthd.framedblocks.client.render.particle;
 
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -7,16 +10,13 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.particle.FluidParticleOptions;
-
-import java.util.Objects;
 
 public final class FluidSpriteParticle extends TextureSheetParticle
 {
@@ -34,18 +34,22 @@ public final class FluidSpriteParticle extends TextureSheetParticle
         this.quadSize /= 2F;
         this.uo = random.nextFloat() * 3F;
         this.vo = random.nextFloat() * 3F;
-        this.brightness = fluid.getFluidType().getLightLevel(fluid.defaultFluidState(), level, pos);
+        this.brightness = FluidVariantAttributes.getLuminance(FluidVariant.of(fluid));
 
         int tint = ClientUtils.getFluidColor(level, pos, fluid.defaultFluidState());
         this.rCol = .6F * (float)(tint >> 16 & 0xFF) / 255F;
         this.gCol = .6F * (float)(tint >>  8 & 0xFF) / 255F;
         this.bCol = .6F * (float)(tint       & 0xFF) / 255F;
 
-        ResourceLocation stillTex = Objects.requireNonNullElse(
-                IClientFluidTypeExtensions.of(fluid).getStillTexture(),
-                MissingTextureAtlasSprite.getLocation()
-        );
-        setSprite(Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(stillTex));
+        TextureAtlasSprite[] sprites = FluidVariantRendering.getSprites(FluidVariant.of(fluid));
+        if (sprites != null && sprites.length > 0 && sprites[0] != null)
+        {
+            setSprite(sprites[0]);
+        }
+        else
+        {
+            setSprite(Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(MissingTextureAtlasSprite.getLocation()));
+        }
     }
 
     @Override

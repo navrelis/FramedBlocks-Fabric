@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.capability;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import xfacthd.framedblocks.platform.transfer.ItemStackHandler;
 
 public class RecipeInputItemStackHandler extends ItemStackHandler implements RecipeInput
 {

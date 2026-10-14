@@ -1,62 +1,59 @@
 package xfacthd.framedblocks.common.data.capabilities;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.capability.TankFluidHandler;
+import xfacthd.framedblocks.common.capability.TankItemFluidStorage;
+import xfacthd.framedblocks.common.compat.energy.EnergyCompat;
 
+/**
+ * Exposes the storages of the mod through the Fabric Transfer API.
+ * <p>
+ * Hoppers and droppers use the registered item storages, either through the vanilla container path or through the
+ * hooks of the Transfer API module, see {@code FramedHopperBlockEntity} for the details
+ */
 public final class CapabilitySetup
 {
-    public static void onRegisterCapabilities(final RegisterCapabilitiesEvent event)
+    public static void init()
     {
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
-                FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.value(),
-                (be, side) -> be.getItemHandler()
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, side) -> be.getItemStorage(),
+                FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.value()
         );
 
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
-                FBContent.BE_TYPE_FRAMED_CHEST.value(),
-                (be, side) -> be.getChestItemHandler(true)
+        // Resolves the single or double chest layout lazily, see FramedChestBlockEntity#getItemStorage()
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, side) -> be.getItemStorage(),
+                FBContent.BE_TYPE_FRAMED_CHEST.value()
         );
 
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
-                FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(),
-                (be, side) -> side != Direction.UP ? be.getExternalItemHandler() : null
-        );
-        event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
-                FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(),
-                (be, side) -> side != Direction.UP ? be.getEnergyStorage() : null
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, side) -> side != Direction.UP ? be.getExternalItemStorage() : null,
+                FBContent.BE_TYPE_POWERED_FRAMING_SAW.value()
         );
 
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
-                FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.value(),
-                (be, side) -> be.getItemHandler()
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, side) -> be.getItemStorage(),
+                FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.value()
         );
 
-        event.registerBlockEntity(
-                Capabilities.FluidHandler.BLOCK,
-                FBContent.BE_TYPE_FRAMED_TANK.value(),
-                (be, side) -> be.getFluidHandler()
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, side) -> be.getItemStorage(),
+                FBContent.BE_TYPE_FRAMED_HOPPER.value()
         );
 
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
-                FBContent.BE_TYPE_FRAMED_HOPPER.value(),
-                (be, side) -> be.new ItemHandler()
+        FluidStorage.SIDED.registerForBlockEntity(
+                (be, side) -> be.getFluidStorage(),
+                FBContent.BE_TYPE_FRAMED_TANK.value()
         );
 
-        event.registerItem(
-                Capabilities.FluidHandler.ITEM,
-                (stack, $) -> new FluidHandlerItemStack(FBContent.DC_TYPE_TANK_CONTENTS, stack, TankFluidHandler.CAPACITY),
-                FBContent.BLOCK_FRAMED_TANK.value()
+        FluidStorage.ITEM.registerForItems(
+                (stack, context) -> new TankItemFluidStorage(context),
+                FBContent.BLOCK_FRAMED_TANK.value().asItem()
         );
+
+        EnergyCompat.init();
     }
 
 

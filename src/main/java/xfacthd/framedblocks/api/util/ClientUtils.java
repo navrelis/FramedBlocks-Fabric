@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.api.util;
 
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
@@ -11,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 
@@ -41,12 +42,12 @@ public final class ClientUtils
 
     public static int getFluidColor(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
-        return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
+        return FluidVariantRendering.getColor(FluidVariant.of(fluid.getType()), level, pos);
     }
 
     public static int getFluidColor(FluidState fluid)
     {
-        return IClientFluidTypeExtensions.of(fluid).getTintColor();
+        return FluidVariantRendering.getColor(FluidVariant.of(fluid.getType()));
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

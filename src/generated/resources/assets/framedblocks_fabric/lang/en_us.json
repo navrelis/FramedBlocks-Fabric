@@ -277,6 +277,7 @@
   "config.framedblocks_fabric.server.glowstoneLightLevel": "Glowstone Light Level",
   "config.framedblocks_fabric.server.maxReceive": "Max input",
   "config.framedblocks_fabric.server.oneWayWindowOwnable": "One-Way Window ownability",
+  "config.framedblocks_fabric.server.poweredSawRequiresEnergy": "Powered Framing Saw requires energy",
   "config.jade.plugin_framedblocks_fabric.framed_block_generic": "FramedBlocks camo",
   "config.jade.plugin_framedblocks_fabric.framed_item_frame": "Framed Item Frame",
   "desc.framedblocks_fabric.block.fluid_tank.contents": "Stored Fluid: %s",

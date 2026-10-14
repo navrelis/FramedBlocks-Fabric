@@ -1,6 +1,14 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import java.util.Iterator;
 import java.util.function.BooleanSupplier;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -23,11 +31,6 @@ import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.VanillaHopperItemHandler;
-import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -38,6 +41,7 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
     public static final String COOLDOWN_NBT_KEY = "TransferCooldown";
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(HopperBlockEntity.HOPPER_CONTAINER_SIZE, ItemStack.EMPTY);
+    private final Storage<ItemVariant> itemStorage = new HopperItemStorage(InventoryStorage.of(this, null));
     private int cooldownTime = -1;
     private long tickedGameTime;
     private Direction facing;
@@ -85,22 +89,27 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
         BlockPos adjPos = worldPosition.relative(facing);
         Direction side = facing.getOpposite();
 
-        IItemHandler itemHandler = level().getCapability(Capabilities.ItemHandler.BLOCK, adjPos, null, null, side);
-        if (itemHandler != null && !isFull(itemHandler))
+        // Same order as the vanilla hopper: containers (including entity containers) first, storages second
+        Container container = HopperBlockEntity.getContainerAt(level(), adjPos);
+        if (container != null)
         {
-            return ejectItemsInto(itemHandler, side, (src, dest, stack, destSide) -> ItemHandlerHelper.insertItem(dest, stack, false));
+            if (HopperBlockEntity.isFullContainer(container, side))
+            {
+                return false;
+            }
+            return ejectItemsInto(container, side);
         }
 
-        Container container = HopperBlockEntity.getContainerAt(level(), adjPos);
-        if (container != null && !HopperBlockEntity.isFullContainer(container, side))
+        Storage<ItemVariant> storage = ItemStorage.SIDED.find(level(), adjPos, side);
+        if (storage != null)
         {
-            return ejectItemsInto(container, side, HopperBlockEntity::addItem);
+            return StorageUtil.move(InventoryStorage.of(this, facing), storage, variant -> true, 1, null) == 1;
         }
 
         return false;
     }
 
-    private <T> boolean ejectItemsInto(T target, Direction side, InsertionFunction<T> inserter)
+    private boolean ejectItemsInto(Container target, Direction side)
     {
         for (int i = 0; i < getContainerSize(); ++i)
         {
@@ -108,7 +117,7 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
             if (!stack.isEmpty())
             {
                 int count = stack.getCount();
-                ItemStack remainder = inserter.insert(this, target, removeItem(i, 1), side);
+                ItemStack remainder = HopperBlockEntity.addItem(this, target, removeItem(i, 1), side);
                 if (remainder.isEmpty())
                 {
                     return true;
@@ -122,19 +131,6 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
             }
         }
         return false;
-    }
-
-    private static boolean isFull(IItemHandler itemHandler)
-    {
-        for (int slot = 0; slot < itemHandler.getSlots(); slot++)
-        {
-            ItemStack stack = itemHandler.getStackInSlot(slot);
-            if (stack.isEmpty() || stack.getCount() < itemHandler.getSlotLimit(slot))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     public void setCooldown(int cooldownTime)
@@ -162,6 +158,11 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
                 tryMoveItems(() -> HopperBlockEntity.addItem(this, itemEntity));
             }
         }
+    }
+
+    public Storage<ItemVariant> getItemStorage()
+    {
+        return itemStorage;
     }
 
     public long getLastUpdateTime()
@@ -298,36 +299,71 @@ public class FramedHopperBlockEntity extends FramedBlockEntity implements Hopper
 
 
 
-    public final class ItemHandler extends InvWrapper
+    private final class HopperItemStorage implements Storage<ItemVariant>
     {
-        public ItemHandler()
+        private final Storage<ItemVariant> inner;
+
+        private HopperItemStorage(Storage<ItemVariant> inner)
         {
-            super(FramedHopperBlockEntity.this);
+            this.inner = inner;
         }
 
-        /** @see VanillaHopperItemHandler */
         @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
+        public boolean supportsInsertion()
         {
-            if (simulate)
-            {
-                return super.insertItem(slot, stack, true);
-            }
-
-            boolean wasEmpty = getInv().isEmpty();
-            int originalStackSize = stack.getCount();
-            stack = super.insertItem(slot, stack, false);
-            if (wasEmpty && originalStackSize > stack.getCount() && !isOnCustomCooldown())
-            {
-                setCooldown(HopperBlockEntity.MOVE_ITEM_SPEED);
-            }
-            return stack;
+            return inner.supportsInsertion();
         }
-    }
 
-    @FunctionalInterface
-    private interface InsertionFunction<T>
-    {
-        ItemStack insert(Container source, T target, ItemStack stack, Direction side);
+        /**
+         * Mirrors the cooldown handling of the vanilla hopper for insertion into an empty hopper from the outside,
+         * the cooldown is only applied if the outermost transaction is committed
+         */
+        @Override
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
+        {
+            boolean wasEmpty = isEmpty();
+            long inserted = inner.insert(resource, maxAmount, transaction);
+            if (wasEmpty && inserted > 0)
+            {
+                transaction.addOuterCloseCallback(result ->
+                {
+                    if (result.wasCommitted() && !isOnCustomCooldown())
+                    {
+                        setCooldown(HopperBlockEntity.MOVE_ITEM_SPEED);
+                    }
+                });
+            }
+            return inserted;
+        }
+
+        @Override
+        public boolean supportsExtraction()
+        {
+            return inner.supportsExtraction();
+        }
+
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
+        {
+            return inner.extract(resource, maxAmount, transaction);
+        }
+
+        @Override
+        public Iterator<StorageView<ItemVariant>> iterator()
+        {
+            return inner.iterator();
+        }
+
+        @Override
+        public Iterator<StorageView<ItemVariant>> nonEmptyIterator()
+        {
+            return inner.nonEmptyIterator();
+        }
+
+        @Override
+        public long getVersion()
+        {
+            return inner.getVersion();
+        }
     }
 }

@@ -23,9 +23,9 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import xfacthd.framedblocks.platform.Platform;
-import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import xfacthd.framedblocks.platform.registry.DeferredHolder;
 import xfacthd.framedblocks.platform.registry.DeferredRegister;
+import xfacthd.framedblocks.platform.transfer.SimpleFluidContent;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.blueprint.AuxBlueprintData;
@@ -400,7 +400,6 @@ public final class FBContent
             "adjustable_double_block",
             builder -> builder.persistent(AdjustableDoubleBlockData.CODEC).networkSynchronized(AdjustableDoubleBlockData.STREAM_CODEC)
     );
-    // TODO(transfer-api): NeoForge SimpleFluidContent has to be replaced together with the fluid handling
     public static final DeferredDataComponentType<SimpleFluidContent> DC_TYPE_TANK_CONTENTS = DATA_COMPONENTS.registerComponentType(
             "tank_contents",
             builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC)

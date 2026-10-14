@@ -1,5 +1,8 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
@@ -9,16 +12,19 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.*;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.capability.TankFluidHandler;
+import xfacthd.framedblocks.platform.transfer.FluidHandlerStorage;
+import xfacthd.framedblocks.platform.transfer.FluidStack;
+import xfacthd.framedblocks.platform.transfer.IFluidHandler;
+import xfacthd.framedblocks.platform.transfer.SimpleFluidContent;
 
 public class FramedTankBlockEntity extends FramedBlockEntity
 {
     private final TankFluidHandler fluidHandler = new TankFluidHandler(this);
+    private final FluidHandlerStorage fluidStorage = new FluidHandlerStorage(fluidHandler, () -> !isRemoved());
 
     public FramedTankBlockEntity(BlockPos pos, BlockState state)
     {
@@ -27,7 +33,7 @@ public class FramedTankBlockEntity extends FramedBlockEntity
 
     public ItemInteractionResult handleTankInteraction(Player player, InteractionHand hand)
     {
-        if (FluidUtil.interactWithFluidHandler(player, hand, fluidHandler))
+        if (FluidStorageUtil.interactWithFluidStorage(fluidStorage, player, hand))
         {
             return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
@@ -42,6 +48,11 @@ public class FramedTankBlockEntity extends FramedBlockEntity
     public IFluidHandler getFluidHandler()
     {
         return fluidHandler;
+    }
+
+    public Storage<FluidVariant> getFluidStorage()
+    {
+        return fluidStorage;
     }
 
     public void onTankContentsChanged()

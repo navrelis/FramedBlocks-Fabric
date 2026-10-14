@@ -13,6 +13,8 @@ public final class ExtConfigView
     {
         void setOverrideIntangibilityConfig(boolean override);
 
+        boolean doesPoweredSawRequireEnergy();
+
         int getPoweredSawEnergyCapacity();
 
         int getPoweredSawMaxInput();

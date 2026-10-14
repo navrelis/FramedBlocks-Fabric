@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.capability;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import xfacthd.framedblocks.platform.transfer.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;

@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.*;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
@@ -19,6 +21,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.capability.IStorageBlockItemHandler;
 import xfacthd.framedblocks.common.capability.StorageBlockItemStackHandler;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
+import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     public static final String OVERFLOW_NBT_KEY = "overflow";
 
     private final StorageBlockItemStackHandler itemHandler = createItemHandler(this, false);
+    private final ItemHandlerStorage itemStorage = new ItemHandlerStorage(itemHandler, () -> !isRemoved());
     private List<ItemStack> overflow = null;
     private Component customName = null;
 
@@ -115,6 +119,11 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     public IStorageBlockItemHandler getItemHandler()
     {
         return itemHandler;
+    }
+
+    public Storage<ItemVariant> getItemStorage()
+    {
+        return itemStorage;
     }
 
     public void setCustomName(Component customName)

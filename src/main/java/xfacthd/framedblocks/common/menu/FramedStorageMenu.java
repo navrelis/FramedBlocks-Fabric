@@ -4,11 +4,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.capability.IStorageBlockItemHandler;
 import xfacthd.framedblocks.common.util.FramedUtils;
+import xfacthd.framedblocks.platform.transfer.SlotItemHandler;
 
 public class FramedStorageMenu extends AbstractContainerMenu
 {

@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.capability;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.neoforged.neoforge.energy.EnergyStorage;
+import xfacthd.framedblocks.platform.transfer.EnergyStorage;
 
 public class EntityAwareEnergyStorage extends EnergyStorage
 {
