@@ -25,6 +25,7 @@ import xfacthd.framedblocks.api.model.wrapping.itemmodel.ItemModelInfo;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.platform.model.*;
+import xfacthd.framedblocks.platform.light.AuxLight;
 import xfacthd.framedblocks.platform.util.ConcatenatedListView;
 import xfacthd.framedblocks.platform.util.TriState;
 
@@ -94,8 +95,9 @@ public final class FramedDoubleBlockModel extends AbstractFramedBlockModel
         {
             boolean leftVisible = !canCullLeft || !hasSolidCamo(dataRight);
             boolean rightVisible = !canCullRight || !hasSolidCamo(dataLeft);
-            ModelBridge.emitBlockQuads(modelLeft, dummyStates.getA(), dataLeft, randSupplier, context, leftVisible, null);
-            ModelBridge.emitBlockQuads(modelRight, dummyStates.getB(), dataRight, randSupplier, context, rightVisible, SECONDARY_TINT_MAPPER);
+            boolean glowing = AuxLight.isGlowing(state);
+            ModelBridge.emitBlockQuads(modelLeft, dummyStates.getA(), dataLeft, randSupplier, context, leftVisible, null, glowing);
+            ModelBridge.emitBlockQuads(modelRight, dummyStates.getB(), dataRight, randSupplier, context, rightVisible, SECONDARY_TINT_MAPPER, glowing);
         }
         else
         {

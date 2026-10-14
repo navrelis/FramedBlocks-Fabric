@@ -56,6 +56,8 @@ public final class Utils
     /** Blocks tagged with this will not be occluded by framed blocks using them as camo, both as camo and directly placed */
     public static final TagKey<Block> NON_OCCLUDEABLE = blockTag("non_occludeable");
     public static final TagKey<Item> TOOL_WRENCH = itemTag("c", "tools/wrench");
+    /** Tag used by Fabric mods which predate the convention tag {@link #TOOL_WRENCH} */
+    public static final TagKey<Item> TOOL_WRENCH_LEGACY = itemTag("c", "wrenches");
     public static final TagKey<Item> COMPLEX_WRENCH = itemTag("complex_wrench");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
@@ -615,7 +617,7 @@ public final class Utils
 
     public static boolean isWrenchRotationTool(ItemStack stack)
     {
-        return ItemAbilities.canPerform(stack, ACTION_WRENCH_ROTATE) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
+        return ItemAbilities.canPerform(stack, ACTION_WRENCH_ROTATE) || ((stack.is(TOOL_WRENCH) || stack.is(TOOL_WRENCH_LEGACY)) && !stack.is(COMPLEX_WRENCH));
     }
 
     public static boolean isConfigurationTool(ItemStack stack)

@@ -171,6 +171,7 @@ public final class ModelWrappingManager
     public static void onModelsLoaded()
     {
         StateLocationCache.clear();
+        ModelBridge.clearCaches();
 
         ModelCounter counter = ModelWrappingManager.counter;
         if (counter != null)

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.platform.model;
 
+import com.google.common.collect.MapMaker;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
 import net.minecraft.client.Minecraft;
@@ -14,13 +15,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Immutable snapshot of the quads a model implementing the Fabric Rendering API emitted for a specific context.
  * <p>
  * Snapshots are interned by their contents, two captures of the same model which produced the same quads yield
- * the same instance. This makes the instance itself usable as a cheap connected textures context in cache keys
+ * the same instance. This makes the instance itself usable as a cheap connected textures context in cache keys.
+ * <p>
+ * The interning table only holds weak references to the snapshots, an instance which is not referenced from any
+ * model data or cache key is dropped and a later identical capture simply creates a new instance. Identity is
+ * therefore only ever compared between instances which are both strongly reachable
  */
 final class CapturedQuads
 {
@@ -33,7 +38,7 @@ final class CapturedQuads
     static final int META_FLAG_AO = 1 << 9;
     static final int META_FLAG_SHADE = 1 << 10;
 
-    private static final Map<Key, CapturedQuads> CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Key, CapturedQuads> CACHE = new MapMaker().weakValues().makeMap();
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final BlendMode[] BLEND_MODES = BlendMode.values();
     private static final int SIDE_COUNT = DIRECTIONS.length + 1;

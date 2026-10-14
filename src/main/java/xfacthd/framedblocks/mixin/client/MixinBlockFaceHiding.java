@@ -1,8 +1,10 @@
-package xfacthd.framedblocks.mixin;
+package xfacthd.framedblocks.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -13,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 
 @Mixin(Block.class)
-public class MixinBlock
+public class MixinBlockFaceHiding
 {
     @WrapOperation(
             method = "shouldRenderFace",
@@ -35,7 +37,8 @@ public class MixinBlock
         {
             return true;
         }
-        return adjState.getBlock() instanceof IFramedBlock block
+        return ItemBlockRenderTypes.getChunkRenderType(state) != RenderType.solid()
+                && adjState.getBlock() instanceof IFramedBlock block
                 && block.hidesNeighborFace(level, adjPos, adjState, state, face.getOpposite());
     }
 }

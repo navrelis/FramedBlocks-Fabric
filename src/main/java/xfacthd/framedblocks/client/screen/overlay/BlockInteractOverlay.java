@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -31,8 +32,9 @@ abstract class BlockInteractOverlay
     private static final int TOOLTIP_MARGIN = 10;
     private static final int PADDING = 10;
     private static final int DEFAULT_Y_OFF = 80;
-    // Height occupied by the health and food bars above the hotbar, the NeoForge overlay layout tracking is not available
+    // Default height of the status bars above the bottom of the screen and the height of one additional row of bars, the overlay layout tracking of NeoForge is not available
     private static final int STATUS_BARS_HEIGHT = 39;
+    private static final int STATUS_BAR_ROW_HEIGHT = 10;
 
     private final String name;
     private final List<Component> linesFalse;
@@ -124,7 +126,7 @@ abstract class BlockInteractOverlay
         int width = textWidth + tex.width + PADDING;
         int height = Math.max(contentHeight, tex.height);
         int minY = screenHeight / 2 + tex.height / 2;
-        int maxY = screenHeight - STATUS_BARS_HEIGHT;
+        int maxY = screenHeight - getStatusBarsHeight();
         int x = centerX - (width / 2);
         int y = Math.max(screenHeight - DEFAULT_Y_OFF - height, minY + TOOLTIP_MARGIN);
         if (y + height > maxY - TOOLTIP_MARGIN)
@@ -146,6 +148,28 @@ abstract class BlockInteractOverlay
         int texY = y + (height / 2) - (tex.height / 2);
         tex.draw(graphics, x, texY);
         renderAfterIcon(graphics, tex, x, texY, target);
+    }
+
+    private static int getStatusBarsHeight()
+    {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gameMode == null || !mc.gameMode.canHurtPlayer())
+        {
+            return STATUS_BARS_HEIGHT;
+        }
+
+        Player player = player();
+        int leftHeight = STATUS_BARS_HEIGHT;
+        if (player.getArmorValue() > 0)
+        {
+            leftHeight += STATUS_BAR_ROW_HEIGHT;
+        }
+        int rightHeight = STATUS_BARS_HEIGHT;
+        if (player.getAirSupply() < player.getMaxAirSupply() || player.isEyeInFluid(FluidTags.WATER))
+        {
+            rightHeight += STATUS_BAR_ROW_HEIGHT;
+        }
+        return Math.min(leftHeight, rightHeight);
     }
 
     protected abstract boolean isValidTool(ItemStack stack);
