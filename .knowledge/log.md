@@ -90,3 +90,5 @@
 - SC1 showcase screenshots — Sonnet, long — running in F:/wt/sc1. CF1 card pipeline + repo link update — Opus, long — running in main checkout (docs/curseforge). H1 parallel state caches — Opus, long — running in F:/wt/h1.
 - H1 — Opus, long — diff read (registry-order list, serial warm-up, per-block parallel build, CacheCounts reduce, wrapped exceptions, determinism self-test). Agent: 901/27 x2, cold 425->125 ms, 0 mismatches. Accepted, merged; lead build 901/27, 125 ms cold, 0 mismatches. Client path (Worker-Main) checked in next client test.
 - CF1 — Opus, long — 11 cards viewed by lead (hero, tools sampled; style matches UXW), check.mjs 0 errors, link update to new repo reviewed. Accepted, committed. Placeholders until SC1. Card 07 reinforcement wording to fix in CF2.
+- H6 quad cache bound — Opus, short — running in F:/wt/h6.
+- H6 — Opus, short — diff read (MAX_CACHE_SIZE 1024, putBounded clear-on-overflow, one debug log per model; consumers verified read-only). Lead build 901/27. Accepted, merged (fast-forward).

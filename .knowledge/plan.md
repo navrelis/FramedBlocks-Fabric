@@ -53,7 +53,7 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | SC1 | Showcase mode for the dev-only client test: build pretty scenes, capture high-res screenshots | `runClientTest -Pshowcase=true` writes named PNGs; release jar unchanged; build green | - | Sonnet long | in progress (worktree F:/wt/sc1) |
 | CF1 | CurseForge card pipeline in `docs/curseforge` (UXW style): cards, alt texts, description template, summary, checks | `node tools/build.mjs` renders all cards; check passes; lead viewed every card | - | Opus long (override: visual quality) | done (11 cards, check passes, screenshots still placeholders) |
 | CF2 | Put SC1 screenshots into CF1 cards, final render, review | All cards use real screenshots; lead viewed every card | SC1, CF1 | Sonnet short | open |
-| H6 | Bound `FramedBlockModel` quad/render-type caches (clear on overflow) | Cap constant, both caches bounded, build + client test green | - | Sonnet short | open |
+| H6 | Bound `FramedBlockModel` quad/render-type caches (clear on overflow) | Cap constant, both caches bounded, build + client test green | - | Opus short (Sonnet slots full, user asked for speed) | done (merged, build 901/27; client test pending after SC1) |
 | H1 | Parallel state-cache build with serial warm-up and determinism check | Same caches as serial build (self-test), cold start measured, build green | - | Opus long (concurrency) | done (lead build 901/27, cold 125 ms, 0 mismatches) |
 | H3, H5 | Lazy beacon occlusion, ItemHandlerStorage toStack hoist | Skipped: benefit unmeasured/negligible, H5 dupe-sensitive | - | - | skipped |
 | UP1 | Loom/Gradle upgrade research (lift JEI/Sodium pins), saw tooltip FE -> E | Research report; implement if low risk | - | Sonnet | research running |
