@@ -2,10 +2,12 @@ package xfacthd.framedblocks.client.render.particle;
 
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.block.render.IClientBlockEffects;
@@ -46,9 +48,16 @@ public final class ClientBlockEffects
      * Called by a mixin before the vanilla block hit particles are spawned
      * @return true if the vanilla particles are to be suppressed
      */
-    public static boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine engine)
+    public static boolean addHitEffects(BlockState state, Level level, BlockPos pos, Direction side, ParticleEngine engine)
     {
-        return of(state).addHitEffects(state, level, target, engine);
+        IClientBlockEffects effects = of(state);
+        if (effects == VANILLA)
+        {
+            return false;
+        }
+        // Only the position and side of the hit are used by the handlers
+        BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(pos), side, pos, false);
+        return effects.addHitEffects(state, level, hit, engine);
     }
 
     /**

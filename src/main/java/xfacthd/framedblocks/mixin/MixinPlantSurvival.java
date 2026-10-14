@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelReader;
@@ -17,8 +19,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 
 /**
@@ -37,11 +37,19 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 })
 public class MixinPlantSurvival
 {
-    @Inject(method = "canSurvive", at = @At("HEAD"), cancellable = true)
-    private void framedblocks$canSurviveOnFramedBlock(
-            BlockState state, LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir
+    @ModifyReturnValue(method = "canSurvive", at = @At("RETURN"))
+    private boolean framedblocks$canSurviveOnFramedBlock(
+            boolean original,
+            @Local(argsOnly = true) BlockState state,
+            @Local(argsOnly = true) LevelReader level,
+            @Local(argsOnly = true) BlockPos pos
     )
     {
+        if (original)
+        {
+            return true;
+        }
+
         BlockPos soilPos = pos.below();
         BlockState soil = level.getBlockState(soilPos);
         if (soil.getBlock() instanceof IFramedBlock block && block.canSustainPlant(soil, level, soilPos, Direction.UP, state).isTrue())
@@ -49,9 +57,10 @@ public class MixinPlantSurvival
             // The upper half of a double plant is supported by the lower half, not by the soil
             if (state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) && state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER)
             {
-                return;
+                return false;
             }
-            cir.setReturnValue(true);
+            return true;
         }
+        return false;
     }
 }
