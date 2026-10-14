@@ -19,7 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.platform.model.ModelData;
-import xfacthd.framedblocks.platform.Platform;
 import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -31,7 +30,6 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.common.config.DevToolsConfig;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
@@ -359,16 +357,6 @@ public class FramedDoubleBlockEntity extends FramedBlockEntity implements IFrame
         boolean changed = super.updateCulling(side, blockPair.getA(), rerender);
         changed |= updateCulling(culledFaces, blockPair.getB(), side, rerender);
         return changed;
-    }
-
-    /*
-     * Debug rendering
-     */
-
-    @Override
-    public boolean hasCustomOutlineRendering(Player player)
-    {
-        return !Platform.isProduction() && DevToolsConfig.VIEW.isDoubleBlockPartHitDebugRendererEnabled();
     }
 
     public final Tuple<BlockState, BlockState> getBlockPair()

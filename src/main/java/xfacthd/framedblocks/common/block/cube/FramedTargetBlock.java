@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -60,7 +61,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
 
         if (!stack.isEmpty() && level.getBlockEntity(pos) instanceof FramedTargetBlockEntity be)
         {
-            DyeColor dye = DyeColor.getColor(stack);
+            DyeColor dye = Utils.getDyeColor(stack);
             if (dye != null && be.setOverlayColor(dye))
             {
                 level.playSound(player, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);

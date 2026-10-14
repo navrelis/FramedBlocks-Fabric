@@ -16,14 +16,14 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | B2b | Networking (4 payloads), data-map replacement + sync, server-config sync check, AE2/Create leftover cleanup | No `neoforge.network`/`datamaps` imports; payloads both directions; data map loaded + synced | B2a | Sonnet long | done (untested at runtime) |
 | C2 | Per-position light emission (aux light replacement) | No `AuxiliaryLightManager` left; all vanilla emission readers covered and listed | B2a | Opus short (precision override) | done (untested at runtime) |
 | C3 | Item / fluid / energy storage on Transfer API | No `neoforge.{items,fluids,energy,capabilities}` imports outside client dirs; no dupes/loss | B2a | Sonnet long | done (untested in game) |
-| C1 | Block/item behaviour hooks (sound, friction, explosion, fire, plants, beacon, ladder, effects, pick block, appearance, tool actions) | Each upstream hook has a Fabric path; listed in a table | C2, B2b, C3 | Sonnet long | in progress (session 4) |
+| C1 | Block/item behaviour hooks (sound, friction, explosion, fire, plants, beacon, ladder, effects, pick block, appearance, tool actions) | Each upstream hook has a Fabric path; listed in a table | C2, B2b, C3 | Sonnet long | done (untested in game) |
 | C4 | Client wiring: FBClient, BERs, ghost + outline renderers, colours, particles, overlays, screens, hit/destroy effects, sprite source, loaders, loader-specific JSON | Client compiles; no NeoForge-only JSON keys unhandled | B1, B2b | Sonnet long | done (C4a + C4b; untested in game) |
-| D1 | First full compile + fix rounds | `gradlew build` passes | B, C | Sonnet per error cluster | open |
+| D1 | First full compile + fix rounds | `gradlew build` passes | B, C | Sonnet per error cluster | done |
 | D2 | Run client and dedicated server | Both start without errors | D1 | lead + Sonnet fixes | open |
 | E2 | Game tests on Fabric gametest | Upstream game tests run and pass (or documented) | D2 | Sonnet long | open |
 | F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | open |
 | G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | open |
 
-Parallel now: C1 (Sonnet). Next: D1 full compile + fix rounds. F1 inputs added in session 4: optional `#c:wrenches` in the wrench tag; avoid the BlockHitResult allocation in MixinParticleEngine.crack for non-framed blocks; stale `initializeClient` javadoc in IBlockType.
+Parallel now: none. Next: D2 run client + server. F1 inputs added in session 4: optional `#c:wrenches` in the wrench tag; avoid the BlockHitResult allocation in MixinParticleEngine.crack for non-framed blocks; stale `initializeClient` javadoc in IBlockType; FireBlock burn face kept in a field on the FireBlock singleton; hidesNeighborFace ignores NeoForge supportsExternalFaceHiding.
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 32 (M1, M2, A1, A2, B2a x2, E1, B2b x2, C3 x2, C4a, C4b x2, C1 x2), Opus 6 (B1 x2, C2 x2). Opus share ~16 %.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 33 (M1, M2, A1, A2, B2a x2, E1, B2b x2, C3 x2, C4a, C4b x2, C1 x2, C1 corr 1 short), Opus 6 (B1 x2, C2 x2). Opus share ~15 %.

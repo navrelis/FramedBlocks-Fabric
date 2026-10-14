@@ -13,7 +13,31 @@
         "MixinHopperBlockEntity",
         "MixinMapItemSavedData",
         "MixinStairBlock",
-        "MixinSystemReport"
+        "MixinSystemReport",
+        "InvokerFireBlock",
+        "MixinAbstractHorse",
+        "MixinBeaconBlockEntity",
+        "MixinBlock",
+        "MixinBlockItem",
+        "MixinBoat",
+        "MixinEnderDragon",
+        "MixinEntity",
+        "MixinExperienceOrb",
+        "MixinExplosionDamageCalculator",
+        "MixinFireBlock",
+        "MixinFlyingMob",
+        "MixinItemEntity",
+        "MixinLavaFluid",
+        "MixinLevelChunkHooks",
+        "MixinLivingEntity",
+        "MixinPlantSurvival",
+        "MixinPoweredRailBlock",
+        "MixinRailDefaultState",
+        "MixinServerPlayerGameMode",
+        "MixinWitherBoss",
+        "MixinWitherSkull",
+        "MixinAbstractMinecart",
+        "MixinRailState"
     ],
     "client": [
         "client.AccessorMultiPlayerGameMode",
@@ -22,7 +46,9 @@
         "client.MixinClientPacketListener",
         "client.MixinLevelRenderer",
         "client.MixinLevelRendererBreakSound",
-        "client.MixinParticleEngine"
+        "client.MixinParticleEngine",
+        "client.hooks.HookLiquidBlockRenderer",
+        "client.hooks.HookMultiPlayerGameMode"
     ],
     "injectors": {
         "defaultRequire": 1

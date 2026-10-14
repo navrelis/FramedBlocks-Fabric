@@ -21,25 +21,33 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.common.block.rail.IPoweredRailBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
 
-public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFramedBlock
+public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFramedBlock, IPoweredRailBlock
 {
     private final BlockType type;
+    private final boolean poweredRail;
 
     private FramedFancyPoweredRailBlock(BlockType type, boolean isPoweredRail)
     {
         super(IFramedBlock.createProperties(type)
-                .noCollission(),
-                isPoweredRail
+                .noCollission()
         );
         this.type = type;
+        this.poweredRail = isPoweredRail;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
         );
+    }
+
+    @Override
+    public boolean isPoweredRail()
+    {
+        return poweredRail;
     }
 
     @Override

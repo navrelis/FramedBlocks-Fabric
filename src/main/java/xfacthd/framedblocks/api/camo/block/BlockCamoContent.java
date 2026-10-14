@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.util.BlockHooks;
 import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.*;
@@ -42,25 +43,25 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     @Override
     public float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        return state.getExplosionResistance(level, pos, explosion);
+        return BlockHooks.getExplosionResistance(state, level, pos, explosion);
     }
 
     @Override
     public boolean isFlammable(BlockGetter level, BlockPos pos, Direction face)
     {
-        return state.isFlammable(level, pos, face);
+        return BlockHooks.isFlammable(state, level, pos, face);
     }
 
     @Override
     public int getFlammability(BlockGetter level, BlockPos pos, Direction face)
     {
-        return state.getFlammability(level, pos, face);
+        return BlockHooks.getFlammability(state, level, pos, face);
     }
 
     @Override
     public int getFireSpreadSpeed(BlockGetter level, BlockPos pos, Direction face)
     {
-        return state.getFireSpreadSpeed(level, pos, face);
+        return BlockHooks.getFireSpreadSpeed(state, level, pos, face);
     }
 
     @Override
@@ -92,13 +93,13 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     @Override
     public boolean shouldDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
-        return state.shouldDisplayFluidOverlay(level, pos, fluid);
+        return BlockHooks.shouldDisplayFluidOverlay(state, level, pos, fluid);
     }
 
     @Override
     public float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity, float frameFriction)
     {
-        return state.getFriction(level, pos, entity);
+        return BlockHooks.getFriction(state, level, pos, entity);
     }
 
     @Override
@@ -110,7 +111,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     @Override
     public boolean canEntityDestroy(BlockGetter level, BlockPos pos, Entity entity)
     {
-        return state.canEntityDestroy(level, pos, entity);
+        return BlockHooks.canEntityDestroy(state, level, pos, entity);
     }
 
     @Override
@@ -144,7 +145,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
     @Nullable
     public Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
-        return state.getBeaconColorMultiplier(level, pos, beaconPos);
+        return BlockHooks.getBeaconColorMultiplier(state, level, pos, beaconPos);
     }
 
     @Override

@@ -59,9 +59,6 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    protected void registerDefaultState() { }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(
@@ -121,12 +118,6 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     public Property<RailShape> getShapeProperty()
     {
         return PropertyHolder.ASCENDING_RAIL_SHAPE;
-    }
-
-    @Override
-    public boolean isValidRailShape(RailShape shape)
-    {
-        return shape.isAscending();
     }
 
     @Override

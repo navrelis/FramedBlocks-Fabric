@@ -92,7 +92,6 @@ public class FramedCornerTubeBlock extends FramedBlock
         return false;
     }
 
-    @Override
     public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
     {
         return state.getValue(PropertyHolder.CORNER_TYPE_ORIENTATION).isVertical();

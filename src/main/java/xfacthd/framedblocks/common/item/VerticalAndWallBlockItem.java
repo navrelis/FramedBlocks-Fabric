@@ -38,11 +38,4 @@ public class VerticalAndWallBlockItem extends BlockItem
         super.registerBlocks(blockToItemMap, item);
         blockToItemMap.put(wallBlock, item);
     }
-
-    @Override
-    public void removeFromBlockToItemMap(Map<Block, Item> blockToItemMap, Item item)
-    {
-        super.removeFromBlockToItemMap(blockToItemMap, item);
-        blockToItemMap.remove(wallBlock);
-    }
 }

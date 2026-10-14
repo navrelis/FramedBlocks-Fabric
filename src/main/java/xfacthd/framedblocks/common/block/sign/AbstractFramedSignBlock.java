@@ -26,7 +26,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ItemAbilities;
+import xfacthd.framedblocks.platform.util.ItemAbilities;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
@@ -285,7 +285,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
                 case InkSacItem ignored -> APPLY_INK;
                 case GlowInkSacItem ignored -> APPLY_GLOW_INK;
                 case HoneycombItem ignored -> APPLY_WAX;
-                default -> stack.canPerformAction(ItemAbilities.AXE_WAX_OFF) ? REMOVE_WAX : null;
+                default -> ItemAbilities.canPerform(stack, ItemAbilities.AXE_WAX_OFF) ? REMOVE_WAX : null;
             };
         }
     }

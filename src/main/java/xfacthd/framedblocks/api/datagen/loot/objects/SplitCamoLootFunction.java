@@ -35,13 +35,13 @@ public final class SplitCamoLootFunction extends LootItemConditionalFunction
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx)
     {
-        CamoList camoList = stack.remove(Utils.DC_TYPE_CAMO_LIST);
+        CamoList camoList = stack.remove(Utils.DC_TYPE_CAMO_LIST.value());
         if (camoList != null && !camoList.isEmpty())
         {
             CamoContainer<?, ?> camo = camoList.getCamo(camoIndex);
             if (camo != EmptyCamoContainer.EMPTY)
             {
-                stack.set(Utils.DC_TYPE_CAMO_LIST, CamoList.of(camo));
+                stack.set(Utils.DC_TYPE_CAMO_LIST.value(), CamoList.of(camo));
             }
         }
         return stack;

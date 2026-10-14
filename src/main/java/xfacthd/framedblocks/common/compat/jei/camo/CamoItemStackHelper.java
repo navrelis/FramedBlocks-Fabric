@@ -54,13 +54,13 @@ public final class CamoItemStackHelper
         {
             return false;
         }
-        CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY);
         return camos.isEmptyOrContentsEmpty();
     }
 
     public static List<ItemStack> dropCamo(ItemStack itemStack)
     {
-        CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST, CamoList.EMPTY);
+        CamoList camos = itemStack.getOrDefault(FBContent.DC_TYPE_CAMO_LIST.value(), CamoList.EMPTY);
         if (camos.isEmptyOrContentsEmpty())
         {
             return List.of();

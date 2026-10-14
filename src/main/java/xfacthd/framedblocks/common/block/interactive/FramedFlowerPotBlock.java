@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -27,8 +25,6 @@ import xfacthd.framedblocks.common.compat.amendments.AmendmentsCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-import java.util.Map;
-import java.util.function.Supplier;
 
 public class FramedFlowerPotBlock extends FramedBlock
 {
@@ -172,10 +168,10 @@ public class FramedFlowerPotBlock extends FramedBlock
 
     public static BlockState getFlowerPotState(Block flower)
     {
-        Map<ResourceLocation, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
-        return fullPots.getOrDefault(
-                BuiltInRegistries.BLOCK.getKey(flower),
-                () -> Blocks.AIR
-        ).get().defaultBlockState();
+        if (flower == Blocks.AIR)
+        {
+            return Blocks.AIR.defaultBlockState();
+        }
+        return FlowerPotBlock.POTTED_BY_CONTENT.getOrDefault(flower, Blocks.AIR).defaultBlockState();
     }
 }

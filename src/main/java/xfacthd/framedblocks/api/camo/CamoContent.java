@@ -14,9 +14,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
-import net.neoforged.neoforge.common.extensions.IBlockStateExtension;
+import xfacthd.framedblocks.platform.util.BlockHooks;
 import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.util.EmptyBlockAndTintGetter;
@@ -31,25 +32,25 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
 
     /**
      * {@return the explosion resistance of this camo}
-     * @see IBlockStateExtension#getExplosionResistance(BlockGetter, BlockPos, Explosion)
+     * @see BlockHooks#getExplosionResistance(BlockState, BlockGetter, BlockPos, Explosion)
      */
     public abstract float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion);
 
     /**
      * {@return whether this camo is flammable on the given side}
-     * @see IBlockStateExtension#isFlammable(BlockGetter, BlockPos, Direction)
+     * @see BlockHooks#isFlammable(BlockState, BlockGetter, BlockPos, Direction)
      */
     public abstract boolean isFlammable(BlockGetter level, BlockPos pos, Direction face);
 
     /**
      * {@return how likely this camo is to catch fire on the given side}
-     * @see IBlockStateExtension#getFlammability(BlockGetter, BlockPos, Direction)
+     * @see BlockHooks#getFlammability(BlockState, BlockGetter, BlockPos, Direction)
      */
     public abstract int getFlammability(BlockGetter level, BlockPos pos, Direction face);
 
     /**
      * {@return how fast fire should spread when this camo is burning on the given side}
-     * @see IBlockStateExtension#getFireSpreadSpeed(BlockGetter, BlockPos, Direction)
+     * @see BlockHooks#getFireSpreadSpeed(BlockState, BlockGetter, BlockPos, Direction)
      */
     public abstract int getFireSpreadSpeed(BlockGetter level, BlockPos pos, Direction face);
 
@@ -61,7 +62,7 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
 
     /**
      * {@return the amount of light emitted by this camo}
-     * @see IBlockStateExtension#getLightEmission(BlockGetter, BlockPos)
+     * @see BlockBehaviour.BlockStateBase#getLightEmission()
      */
     public abstract int getLightEmission();
 
@@ -73,31 +74,31 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
 
     /**
      * {@return the sound type of this camo}
-     * @see IBlockStateExtension#getSoundType(LevelReader, BlockPos, Entity)
+     * @see BlockHooks#getSoundType(BlockState, LevelReader, BlockPos, Entity)
      */
     public abstract SoundType getSoundType();
 
     /**
      * {@return whether fluids rendered next to this camo should display a fluid overlay}
-     * @see IBlockStateExtension#shouldDisplayFluidOverlay(BlockAndTintGetter, BlockPos, FluidState)
+     * @see BlockHooks#shouldDisplayFluidOverlay(BlockState, BlockAndTintGetter, BlockPos, FluidState)
      */
     public abstract boolean shouldDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid);
 
     /**
      * {@return the slipperiness of this camo}
-     * @see IBlockStateExtension#getFriction(LevelReader, BlockPos, Entity)
+     * @see BlockHooks#getFriction(BlockState, LevelReader, BlockPos, Entity)
      */
     public abstract float getFriction(LevelReader level, BlockPos pos, @Nullable Entity entity, float frameFriction);
 
     /**
      * {@return whether this camo can sustain the given plan on the given side}
-     * @see IBlockStateExtension#canSustainPlant(BlockGetter, BlockPos, Direction, BlockState)
+     * @see IFramedBlock#canSustainPlant(BlockState, BlockGetter, BlockPos, Direction, BlockState)
      */
     public abstract TriState canSustainPlant(BlockGetter level, BlockPos pos, Direction side, BlockState plant);
 
     /**
      * {@return whether this camo can be destroyed by the given entity}
-     * @see IBlockStateExtension#canEntityDestroy(BlockGetter, BlockPos, Entity)
+     * @see BlockHooks#canEntityDestroy(BlockState, BlockGetter, BlockPos, Entity)
      */
     public abstract boolean canEntityDestroy(BlockGetter level, BlockPos pos, Entity entity);
 
@@ -123,7 +124,7 @@ public abstract class CamoContent<C extends CamoContent<C>> implements QuadCache
 
     /**
      * {@return the beacon color multiplier of this camo}
-     * @see IBlockStateExtension#getBeaconColorMultiplier(LevelReader, BlockPos, BlockPos)
+     * @see BlockHooks#getBeaconColorMultiplier(BlockState, LevelReader, BlockPos, BlockPos)
      */
     @Nullable
     public abstract Integer getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos);

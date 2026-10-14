@@ -77,13 +77,11 @@ public class FramedLadderBlock extends FramedBlock
         return false;
     }
 
-    @Override
     public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
     {
         return true;
     }
 
-    @Override
     public boolean makesOpenTrapdoorAboveClimbable(BlockState state, LevelReader level, BlockPos pos, BlockState trapdoorState)
     {
         return state.getValue(FramedProperties.FACING_HOR) == trapdoorState.getValue(TrapDoorBlock.FACING).getOpposite();

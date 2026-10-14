@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.data;
 
-import net.neoforged.neoforge.common.ItemAbility;
+import xfacthd.framedblocks.platform.util.ItemAbility;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 

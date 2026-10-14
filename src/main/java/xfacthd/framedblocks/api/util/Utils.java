@@ -27,7 +27,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.*;
-import net.neoforged.neoforge.common.ItemAbility;
+import xfacthd.framedblocks.platform.util.ItemAbilities;
+import xfacthd.framedblocks.platform.util.ItemAbility;
 import xfacthd.framedblocks.platform.registry.DeferredItem;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -60,6 +61,9 @@ public final class Utils
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
     /** Group tag containing all full-cube blocks excluding ones that can deviate from that via player interaction */
     public static final TagKey<Block> GROUP_FULL_CUBE = blockTag("group/full");
+    private static final List<TagKey<Item>> DYE_TAGS = Arrays.stream(DyeColor.values())
+            .map(color -> itemTag("c", "dyes/" + color.getName()))
+            .toList();
 
     /**
      * Provided by tools for rotating blocks
@@ -611,12 +615,32 @@ public final class Utils
 
     public static boolean isWrenchRotationTool(ItemStack stack)
     {
-        return stack.canPerformAction(ACTION_WRENCH_ROTATE) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
+        return ItemAbilities.canPerform(stack, ACTION_WRENCH_ROTATE) || (stack.is(TOOL_WRENCH) && !stack.is(COMPLEX_WRENCH));
     }
 
     public static boolean isConfigurationTool(ItemStack stack)
     {
-        return stack.is(FRAMED_SCREWDRIVER.value()) || stack.canPerformAction(ACTION_WRENCH_CONFIGURE);
+        return stack.is(FRAMED_SCREWDRIVER.value()) || ItemAbilities.canPerform(stack, ACTION_WRENCH_CONFIGURE);
+    }
+
+    /**
+     * {@return the {@link DyeColor} the given stack represents or null if it is not a dye}
+     */
+    @Nullable
+    public static DyeColor getDyeColor(ItemStack stack)
+    {
+        if (stack.getItem() instanceof DyeItem dye)
+        {
+            return dye.getDyeColor();
+        }
+        for (DyeColor color : DyeColor.values())
+        {
+            if (stack.is(DYE_TAGS.get(color.getId())))
+            {
+                return color;
+            }
+        }
+        return null;
     }
 
     public static String formatItemStack(ItemStack stack)

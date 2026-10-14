@@ -146,12 +146,6 @@ final class CamoResolvingLevelReader implements LevelReader
     }
 
     @Override
-    public float getShade(float normalX, float normalY, float normalZ, boolean shade)
-    {
-        return wrapped.getShade(normalX, normalY, normalZ, shade);
-    }
-
-    @Override
     public LevelLightEngine getLightEngine()
     {
         return wrapped.getLightEngine();

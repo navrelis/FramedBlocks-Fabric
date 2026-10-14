@@ -25,6 +25,7 @@ import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.ISlopeBlock;
+import xfacthd.framedblocks.common.block.rail.IPoweredRailBlock;
 import xfacthd.framedblocks.common.block.rail.fancyslope.FramedFancyPoweredRailSlopeBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.rail.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -34,17 +35,19 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock
+public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock, IPoweredRailBlock
 {
     private final BlockType type;
+    private final boolean poweredRail;
     private final ShapeProvider shapes;
     private final ShapeProvider occlusionShapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
     protected FramedPoweredRailSlopeBlock(BlockType type, boolean isPoweredRail, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
-        super(IFramedBlock.createProperties(type), isPoweredRail);
+        super(IFramedBlock.createProperties(type));
         this.type = type;
+        this.poweredRail = isPoweredRail;
         this.shapes = type.generateShapes(getStateDefinition().getPossibleStates());
         this.occlusionShapes = type.generateOcclusionShapes(getStateDefinition().getPossibleStates(), shapes);
         this.beFactory = beFactory;
@@ -59,7 +62,10 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    protected void registerDefaultState() { }
+    public boolean isPoweredRail()
+    {
+        return poweredRail;
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -138,12 +144,6 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     public Property<RailShape> getShapeProperty()
     {
         return PropertyHolder.ASCENDING_RAIL_SHAPE;
-    }
-
-    @Override
-    public boolean isValidRailShape(RailShape shape)
-    {
-        return shape.isAscending();
     }
 
     @Override

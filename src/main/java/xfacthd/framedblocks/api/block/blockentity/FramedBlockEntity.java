@@ -29,6 +29,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import xfacthd.framedblocks.platform.model.ModelData;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+import xfacthd.framedblocks.platform.util.BlockHooks;
+import xfacthd.framedblocks.platform.util.ItemAbilities;
 import xfacthd.framedblocks.platform.util.TriState;
 import xfacthd.framedblocks.platform.light.AuxLight;
 import org.jetbrains.annotations.ApiStatus;
@@ -159,7 +161,7 @@ public class FramedBlockEntity extends BlockEntity
 
     private static boolean canRemoveReinforcement(ItemStack stack)
     {
-        if (stack.getItem().canPerformAction(stack, ItemAbilities.PICKAXE_DIG))
+        if (ItemAbilities.canPerform(stack, ItemAbilities.PICKAXE_DIG))
         {
             return stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState());
         }
@@ -777,7 +779,7 @@ public class FramedBlockEntity extends BlockEntity
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean canEntityDestroyCamo(Entity entity)
     {
-        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level(), worldPosition, entity))
+        if (reinforced && !BlockHooks.canEntityDestroy(Blocks.OBSIDIAN.defaultBlockState(), level(), worldPosition, entity))
         {
             return false;
         }

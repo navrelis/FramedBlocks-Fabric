@@ -6,7 +6,6 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.*;
-import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,15 +19,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
-import net.neoforged.neoforge.common.CommonHooks;
 import xfacthd.framedblocks.platform.Platform;
 import xfacthd.framedblocks.platform.light.AuxLight;
+import xfacthd.framedblocks.platform.util.BlockHooks;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.block.render.IClientBlockEffects;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.render.particle.ClientBlockEffects;
+import xfacthd.framedblocks.common.util.EventHandler;
 
 import java.util.*;
 import java.util.function.*;
@@ -149,7 +150,7 @@ public final class TestUtils
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
-        CommonHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK);
+        EventHandler.onBlockLeftClick(player, helper.getLevel(), InteractionHand.MAIN_HAND, helper.absolutePos(pos), Direction.UP);
     }
 
     /**
@@ -509,12 +510,12 @@ public final class TestUtils
     {
         public static void testHasParticleOverride(GameTestHelper helper, BlockState state)
         {
-            IClientBlockExtensions blockExt = IClientBlockExtensions.of(state);
+            IClientBlockEffects blockExt = ClientBlockEffects.of(state);
             assertTrue(
                     helper,
                     INTANGIBILITY_BLOCK,
                     blockExt instanceof FramedBlockRenderProperties,
-                    () -> String.format("Block '%s' doesn't have required IClientBlockExtensions", state.getBlock())
+                    () -> String.format("Block '%s' doesn't have required client block effects", state.getBlock())
             );
 
             BlockPos pos = helper.absolutePos(INTANGIBILITY_BLOCK);
@@ -556,7 +557,8 @@ public final class TestUtils
         BlockState state = helper.getBlockState(BEACON_TINT_BLOCK);
         assertFramedBlock(helper, state.getBlock());
 
-        Integer tint = state.getBeaconColorMultiplier(
+        Integer tint = BlockHooks.getBeaconColorMultiplier(
+                state,
                 helper.getLevel(),
                 helper.absolutePos(BEACON_TINT_BLOCK),
                 helper.absolutePos(BEACON_TINT_BEACON)

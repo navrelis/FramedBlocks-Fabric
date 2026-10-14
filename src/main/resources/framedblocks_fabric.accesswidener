@@ -38,3 +38,8 @@ accessible	field	net/minecraft/world/level/block/entity/HopperBlockEntity	ticked
 accessible	method	net/minecraft/world/level/material/Fluid	getExplosionResistance	()F
 accessible	method	net/minecraft/client/renderer/entity/ItemRenderer	renderModelLists	(Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/item/ItemStack;IILcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V
 accessible	field	net/minecraft/client/renderer/texture/atlas/SpriteSources	TYPES	Lcom/google/common/collect/BiMap;
+accessible	field	net/minecraft/world/level/block/FlowerPotBlock	POTTED_BY_CONTENT	Ljava/util/Map;
+extendable	method	net/minecraft/world/level/block/WallBlock	makeShapes	(FFFFFF)Ljava/util/Map;
+extendable	method	net/minecraft/world/level/block/WallBlock	connectsTo	(Lnet/minecraft/world/level/block/state/BlockState;ZLnet/minecraft/core/Direction;)Z
+accessible	method	net/minecraft/world/level/block/state/properties/BlockSetType	register	(Lnet/minecraft/world/level/block/state/properties/BlockSetType;)Lnet/minecraft/world/level/block/state/properties/BlockSetType;
+accessible	field	net/minecraft/world/level/block/RailState	pos	Lnet/minecraft/core/BlockPos;

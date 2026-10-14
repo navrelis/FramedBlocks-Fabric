@@ -27,5 +27,13 @@ public interface ISlopeBlock
         {
             return SlopeType.BOTTOM;
         }
+
+        /**
+         * {@return whether the given shape may be assigned to this rail by a neighboring rail}
+         */
+        default boolean isValidRailShape(RailShape shape)
+        {
+            return shape.isAscending();
+        }
     }
 }

@@ -26,3 +26,5 @@
 - Hit/destroy particles and break sound: own `IClientBlockEffects` registry + mixins on `ParticleEngine.crack/destroy` and the 2001 level event sound; hit handlers get a synthesized `BlockHitResult` (pos + side only).
 - Overlay models (`"loader": "framedblocks_fabric:overlay"`): fixed list of 3 ids served by a preparable model resolver instead of scanning all model JSONs.
 - `neoforge:white` / NeoForge warning icon replaced by own textures; `neoforge_data` keys left in JSON (ignored, emissivity handled in code); `render_type` keys ignored by vanilla.
+- Block hooks (C1): NeoForge IBlockExtension hooks kept as IFramedBlock methods, dispatched by MixinExtras wrappers at the vanilla call sites (fb/mixin, fb/mixin/client/hooks); defaults for non-framed blocks in `platform/util/BlockHooks`. FabricBlock#getAppearance used directly. ItemAbility stand-in (`platform/util/ItemAbility*`) recognises vanilla axe/pickaxe classes + tags and own tools. Static FlammableBlockRegistry not used (camo-dependent flammability).
+- Rails: NeoForge `isPoweredRail`/`isValidRailShape` replaced by `IPoweredRailBlock` + mixins on PoweredRailBlock, AbstractMinecart and RailState.

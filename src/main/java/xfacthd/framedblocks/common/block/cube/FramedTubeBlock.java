@@ -58,7 +58,6 @@ public class FramedTubeBlock extends FramedBlock
         return false;
     }
 
-    @Override
     public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
     {
         return state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
