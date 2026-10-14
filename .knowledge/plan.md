@@ -21,10 +21,15 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | D1 | First full compile + fix rounds | `gradlew build` passes | B, C | Sonnet per error cluster | done |
 | D2 | Run client and dedicated server | Both start without errors | D1 | lead + Sonnet fixes | done (title screen, gametest, server to EULA) |
 | E2 | Game tests on Fabric gametest | Upstream game tests run and pass (or documented) | D2 | Sonnet long | done (858 required pass, 27 optional known failures) |
-| E3 | Port self-test (startup + in-world consistency checks) and command tests as dev-only test code | Self-test runs on gametest server and client dev run, findings classified | E2 | Sonnet long | open (interrupted; partial untracked files) |
-| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | review done; H1, T1–T4, L1, N1–N3 merged into 1.21.1-fabric; E+G (R1, R2, B1–B3, M1–M3) uncommitted in F:/wt/fbr, accepted except unverified M1 correction (interrupted) |
+| E3 | Port self-test (startup + in-world consistency checks) and command tests as dev-only test code | Self-test runs on gametest server and client dev run, findings classified | E2 | Sonnet long | done (0 port findings; 2 duplicate-recipe pairs = upstream issue; merged) |
+| F2 | Optional Team Reborn Energy integration for the Powered Framing Saw | Gated compat, transaction-safe wrapper, gametests (commit/abort/nested), build green | F1 | Sonnet long | done (merged, 900 required gametests green) |
+| V1 | Runtime check of JEI/REI/EMI/Jade integrations in the dev client (read-only) | Each integration reaches the title screen with our plugin registered, problems with root cause | F2 | Sonnet long | done (Jade + REI plugins load; EMI needs a world; JEI dev runtime misses mezz_config; no-compat start clean without TR Energy) |
+| T1 | Fix flaky required light/occlusion gametests (about 1 in 3 builds under load) | Root cause found; 5 consecutive builds (2 under CPU load) with all required passing, 27 known optional failures unchanged | E3 | Opus long (precision override) | in progress |
+| D3 | README + listing texts: energy via TR Energy, integration status, Athena removed, test tasks | Texts match verified facts | V1 | Sonnet short | in progress |
+| C5 | JEI dev runtime (`mezz_config`), delete ported upstream `src/test` tree, `gradlew tasks` failure on empty test source set | runClient with compat_runtime=jei reaches title screen; tree removed; tasks works; build green | T1 | Sonnet short | open |
+| F1 | Bug hunt and optimisation review | Findings list, fixes verified | D2 | Opus review + Sonnet fixes | done (all accepted findings merged into 1.21.1-fabric) |
 | G1 | Final acceptance, Graphify, report, first push | Per role step 8 | all | lead | open |
 
-Parallel now: none (session 5 stopped by auto-handoff, see handoff.md).
+Parallel now: T1 (Opus, main checkout, builds), D3 (Sonnet, docs only, no Gradle).
 
-Usage tally (long = 2, short = 1), including killed runs: Sonnet 48 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3), Opus 12 (B1 x2, C2 x2, F1 review x3, F1-C). Opus share ~20 %.
+Usage tally (long = 2, short = 1), including killed runs: Sonnet 56 (… D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3), Opus 14 (B1 x2, C2 x2, F1 review x3, F1-C, T1). Opus share ~20 %.

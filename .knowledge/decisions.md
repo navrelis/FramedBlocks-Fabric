@@ -18,7 +18,7 @@
 - `compat_runtime` gradle property (false by default) adds JEI/EMI/REI/Jade to the dev runtime for testing.
 - Block entity sync: update packet and chunk update tag carry marker keys (`fb_client_sync`, `fb_initial_sync`) and are dispatched by a mixin on `BlockEntity.loadWithComponents`, because vanilla has no `onDataPacket`/`handleUpdateTag`.
 - Former common-setup work runs once on the first `TAGS_LOADED`; registries are registered eagerly in `FBContent.init()` in a fixed order.
-- Powered framing saw energy: Fabric has no energy API and no dependency is added; the internal buffer stays, a server config `poweredSawRequiresEnergy` (default false) makes the saw usable without an energy mod. Exposure to Team Reborn Energy is left as a hook only.
+- Powered framing saw energy: internal buffer stays, server config `poweredSawRequiresEnergy` (default false) keeps the saw usable without an energy mod. Session 6: optional Team Reborn Energy integration (compile-only, `suggests`, not bundled) exposes the buffer for insertion on all sides except UP, because TR Energy is the de-facto Fabric energy API and upstream exposes FE the same way.
 - Shared files (mixin jsons, access widener, lang) are edited append-only by parallel agents; each task with risky mixins gets its own mixin config (render, light).
 - Light: cached `BlockState.getLightEmission()` of framed blocks stays at the declared value; the per-position value is injected at each vanilla reader (own `required: false` mixin config). Fabric data attachments rejected (plain non-volatile map, unsafe for the light thread).
 - Server config sync: none added, FCAP 21.1.6 already syncs SERVER configs in the configuration phase.
@@ -32,3 +32,5 @@
 - Parallel fix agents work in short-path git worktrees (F:/wt/*, core.longpaths) so their Gradle runs do not collide; lead applies the diff to the main branch after review. The harness worktree isolation fails on Windows path length.
 - F1-C transfer fixes go to Opus: dupe-sensitive nested-transaction semantics (precision).
 - BE onLoad is deferred to the next world tick start (queue), mirroring NeoForge freshBlockEntities; Fabric's BLOCK_ENTITY_LOAD fires inside LevelChunk.setBlockEntity.
+- Precision override T1 (Opus): flaky required light/occlusion gametests, cause unclear; a naive wait-longer fix could hide a real per-position light bug.
+- Duplicate recipe pairs found by /fbtest recipecollision (framed_sloped_stairs vs framed_sliced_sloped_stairs_slab, framed_vertical_sloped_stairs vs framed_vertical_sliced_sloped_stairs_panel) are upstream; kept as is to stay recipe-compatible with upstream.
