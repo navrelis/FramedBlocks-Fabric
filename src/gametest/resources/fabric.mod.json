@@ -5,6 +5,9 @@
   "name": "FramedBlocks Fabric Game Tests",
   "environment": "*",
   "entrypoints": {
+    "preLaunch": [
+      "xfacthd.framedblocks.gametest.clienttest.ClientTestPreLaunch"
+    ],
     "main": [
       "xfacthd.framedblocks.gametest.FramedBlocksTestMod"
     ],
