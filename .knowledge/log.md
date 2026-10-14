@@ -84,3 +84,4 @@
 - FX1 /fbtest chat OPEN_FILE -> COPY_TO_CLIPBOARD — Sonnet, short — running in main checkout.
 - FX1 — Sonnet, short — diff read (COPY_TO_CLIPBOARD + hover, normalized path). Build green 901/27; lead runClientTest Indigo PASS, 0 'Action not allowed'. Accepted, committed.
 - Session 7 acceptance — lead — build 901/27, runClientTest Indigo+Sodium PASS, Graphify updated (16,227 nodes), report.md §8 added.
+- Session 7 ended by auto-handoff; nothing in progress, all merged and pushed (3a641d9f4). State: handoff.md.
