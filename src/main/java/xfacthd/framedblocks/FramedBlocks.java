@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientBlockEntityEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -15,10 +17,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.slf4j.Logger;
-import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.RegisterBlueprintCopyBehavioursEvent;
 import xfacthd.framedblocks.common.config.*;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
@@ -27,7 +29,6 @@ import xfacthd.framedblocks.common.data.FramedDataMaps;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
@@ -39,6 +40,7 @@ import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.net.NetworkHandler;
 import xfacthd.framedblocks.common.util.EventHandler;
 import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.event.FreshBlockEntityQueue;
 import xfacthd.framedblocks.platform.event.ModEvents;
 
 import java.util.Set;
@@ -65,7 +67,9 @@ public final class FramedBlocks implements ModInitializer
         ModEvents.addListener(RegisterBlueprintCopyBehavioursEvent.class, BlueprintBehaviours::onRegisterBlueprintCopyBehaviours);
         extendPoiTypes();
 
-        ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register((be, level) -> onBlockEntityLoad(be));
+        ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register(FramedBlocks::onBlockEntityLoad);
+        ServerTickEvents.START_WORLD_TICK.register(FreshBlockEntityQueue::drain);
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> FreshBlockEntityQueue.clear(false));
         if (Platform.isClient())
         {
             ClientHooks.init();
@@ -116,17 +120,12 @@ public final class FramedBlocks implements ModInitializer
         }
     }
 
-    // NeoForge's BlockEntity#onLoad() has no vanilla equivalent, the Fabric load events fire at the same point
-    private static void onBlockEntityLoad(BlockEntity be)
+    // NeoForge calls BlockEntity#onLoad() at the start of the next block entity tick. The Fabric load events fire from
+    // inside LevelChunk#setBlockEntity(), potentially while the chunk is still being loaded and before the BE data was
+    // loaded, so the call is deferred to the start of the next level tick
+    private static void onBlockEntityLoad(BlockEntity be, Level level)
     {
-        if (be instanceof FramedBlockEntity framedBe)
-        {
-            framedBe.onLoad();
-        }
-        else if (be instanceof PoweredFramingSawBlockEntity sawBe)
-        {
-            sawBe.onLoad();
-        }
+        FreshBlockEntityQueue.enqueue(be, level);
     }
 
     private static void extendPoiTypes()
@@ -158,7 +157,9 @@ public final class FramedBlocks implements ModInitializer
     {
         private static void init()
         {
-            ClientBlockEntityEvents.BLOCK_ENTITY_LOAD.register((be, level) -> onBlockEntityLoad(be));
+            ClientBlockEntityEvents.BLOCK_ENTITY_LOAD.register(FramedBlocks::onBlockEntityLoad);
+            ClientTickEvents.START_WORLD_TICK.register(FreshBlockEntityQueue::drain);
+            ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> FreshBlockEntityQueue.clear(true));
         }
     }
 }
