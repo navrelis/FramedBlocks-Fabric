@@ -105,8 +105,8 @@ public final class ServerConfig
         POWERED_SAW_REQUIRES_ENERGY_VALUE = builder
                 .comment(
                         "If true, the Powered Framing Saw consumes energy and does nothing without it. If false, the saw works without energy " +
-                        "and does not use the energy-related settings below. Fabric has no common energy API, so the energy buffer of the saw " +
-                        "can currently only be filled through addon mods that expose it"
+                        "and does not use the energy-related settings below. The energy buffer of the saw can be filled from every side except " +
+                        "the top through Team Reborn Energy when that mod is installed"
                 )
                 .translation(TRANSLATION_POWERED_SAW_REQUIRES_ENERGY)
                 .define(KEY_POWERED_SAW_REQUIRES_ENERGY, false);

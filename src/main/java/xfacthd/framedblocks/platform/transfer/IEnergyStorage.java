@@ -2,7 +2,8 @@ package xfacthd.framedblocks.platform.transfer;
 
 /**
  * Stand-in for NeoForge's {@code IEnergyStorage} with identical semantics.
- * There is no energy API on Fabric, so the mod only uses this internally
+ * Fabric API has no energy API, so the mod only uses this internally and exposes the saw buffer to Team Reborn Energy
+ * (when installed) through a transactional wrapper, see {@code SawEnergyStorage}
  */
 public interface IEnergyStorage
 {

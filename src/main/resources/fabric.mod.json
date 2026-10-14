@@ -64,6 +64,7 @@
     "amendments": "*",
     "searchables": "*",
     "additionalplacements": "*",
-    "atlasviewer": "*"
+    "atlasviewer": "*",
+    "team_reborn_energy": "*"
   }
 }

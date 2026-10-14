@@ -19,7 +19,6 @@ import xfacthd.framedblocks.common.config.ServerConfig;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
-import xfacthd.framedblocks.platform.transfer.IEnergyStorage;
 import xfacthd.framedblocks.platform.transfer.IItemHandler;
 import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
 
@@ -267,7 +266,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         return externalItemStorage;
     }
 
-    public IEnergyStorage getEnergyStorage()
+    public EntityAwareEnergyStorage getEnergyStorage()
     {
         return energyStorage;
     }

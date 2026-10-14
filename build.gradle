@@ -150,6 +150,11 @@ dependencies {
 
     modCompileOnly "maven.modrinth:atlasviewer:${atlasviewer_version}"
 
+    modCompileOnly "teamreborn:energy:${team_reborn_energy_version}"
+
+    // Only for the game tests of the Team Reborn Energy integration, never bundled or part of the main runtime
+    modGametestImplementation "teamreborn:energy:${team_reborn_energy_version}"
+
     // Set compat_runtime=true to run JEI, EMI, REI and Jade in the dev client, or a comma-separated subset (e.g. jei,jade)
     var compatRuntime = findProperty('compat_runtime')?.toString()?.toLowerCase() ?: 'false'
     var compatRuntimeAll = compatRuntime == 'true'
