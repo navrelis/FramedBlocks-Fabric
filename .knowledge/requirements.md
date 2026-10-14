@@ -17,3 +17,9 @@ User answers (2026-10-14):
 Constraints:
 - Lead (Opus 5.5) writes no project code; subagents implement. Sonnet default, Opus <= ~50% unless precision override.
 - No force-push, no secrets, only push code that builds.
+
+Session 8 answers (2026-10-14):
+- Source code public: publish as a NEW public repo with clean history (author/committer email nikko.yat@gmail.com on 19 commits rewritten to the GitHub noreply address); the old private repo stays untouched. No force-push.
+- CurseForge pictures: same style as the user's Unified Xaero Worldmap cards (F:\Coding\UnifiedXaeroWorldmap\docs\curseforge: HTML/CSS pixel cards, gold frame, headless Edge, lossless PNG, alt texts, description template with real text between cards). Real in-game screenshots from automated showcase client runs (about 2 runs) are approved.
+- CurseForge project: not created yet; prepare everything, upload later with the id and the user's final yes.
+- No playtest findings yet.

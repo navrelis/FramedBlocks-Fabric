@@ -85,3 +85,6 @@
 - FX1 — Sonnet, short — diff read (COPY_TO_CLIPBOARD + hover, normalized path). Build green 901/27; lead runClientTest Indigo PASS, 0 'Action not allowed'. Accepted, committed.
 - Session 7 acceptance — lead — build 901/27, runClientTest Indigo+Sodium PASS, Graphify updated (16,227 nodes), report.md §8 added.
 - Session 7 ended by auto-handoff; nothing in progress, all merged and pushed (3a641d9f4). State: handoff.md.
+- Session 8 start — lead — handoff verified; worktree cleanup denied by permission policy (left for user). H-items mapping — Sonnet, long, read-only — H6 worth doing, H1 optional, H3/H5 skip.
+- PUB1 — lead — bare copy rewritten (19 commits' personal email -> noreply), public repo github.com/navrelis/FramedBlocks-Fabric created, tree identical; local remotes: origin = public, private = old repo.
+- SC1 showcase screenshots — Sonnet, long — running in F:/wt/sc1. CF1 card pipeline + repo link update — Opus, long — running in main checkout (docs/curseforge). H1 parallel state caches — Opus, long — running in F:/wt/h1.

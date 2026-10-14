@@ -39,3 +39,7 @@
 - Session 7: precision override O1 (Opus): AuxLight store is read by light worker threads while the server writes; a subtle race gives wrong light that is hard to detect.
 - Session 7: T2 to Opus: same light-timing area as T1, unclear whether test-side or mod-side.
 - Session 7: H1 (parallel state caches), H3, H5, H6 deferred: inherited from upstream, medium risk, not port regressions.
+- Session 8: public repo is a new repository with the user's personal email rewritten (filter-branch on a bare copy); the private repo keeps the original history, no force-push.
+- Session 8: CurseForge cards follow the Unified Xaero Worldmap pipeline (HTML/CSS + headless Edge); screenshots come from a dev-only showcase mode in the client test harness.
+- Session 8: H6 done (makes R2 weak-value interning effective), H1 done by Opus (concurrency); H3 and H5 skipped (no measured benefit; H5 is dupe-sensitive).
+- Session 8: CF1 to Opus (override): the user explicitly wants pictures matching their other mods' look; visual design quality is hard to spec for Sonnet.

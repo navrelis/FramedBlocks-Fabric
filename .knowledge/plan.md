@@ -45,6 +45,21 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 
 | FX1 | `/fbtest` result chat message uses OPEN_FILE, rejected by 1.21.1 ("Can't deliver chat message") | COPY_TO_CLIPBOARD, no encoder error in logs, build green | CT1 | Sonnet short | done (client run: 0 "Action not allowed") |
 
-Parallel now: none.
+## Session 8: public source, CurseForge cards, optional perf items
+
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| PUB1 | New public GitHub repo with rewritten author email | Public repo, no personal email in author/committer fields, tree identical; local branch tracks it | - | lead | done (github.com/navrelis/FramedBlocks-Fabric; old repo = remote `private`) |
+| SC1 | Showcase mode for the dev-only client test: build pretty scenes, capture high-res screenshots | `runClientTest -Pshowcase=true` writes named PNGs; release jar unchanged; build green | - | Sonnet long | in progress (worktree F:/wt/sc1) |
+| CF1 | CurseForge card pipeline in `docs/curseforge` (UXW style): cards, alt texts, description template, summary, checks | `node tools/build.mjs` renders all cards; check passes; lead viewed every card | - | Opus long (override: visual quality) | in progress (main checkout, docs/curseforge) |
+| CF2 | Put SC1 screenshots into CF1 cards, final render, review | All cards use real screenshots; lead viewed every card | SC1, CF1 | Sonnet short | open |
+| H6 | Bound `FramedBlockModel` quad/render-type caches (clear on overflow) | Cap constant, both caches bounded, build + client test green | - | Sonnet short | open |
+| H1 | Parallel state-cache build with serial warm-up and determinism check | Same caches as serial build (self-test), cold start measured, build green | - | Opus long (concurrency) | in progress (worktree F:/wt/h1) |
+| H3, H5 | Lazy beacon occlusion, ItemHandlerStorage toStack hoist | Skipped: benefit unmeasured/negligible, H5 dupe-sensitive | - | - | skipped |
+| UP1 | Loom/Gradle upgrade research (lift JEI/Sodium pins), saw tooltip FE -> E | Research report; implement if low risk | - | Sonnet | research running |
+
+Parallel now: UP1 research (Sonnet), SC1 (Sonnet), CF1 (Opus), H1 (Opus). H6 queued for the next free Sonnet slot.
+
+Usage tally session 8 so far: Sonnet +2 (H mapping long) → 67 + running SC1 2, UP1 2; Opus +4 running (CF1, H1) → 22. Opus share ~24 %.
 
 Usage tally (long = 2, short = 1), including killed runs: Sonnet 65 (session 7: CT1, P1, O2, O3 short, FX1 short; … D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3, C5 short), Opus 18 (B1 x2, C2 x2, F1 review x3, F1-C, T1, session 7: O1, T2). Opus share ~22 %.
