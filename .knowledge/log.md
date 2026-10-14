@@ -88,3 +88,4 @@
 - Session 8 start — lead — handoff verified; worktree cleanup denied by permission policy (left for user). H-items mapping — Sonnet, long, read-only — H6 worth doing, H1 optional, H3/H5 skip.
 - PUB1 — lead — bare copy rewritten (19 commits' personal email -> noreply), public repo github.com/navrelis/FramedBlocks-Fabric created, tree identical; local remotes: origin = public, private = old repo.
 - SC1 showcase screenshots — Sonnet, long — running in F:/wt/sc1. CF1 card pipeline + repo link update — Opus, long — running in main checkout (docs/curseforge). H1 parallel state caches — Opus, long — running in F:/wt/h1.
+- H1 — Opus, long — diff read (registry-order list, serial warm-up, per-block parallel build, CacheCounts reduce, wrapped exceptions, determinism self-test). Agent: 901/27 x2, cold 425->125 ms, 0 mismatches. Accepted, merged; lead build 901/27, 125 ms cold, 0 mismatches. Client path (Worker-Main) checked in next client test.
