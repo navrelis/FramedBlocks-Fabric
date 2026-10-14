@@ -34,3 +34,7 @@
 - C1 block/item hooks — Sonnet, long — report received; full diff + all new mixins read, risky targets javap-checked by lead (LiquidBlockRenderer ordinal 7, beacon tick). Accepted except rails: correction 1 sent (minecart boost/activation on framed powered/activator rails, RailState isValidRailShape semantics to avoid setValue crash on slopes, compat JEI DC_TYPE_CAMO_LIST fix, full compile).
 - C1 correction 1 — Sonnet — MixinAbstractMinecart (boost/activation on framed powered/activator rails), MixinRailState (NeoForge isValidRailShape semantics, slope updateDir override dropped), JEI compat fix. Files read; accepted. Agent hand-back text not received, verified from disk.
 - D1 — lead — first full `gradlew build`: BUILD SUCCESSFUL. Built jar: mixin annotation targets remapped in place to intermediary (tiny-remapper mixin extension), no refmap needed; FCAP jar-in-jar present.
+- First push of `1.21.1-fabric` to origin (build green).
+- D2 — lead ran runClient: crash before title screen (MixinSystemReport loads ServerConfig before Bootstrap). D2 fix loop delegated — Sonnet, long — running (client to title screen, gametest-mode server start without EULA, runServer to EULA prompt).
+- F1 review (read-only, in parallel with D2) — Opus, long — running.
+- Session 4 stopped by auto-handoff; D2 (partial uncommitted edits) and F1 review (nothing written) stopped. State and next steps: see handoff.md in the repo root.
