@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,6 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import xfacthd.framedblocks.api.camo.CamoContent;
@@ -47,11 +49,19 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
     private static final int FLAG_NO_CAMO_SOLID_BG = 0b100;
     private static final BlockCamoContent[] DEFAULT_NO_CAMO_CONTENTS = makeNoCamoContents(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState());
     private static final UnaryOperator<BakedQuad> EMISSIVE_PROCESSOR = QuadTransformers.settingMaxEmissivity()::process;
+    private static final Logger LOGGER = LogUtils.getLogger();
+    /**
+     * Upper bound for the entries of each per-model cache. Most models only ever see a handful of camos (times a few
+     * connected textures contexts), but collapsible blocks additionally key by their packed vertex offsets, which
+     * allows for tens of thousands of combinations per camo. A cache reaching this bound is cleared entirely
+     */
+    private static final int MAX_CACHE_SIZE = 1024;
 
     private final Map<QuadCacheKey, QuadTable> quadCache = new ConcurrentHashMap<>();
     private final Map<QuadCacheKey, CachedRenderTypes> renderTypeCache = new ConcurrentHashMap<>();
     private final Geometry geometry;
     private final IBlockType type;
+    private boolean overflowLogged = false;
     private final boolean isBaseCube;
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
@@ -155,7 +165,7 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
         if (cachedTypes == null)
         {
             cachedTypes = buildRenderTypeCache(camoContent, rand, data);
-            renderTypeCache.put(key, cachedTypes);
+            putBounded(renderTypeCache, key, cachedTypes);
         }
         return cachedTypes;
     }
@@ -264,10 +274,24 @@ public final class FramedBlockModel extends AbstractFramedBlockModel
             {
                 ModelData ctData = ctCtx != null ? camoData : ModelData.EMPTY;
                 quadTable = buildQuadCache(key.camo(), camoModel, rand, extraData, ctData, renderTypes, reinforce);
-                quadCache.put(key, quadTable);
+                putBounded(quadCache, key, quadTable);
             }
             return nullLayer ? quadTable.getAllQuads(side) : quadTable.getQuads(renderType, side);
         }
+    }
+
+    private <V> void putBounded(Map<QuadCacheKey, V> cache, QuadCacheKey key, V value)
+    {
+        if (cache.size() >= MAX_CACHE_SIZE)
+        {
+            cache.clear();
+            if (!overflowLogged)
+            {
+                overflowLogged = true;
+                LOGGER.debug("Model cache for block type {} reached {} entries and was cleared", type, MAX_CACHE_SIZE);
+            }
+        }
+        cache.put(key, value);
     }
 
     /**
