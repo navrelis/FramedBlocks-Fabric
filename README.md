@@ -60,7 +60,7 @@ Not included, because no Fabric build for Minecraft 1.21.1 of these mods exists:
 
 ## Building from source
 
-Requires JDK 21.
+Requires JDK 17 or newer to start the Gradle wrapper. The Gradle daemon needs JDK 25 (Fabric Loom 1.18), which is provisioned automatically through the Daemon JVM criteria in `gradle/gradle-daemon-jvm.properties`, and the mod itself is compiled for Java 21 through a Java toolchain.
 
 ```
 ./gradlew build

@@ -75,6 +75,7 @@ repositories {
         url = 'https://maven.blamejared.com/'
         content {
             includeGroup('mezz.jei')
+            includeGroup('net.mezzdev.config')
             includeGroup('com.blamejared.searchables')
         }
     }
@@ -168,8 +169,8 @@ dependencies {
     if (compatRuntimeAll || compatRuntimeSet.contains('jei'))
     {
         modLocalRuntime "mezz.jei:jei-${jei_mc_version}-fabric:${jei_version}"
-        // JEI needs mezz_config at runtime, it is not published on the JEI maven
-        modLocalRuntime "maven.modrinth:mezzconfig:${mezz_config_version}"
+        // JEI needs mezz_config at runtime, it is a separate artifact on the same maven
+        modLocalRuntime "net.mezzdev.config:mezz_config-${jei_mc_version}-fabric:${mezz_config_version}"
     }
     if (compatRuntimeAll || compatRuntimeSet.contains('emi'))
     {
