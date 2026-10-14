@@ -59,7 +59,8 @@ import java.util.stream.Stream;
 /**
  * Drives the automated client smoke test: creates a fresh world, builds a grid of all framed blocks, measures
  * meshing and frame times, takes screenshots of the world and of item rendering, runs the client-side test commands
- * and writes a report. Only active when the {@code framedblocks.clienttest} system property is set
+ * and writes a report. Only active when the {@code framedblocks.clienttest} system property is set. With the
+ * {@code framedblocks.clienttest.showcase} property the test phases are replaced by the {@link ShowcaseDirector}
  */
 public final class ClientTestHarness
 {
@@ -125,6 +126,8 @@ public final class ClientTestHarness
     private Set<String> modelFilesBefore = Set.of();
     private boolean modelCommandsSent = false;
 
+    private ShowcaseDirector showcase = null;
+
     public static void init()
     {
         if (ClientTestConfig.isEnabled())
@@ -138,8 +141,17 @@ public final class ClientTestHarness
         LogCapture.attach();
         try
         {
-            deleteRecursively(outDir);
-            Files.createDirectories(outDir);
+            if (ClientTestConfig.isShowcase())
+            {
+                Files.createDirectories(outDir);
+                showcase = new ShowcaseDirector(report, this::fail, () -> finish(ClientTestReport.Verdict.PASS));
+                showcase.prepareOutput();
+            }
+            else
+            {
+                deleteContentsExceptShowcase(outDir);
+                Files.createDirectories(outDir);
+            }
         }
         catch (IOException e)
         {
@@ -196,7 +208,7 @@ public final class ClientTestHarness
         }
         report.failure("Watchdog expired after " + (ClientTestConfig.watchdogMillis() / 1000) + " s in phase " + phase);
         report.setPhase(phase.name());
-        report.write(ClientTestReport.Verdict.TIMEOUT, outDir, logFile());
+        report.write(ClientTestReport.Verdict.TIMEOUT, reportDir(), logFile());
 
         // Try to shut the game down cleanly first, halting with a live GL context can crash the graphics driver on exit
         mc.stop();
@@ -227,8 +239,13 @@ public final class ClientTestHarness
         report.failure("The JVM exited before the test finished (crash or external exit) in phase " + phase);
         report.setPhase(phase.name());
         scanCrashReports();
-        report.write(ClientTestReport.Verdict.FAIL, outDir, logFile());
+        report.write(ClientTestReport.Verdict.FAIL, reportDir(), logFile());
         Runtime.getRuntime().halt(ClientTestConfig.FAIL_EXIT_CODE);
+    }
+
+    private Path reportDir()
+    {
+        return ClientTestConfig.isShowcase() ? ClientTestConfig.showcaseDir() : outDir;
     }
 
     private void fail(String message)
@@ -248,7 +265,7 @@ public final class ClientTestHarness
         report.setRenderer(detectRenderer());
 
         scanCrashReports();
-        report.write(verdict, outDir, logFile());
+        report.write(verdict, reportDir(), logFile());
         int code = report.finalVerdict() == ClientTestReport.Verdict.PASS ? 0 : ClientTestConfig.FAIL_EXIT_CODE;
         LOGGER.info("Client smoke test finished with result {}, expected exit code {}", report.finalVerdict(), code);
         mc.stop();
@@ -355,6 +372,7 @@ public final class ClientTestHarness
             case ITEMS -> items(fromTick);
             case CREATIVE -> creative(fromTick);
             case MODEL_COMMANDS -> modelCommands();
+            case SHOWCASE -> showcase.step(fromTick);
         }
     }
 
@@ -423,7 +441,7 @@ public final class ClientTestHarness
             return;
         }
         report.setRenderer(detectRenderer());
-        enter(Phase.WAIT_SELFTEST);
+        enter(showcase != null ? Phase.SHOWCASE : Phase.WAIT_SELFTEST);
     }
 
     private void waitSelfTest()
@@ -1108,6 +1126,28 @@ public final class ClientTestHarness
         }
     }
 
+    private static void deleteContentsExceptShowcase(Path dir)
+    {
+        if (!Files.isDirectory(dir))
+        {
+            return;
+        }
+        try (Stream<Path> children = Files.list(dir))
+        {
+            for (Path child : children.toList())
+            {
+                if (!child.getFileName().toString().equals(ClientTestConfig.SHOWCASE_DIR_NAME))
+                {
+                    deleteRecursively(child);
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            throw new IllegalStateException("Failed to clean " + dir, e);
+        }
+    }
+
     private static void deleteRecursively(Path dir)
     {
         if (!Files.exists(dir))
@@ -1158,7 +1198,8 @@ public final class ClientTestHarness
         VIEWPOINTS(300),
         ITEMS(120),
         CREATIVE(60),
-        MODEL_COMMANDS(MODEL_COMMAND_TIMEOUT / SECOND);
+        MODEL_COMMANDS(MODEL_COMMAND_TIMEOUT / SECOND),
+        SHOWCASE(1500);
 
         private final long timeout;
 

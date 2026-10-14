@@ -139,7 +139,7 @@ public final class GridBuilder
         }
     }
 
-    private static CamoContainer<?, ?> blockCamo(Block block)
+    public static CamoContainer<?, ?> blockCamo(Block block)
     {
         return new SimpleBlockCamoContainer(block.defaultBlockState(), FBContent.FACTORY_BLOCK.value());
     }
