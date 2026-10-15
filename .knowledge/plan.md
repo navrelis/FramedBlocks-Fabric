@@ -61,6 +61,7 @@ Approach: a platform layer (`xfacthd.framedblocks.platform.*`) provides small st
 | UP1 | Loom/Gradle upgrade research | Report with verified target versions | - | Sonnet long | done (Loom 1.18.4 + Gradle 9.7 + daemon JDK 25 verified in a copy: build 901, client test PASS with JEI 19.64, Sodium 0.8.13) |
 | UP2 | Replace 9 JEI removal-marked APIs; saw energy unit FE -> E | 0 removal warnings, 901/27, no behaviour change | - | Sonnet long | done (merged 12750eb84, lint 9->0, build 901/27; JEI GUI untested in game) |
 | UP3 | Loom 1.18.4, Gradle 9.7.0, daemon JVM criteria 25, JEI 19.64, MezzConfig 0.6.8 (maven), Sodium 0.8.13, Amendments 2.1.11 | Build 901/27, runClientTest PASS (Indigo + Sodium), compat runtime starts | UP2 | Sonnet long | done (merged 8fccef08d; lead build 901/27; agent client test PASS with JEI 19.64 + Sodium 0.8.13) |
+| DB1 | Diagonal Blocks factory overrides before block registration (server crash "block for item 'framedblocks_fabric:framed_fence' is null" at data pack load) | Overrides registered before FBContent.init without loading FBContent; build 901/27; Nytheria server pack reaches Done and stops cleanly | - | Sonnet short | done (session 10; lead server run: Done 12.1 s, exit 0) |
 
 Parallel now: none. Open: CurseForge upload (needs project id + user's yes).
 
@@ -69,3 +70,6 @@ Usage tally session 8 so far: Sonnet +2 (H mapping long) → 67 + running SC1 2,
 Usage tally (long = 2, short = 1), including killed runs: Sonnet 65 (session 7: CT1, P1, O2, O3 short, FX1 short; … D2 x2, E2, F1-A short, F1-D/F, F1-E/G, F1-E/G corr short, merge short, E3, E3 session 6, F2, V1, merge short, D3, C5 short), Opus 18 (B1 x2, C2 x2, F1 review x3, F1-C, T1, session 7: O1, T2). Opus share ~22 %.
 
 Usage tally session 9: Opus +1 (CF2 short incl. 1 short correction) -> ~28; Sonnet 75. Opus share ~27 %.
+
+
+Usage tally session 10: Sonnet +1 (DB1 short) -> 76; Opus ~28. Opus share ~27 %.

@@ -20,6 +20,7 @@ import xfacthd.framedblocks.api.block.render.FramedBlockColor;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.pane.FramedPaneBlock;
 import xfacthd.framedblocks.common.block.pillar.FramedFenceBlock;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.platform.Platform;
 import xfacthd.framedblocks.platform.event.ModEvents;
 
@@ -29,21 +30,37 @@ public final class DiagonalBlocksCompat
 {
     private static boolean loaded = false;
 
-    public static void init()
+    /**
+     * Must run before any framed block is registered because Diagonal Blocks decides whether to create a diagonal
+     * variant of a block at the time the block is added to the registry. Must not load {@code FBContent}
+     */
+    public static void initEarly()
     {
         if (Platform.isModLoaded("diagonalblocks"))
         {
             try
             {
-                GuardedAccess.init();
-                if (Platform.isClient())
-                {
-                    GuardedClientAccess.init();
-                }
+                GuardedAccess.initEarly();
                 loaded = true;
             }
             catch (Throwable t)
             {
+                FramedBlocks.LOGGER.error("Failed to initialized Diagonal Blocks integration", t);
+            }
+        }
+    }
+
+    public static void init()
+    {
+        if (loaded && Platform.isClient())
+        {
+            try
+            {
+                GuardedClientAccess.init();
+            }
+            catch (Throwable t)
+            {
+                loaded = false;
                 FramedBlocks.LOGGER.error("Failed to initialized Diagonal Blocks integration", t);
             }
         }
@@ -78,18 +95,19 @@ public final class DiagonalBlocksCompat
 
     private static final class GuardedAccess
     {
-        public static void init()
+        public static void initEarly()
         {
+            // FBContent must not be touched here, its static initializer registers the blocks
             DiagonalBlockTypes.FENCE.registerBlockFactory(
-                    Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_FENCE).location(),
+                    Utils.rl(BlockType.FRAMED_FENCE.getName()),
                     FramedDiagonalFenceBlock::new
             );
             DiagonalBlockTypes.WINDOW.registerBlockFactory(
-                    Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_PANE).location(),
+                    Utils.rl(BlockType.FRAMED_PANE.getName()),
                     FramedDiagonalGlassPaneBlock::new
             );
-            DiagonalBlockTypes.WINDOW.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_BARS).location());
-            DiagonalBlockTypes.WALL.disableBlockFactory(Utils.getKeyOrThrow(FBContent.BLOCK_FRAMED_WALL).location());
+            DiagonalBlockTypes.WINDOW.disableBlockFactory(Utils.rl(BlockType.FRAMED_BARS.getName()));
+            DiagonalBlockTypes.WALL.disableBlockFactory(Utils.rl(BlockType.FRAMED_WALL.getName()));
         }
 
         public static void commonSetup()

@@ -59,6 +59,9 @@ public final class FramedBlocks implements ModInitializer
         ServerConfig.init();
         DevToolsConfig.init();
 
+        // Diagonal Blocks decides per block at registration time whether to create a diagonal variant, so its block
+        // factory overrides must be in place before the first framed block is registered
+        CompatHandler.initEarly();
         FBContent.init();
 
         CapabilitySetup.init();

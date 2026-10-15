@@ -7,6 +7,11 @@ import xfacthd.framedblocks.common.compat.searchables.SearchablesCompat;
 
 public final class CompatHandler
 {
+    public static void initEarly()
+    {
+        DiagonalBlocksCompat.initEarly();
+    }
+
     public static void init()
     {
         AmendmentsCompat.init();

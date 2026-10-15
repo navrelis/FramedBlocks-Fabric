@@ -49,3 +49,4 @@
 - Session 9: CF2 to a fresh Opus short agent (the CF1 agent is not resumable across sessions); visual layout judgement, budget ~27 %.
 - Session 9: no retake of functional_blocks (weak but usable; alt lists visible blocks) to keep game-window runs few.
 - Session 9: integration status text updated to JEI/REI/EMI/Jade loading their plugin in the automated client test; GUIs still on the manual checklist.
+- Session 10: Diagonal Blocks factory overrides are registered before FBContent.init(): Diagonal Blocks decides per block when it is registered (Puzzles Lib replays only blocks already present when it subscribes), so with Diagonal Blocks initialising first the framed fence got no diagonal twin but was a target at tag load -> NPE.
