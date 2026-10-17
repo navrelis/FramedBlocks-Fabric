@@ -3,7 +3,8 @@ package xfacthd.framedblocks.api.model.data;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.model.data.*;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 
 public sealed class FramedBlockData permits FramedBlockData.Immutable
 {

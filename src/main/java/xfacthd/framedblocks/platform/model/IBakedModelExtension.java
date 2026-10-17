@@ -46,9 +46,23 @@ public interface IBakedModelExtension
         return modelData;
     }
 
+    /**
+     * Forge 1.20.1 signature: {@return whether the quads of the given render type use ambient occlusion}
+     * The block light emission check of the renderer still applies on top of this
+     */
+    default boolean useAmbientOcclusion(BlockState state, RenderType renderType)
+    {
+        return self().useAmbientOcclusion();
+    }
+
+    /**
+     * {@return the ambient occlusion mode of the quads of the given render type}, see
+     * {@link ModelBridge#emitBlockQuads(IBakedModelExtension, BlockState, ModelData, java.util.function.Supplier, net.fabricmc.fabric.api.renderer.v1.render.RenderContext, boolean, ModelBridge.TintIndexMapper, boolean)}.
+     * Defaults to the Forge style {@link #useAmbientOcclusion(BlockState, RenderType)}
+     */
     default TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
     {
-        return self().useAmbientOcclusion() ? TriState.DEFAULT : TriState.FALSE;
+        return useAmbientOcclusion(state, renderType) ? TriState.DEFAULT : TriState.FALSE;
     }
 
     default TextureAtlasSprite getParticleIcon(ModelData data)

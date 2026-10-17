@@ -3,7 +3,10 @@
     "package": "xfacthd.framedblocks.mixin.client.render",
     "compatibilityLevel": "JAVA_17",
     "mixins": [],
-    "client": [],
+    "client": [
+        "MixinItemRenderer",
+        "MixinModelManager"
+    ],
     "injectors": {
         "defaultRequire": 1
     },

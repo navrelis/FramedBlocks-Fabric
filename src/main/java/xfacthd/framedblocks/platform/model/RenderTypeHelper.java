@@ -52,6 +52,25 @@ public final class RenderTypeHelper
         return id < 0 ? BlendMode.DEFAULT : BLEND_MODES[id];
     }
 
+    /**
+     * {@return the {@link BlendMode} to use for item quads which Forge would render with the given item render type}
+     * The Fabric item render context only distinguishes translucent from non-translucent quads, entity cutout
+     * and solid item render types therefore map to {@link BlendMode#CUTOUT}
+     */
+    public static BlendMode getItemBlendMode(RenderType itemRenderType)
+    {
+        if (itemRenderType == Sheets.translucentCullBlockSheet() || itemRenderType == Sheets.translucentItemSheet())
+        {
+            return BlendMode.TRANSLUCENT;
+        }
+        if (itemRenderType == Sheets.cutoutBlockSheet() || itemRenderType == Sheets.solidBlockSheet())
+        {
+            return BlendMode.CUTOUT;
+        }
+        int id = getChunkLayerId(itemRenderType);
+        return id < 0 ? BlendMode.DEFAULT : BLEND_MODES[id];
+    }
+
     public static RenderType getEntityRenderType(RenderType chunkRenderType, boolean cull)
     {
         if (chunkRenderType != RenderType.translucent())

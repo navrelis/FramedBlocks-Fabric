@@ -34,3 +34,7 @@ accessible	class	net/minecraft/world/item/crafting/Ingredient$TagValue
 accessible	class	net/minecraft/world/item/crafting/Ingredient$ItemValue
 accessible	class	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl
 accessible	method	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl	<init>	(Lnet/minecraft/client/resources/model/ModelBakery;Ljava/util/function/BiFunction;Lnet/minecraft/resources/ResourceLocation;)V
+
+# O-B1 (rendering core)
+# ModelUtils#getAllCullableQuads() reads the wrapped model of weighted models (Forge version used reflection on the SRG name)
+accessible	field	net/minecraft/client/resources/model/WeightedBakedModel	wrapped	Lnet/minecraft/client/resources/model/BakedModel;

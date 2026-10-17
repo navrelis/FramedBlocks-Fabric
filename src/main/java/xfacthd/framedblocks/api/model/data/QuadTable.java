@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.model.RenderTypeHelper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public final class QuadTable implements QuadMap
 
     public List<BakedQuad> getQuads(RenderType renderType, Direction side)
     {
-        int idx = renderType.getChunkLayerId() * SIDE_COUNT + Utils.maskNullDirection(side);
+        int idx = RenderTypeHelper.getChunkLayerId(renderType) * SIDE_COUNT + Utils.maskNullDirection(side);
         return Objects.requireNonNullElse(quads[idx], EMPTY);
     }
 
@@ -57,7 +58,7 @@ public final class QuadTable implements QuadMap
 
     public void bindRenderType(RenderType renderType)
     {
-        boundBaseIdx = renderType != null ? (renderType.getChunkLayerId() * SIDE_COUNT) : -1;
+        boundBaseIdx = renderType != null ? (RenderTypeHelper.getChunkLayerId(renderType) * SIDE_COUNT) : -1;
     }
 
 
