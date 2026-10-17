@@ -107,7 +107,7 @@ Per-version pipeline (refined per version from its map):
 | N-C1..C5, N-B1..B3, N-E1/E2, N-K, N-T, N-F, N-R | 1.21.11 lanes per map.md section 8 (B1, C5 Opus precision overrides) | N-0B | see map | open |
 | O-M | 1.20.1 port map | - | Sonnet long | done (docs/port/map.md on mc/1.20.1) |
 | O-A | 1.20.1 platform copy (A0) + build, identity, tag rewrite, deletions | O-M | Sonnet long | done (58500c495) |
-| O-B1 | 1.20.1 rendering core (platform/model fixes, ModifyBakingResult mixin, model events bridge) | O-A | Opus long (precision override) | in progress (F:/wt/ob1) |
+| O-B1 | 1.20.1 rendering core (platform/model fixes, ModifyBakingResult mixin, model events bridge) | O-A | Opus long (precision override) | done (ba00654dc, merged a5372ed26) |
 | O-C1 | 1.20.1 FramedBlocks/FBContent/configs (FCAP 8.0.3)/creative tab/Utils/ApiImpl/crafting + re-runnable tools/port/rewrite-imports.mjs | O-A | Sonnet long | done (2ff989626) |
 | O-C3 | 1.20.1 transfer: platform/transfer 1.20.1 NBT fixes, storage/bookshelf/saw BE lookups, menus, fluid camo item, TR Energy, TransferSetup | O-C1 | Sonnet long | in progress (F:/wt/oc3) |
 | O-B2, O-C2, O-C4a, O-C4b, O-N, O-L, O-E1..E3, O-T1, O-F1..F3, O-R | 1.20.1 tasks per map.md section 9 (L Opus short) | O-A | see map | open |
@@ -124,3 +124,4 @@ Usage tally: Sonnet 95 + O-C3 long = 97; Opus 30. Opus share ~24 %.
 - O-B1: ModelUtils use weighted.wrapped (AW); FramedBlockModel FMLEnvironment -> Platform; FramedPane/FenceModel ModList -> Platform (B2); FramedDoubleBlockModel ConcatenatedListView import.
 - E1: ClientAccess destroyDelay field; StandingAndWallBlockGhostRenderBehaviour getPlacementState; FBClient Forge bus; ClientUtils.onClientTick, ClientEventHandler; Caffeine RemovalCause in FBClient.
 - E2/E3: ReiCompat Forge-only REI annotations; CreateCompat ObfuscationReflectionHelper.
+- From O-B1 (docs/port/model-contract.md on mc/1.20.1): E1 FBClient: ModelEventsBridge.init + 3 listeners, register FluidModel.BARE_MODEL_SINGLE, drop onGeometryLoaderRegister + RemovalCause, BlockRenderLayerMap cutout for all framed blocks + saws; FramedClientUtils.clearModelCaches via ModelEventsBridge.getBakedModels; ClientApiImpl.extractCTContext via ModelBridge.extractCapturedContext; ClientUtils.getFluidColor via FluidRenderHandlerRegistry. N: FramedBlockEntity getRenderData() -> getModelData(), drop requestModelDataUpdate; ModelData imports in ~12 files. B2: contract script on client/model|data|render|screen|util + ghost renderer, GhostVertexConsumer, AnimationSplitterSource, ModList. AW cleanup: duplicate WeightedBakedModel.wrapped, unused ModelBakerImpl entries.
