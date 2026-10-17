@@ -115,3 +115,5 @@
 - O-M — Sonnet, long — map read by lead (FRAPI 3.x source-compatible with the 1.21.1 platform/model; ModifyBakingResult mixin; plant redesign; Indium). Committed to mc/1.20.1. O-A — Sonnet, long — running in F:/wt/m1201.
 - N-0A — Sonnet, long — reviewed (build.gradle, fabric.mod.json, AW 30+5+3 entries, patch-resources idempotent); lead: processResources + validateAccessWidener green. Committed on mc/1.21.11. N-0B — Sonnet, long — running.
 - Session 11 auto-handoff — N-0B and O-A stopped; state in handoff.md.
+- Session 12 start — lead — handoff matches repo (m12111 clean @1b21581c1, m1201 partial O-A); board+handoff committed/pushed (4077bb220). N-0B — Sonnet, long — re-delegated (running). O-A finish/verify — Sonnet, long — running. Worktrees m1192/m1182/m1165 created (mc/1.19.2, mc/1.18.2, mc/1.16.5 from upstream tips).
+- Session 12 handoff — lead — N-0B and O-A still running at handoff (no reports); state in handoff.md §4.
