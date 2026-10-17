@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.client.screen;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ModelRenderHelper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -21,8 +23,8 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.RenderTypeHelper;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.RenderTypeHelper;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.render.Quaternions;
@@ -187,10 +189,10 @@ public class FramedSignScreen extends Screen
         float green = FastColor.ARGB32.green(color) / 255F;
         float blue = FastColor.ARGB32.blue(color) / 255F;
 
-        for (RenderType renderType : model.getRenderTypes(state, RandomSource.create(42), modelData))
+        for (RenderType renderType : ModelBridge.getRenderTypes(model, state, RandomSource.create(42), modelData))
         {
             VertexConsumer consumer = buffer.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false));
-            renderer.getModelRenderer().renderModel(
+            ModelRenderHelper.renderModel(
                     pose,
                     consumer,
                     state,

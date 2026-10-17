@@ -8,7 +8,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.platform.util.Lazy;
-import net.minecraftforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -27,10 +26,14 @@ public final class KeyMappings
         );
     }
 
-    public static void onClientTick(final TickEvent.ClientTickEvent event)
+    /**
+     * Replacement for the START phase of Forge's {@code TickEvent.ClientTickEvent},
+     * to be hooked into {@code ClientTickEvents.START_CLIENT_TICK}
+     */
+    public static void onStartClientTick(final Minecraft mc)
     {
-        Level level = Minecraft.getInstance().level;
-        if (event.phase != TickEvent.Phase.START || level == null || Minecraft.getInstance().screen != null)
+        Level level = mc.level;
+        if (level == null || mc.screen != null)
         {
             return;
         }

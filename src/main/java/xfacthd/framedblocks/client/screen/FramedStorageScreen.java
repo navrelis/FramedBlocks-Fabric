@@ -17,7 +17,7 @@ public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMe
         super(container, inv, title);
 
         this.imageHeight = 168;
-        this.inventoryLabelY = getYSize() - 94;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override

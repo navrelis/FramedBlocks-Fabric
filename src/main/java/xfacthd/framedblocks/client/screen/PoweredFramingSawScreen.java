@@ -211,7 +211,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
 
         if (statusTooltipArea.contains(mouseX, mouseY))
         {
-            graphics.renderTooltip(font, statusTooltip, Optional.empty(), ItemStack.EMPTY, mouseX, mouseY);
+            graphics.renderTooltip(font, statusTooltip, Optional.empty(), mouseX, mouseY);
             statusTooltipArea = EMPTY;
             statusTooltip = List.of();
         }
@@ -229,7 +229,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
             components.add(Component.translatable(FramingSawScreen.TOOLTIP_MATERIAL, material));
         }
 
-        graphics.renderTooltip(font, components, tooltip, stack, mouseX, mouseY);
+        graphics.renderTooltip(font, components, tooltip, mouseX, mouseY);
     }
 
     @Override
