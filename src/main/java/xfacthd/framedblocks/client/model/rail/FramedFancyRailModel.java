@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.rail;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderType;
@@ -9,8 +10,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -227,7 +228,7 @@ public class FramedFancyRailModel extends FramedBlockModel
     @Override
     protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
-        return baseModel.getRenderTypes(state, rand, extraData);
+        return ModelBridge.getRenderTypes(baseModel, state, rand, extraData);
     }
 
     @Override
@@ -239,7 +240,7 @@ public class FramedFancyRailModel extends FramedBlockModel
             RenderType renderType
     )
     {
-        Utils.forAllDirections(dir -> quadMap.get(dir).addAll(baseModel.getQuads(state, dir, rand, data, renderType)));
+        Utils.forAllDirections(dir -> quadMap.get(dir).addAll(ModelBridge.getQuads(baseModel, state, dir, rand, data, renderType)));
     }
 
     @Override

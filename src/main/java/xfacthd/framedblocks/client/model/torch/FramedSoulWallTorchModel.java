@@ -4,8 +4,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 
 public class FramedSoulWallTorchModel extends FramedWallTorchModel

@@ -6,11 +6,11 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.Platform;
 
 import java.util.List;
 import java.util.Map;
@@ -138,7 +138,7 @@ public class FramedPaneModel extends FramedBlockModel
 
     public static BakedModel createPaneModel(BlockState state, BakedModel baseModel)
     {
-        if (ModList.get().isLoaded("diagonalwindows"))
+        if (Platform.isModLoaded("diagonalwindows"))
         {
             return new FramedDiagonalPaneModel(state, baseModel);
         }

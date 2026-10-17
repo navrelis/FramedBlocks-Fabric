@@ -27,6 +27,21 @@ public final class FramedRenderTypes extends RenderType
                     .setDepthTestState(NO_DEPTH_TEST)
                     .createCompositeState(false)
     );
+    public static final RenderType TRANSLUCENT_ON_PARTICLES_TARGET = create(
+            "translucent_on_particles_target",
+            DefaultVertexFormat.BLOCK,
+            VertexFormat.Mode.QUADS,
+            262144,
+            true,
+            true,
+            RenderType.CompositeState.builder()
+                    .setLightmapState(LIGHTMAP)
+                    .setShaderState(RENDERTYPE_TRANSLUCENT_SHADER)
+                    .setTextureState(BLOCK_SHEET_MIPPED)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setOutputState(PARTICLES_TARGET)
+                    .createCompositeState(true)
+    );
 
 
 

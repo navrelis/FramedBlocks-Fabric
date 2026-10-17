@@ -1,13 +1,14 @@
 package xfacthd.framedblocks.client.model.cube;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -78,7 +79,7 @@ public class FramedBookshelfModel extends FramedBlockModel
         {
             for (Direction dir : Direction.Plane.HORIZONTAL)
             {
-                quadMap.get(dir).addAll(baseModel.getQuads(state, dir, rand, data, renderType));
+                quadMap.get(dir).addAll(ModelBridge.getQuads(baseModel, state, dir, rand, data, renderType));
             }
         }
     }

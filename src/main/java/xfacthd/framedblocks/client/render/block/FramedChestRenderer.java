@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.client.render.block;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ModelRenderHelper;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -17,8 +19,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.RenderTypeHelper;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.RenderTypeHelper;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.Utils;
@@ -63,7 +65,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
         BakedModel model = LID_MODELS.get(dir, state.getValue(PropertyHolder.LATCH_TYPE));
         //noinspection ConstantConditions
-        ModelData data = model.getModelData(be.getLevel(), be.getBlockPos(), state, be.getModelData());
+        ModelData data = ModelBridge.getModelData(model, be.getLevel(), be.getBlockPos(), state, be.getModelData());
 
         float angle = calculateAngle(be, chestState, dir, lastChange, partialTicks);
 
@@ -101,11 +103,11 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         int light = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos());
 
         RANDOM.setSeed(42);
-        for (RenderType type : model.getRenderTypes(state, RANDOM, data))
+        for (RenderType type : ModelBridge.getRenderTypes(model, state, RANDOM, data))
         {
             RenderType bufferType = type == RenderType.solid() ? Sheets.solidBlockSheet() : RenderTypeHelper.getEntityRenderType(type, false);
 
-            renderer.renderModel(
+            ModelRenderHelper.renderModel(
                     matrix.last(),
                     buffer.getBuffer(bufferType),
                     state,

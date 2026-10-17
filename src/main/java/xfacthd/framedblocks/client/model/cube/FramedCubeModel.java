@@ -1,10 +1,11 @@
 package xfacthd.framedblocks.client.model.cube;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 
@@ -21,7 +22,7 @@ public class FramedCubeModel extends FramedCubeBaseModel
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (fbData == null || fbData.getCamoState().isAir())
         {
-            return baseModel.getRenderTypes(state, rand, data);
+            return ModelBridge.getRenderTypes(baseModel, state, rand, data);
         }
         return super.getRenderTypes(state, rand, data);
     }

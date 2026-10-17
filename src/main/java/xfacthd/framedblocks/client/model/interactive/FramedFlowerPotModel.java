@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.interactive;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -10,8 +11,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -117,15 +118,11 @@ public class FramedFlowerPotModel extends FramedBlockModel
 
         if (hanging && layer == RenderType.cutout())
         {
-            quadMap.get(null).addAll(hangingPotModel.getQuads(
-                    null, null, rand, data, null
-            ));
+            quadMap.get(null).addAll(ModelBridge.getQuads(hangingPotModel, null, null, rand, data, null));
 
             for (Direction side : Direction.values())
             {
-                quadMap.get(side).addAll(hangingPotModel.getQuads(
-                        null, side, rand, data, null
-                ));
+                quadMap.get(side).addAll(ModelBridge.getQuads(hangingPotModel, null, side, rand, data, null));
             }
         }
     }
@@ -148,7 +145,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
     {
         BakedModel potModel = ModelCache.getModel(potState);
 
-        if (potModel.getRenderTypes(potState, rand, ModelData.EMPTY).contains(layer))
+        if (ModelBridge.getRenderTypes(potModel, potState, rand, ModelData.EMPTY).contains(layer))
         {
             Arrays.stream(Direction.values())
                     .map(dir -> Pair.of(dir, getFilteredPlantQuads(potState, potModel, dir, rand, layer)))
@@ -162,7 +159,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
             BlockState potState, BakedModel potModel, Direction face, RandomSource rand, RenderType layer
     )
     {
-        return potModel.getQuads(potState, face, rand, ModelData.EMPTY, layer)
+        return ModelBridge.getQuads(potModel, potState, face, rand, ModelData.EMPTY, layer)
                 .stream()
                 .filter(q -> !ClientUtils.isTexture(q, POT_TEXTURE))
                 .filter(q -> !ClientUtils.isTexture(q, DIRT_TEXTURE))
@@ -175,9 +172,9 @@ public class FramedFlowerPotModel extends FramedBlockModel
     )
     {
         BakedModel dirtModel = ModelCache.getModel(Blocks.DIRT.defaultBlockState());
-        if (dirtModel.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))
+        if (ModelBridge.getRenderTypes(dirtModel, Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))
         {
-            dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, ModelData.EMPTY, layer).forEach(q ->
+            ModelBridge.getQuads(dirtModel, Blocks.DIRT.defaultBlockState(), Direction.UP, rand, ModelData.EMPTY, layer).forEach(q ->
                     QuadModifier.geometry(q)
                             .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
                             .apply(Modifiers.setPosition(4F/16F))
@@ -187,7 +184,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
             FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
             if (fbData != null && !fbData.getCamoState().canOcclude())
             {
-                dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer).forEach(q ->
+                ModelBridge.getQuads(dirtModel, Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer).forEach(q ->
                         QuadModifier.geometry(q)
                                 .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
                                 .apply(Modifiers.setPosition(15F/16F))
@@ -195,7 +192,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
                 );
 
                 Direction.Plane.HORIZONTAL.stream()
-                        .flatMap(face -> dirtModel.getQuads(Blocks.AIR.defaultBlockState(), face, rand, ModelData.EMPTY, layer).stream())
+                        .flatMap(face -> ModelBridge.getQuads(dirtModel, Blocks.AIR.defaultBlockState(), face, rand, ModelData.EMPTY, layer).stream())
                         .forEach(q -> QuadModifier.geometry(q)
                                 .apply(Modifiers.cutSide(6F/16F, 1F/16F, 10F/16F, 4F/16F))
                                 .apply(Modifiers.setPosition(10F/16F))

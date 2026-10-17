@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.cube;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -9,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -56,13 +57,7 @@ public class FramedOneWayWindowModel extends FramedBlockModel
         if (face != NullableDirection.NONE && renderType == RenderType.translucent())
         {
             Direction side = face.toDirection();
-            quadMap.get(side).addAll(tintedGlassModel.getQuads(
-                    Blocks.TINTED_GLASS.defaultBlockState(),
-                    side,
-                    rand,
-                    ModelData.EMPTY,
-                    renderType
-            ));
+            quadMap.get(side).addAll(ModelBridge.getQuads(tintedGlassModel, Blocks.TINTED_GLASS.defaultBlockState(), side, rand, ModelData.EMPTY, renderType));
         }
     }
 
