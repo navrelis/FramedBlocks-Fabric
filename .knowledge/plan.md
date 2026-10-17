@@ -113,13 +113,14 @@ Per-version pipeline (refined per version from its map):
 | O-C1 | 1.20.1 FramedBlocks/FBContent/configs (FCAP 8.0.3)/creative tab/Utils/ApiImpl/crafting + re-runnable tools/port/rewrite-imports.mjs | O-A | Sonnet long | done (2ff989626) |
 | O-C3 | 1.20.1 transfer: platform/transfer 1.20.1 NBT fixes, storage/bookshelf/saw BE lookups, menus, fluid camo item, TR Energy, TransferSetup | O-C1 | Sonnet long (+short corr) | done (9efd88599, merged 060e9070c) |
 | O-B2 | 1.20.1 leaf models client/model|data|render via tools/port/forge2platform.mjs + ghost renderer, GhostVertexConsumer, AnimationSplitterSource | O-B1 | Sonnet long | done (fb5985d9f, merged e68f6e8ce; 0 owned errors whole-tree + isolated, codemod idempotent) |
-| O-C2 | 1.20.1 networking: 4 FabricPackets, NetworkHandler/ClientNetworkHandler, CullingUpdateTracker(ServerLevel), FramingSawBlock ExtendedScreenHandlerFactory | O-C1 | Sonnet long | in progress (F:/wt/oc2) |
+| O-C2 | 1.20.1 networking: 4 FabricPackets, NetworkHandler/ClientNetworkHandler, CullingUpdateTracker(ServerLevel), FramingSawBlock ExtendedScreenHandlerFactory | O-C1 | Sonnet long | done (6d64633d1, merged 69d2dfa5f; also fixes upstream culling chunk-z bug) |
 | O-C4a | 1.20.1 non-light/non-render mixins + BlockHooks + plant design + docs/port/hooks-contract.md (C4b implements the IFramedBlock side) | O-C1 | Sonnet long | in progress (F:/wt/oc4a) |
+| O-E1 | 1.20.1 client wiring: FBClient ClientModInitializer, overlays, client util/screen, client block effects + client mixins (client.mixins.json) | O-B2, O-C2 | Sonnet long | in progress (F:/wt/oe1) |
 | O-C4b, O-N, O-L, O-E1..E3, O-T1, O-F1..F3, O-R | 1.20.1 tasks per map.md section 9 (L Opus short) | O-A | see map | open |
 | P-M, S-M, V-M | port maps 1.19.2 (P, F:/wt/m1192), 1.18.2 (S, F:/wt/m1182), 1.16.5 (V, F:/wt/m1165); worktrees created session 12 | O-A (reuse 1.20.1 solutions) | Sonnet long each | open |
 | W-M | 26.3 port map + worktree F:/wt/m263 (merge mc/1.21.11) | N-F | Sonnet long | open |
 
-Usage tally: Sonnet 97 + O-C3 corr short + O-B2 long = 100; Opus 30. Session 13: Sonnet +2 (O-B2 finish long-ish, N-0B finish short), Opus +1 (N-0B stub review short) -> Sonnet 102, Opus 31, share ~23 %. + O-C2 long, O-C4a long -> Sonnet 106, Opus 31, ~23 %. + N-B1 long, N-C5 long (overrides) -> Opus 35, share ~25 %.
+Usage tally: Sonnet 97 + O-C3 corr short + O-B2 long = 100; Opus 30. Session 13: Sonnet +2 (O-B2 finish long-ish, N-0B finish short), Opus +1 (N-0B stub review short) -> Sonnet 102, Opus 31, share ~23 %. + O-C2 long, O-C4a long -> Sonnet 106, Opus 31, ~23 %. + N-B1 long, N-C5 long (overrides) -> Opus 35, share ~25 %. + O-C2 corr short, O-E1 long -> Sonnet 109, Opus 35, ~24 %.
 
 1.20.1 cross-task hand-offs (from O-C1 report):
 - C2: `CullingUpdateTracker.onServerLevelTick(ServerLevel)` (registered on START_WORLD_TICK) + PlayerLookup; replace 5 `FramedBlocks.CHANNEL` uses; `NetworkHandler.init()` at `// TODO C2` in FramedBlocks; all 3 menus need ExtendedScreenHandlerFactory (FramingSawBlock too).

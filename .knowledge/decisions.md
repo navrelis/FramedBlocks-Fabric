@@ -67,3 +67,4 @@
 - Session 13: 1.21.11 framed flower pot drops the Amendments-only HANGING property (Amendments dropped on 1.21.11; blockstate JSON already has no hanging variants).
 - Session 13: 1.20.1 O-C4a writes docs/port/hooks-contract.md (mixin -> BlockHooks -> IFramedBlock signature) instead of editing block classes; C4b implements the block side against it, so the two lanes never share files.
 - Session 13: N-B1 and N-C5 run as two parallel Opus lanes (both precision overrides from map §8, independent files); glue files (FBClient, FramedBlocks, AW, platform-api.md) append-only for non-owners.
+- Session 13: 1.20.1 fixes upstream 9.4.3's CullingUpdatePacket chunk z (getX -> getZ); obvious bug, check 1.19.2/1.18.2 for the same.
