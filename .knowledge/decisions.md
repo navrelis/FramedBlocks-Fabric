@@ -62,3 +62,5 @@
 - Session 12: precision override O-B1 (Opus long): 1.20.1 render path (FRAPI emission, ModelManager replacement hook, overlay resolver); errors only visible in game.
 - Session 12: parallel 1.20.1 tasks run in per-task worktrees (F:/wt/ob1, F:/wt/oc1, ... branches o-<task>) off mc/1.20.1 so Gradle runs do not collide; strict file ownership, lead merges after review. Done-criterion per task = zero compile errors in owned files (whole tree compiles only after all lanes).
 - Session 12: 1.20.1 keeps Create/Flywheel compat sources for optional E3 (restored after the O-A agent deleted them); Caffeine replaced by Guava caches (not on the 1.20.1 classpath).
+- Session 12: 1.20.1 gets the 1.21.1 port's `poweredSawRequiresEnergy` server config (default false) so the powered saw works without an energy mod (TR Energy optional on Fabric).
+- Session 12: "zero errors in owned files" from a whole-tree javac run is not reliable (javac skips attribution of files when resolution errors exist elsewhere); lanes also run an isolated javac of their files, final proof is the gate compile.
