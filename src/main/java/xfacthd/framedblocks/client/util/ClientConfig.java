@@ -1,14 +1,14 @@
 package xfacthd.framedblocks.client.util;
 
+import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.model.SolidFrameMode;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.CamoMessageVerbosity;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
 
@@ -110,6 +110,17 @@ public final class ClientConfig
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> camoRotationModeValue;
 
+    /**
+     * Registers the config spec and the listeners that copy the values into the static fields.
+     * The listeners must be registered first because the config is loaded (and the loading event fired) on registration
+     */
+    public static void init()
+    {
+        ModConfigEvents.loading(FramedConstants.MOD_ID).register(INSTANCE::onConfigReloaded);
+        ModConfigEvents.reloading(FramedConstants.MOD_ID).register(INSTANCE::onConfigReloaded);
+        ForgeConfigRegistry.INSTANCE.register(FramedConstants.MOD_ID, ModConfig.Type.CLIENT, SPEC);
+    }
+
     static
     {
         final Pair<ClientConfig, ForgeConfigSpec> configSpecPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
@@ -119,8 +130,6 @@ public final class ClientConfig
 
     public ClientConfig(ForgeConfigSpec.Builder builder)
     {
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
         builder.push("general");
         showGhostBlocksValue = builder
                 .comment("Whether ghost blocks are shown when you are holding a framed block")
@@ -262,10 +271,9 @@ public final class ClientConfig
         return Utils.translateConfig("client", key);
     }
 
-    @SubscribeEvent
-    public void onConfigReloaded(ModConfigEvent event)
+    private void onConfigReloaded(ModConfig config)
     {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
+        if (config.getType() == ModConfig.Type.CLIENT && config.getSpec() == SPEC)
         {
             showGhostBlocks = showGhostBlocksValue.get();
             altGhostRenderer = altGhostRendererValue.get();

@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.common.util;
 
+import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class CommonConfig
@@ -21,6 +21,17 @@ public final class CommonConfig
 
     private final ForgeConfigSpec.BooleanValue fireproofBlocksValue;
 
+    /**
+     * Registers the config spec and the listeners that copy the values into the static fields.
+     * The listeners must be registered first because the config is loaded (and the loading event fired) on registration
+     */
+    public static void init()
+    {
+        ModConfigEvents.loading(FramedConstants.MOD_ID).register(INSTANCE::onConfigReloaded);
+        ModConfigEvents.reloading(FramedConstants.MOD_ID).register(INSTANCE::onConfigReloaded);
+        ForgeConfigRegistry.INSTANCE.register(FramedConstants.MOD_ID, ModConfig.Type.COMMON, SPEC);
+    }
+
     static
     {
         final Pair<CommonConfig, ForgeConfigSpec> configSpecPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
@@ -30,8 +41,6 @@ public final class CommonConfig
 
     public CommonConfig(ForgeConfigSpec.Builder builder)
     {
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
         builder.push("general");
         fireproofBlocksValue = builder
                 .comment("If true, framed blocks are completely fire proof")
@@ -45,10 +54,9 @@ public final class CommonConfig
         return Utils.translateConfig("common", key);
     }
 
-    @SubscribeEvent
-    public void onConfigReloaded(ModConfigEvent event)
+    private void onConfigReloaded(ModConfig config)
     {
-        if (event.getConfig().getType() == ModConfig.Type.COMMON && event.getConfig().getSpec() == SPEC)
+        if (config.getType() == ModConfig.Type.COMMON && config.getSpec() == SPEC)
         {
             fireproofBlocks = fireproofBlocksValue.get();
         }

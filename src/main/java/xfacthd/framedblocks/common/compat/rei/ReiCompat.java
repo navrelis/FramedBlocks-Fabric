@@ -5,10 +5,9 @@ import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.RecipeViewer;
+import xfacthd.framedblocks.platform.Platform;
 
 public final class ReiCompat
 {
@@ -18,7 +17,7 @@ public final class ReiCompat
 
     public static void init()
     {
-        if (FMLEnvironment.dist.isClient() && ModList.get().isLoaded("roughlyenoughitems"))
+        if (Platform.isClient() && Platform.isModLoaded("roughlyenoughitems"))
         {
             GuardedAccess.init();
             loadedClient = true;

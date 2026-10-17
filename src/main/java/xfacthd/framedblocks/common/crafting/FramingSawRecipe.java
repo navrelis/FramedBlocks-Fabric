@@ -6,7 +6,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Lazy;
+import xfacthd.framedblocks.platform.util.Lazy;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.FBContent;
 

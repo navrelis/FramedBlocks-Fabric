@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
@@ -33,6 +32,7 @@ import xfacthd.framedblocks.common.data.shapes.slopeslab.*;
 import xfacthd.framedblocks.common.data.shapes.stairs.standard.*;
 import xfacthd.framedblocks.common.data.shapes.stairs.vertical.*;
 import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
+import xfacthd.framedblocks.platform.Platform;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -322,7 +322,7 @@ public enum BlockType implements IBlockType
     @Override
     public ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        if (!FMLEnvironment.production)
+        if (!Platform.isProduction())
         {
             return new ReloadableShapeProvider(shapeGen, states);
         }
@@ -335,7 +335,7 @@ public enum BlockType implements IBlockType
         if (separateOcclusionShapes)
         {
             SplitShapeGenerator splitShapeGen = (SplitShapeGenerator) shapeGen;
-            if (!FMLEnvironment.production)
+            if (!Platform.isProduction())
             {
                 return new ReloadableShapeProvider(splitShapeGen::generateOcclusionShapes, states);
             }

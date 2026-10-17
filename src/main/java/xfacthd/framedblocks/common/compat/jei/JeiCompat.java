@@ -9,10 +9,9 @@ import mezz.jei.api.recipe.*;
 import mezz.jei.api.runtime.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.RecipeViewer;
+import xfacthd.framedblocks.platform.Platform;
 
 import java.util.Optional;
 
@@ -26,7 +25,7 @@ public final class JeiCompat
     public static void init()
     {
         // Ignore REI's JEI plugin compat layer, we have a proper REI plugin and our JEI plugin won't be called by REI
-        if (FMLEnvironment.dist.isClient() && ModList.get().isLoaded("jei") && !ModList.get().isLoaded("rei_plugin_compatibilities"))
+        if (Platform.isClient() && Platform.isModLoaded("jei") && !Platform.isModLoaded("rei_plugin_compatibilities"))
         {
             loadedClient = true;
         }

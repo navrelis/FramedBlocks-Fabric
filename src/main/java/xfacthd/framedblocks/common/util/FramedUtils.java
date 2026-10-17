@@ -15,21 +15,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
+import xfacthd.framedblocks.platform.util.Lazy;
+import xfacthd.framedblocks.platform.transfer.IItemHandlerModifiable;
+import xfacthd.framedblocks.platform.transfer.ItemStackHandler;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
-import java.lang.invoke.MethodHandle;
 import java.util.*;
 import java.util.function.Consumer;
 
 public final class FramedUtils
 {
-    private static final MethodHandle MH_STATE_DEF_BUILDER_GET_PROPERTIES = Utils.unreflectField(
-            StateDefinition.Builder.class, "f_61096_"
-    );
     private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.concurrentOf(() ->
     {
         Set<Item> items = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -135,18 +131,10 @@ public final class FramedUtils
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void removeProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property)
     {
-        try
-        {
-            var properties = (Map<String, Property<?>>) MH_STATE_DEF_BUILDER_GET_PROPERTIES.invoke(builder);
-            properties.remove(property.getName());
-        }
-        catch (Throwable e)
-        {
-            throw new RuntimeException("Failed to remove property from state builder", e);
-        }
+        // StateDefinition.Builder#properties is made accessible by the access widener
+        builder.properties.remove(property.getName());
     }
 
     public static IItemHandlerModifiable makeMenuItemHandler(IItemHandlerModifiable handler, Level level)

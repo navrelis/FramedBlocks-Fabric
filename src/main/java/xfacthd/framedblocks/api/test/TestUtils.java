@@ -20,8 +20,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.*;
@@ -477,7 +477,7 @@ public final class TestUtils
                                 );
                             });
 
-                    if (FMLEnvironment.dist.isClient())
+                    if (Platform.isClient())
                     {
                         ClientGuard.testHasParticleOverride(helper, state);
                     }

@@ -16,8 +16,8 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -365,7 +365,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     @Override
     public boolean hasCustomOutlineRendering(Player player)
     {
-        return !FMLEnvironment.production && ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER;
+        return !Platform.isProduction() && ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER;
     }
 
     public Tuple<BlockState, BlockState> getBlockPair()

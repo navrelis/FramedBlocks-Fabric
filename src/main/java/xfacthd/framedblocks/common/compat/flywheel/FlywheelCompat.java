@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.compat.flywheel;
 
 import dev.engine_room.flywheel.api.visualization.VisualizationLevel;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraftforge.fml.ModList;
+import xfacthd.framedblocks.platform.Platform;
 
 public final class FlywheelCompat
 {
@@ -10,7 +10,7 @@ public final class FlywheelCompat
 
     public static void init()
     {
-        loaded = ModList.get().isLoaded("flywheel");
+        loaded = Platform.isModLoaded("flywheel");
     }
 
     public static boolean isVirtualLevel(BlockGetter level)

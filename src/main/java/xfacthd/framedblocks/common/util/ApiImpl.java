@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.common.util;
 
+import net.minecraft.core.Registry;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
@@ -70,9 +70,9 @@ public final class ApiImpl implements FramedBlocksAPI
     }
 
     @Override
-    public IForgeRegistry<CamoContainer.Factory> getCamoContainerFactoryRegistry()
+    public Registry<CamoContainer.Factory> getCamoContainerFactoryRegistry()
     {
-        return FBContent.CAMO_CONTAINER_FACTORY_REGISTRY.get();
+        return FBContent.CAMO_CONTAINER_FACTORY_REGISTRY;
     }
 
     @Override

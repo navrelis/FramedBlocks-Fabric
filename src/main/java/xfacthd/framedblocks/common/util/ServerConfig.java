@@ -1,15 +1,15 @@
 package xfacthd.framedblocks.common.util;
 
+import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class ServerConfig
@@ -45,6 +45,17 @@ public final class ServerConfig
     private final ForgeConfigSpec.BooleanValue consumeCamoItemValue;
     private final ForgeConfigSpec.IntValue glowstoneLightLevelValue;
 
+    /**
+     * Registers the config spec and the listeners that copy the values into the static fields.
+     * The listeners must be registered first because the config is loaded (and the loading event fired) on registration
+     */
+    public static void init()
+    {
+        ModConfigEvents.loading(FramedConstants.MOD_ID).register(INSTANCE::onConfigReloaded);
+        ModConfigEvents.reloading(FramedConstants.MOD_ID).register(INSTANCE::onConfigReloaded);
+        ForgeConfigRegistry.INSTANCE.register(FramedConstants.MOD_ID, ModConfig.Type.SERVER, SPEC);
+    }
+
     static
     {
         final Pair<ServerConfig, ForgeConfigSpec> configSpecPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
@@ -55,8 +66,6 @@ public final class ServerConfig
     @SuppressWarnings("ConstantConditions")
     public ServerConfig(ForgeConfigSpec.Builder builder)
     {
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
         builder.push("general");
         allowBlockEntitiesValue = builder
                 .comment("Whether blocks with block entities can be placed in framed blocks")
@@ -103,10 +112,9 @@ public final class ServerConfig
         return Utils.translateConfig("server", key);
     }
 
-    @SubscribeEvent
-    public void onConfigReloaded(ModConfigEvent event)
+    private void onConfigReloaded(ModConfig config)
     {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == SPEC)
+        if (config.getType() == ModConfig.Type.SERVER && config.getSpec() == SPEC)
         {
             allowBlockEntities = allowBlockEntitiesValue.get();
             enableIntangibleFeature = enableIntangibleFeatureValue.get();

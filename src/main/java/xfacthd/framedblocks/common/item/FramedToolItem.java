@@ -17,22 +17,35 @@ public class FramedToolItem extends Item
         this.type = type;
     }
 
+    // Fabric API's replacement for Forge's hasCraftingRemainingItem(ItemStack) + getCraftingRemainingItem(ItemStack)
     @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack)
-    {
-        return true;
-    }
-
-    @Override
-    public ItemStack getCraftingRemainingItem(ItemStack stack)
+    public ItemStack getRecipeRemainder(ItemStack stack)
     {
         return stack.copy();
     }
 
-    @Override
+    /**
+     * Replacement for Forge's {@code IForgeItem#doesSneakBypassUse()}, evaluated through {@link #doItemsBypassSneak}
+     */
     public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player)
     {
         return true;
+    }
+
+    /**
+     * {@return whether both hands of the player allow the sneak state to be ignored when using an item on a block}
+     * To be called from the (client and server) game mode hooks which replace Forge's patches in
+     * {@code ServerPlayerGameMode#useItemOn()} and {@code MultiPlayerGameMode#useItemOn()}
+     */
+    public static boolean doItemsBypassSneak(Player player, LevelReader level, BlockPos pos)
+    {
+        return doesStackBypassSneak(player.getMainHandItem(), level, pos, player) &&
+                doesStackBypassSneak(player.getOffhandItem(), level, pos, player);
+    }
+
+    private static boolean doesStackBypassSneak(ItemStack stack, LevelReader level, BlockPos pos, Player player)
+    {
+        return stack.isEmpty() || (stack.getItem() instanceof FramedToolItem tool && tool.doesSneakBypassUse(stack, level, pos, player));
     }
 
     public final FramedToolType getType()

@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.api.shapes;
 
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 import java.util.function.*;
+import xfacthd.framedblocks.platform.Platform;
 
 /**
  * Re-buildable map-like structure mapping keys to {@link VoxelShape} values.<br>
@@ -36,7 +36,7 @@ public final class ShapeCache<K>
         this.generator = generator;
         this.cache = cache;
         generator.accept(cache);
-        if (!FMLEnvironment.production)
+        if (!Platform.isProduction())
         {
             ShapeReloader.addCache(this);
         }
@@ -48,7 +48,7 @@ public final class ShapeCache<K>
         this.generator = generator;
         this.cache = mapFactory.get();
         generator.accept(cache);
-        if (!FMLEnvironment.production)
+        if (!Platform.isProduction())
         {
             ShapeReloader.addCache(this);
         }

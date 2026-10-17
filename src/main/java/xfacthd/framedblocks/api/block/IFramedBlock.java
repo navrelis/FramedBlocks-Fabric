@@ -29,7 +29,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeBlock;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -125,7 +124,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
                     return;
                 }
             }
-            else if (!offhandStack.is(Tags.Items.DUSTS_GLOWSTONE))
+            else if (!offhandStack.is(Items.GLOWSTONE_DUST))
             {
                 return;
             }

@@ -12,10 +12,9 @@ import com.simibubi.create.content.contraptions.behaviour.TrapdoorMovingInteract
 import com.simibubi.create.foundation.block.connected.CTModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.RegistryObject;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.registry.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.common.FBContent;
@@ -37,12 +36,12 @@ public final class CreateCompat
 {
     public static void init()
     {
-        if (ModList.get().isLoaded("create"))
+        if (Platform.isModLoaded("create"))
         {
             // Safeguard against potential changes in Create since the ct context property is not exposed as API
             try
             {
-                if (FMLEnvironment.dist.isClient())
+                if (Platform.isClient())
                 {
                     GuardedClientAccess.init();
                 }
@@ -56,7 +55,7 @@ public final class CreateCompat
 
     public static void commonSetup()
     {
-        if (ModList.get().isLoaded("create"))
+        if (Platform.isModLoaded("create"))
         {
             try
             {

@@ -1,16 +1,18 @@
 package xfacthd.framedblocks.common.data;
 
 import com.google.common.base.Stopwatch;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
 import xfacthd.framedblocks.api.block.cache.StateCache;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
 
@@ -69,11 +71,17 @@ public final class StateCacheBuilder
 
 
 
-    public static final class CacheReloader implements ResourceManagerReloadListener
+    public static final class CacheReloader implements SimpleSynchronousResourceReloadListener
     {
         public static final CacheReloader INSTANCE = new CacheReloader();
 
         private CacheReloader() { }
+
+        @Override
+        public ResourceLocation getFabricId()
+        {
+            return Utils.rl("state_cache_reloader");
+        }
 
         @Override
         public void onResourceManagerReload(ResourceManager mgr)

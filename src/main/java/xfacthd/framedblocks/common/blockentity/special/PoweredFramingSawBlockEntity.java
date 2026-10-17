@@ -13,7 +13,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -23,6 +22,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.util.EntityAwareEnergyStorage;
 import xfacthd.framedblocks.common.util.ExternalItemHandler;
+import xfacthd.framedblocks.platform.Platform;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -87,7 +87,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
 
     public static void tick(Level level, BlockPos pos, BlockState state, PoweredFramingSawBlockEntity be)
     {
-        if (!FMLEnvironment.production && INSERT_ENERGY_DEBUG)
+        if (!Platform.isProduction() && INSERT_ENERGY_DEBUG)
         {
             be.energyStorage.receiveEnergy(ENERGY_MAX_INSERT, false);
         }

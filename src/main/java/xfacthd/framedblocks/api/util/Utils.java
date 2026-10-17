@@ -30,9 +30,9 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.*;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.registry.RegistryObject;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -42,9 +42,6 @@ import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 
-import java.lang.invoke.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -224,7 +221,7 @@ public final class Utils
         {
             return chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
         }
-        else if (FMLEnvironment.dist.isClient())
+        else if (Platform.isClient())
         {
             return ClientUtils.getBlockEntitySafe(blockGetter, pos);
         }
@@ -392,7 +389,7 @@ public final class Utils
 
     public static TagKey<Block> blockTag(String modid, String name)
     {
-        return BlockTags.create(new ResourceLocation(modid, name));
+        return TagKey.create(Registries.BLOCK, new ResourceLocation(modid, name));
     }
 
     public static TagKey<Item> itemTag(String name)
@@ -402,7 +399,7 @@ public final class Utils
 
     public static TagKey<Item> itemTag(String modid, String name)
     {
-        return ItemTags.create(new ResourceLocation(modid, name));
+        return TagKey.create(Registries.ITEM, new ResourceLocation(modid, name));
     }
 
     public static FluidState readFluidStateFromNbt(CompoundTag tag)
@@ -532,55 +529,30 @@ public final class Utils
         return new ResourceLocation(FramedConstants.MOD_ID, path);
     }
 
-    public static MethodHandle unreflectMethod(Class<?> clazz, String srgMethodName, Class<?>... paramTypes)
+    /**
+     * {@return the numeric id of the given value in the given registry}
+     */
+    public static <T> int getId(Registry<T> registry, T obj)
     {
-        Method method = ObfuscationReflectionHelper.findMethod(clazz, srgMethodName, paramTypes);
-        try
-        {
-            return MethodHandles.publicLookup().unreflect(method);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to unreflect method '%s#%s()'".formatted(clazz.getName(), srgMethodName), e);
-        }
+        return registry.getId(obj);
     }
 
-    public static MethodHandle unreflectField(Class<?> clazz, String srgFieldName)
+    /**
+     * {@return the value with the given numeric id in the given registry, or the default value of the registry}
+     */
+    public static <T> T getValue(Registry<T> registry, int id)
     {
-        Field field = ObfuscationReflectionHelper.findField(clazz, srgFieldName);
-        try
-        {
-            return MethodHandles.publicLookup().unreflectGetter(field);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), srgFieldName), e);
-        }
+        return registry.byId(id);
     }
 
-    public static MethodHandle unreflectFieldSetter(Class<?> clazz, String srgFieldName)
+    public static <T> int getId(ForgeRegistries.Wrapper<T> registry, T obj)
     {
-        Field field = ObfuscationReflectionHelper.findField(clazz, srgFieldName);
-        try
-        {
-            return MethodHandles.publicLookup().unreflectSetter(field);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), srgFieldName), e);
-        }
+        return getId(registry.registry(), obj);
     }
 
-    @SuppressWarnings("UnstableApiUsage")
-    public static <T> int getId(IForgeRegistry<T> registry, T obj)
+    public static <T> T getValue(ForgeRegistries.Wrapper<T> registry, int id)
     {
-        return ((ForgeRegistry<T>) registry).getID(obj);
-    }
-
-    @SuppressWarnings("UnstableApiUsage")
-    public static <T> T getValue(IForgeRegistry<T> registry, int id)
-    {
-        return ((ForgeRegistry<T>) registry).getValue(id);
+        return getValue(registry.registry(), id);
     }
 
     public static String formatItemStack(ItemStack stack)
@@ -625,7 +597,8 @@ public final class Utils
     @ApiStatus.Internal
     public static <T> T loadService(Class<T> clazz)
     {
-        return ServiceLoader.load(clazz)
+        // The class loader has to be given explicitly, the context class loader may not see the mod classes on Fabric
+        return ServiceLoader.load(clazz, Utils.class.getClassLoader())
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
     }

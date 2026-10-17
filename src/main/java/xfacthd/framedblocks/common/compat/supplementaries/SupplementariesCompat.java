@@ -4,8 +4,8 @@ import net.mehvahdjukaar.supplementaries.common.block.IRopeConnection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
-import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.platform.Platform;
 
 public final class SupplementariesCompat
 {
@@ -14,7 +14,7 @@ public final class SupplementariesCompat
 
     public static void init()
     {
-        loaded = ModList.get().isLoaded("supplementaries");
+        loaded = Platform.isModLoaded("supplementaries");
     }
 
     public static boolean isLoaded()

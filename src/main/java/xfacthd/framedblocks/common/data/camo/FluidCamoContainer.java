@@ -14,8 +14,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -34,7 +34,7 @@ public class FluidCamoContainer extends CamoContainer
     @Override
     public int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
     {
-        if (FMLEnvironment.dist.isClient())
+        if (Platform.isClient())
         {
             return ClientUtils.getFluidColor(level, pos, fluidState);
         }

@@ -3,6 +3,20 @@ accessWidener	v2	named
 # Not carried over (only used by the removed Forge data generators): RecipeProvider#getName and #has. ModelBakerImpl is kept because FluidModel still instantiates it (until task B1 reworks it)
 # Forge "protected" entries are mapped to "accessible" (public)
 
+# O-C1: direct field/method access replacing the former ObfuscationReflectionHelper/MethodHandle lookups of Utils#unreflect*
+# (those used Forge's SRG names and cannot work with Mojang names in production, Fabric runs on intermediary names)
+# FramedUtils#removeProperty
+accessible	field	net/minecraft/world/level/block/state/StateDefinition$Builder	properties	Ljava/util/Map;
+# RecipeUtils
+accessible	field	net/minecraft/world/item/crafting/Ingredient	values	[Lnet/minecraft/world/item/crafting/Ingredient$Value;
+accessible	field	net/minecraft/world/item/crafting/Ingredient$TagValue	tag	Lnet/minecraft/tags/TagKey;
+# ModelUtils#getAllCullableQuads (task O-B1: replace WBM_WRAPPED_MODEL with 'weighted.wrapped')
+accessible	field	net/minecraft/client/resources/model/WeightedBakedModel	wrapped	Lnet/minecraft/client/resources/model/BakedModel;
+# StandingAndWallBlockGhostRenderBehaviour (client ghost rendering: replace BLOCKITEM_GETPLACESTATE with 'blockItem.getPlacementState(ctx)')
+accessible	method	net/minecraft/world/item/BlockItem	getPlacementState	(Lnet/minecraft/world/item/context/BlockPlaceContext;)Lnet/minecraft/world/level/block/state/BlockState;
+# ClientAccess#resetDestroyDelay (replace MPGM_DESTROY_DELAY with 'gameMode.destroyDelay = 5')
+accessible	field	net/minecraft/client/multiplayer/MultiPlayerGameMode	destroyDelay	I
+
 accessible	method	net/minecraft/client/gui/GuiGraphics	innerBlit	(Lnet/minecraft/resources/ResourceLocation;IIIIIFFFF)V
 accessible	method	net/minecraft/nbt/NbtUtils	setValueHelper	(Lnet/minecraft/world/level/block/state/StateHolder;Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/String;Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/level/block/state/StateHolder;
 accessible	field	net/minecraft/world/level/block/PressurePlateBlock	sensitivity	Lnet/minecraft/world/level/block/PressurePlateBlock$Sensitivity;

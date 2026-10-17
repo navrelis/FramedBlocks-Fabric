@@ -1,9 +1,8 @@
 package xfacthd.framedblocks.common.compat.emi;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.Platform;
 
 public final class EmiCompat
 {
@@ -13,7 +12,7 @@ public final class EmiCompat
 
     public static void init()
     {
-        if (FMLEnvironment.dist.isClient() && ModList.get().isLoaded("emi"))
+        if (Platform.isClient() && Platform.isModLoaded("emi"))
         {
             loadedClient = true;
         }

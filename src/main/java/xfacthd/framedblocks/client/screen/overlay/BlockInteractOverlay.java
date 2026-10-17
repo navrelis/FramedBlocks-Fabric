@@ -18,7 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.common.util.ConcatenatedListView;
+import xfacthd.framedblocks.platform.util.ConcatenatedListView;
 
 import java.util.*;
 import java.util.function.Supplier;

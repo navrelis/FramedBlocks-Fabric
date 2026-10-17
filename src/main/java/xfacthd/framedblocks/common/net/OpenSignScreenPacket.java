@@ -2,9 +2,9 @@ package xfacthd.framedblocks.common.net;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkEvent;
 import xfacthd.framedblocks.client.util.ClientAccess;
+import xfacthd.framedblocks.platform.Platform;
 
 import java.util.function.Supplier;
 
@@ -25,7 +25,7 @@ public record OpenSignScreenPacket(BlockPos pos, boolean frontText)
     {
         ctx.get().enqueueWork(() ->
         {
-            if (FMLEnvironment.dist.isClient())
+            if (Platform.isClient())
             {
                 ClientAccess.openSignScreen(pos, frontText);
             }

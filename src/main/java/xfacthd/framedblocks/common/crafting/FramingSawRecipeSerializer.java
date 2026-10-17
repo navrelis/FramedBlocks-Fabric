@@ -8,7 +8,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 
@@ -55,7 +55,7 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
         }
 
         JsonObject resultObj = GsonHelper.getAsJsonObject(json, "result");
-        ItemStack result = CraftingHelper.getItemStack(resultObj, false);
+        ItemStack result = ShapedRecipe.itemStackFromJson(resultObj);
         IBlockType resultType = findResultType(result);
 
         return new FramingSawRecipe(recipeId, material, additives, result, resultType, disabled);

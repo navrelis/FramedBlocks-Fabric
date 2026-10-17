@@ -25,7 +25,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
@@ -34,6 +33,7 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
+import xfacthd.framedblocks.platform.util.ItemAbilities;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -266,7 +266,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
             {
                 return APPLY_WAX;
             }
-            else if (stack.canPerformAction(ToolActions.AXE_WAX_OFF))
+            else if (ItemAbilities.canPerform(stack, ItemAbilities.AXE_WAX_OFF))
             {
                 return REMOVE_WAX;
             }

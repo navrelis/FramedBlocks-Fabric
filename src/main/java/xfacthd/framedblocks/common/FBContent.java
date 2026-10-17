@@ -1,6 +1,8 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
@@ -8,11 +10,10 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.network.IContainerFactory;
-import net.minecraftforge.registries.*;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.registry.RegistryObject;
+import xfacthd.framedblocks.platform.registry.DeferredRegister;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
@@ -70,13 +71,10 @@ public final class FBContent
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
             FramedConstants.MOD_ID
     );
-    public static final Supplier<IForgeRegistry<CamoContainer.Factory>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
-            () ->
-            {
-                RegistryBuilder<CamoContainer.Factory> builder = new RegistryBuilder<>();
-                builder.disableOverrides().setDefaultKey(Utils.rl("empty"));
-                return builder;
-            }
+    // Created eagerly when this class is loaded (before any entries are registered), synced to clients,
+    // unknown names/ids resolve to the empty factory (Forge: setDefaultKey, no overrides)
+    public static final Registry<CamoContainer.Factory> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
+            true, Utils.rl("empty")
     );
 
     private static final Map<BlockType, RegistryObject<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
@@ -653,16 +651,20 @@ public final class FBContent
 
 
 
-    public static void init(IEventBus modBus)
+    /**
+     * Fabric has no registry events, all entries are registered eagerly from the mod initializer.
+     * Order matters: items need their blocks, block entity types need blocks, the creative tab icon needs items
+     */
+    public static void init()
     {
-        BLOCKS.register(modBus);
-        ITEMS.register(modBus);
-        BE_TYPES.register(modBus);
-        CONTAINER_TYPES.register(modBus);
-        RECIPE_TYPES.register(modBus);
-        RECIPE_SERIALIZERS.register(modBus);
-        CREATIVE_TABS.register(modBus);
-        CAMO_CONTAINER_FACTORIES.register(modBus);
+        CAMO_CONTAINER_FACTORIES.registerAll();
+        BLOCKS.registerAll();
+        ITEMS.registerAll();
+        BE_TYPES.registerAll();
+        CONTAINER_TYPES.registerAll();
+        RECIPE_TYPES.registerAll();
+        RECIPE_SERIALIZERS.registerAll();
+        CREATIVE_TABS.registerAll();
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks()
@@ -756,7 +758,7 @@ public final class FBContent
                 .toArray(Block[]::new);
 
         RegisteredBE<T> result = createBlockEntityType(factory, types[0].getName(), blocks, true);
-        if (!FMLEnvironment.production && Arrays.stream(types).anyMatch(BlockType::isDoubleBlock))
+        if (!Platform.isProduction() && Arrays.stream(types).anyMatch(BlockType::isDoubleBlock))
         {
             //noinspection unchecked
             DOUBLE_BLOCK_ENTITIES.add((RegistryObject<BlockEntityType<? extends FramedDoubleBlockEntity>>)(Object) result.value());
@@ -781,9 +783,11 @@ public final class FBContent
         return result;
     }
 
-    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> createMenuType(IContainerFactory<T> factory, String name)
+    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> createMenuType(
+            ExtendedScreenHandlerType.ExtendedFactory<T> factory, String name
+    )
     {
-        return CONTAINER_TYPES.register(name, () -> IForgeMenuType.create(factory));
+        return CONTAINER_TYPES.register(name, () -> new ExtendedScreenHandlerType<>(factory));
     }
 
     @SuppressWarnings("SameParameterValue")

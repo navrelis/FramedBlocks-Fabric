@@ -8,11 +8,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.platform.Platform;
 
 public class BlockCamoContainer extends CamoContainer
 {
@@ -24,7 +24,7 @@ public class BlockCamoContainer extends CamoContainer
     @Override
     public int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
     {
-        if (FMLEnvironment.dist.isClient())
+        if (Platform.isClient())
         {
             return ClientUtils.getBlockColor(level, pos, state, tintIdx);
         }

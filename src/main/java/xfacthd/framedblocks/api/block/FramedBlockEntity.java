@@ -26,7 +26,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.*;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -40,6 +40,7 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.platform.util.ItemAbilities;
 
 import java.util.List;
 import java.util.Objects;
@@ -105,7 +106,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return setFluidCamo(player, stack, secondary);
         }
-        else if (stack.is(Tags.Items.DUSTS_GLOWSTONE) && !glowing)
+        else if (stack.is(Items.GLOWSTONE_DUST) && !glowing)
         {
             return applyGlowstone(player, stack);
         }
@@ -144,7 +145,7 @@ public class FramedBlockEntity extends BlockEntity
 
     private static boolean canRemoveReinforcement(ItemStack stack)
     {
-        if (stack.getItem().canPerformAction(stack, ToolActions.PICKAXE_DIG))
+        if (ItemAbilities.canPerform(stack, ItemAbilities.PICKAXE_DIG))
         {
             return stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState());
         }

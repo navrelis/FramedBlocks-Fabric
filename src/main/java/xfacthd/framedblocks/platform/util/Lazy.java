@@ -46,4 +46,12 @@ public final class Lazy<T> implements Supplier<T>
     {
         return new Lazy<>(factory);
     }
+
+    /**
+     * Same as {@link #of(Supplier)}, this implementation is always safe to be used from multiple threads
+     */
+    public static <T> Lazy<T> concurrentOf(Supplier<T> factory)
+    {
+        return new Lazy<>(factory);
+    }
 }

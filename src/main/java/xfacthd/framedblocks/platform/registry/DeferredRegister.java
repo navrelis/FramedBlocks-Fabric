@@ -1,15 +1,21 @@
 package xfacthd.framedblocks.platform.registry;
 
+import com.mojang.serialization.Lifecycle;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
+import net.minecraft.core.DefaultedMappedRegistry;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -22,7 +28,8 @@ public class DeferredRegister<T>
     private final ResourceKey<? extends Registry<T>> registryKey;
     private final String namespace;
     private final Map<DeferredHolder<T, ? extends T>, Supplier<? extends T>> entries = new LinkedHashMap<>();
-    private final Collection<DeferredHolder<T, ? extends T>> entriesView = Collections.unmodifiableCollection(entries.keySet());
+    private final List<RegistryObject<T>> entryObjects = new ArrayList<>();
+    private final Collection<RegistryObject<T>> entriesView = Collections.unmodifiableCollection(entryObjects);
     private boolean registered = false;
 
     protected DeferredRegister(ResourceKey<? extends Registry<T>> registryKey, String namespace)
@@ -44,7 +51,10 @@ public class DeferredRegister<T>
         {
             throw new IllegalArgumentException("Duplicate registration: " + id);
         }
-        return new RegistryObject<>(holder);
+        RegistryObject<I> result = new RegistryObject<>(holder);
+        //noinspection unchecked
+        entryObjects.add((RegistryObject<T>) result);
+        return result;
     }
 
     /**
@@ -68,7 +78,10 @@ public class DeferredRegister<T>
         entries.forEach((holder, supplier) -> holder.bind(Registry.registerForHolder(registry, holder.getKey(), supplier.get())));
     }
 
-    public Collection<DeferredHolder<T, ? extends T>> getEntries()
+    /**
+     * {@return all entries handed out by this register in registration order, mirrors the Forge method of the same name}
+     */
+    public Collection<RegistryObject<T>> getEntries()
     {
         return entriesView;
     }
@@ -86,10 +99,28 @@ public class DeferredRegister<T>
     /**
      * Creates and registers the registry this register targets. The registry is synchronized to clients if requested
      */
-    @SuppressWarnings("unchecked")
     public Registry<T> makeRegistry(boolean sync)
     {
-        FabricRegistryBuilder<T, ?> builder = FabricRegistryBuilder.createSimple((ResourceKey<Registry<T>>) registryKey);
+        return makeRegistry(sync, null);
+    }
+
+    /**
+     * Creates and registers the registry this register targets. The registry is synchronized to clients if requested.
+     * If a default key is given, lookups of unknown names and ids return the entry registered under the default key
+     * instead of null (the behaviour of Forge's {@code RegistryBuilder#setDefaultKey})
+     */
+    public Registry<T> makeRegistry(boolean sync, @Nullable ResourceLocation defaultKey)
+    {
+        MappedRegistry<T> registry;
+        if (defaultKey != null)
+        {
+            registry = new DefaultedMappedRegistry<>(defaultKey.toString(), registryKey, Lifecycle.stable(), false);
+        }
+        else
+        {
+            registry = new MappedRegistry<>(registryKey, Lifecycle.stable(), false);
+        }
+        FabricRegistryBuilder<T, MappedRegistry<T>> builder = FabricRegistryBuilder.from(registry);
         if (sync)
         {
             builder.attribute(RegistryAttribute.SYNCED);
