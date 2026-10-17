@@ -100,8 +100,14 @@ Per-version pipeline (refined per version from its map):
 
 | ID | Task | Depends | Model / size | Status |
 |----|------|---------|--------------|--------|
-| MV0 | Push mc/1.21.1 | - | lead | open |
-| N-M | 1.21.11 port map | - | Sonnet long | open |
-| O-M | 1.20.1 port map | - | Sonnet long | open |
+| MV0 | Push mc/1.21.1 | - | lead | done |
+| N-M | 1.21.11 port map | - | Sonnet long | done (docs/port/map.md on mc/1.21.11) |
+| N-0A | 1.21.11 build setup, identity, resource patch script, deletions, gametest copy | N-M | Sonnet long | in progress |
+| N-0B | 1.21.11 platform skeleton + codemod, tree compiles with stubs | N-0A | Sonnet long (+Opus short stub review) | open |
+| N-C1..C5, N-B1..B3, N-E1/E2, N-K, N-T, N-F, N-R | 1.21.11 lanes per map.md section 8 (B1, C5 Opus precision overrides) | N-0B | see map | open |
+| O-M | 1.20.1 port map | - | Sonnet long | done (docs/port/map.md on mc/1.20.1) |
+| O-A | 1.20.1 platform copy (A0) + build, identity, tag rewrite, deletions | O-M | Sonnet long | in progress |
+| O-B1 | 1.20.1 rendering core (platform/model fixes, ModifyBakingResult mixin, model events bridge) | O-A | Opus long (precision override) | open |
+| O-B2, O-C1..C4b, O-N, O-L, O-E1..E3, O-T1, O-F1..F3, O-R | 1.20.1 tasks per map.md section 9 (L Opus short) | O-A | see map | open |
 
-Usage tally session 11: Sonnet +2 (MV-R long) -> 79; Opus 28. Opus share ~26 %.
+Usage tally session 11: Sonnet +10 (MV-R, N-M, O-M, N-0A, O-A long) -> 87; Opus 28. Opus share ~24 %.

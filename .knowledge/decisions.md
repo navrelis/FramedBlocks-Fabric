@@ -54,3 +54,8 @@
 - Session 11: `mc/26.3` = upstream/26.3 @6b0aa6303 with `mc/1.21.11` merged in (upstream/1.21.11 tip is an ancestor of upstream/26.3, so git's 3-way merge carries our Fabric changes forward).
 - Session 11: ports run in short-path worktrees `F:/wt/m<ver>` (Windows path length); central status board stays on `mc/1.21.1` in the main checkout.
 - Session 11: 1.16.5 targets Java 8 (no records/var/switch expressions/text blocks in that branch).
+- Session 11: 1.21.11 keeps upstream's renamed package `io.github.xfacthd.framedblocks` (merge-friendly for 26.3); REI dropped there (upstream removed it 2024-12); EMI/Amendments/Athena dropped (no Fabric build).
+- Session 11: 1.21.11 staging per map: N-0A build/identity -> N-0B compile-clean platform stubs + re-runnable codemod -> parallel lanes; resource renames via re-runnable `tools/port/patch-resources.mjs`.
+- Session 11: 1.20.1 compat = JEI, REI, EMI, Jade, Supplementaries (upstream 1.20 integrates Supplementaries, not Amendments), Diagonal Fences/Windows, Team Reborn Energy (replaces the FE capability as on 1.21.1); Create Fabric 6.0.8.1 deferred to optional task O-E3; Forge-only compat dropped. Sodium 0.5 on 1.20.1 needs Indium (suggests + dev runtime).
+- Session 11: 1.20.1 keeps upstream's per-family model classes; a client mixin on ModelManager emulates Forge ModifyBakingResult/BakingCompleted so upstream's replaceModels code stays.
+- Session 11: 1.20.1 recipes/tags: forge: tags rewritten to Fabric 1.20.1 convention names (c:iron_ingots ...); tags absent on Fabric become item ids or own c: tag files.
