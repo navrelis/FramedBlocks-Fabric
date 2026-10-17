@@ -1,17 +1,17 @@
 package xfacthd.framedblocks.client.util;
 
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 
 public final class ClientEventHandler
 {
-    public static void onRecipesUpdated(final RecipesUpdatedEvent event)
-    {
-        FramingSawRecipeCache.get(true).update(event.getRecipeManager());
-    }
+    // Forge's RecipesUpdatedEvent has no event on Fabric, the client recipe cache is updated by a
+    // ClientPacketListener mixin which calls FramingSawRecipeCache#update() when the recipes were received
 
-    public static void onClientDisconnect(final ClientPlayerNetworkEvent.LoggingOut event)
+    /**
+     * Replacement for Forge's {@code ClientPlayerNetworkEvent.LoggingOut},
+     * to be hooked into {@code ClientPlayConnectionEvents.DISCONNECT}
+     */
+    public static void onClientDisconnect()
     {
         FramingSawRecipeCache.get(true).clear();
     }

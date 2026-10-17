@@ -1,17 +1,14 @@
 package xfacthd.framedblocks.client.util;
 
-import net.minecraft.client.Minecraft;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.client.model.ModelEventsBridge;
 import xfacthd.framedblocks.client.render.block.FramedChestRenderer;
 
 public final class FramedClientUtils
 {
     public static void clearModelCaches()
     {
-        Minecraft.getInstance()
-                .getModelManager()
-                .getModelBakery()
-                .getBakedTopLevelModels()
+        ModelEventsBridge.getBakedModels()
                 .values()
                 .stream()
                 .filter(FramedBlockModel.class::isInstance)

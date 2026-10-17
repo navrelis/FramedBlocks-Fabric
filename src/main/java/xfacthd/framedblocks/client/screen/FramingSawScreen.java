@@ -210,7 +210,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             appendRecipeFailure(components, recipeHolder);
         }
 
-        graphics.renderTooltip(font, components, tooltip, stack, mouseX, mouseY);
+        graphics.renderTooltip(font, components, tooltip, mouseX, mouseY);
     }
 
     private void appendRecipeFailure(List<Component> components, FramingSawMenu.RecipeHolder recipeHolder)

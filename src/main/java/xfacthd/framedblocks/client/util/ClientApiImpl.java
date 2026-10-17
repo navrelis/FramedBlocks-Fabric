@@ -5,8 +5,10 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
+import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.platform.model.ModelBridge;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.SolidFrameMode;
@@ -81,9 +83,16 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
         ConTexDataHandler.addConTexProperty(ctProperty);
     }
 
+    @Nullable
     @Override
     public Object extractCTContext(ModelData data)
     {
+        // Context captured from camo models which implement the Fabric Rendering API (Continuity, Fabric CTM, ...)
+        Object context = ModelBridge.extractCapturedContext(data);
+        if (context != null)
+        {
+            return context;
+        }
         return ConTexDataHandler.extractConTexData(data);
     }
 }
