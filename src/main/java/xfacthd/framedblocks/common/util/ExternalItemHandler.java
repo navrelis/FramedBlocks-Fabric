@@ -1,14 +1,17 @@
 package xfacthd.framedblocks.common.util;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import org.jetbrains.annotations.NotNull;
+import xfacthd.framedblocks.platform.transfer.IItemHandlerModifiable;
 
-public abstract class ExternalItemHandler implements IItemHandler
+/**
+ * Restricted view of an item handler for external access. Modifiable only so that the Transfer API adapter can roll back
+ * aborted transactions, the restrictions of this handler are not applied to {@link #setStackInSlot(int, ItemStack)}
+ */
+public abstract class ExternalItemHandler implements IItemHandlerModifiable
 {
-    private final IItemHandler wrapped;
+    private final IItemHandlerModifiable wrapped;
 
-    public ExternalItemHandler(IItemHandler wrapped)
+    public ExternalItemHandler(IItemHandlerModifiable wrapped)
     {
         this.wrapped = wrapped;
     }
@@ -26,7 +29,31 @@ public abstract class ExternalItemHandler implements IItemHandler
     }
 
     @Override
-    public final ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate)
+    public final void setStackInSlot(int slot, ItemStack stack)
+    {
+        wrapped.setStackInSlot(slot, stack);
+    }
+
+    @Override
+    public final void beginSilentChanges()
+    {
+        wrapped.beginSilentChanges();
+    }
+
+    @Override
+    public final void endSilentChanges()
+    {
+        wrapped.endSilentChanges();
+    }
+
+    @Override
+    public final void notifyContentsChanged(int slot)
+    {
+        wrapped.notifyContentsChanged(slot);
+    }
+
+    @Override
+    public final ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
     {
         return wrapped.insertItem(slot, stack, simulate);
     }
@@ -48,7 +75,7 @@ public abstract class ExternalItemHandler implements IItemHandler
     }
 
     @Override
-    public final boolean isItemValid(int slot, @NotNull ItemStack stack)
+    public final boolean isItemValid(int slot, ItemStack stack)
     {
         return wrapped.isItemValid(slot, stack);
     }

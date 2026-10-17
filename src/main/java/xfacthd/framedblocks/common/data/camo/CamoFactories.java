@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.data.camo;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -35,7 +34,7 @@ public final class CamoFactories
         {
             return itemToFactory.get(stack.getItem());
         }
-        if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
+        if (FluidCamoContainer.isFluidContainer(stack))
         {
             return FBContent.FACTORY_FLUID.get();
         }

@@ -26,8 +26,8 @@ public final class FluidStack
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final FluidStack EMPTY = new FluidStack(Fluids.EMPTY, 0);
     public static final Codec<FluidStack> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            BuiltInRegistries.FLUID.byNameCodec().validate(
-                    fluid -> fluid == Fluids.EMPTY ? DataResult.error(() -> "Fluid must not be minecraft:empty") : DataResult.success(fluid)
+            BuiltInRegistries.FLUID.byNameCodec().flatXmap(
+                    FluidStack::validateFluid, FluidStack::validateFluid
             ).fieldOf("id").forGetter(FluidStack::getFluid),
             Codec.intRange(1, Integer.MAX_VALUE).fieldOf("amount").forGetter(FluidStack::getAmount),
             CompoundTag.CODEC.optionalFieldOf("tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
@@ -126,6 +126,11 @@ public final class FluidStack
         return CODEC.parse(NbtOps.INSTANCE, tag)
                 .resultOrPartial(error -> LOGGER.error("Tried to load invalid fluid: '{}'", error))
                 .orElse(EMPTY);
+    }
+
+    private static DataResult<Fluid> validateFluid(Fluid fluid)
+    {
+        return fluid == Fluids.EMPTY ? DataResult.error(() -> "Fluid must not be minecraft:empty") : DataResult.success(fluid);
     }
 
     public static boolean isSameFluidSameTag(FluidStack a, FluidStack b)

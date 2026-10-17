@@ -23,6 +23,7 @@ public final class ServerConfig
     private static final String KEY_ONE_WAY_WINDOW_OWNABLE = "oneWayWindowOwnable";
     private static final String KEY_CONSUME_CAMO_ITEM = "consumeCamoItem";
     private static final String KEY_GLOWSTONE_LIGHT_LEVEL = "glowstoneLightLevel";
+    private static final String KEY_POWERED_SAW_REQUIRES_ENERGY = "poweredSawRequiresEnergy";
 
     public static final String TRANSLATION_ALLOW_BLOCK_ENTITIES = translate(KEY_ALLOW_BLOCK_ENTITIES);
     public static final String TRANSLATION_ENABLE_INTANGIBILITY = translate(KEY_ENABLE_INTANGIBILITY);
@@ -30,6 +31,7 @@ public final class ServerConfig
     public static final String TRANSLATION_ONE_WAY_WINDOW_OWNABLE = translate(KEY_ONE_WAY_WINDOW_OWNABLE);
     public static final String TRANSLATION_CONSUME_CAMO_ITEM = translate(KEY_CONSUME_CAMO_ITEM);
     public static final String TRANSLATION_GLOWSTONE_LIGHT_LEVEL = translate("glowstoneLightLevel");
+    public static final String TRANSLATION_POWERED_SAW_REQUIRES_ENERGY = translate(KEY_POWERED_SAW_REQUIRES_ENERGY);
 
     public static boolean allowBlockEntities;
     public static boolean enableIntangibleFeature;
@@ -37,6 +39,7 @@ public final class ServerConfig
     public static boolean oneWayWindowOwnable;
     public static boolean consumeCamoItem;
     public static int glowstoneLightLevel;
+    public static boolean poweredSawRequiresEnergy;
 
     private final ForgeConfigSpec.BooleanValue allowBlockEntitiesValue;
     private final ForgeConfigSpec.BooleanValue enableIntangibleFeatureValue;
@@ -44,6 +47,7 @@ public final class ServerConfig
     private final ForgeConfigSpec.BooleanValue oneWayWindowOwnableValue;
     private final ForgeConfigSpec.BooleanValue consumeCamoItemValue;
     private final ForgeConfigSpec.IntValue glowstoneLightLevelValue;
+    private final ForgeConfigSpec.BooleanValue poweredSawRequiresEnergyValue;
 
     /**
      * Registers the config spec and the listeners that copy the values into the static fields.
@@ -92,6 +96,16 @@ public final class ServerConfig
                 .translation(TRANSLATION_GLOWSTONE_LIGHT_LEVEL)
                 .defineInRange(KEY_GLOWSTONE_LIGHT_LEVEL, 15, 0, 15);
         builder.pop();
+
+        builder.push("powered_framing_saw");
+        poweredSawRequiresEnergyValue = builder
+                .comment(
+                        "If true, the Powered Framing Saw consumes energy and does nothing without it. If false, the saw works without energy. " +
+                        "The energy buffer of the saw can be filled from every side except the top through Team Reborn Energy when that mod is installed"
+                )
+                .translation(TRANSLATION_POWERED_SAW_REQUIRES_ENERGY)
+                .define(KEY_POWERED_SAW_REQUIRES_ENERGY, false);
+        builder.pop();
     }
 
     private static boolean validateItemName(Object obj)
@@ -122,6 +136,7 @@ public final class ServerConfig
             oneWayWindowOwnable = oneWayWindowOwnableValue.get();
             consumeCamoItem = consumeCamoItemValue.get();
             glowstoneLightLevel = glowstoneLightLevelValue.get();
+            poweredSawRequiresEnergy = poweredSawRequiresEnergyValue.get();
         }
     }
 }

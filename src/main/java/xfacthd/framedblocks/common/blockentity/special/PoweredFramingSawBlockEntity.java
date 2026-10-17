@@ -1,7 +1,8 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -9,22 +10,18 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.util.EntityAwareEnergyStorage;
 import xfacthd.framedblocks.common.util.ExternalItemHandler;
+import xfacthd.framedblocks.common.util.ServerConfig;
 import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
+import xfacthd.framedblocks.platform.transfer.ItemStackHandler;
+import xfacthd.framedblocks.platform.transfer.RecipeWrapper;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -52,7 +49,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             return PoweredFramingSawBlockEntity.this.isValidItem(slot, stack);
         }
     };
-    private final IItemHandler externalItemHandler = new ExternalItemHandler(itemHandler)
+    private final ExternalItemHandler externalItemHandler = new ExternalItemHandler(itemHandler)
     {
         @Override
         protected boolean canExtract(int slot)
@@ -60,12 +57,12 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             return slot == FramingSawMenu.SLOT_RESULT;
         }
     };
+    // This is the only Transfer API view of the slots of the item handler
+    private final ItemHandlerStorage externalItemStorage = new ItemHandlerStorage(externalItemHandler, () -> !isRemoved());
     private final RecipeWrapper container = new RecipeWrapper(itemHandler);
     private final EntityAwareEnergyStorage energyStorage = new EntityAwareEnergyStorage(
-            ENERGY_CAPACITY, ENERGY_MAX_INSERT, 0, this
+            ENERGY_CAPACITY, ENERGY_MAX_INSERT, 0, this::setChanged
     );
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
     private FramingSawRecipeCache cache = null;
     private ResourceLocation selectedRecipeId = null;
     private FramingSawRecipe selectedRecipe = null;
@@ -100,7 +97,10 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
                 level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ACTIVE, true));
             }
 
-            be.energyStorage.extractEnergyInternal(ENERGY_CONSUMPTION);
+            if (ServerConfig.poweredSawRequiresEnergy)
+            {
+                be.energyStorage.extractEnergyInternal(ENERGY_CONSUMPTION);
+            }
             be.progress++;
 
             if (be.progress >= MAX_PROGRESS)
@@ -144,7 +144,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     private boolean canRun()
     {
         if (selectedRecipe == null || !recipeSatisfied) return false;
-        if (energyStorage.getEnergyStored() < ENERGY_CONSUMPTION) return false;
+        if (ServerConfig.poweredSawRequiresEnergy && energyStorage.getEnergyStored() < ENERGY_CONSUMPTION) return false;
 
         ItemStack output = itemHandler.getStackInSlot(FramingSawMenu.SLOT_RESULT);
         if (!output.isEmpty() && output.getItem() != selectedRecipe.getResult().getItem()) return false;
@@ -192,7 +192,8 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     {
         if (slot == FramingSawMenu.SLOT_INPUT)
         {
-            return cache.getMaterialValue(stack.getItem()) > 0;
+            // The cache is only available after onLoad() ran, external access may happen before that
+            return cache != null && cache.getMaterialValue(stack.getItem()) > 0;
         }
         else if (slot < FramingSawMenu.SLOT_RESULT)
         {
@@ -247,9 +248,30 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         return itemHandler;
     }
 
+    /**
+     * @return The stored energy or, if the saw does not require energy, always the full capacity
+     */
     public int getEnergy()
     {
+        if (!ServerConfig.poweredSawRequiresEnergy)
+        {
+            return energyStorage.getMaxEnergyStored();
+        }
         return energyStorage.getEnergyStored();
+    }
+
+    public EntityAwareEnergyStorage getEnergyStorage()
+    {
+        return energyStorage;
+    }
+
+    /**
+     * {@return the restricted Transfer API view of the inventory for external access, only the result slot can be
+     * extracted from}
+     */
+    public Storage<ItemVariant> getExternalItemStorage()
+    {
+        return externalItemStorage;
     }
 
     public void dropContents(Consumer<ItemStack> dropper)
@@ -263,29 +285,9 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         inhibitUpdate = false;
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
-    {
-        if (side != Direction.UP)
-        {
-            if (cap == ForgeCapabilities.ITEM_HANDLER)
-            {
-                return lazyItemHandler.cast();
-            }
-            if (cap == ForgeCapabilities.ENERGY)
-            {
-                return lazyEnergyStorage.cast();
-            }
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
+    // Called through FreshBlockEntityQueue, there is no BlockEntity#onLoad() on Fabric
     public void onLoad()
     {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> externalItemHandler);
-        lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
         //noinspection ConstantConditions
         cache = FramingSawRecipeCache.get(level.isClientSide());
         if (selectedRecipeId != null && !level.isClientSide())
@@ -296,14 +298,6 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
                     .orElse(null);
             selectRecipe(recipe);
         }
-    }
-
-    @Override
-    public void invalidateCaps()
-    {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
-        lazyEnergyStorage.invalidate();
     }
 
     public boolean isUsableByPlayer(Player player)

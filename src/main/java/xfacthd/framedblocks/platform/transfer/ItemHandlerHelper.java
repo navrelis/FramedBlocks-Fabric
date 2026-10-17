@@ -6,12 +6,18 @@ public final class ItemHandlerHelper
 {
     public static boolean canItemStacksStack(ItemStack a, ItemStack b)
     {
-        return !a.isEmpty() && ItemStack.isSameItemSameComponents(a, b);
+        return !a.isEmpty() && ItemStack.isSameItemSameTags(a, b);
     }
 
     public static ItemStack copyStackWithSize(ItemStack stack, int size)
     {
-        return size <= 0 ? ItemStack.EMPTY : stack.copyWithCount(size);
+        if (size <= 0)
+        {
+            return ItemStack.EMPTY;
+        }
+        ItemStack copy = stack.copy();
+        copy.setCount(size);
+        return copy;
     }
 
 

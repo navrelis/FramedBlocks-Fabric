@@ -7,7 +7,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Stand-in for NeoForge's {@code SlotItemHandler}: a menu slot backed by an {@link IItemHandler}
+ * Stand-in for Forge's {@code SlotItemHandler}: a menu slot backed by an {@link IItemHandler}
  */
 public class SlotItemHandler extends Slot
 {

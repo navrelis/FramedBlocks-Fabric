@@ -230,6 +230,7 @@
   "config.framedblocks_fabric.server.glowstoneLightLevel": "Glowstone Light Level",
   "config.framedblocks_fabric.server.intangibleMarkerItem": "Intangibility marker item",
   "config.framedblocks_fabric.server.oneWayWindowOwnable": "One-Way Window ownability",
+  "config.framedblocks_fabric.server.poweredSawRequiresEnergy": "Powered Framing Saw requires energy",
   "config.jade.plugin_framedblocks_fabric.framed_item_frame": "Framed Item Frame",
   "desc.framedblocks_fabric.blueprint_block": "Contained Block: %s",
   "desc.framedblocks_fabric.blueprint_camo": "Camo Block: %s",
