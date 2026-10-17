@@ -113,3 +113,5 @@
 - MV0 — lead — mc/1.21.1 pushed; worktrees F:/wt/m12111 (mc/1.21.11 @upstream 8c38a156c), F:/wt/m1201 (mc/1.20.1 @upstream 5dc540401). N-M, O-M maps — Sonnet, long x2 — running.
 - N-M — Sonnet, long — map read by lead (rendering = new design on FRAPI 8 FabricBlockStateModel; NF Transfer redesign; ~45 mixin re-targets; staged plan). Committed to mc/1.21.11. N-0A — Sonnet, long — running in F:/wt/m12111.
 - O-M — Sonnet, long — map read by lead (FRAPI 3.x source-compatible with the 1.21.1 platform/model; ModifyBakingResult mixin; plant redesign; Indium). Committed to mc/1.20.1. O-A — Sonnet, long — running in F:/wt/m1201.
+- N-0A — Sonnet, long — reviewed (build.gradle, fabric.mod.json, AW 30+5+3 entries, patch-resources idempotent); lead: processResources + validateAccessWidener green. Committed on mc/1.21.11. N-0B — Sonnet, long — running.
+- Session 11 auto-handoff — N-0B and O-A stopped; state in handoff.md.
