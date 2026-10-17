@@ -64,3 +64,6 @@
 - Session 12: 1.20.1 keeps Create/Flywheel compat sources for optional E3 (restored after the O-A agent deleted them); Caffeine replaced by Guava caches (not on the 1.20.1 classpath).
 - Session 12: 1.20.1 gets the 1.21.1 port's `poweredSawRequiresEnergy` server config (default false) so the powered saw works without an energy mod (TR Energy optional on Fabric).
 - Session 12: "zero errors in owned files" from a whole-tree javac run is not reliable (javac skips attribution of files when resolution errors exist elsewhere); lanes also run an isolated javac of their files, final proof is the gate compile.
+- Session 13: 1.21.11 framed flower pot drops the Amendments-only HANGING property (Amendments dropped on 1.21.11; blockstate JSON already has no hanging variants).
+- Session 13: 1.20.1 O-C4a writes docs/port/hooks-contract.md (mixin -> BlockHooks -> IFramedBlock signature) instead of editing block classes; C4b implements the block side against it, so the two lanes never share files.
+- Session 13: N-B1 and N-C5 run as two parallel Opus lanes (both precision overrides from map §8, independent files); glue files (FBClient, FramedBlocks, AW, platform-api.md) append-only for non-owners.
