@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.rail;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -8,8 +9,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.model.slope.FramedSlopeModel;
@@ -59,7 +60,7 @@ public class FramedRailSlopeModel extends FramedSlopeModel
 
     private List<BakedQuad> getRailQuads(@Nullable Direction side, RandomSource rand, RenderType layer)
     {
-        return ModelCache.getModel(railState).getQuads(railState, side, rand, ModelData.EMPTY, layer);
+        return ModelBridge.getQuads(ModelCache.getModel(railState), railState, side, rand, ModelData.EMPTY, layer);
     }
 
     private static BlockState getSlopeState(BlockState state)

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.interactive;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -9,9 +10,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.client.model.ModelEvent;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
@@ -67,10 +68,10 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
             return;
         }
 
-        quadMap.get(null).addAll(frameModel.getQuads(state, null, rand, data, layer));
+        quadMap.get(null).addAll(ModelBridge.getQuads(frameModel, state, null, rand, data, layer));
         for (Direction side : Direction.values())
         {
-            quadMap.get(side).addAll(frameModel.getQuads(state, side, rand, data, layer));
+            quadMap.get(side).addAll(ModelBridge.getQuads(frameModel, state, side, rand, data, layer));
         }
     }
 

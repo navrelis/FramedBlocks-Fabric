@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.interactive;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -8,9 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.client.model.ModelEvent;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -73,12 +74,12 @@ public class FramedStoneButtonModel extends FramedButtonModel
             return;
         }
 
-        List<BakedQuad> quads = frameModel.getQuads(state, null, rand, data, layer);
+        List<BakedQuad> quads = ModelBridge.getQuads(frameModel, state, null, rand, data, layer);
         addRotatedQuads(quads, quadMap.get(null));
 
         for (Direction side : Direction.values())
         {
-            quads = frameModel.getQuads(state, side, rand, data, layer);
+            quads = ModelBridge.getQuads(frameModel, state, side, rand, data, layer);
             addRotatedQuads(quads, quadMap.get(side));
         }
     }

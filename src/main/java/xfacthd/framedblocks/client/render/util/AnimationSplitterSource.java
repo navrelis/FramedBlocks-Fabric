@@ -117,7 +117,7 @@ public class AnimationSplitterSource implements SpriteSource
 
                 NativeImage imageOut = new NativeImage(NativeImage.Format.RGBA, frameW, frameH, false);
                 image.copyRect(imageOut, srcX, srcY, 0, 0, frameW, frameH, false, false);
-                return postProcess(new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, AnimationMetadataSection.EMPTY, null));
+                return postProcess(new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, AnimationMetadataSection.EMPTY));
             }
             catch (Exception e)
             {

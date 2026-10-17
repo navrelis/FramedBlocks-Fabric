@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.client.data;
 
 import com.google.common.base.Preconditions;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 
 import java.util.HashSet;
 import java.util.Set;

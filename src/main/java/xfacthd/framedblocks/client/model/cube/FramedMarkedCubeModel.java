@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.cube;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -7,8 +8,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
@@ -57,7 +58,7 @@ public class FramedMarkedCubeModel extends FramedCubeBaseModel
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (fbData != null && !fbData.getCamoState().isAir())
         {
-            Utils.copyAll(frameModel.getQuads(state, side, rand, data, renderType), quads);
+            Utils.copyAll(ModelBridge.getQuads(frameModel, state, side, rand, data, renderType), quads);
         }
     }
 

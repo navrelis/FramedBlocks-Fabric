@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.render.block;
 
+import xfacthd.framedblocks.platform.model.ModelRenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.Util;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
@@ -61,7 +62,7 @@ public class FramedDoubleBlockDebugRenderer implements BlockEntityRenderer<Frame
 
         //noinspection deprecation
         VertexConsumer consumer = outlineBuffer.getBuffer(RenderType.outline(TextureAtlas.LOCATION_BLOCKS));
-        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
+        ModelRenderHelper.renderModel(
                 poseStack.last(),
                 consumer,
                 state,

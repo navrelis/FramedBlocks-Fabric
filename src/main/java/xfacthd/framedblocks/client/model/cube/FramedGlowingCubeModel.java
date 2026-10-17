@@ -1,13 +1,14 @@
 package xfacthd.framedblocks.client.model.cube;
 
+import xfacthd.framedblocks.platform.model.ExtendedBakedQuad;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.QuadTransformers;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.QuadTransformers;
+import xfacthd.framedblocks.platform.model.ModelData;
 
 import java.util.*;
 
@@ -55,7 +56,7 @@ public class FramedGlowingCubeModel extends FramedCubeBaseModel
         quads.forEach(quad ->
         {
             int[] vertexData = quad.getVertices();
-            BakedQuad newQuad = new BakedQuad(
+            BakedQuad newQuad = ExtendedBakedQuad.create(
                     Arrays.copyOf(vertexData, vertexData.length),
                     quad.getTintIndex(),
                     quad.getDirection(),

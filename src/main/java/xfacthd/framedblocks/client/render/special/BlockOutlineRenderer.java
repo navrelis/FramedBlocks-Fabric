@@ -3,14 +3,15 @@ package xfacthd.framedblocks.client.render.special;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.event.RenderHighlightEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -26,29 +27,35 @@ public final class BlockOutlineRenderer
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
     private static boolean locked = false;
 
-    public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
+    /**
+     * Replacement for Forge's {@code RenderHighlightEvent.Block}. To be hooked into
+     * {@code WorldRenderEvents.BLOCK_OUTLINE}
+     * @return false to cancel the vanilla outline rendering
+     */
+    public static boolean onBlockOutline(WorldRenderContext context, WorldRenderContext.BlockOutlineContext outlineContext)
     {
         if (!ClientConfig.fancyHitboxes && !TestProperties.ENABLE_OCCLUSION_SHAPE_DEBUG_RENDERER)
         {
-            return;
+            return true;
         }
 
-        BlockHitResult result = event.getTarget();
-        //noinspection ConstantConditions
-        BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
+        BlockPos pos = outlineContext.blockPos();
+        BlockState state = outlineContext.blockState();
         if (!(state.getBlock() instanceof IFramedBlock block))
         {
-            return;
+            return true;
         }
+
+        MultiBufferSource buffers = Objects.requireNonNull(context.consumers());
+        Vec3 cameraPos = context.camera().getPosition();
 
         if (TestProperties.ENABLE_OCCLUSION_SHAPE_DEBUG_RENDERER)
         {
-            VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
-            VoxelShape shape = state.getOcclusionShape(Minecraft.getInstance().level, result.getBlockPos());
-            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
-            LevelRenderer.renderShape(event.getPoseStack(), builder, shape, offset.x, offset.y, offset.z, 0F, 0F, 0F, .4F);
-            event.setCanceled(true);
-            return;
+            VertexConsumer builder = buffers.getBuffer(RenderType.lines());
+            VoxelShape shape = state.getOcclusionShape(Minecraft.getInstance().level, pos);
+            Vec3 offset = Vec3.atLowerCornerOf(pos).subtract(cameraPos);
+            LevelRenderer.renderShape(Objects.requireNonNull(context.matrixStack()), builder, shape, offset.x, offset.y, offset.z, 0F, 0F, 0F, .4F);
+            return false;
         }
 
         IBlockType type = block.getBlockType();
@@ -61,12 +68,12 @@ public final class BlockOutlineRenderer
                 {
                     FramedBlocks.LOGGER.error("IBlockType '{}' requests custom outline rendering but no OutlineRender was registered!", type.getName());
                 }
-                return;
+                return true;
             }
 
-            PoseStack mstack = event.getPoseStack();
-            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
-            VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
+            PoseStack mstack = Objects.requireNonNull(context.matrixStack());
+            Vec3 offset = Vec3.atLowerCornerOf(pos).subtract(cameraPos);
+            VertexConsumer builder = buffers.getBuffer(RenderType.lines());
 
             mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
@@ -74,12 +81,13 @@ public final class BlockOutlineRenderer
             renderer.rotateMatrix(mstack, state);
             mstack.translate(-.5, -.5, -.5);
 
-            renderer.draw(state, Minecraft.getInstance().level, result.getBlockPos(), mstack, builder);
+            renderer.draw(state, Minecraft.getInstance().level, pos, mstack, builder);
 
             mstack.popPose();
 
-            event.setCanceled(true);
+            return false;
         }
+        return true;
     }
 
     public static synchronized void registerOutlineRender(IBlockType type, OutlineRenderer render)

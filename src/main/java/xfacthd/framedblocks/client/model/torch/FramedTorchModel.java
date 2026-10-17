@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model.torch;
 
+import xfacthd.framedblocks.platform.model.ModelBridge;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -7,8 +8,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.platform.model.ChunkRenderTypeSet;
+import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -36,7 +37,7 @@ public class FramedTorchModel extends FramedBlockModel
     @Override
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData extraData, RenderType layer)
     {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, layer);
+        List<BakedQuad> quads = ModelBridge.getQuads(baseModel, state, null, rand, extraData, layer);
         for (BakedQuad quad : quads)
         {
             if (!ClientUtils.isDummyTexture(quad))
