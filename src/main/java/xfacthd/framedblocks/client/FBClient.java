@@ -95,6 +95,7 @@ public final class FBClient
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
+        xfacthd.framedblocks.client.net.ClientNetworkHandler.init();
         event.enqueueWork(() ->
         {
             MenuScreens.register(FBContent.MENU_TYPE_FRAMED_STORAGE.get(), FramedStorageScreen::new);

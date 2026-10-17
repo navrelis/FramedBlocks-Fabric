@@ -25,13 +25,12 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PacketDistributor;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.net.NetworkHandler;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.platform.util.ItemAbilities;
 
@@ -184,10 +183,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     public static void openEditScreen(Player player, FramedSignBlockEntity sign, boolean frontText)
     {
         sign.setEditingPlayer(player.getUUID());
-        FramedBlocks.CHANNEL.send(
-                PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                new OpenSignScreenPacket(sign.getBlockPos(), frontText)
-        );
+        NetworkHandler.sendToPlayer((ServerPlayer) player, new OpenSignScreenPacket(sign.getBlockPos(), frontText));
     }
 
 

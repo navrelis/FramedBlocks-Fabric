@@ -65,7 +65,8 @@ public final class FramedBlocks implements ModInitializer
         FBContent.init();
         TransferSetup.init();
 
-        // TODO C2: register networking (NetworkHandler.init()), replaces the four messages registered in FMLCommonSetupEvent
+        // Registers the server-side packet receivers, replaces the messages registered in FMLCommonSetupEvent
+        xfacthd.framedblocks.common.net.NetworkHandler.init();
 
         // BlockEntity#onLoad() is deferred to the start of the next level tick, see FreshBlockEntityQueue
         ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register(FramedBlocks::onBlockEntityLoad);

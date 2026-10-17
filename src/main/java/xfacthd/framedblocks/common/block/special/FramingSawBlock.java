@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.common.block.special;
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
@@ -21,7 +23,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
@@ -61,8 +62,14 @@ public class FramingSawBlock extends Block
     {
         if (!level.isClientSide())
         {
-            NetworkHooks.openScreen((ServerPlayer) player, new MenuProvider()
+            ((ServerPlayer) player).openMenu(new ExtendedScreenHandlerFactory()
             {
+                @Override
+                public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf)
+                {
+                    buf.writeBlockPos(pos);
+                }
+
                 @Override
                 public Component getDisplayName()
                 {
@@ -74,7 +81,7 @@ public class FramingSawBlock extends Block
                 {
                     return createSawMenu(containerId, inventory, level, pos);
                 }
-            }, pos);
+            });
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }

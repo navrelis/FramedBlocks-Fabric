@@ -1,35 +1,36 @@
 package xfacthd.framedblocks.common.net;
 
+import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-import xfacthd.framedblocks.client.util.ClientAccess;
-import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.api.util.Utils;
 
-import java.util.function.Supplier;
-
-public record OpenSignScreenPacket(BlockPos pos, boolean frontText)
+/**
+ * Clientbound: opens the edit screen of a framed sign. Handled by
+ * {@link xfacthd.framedblocks.client.net.ClientNetworkHandler}
+ */
+public record OpenSignScreenPacket(BlockPos pos, boolean frontText) implements FabricPacket
 {
+    public static final PacketType<OpenSignScreenPacket> TYPE = PacketType.create(
+            Utils.rl("open_sign_screen"), OpenSignScreenPacket::new
+    );
+
     public OpenSignScreenPacket(FriendlyByteBuf buffer)
     {
         this(buffer.readBlockPos(), buffer.readBoolean());
     }
 
-    public void encode(FriendlyByteBuf buffer)
+    @Override
+    public void write(FriendlyByteBuf buffer)
     {
         buffer.writeBlockPos(pos);
         buffer.writeBoolean(frontText);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx)
+    @Override
+    public PacketType<?> getType()
     {
-        ctx.get().enqueueWork(() ->
-        {
-            if (Platform.isClient())
-            {
-                ClientAccess.openSignScreen(pos, frontText);
-            }
-        });
-        return true;
+        return TYPE;
     }
 }

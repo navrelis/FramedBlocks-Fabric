@@ -6,9 +6,8 @@ import mezz.jei.api.recipe.transfer.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.client.net.ClientNetworkHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
@@ -72,7 +71,7 @@ public final class FramingSawTransferHandler implements IRecipeTransferHandler<F
 
             if (doTransfer && menu.clickMenuButton(player, idx))
             {
-                FramedBlocks.CHANNEL.send(PacketDistributor.SERVER.noArg(), new SelectFramingSawRecipePacket(menu.containerId, idx));
+                ClientNetworkHandler.sendToServer(new SelectFramingSawRecipePacket(menu.containerId, idx));
             }
             // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
             return new RecipeTransferErrorTransferNotImplemented();
