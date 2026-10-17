@@ -117,3 +117,5 @@
 - Session 11 auto-handoff — N-0B and O-A stopped; state in handoff.md.
 - Session 12 start — lead — handoff matches repo (m12111 clean @1b21581c1, m1201 partial O-A); board+handoff committed/pushed (4077bb220). N-0B — Sonnet, long — re-delegated (running). O-A finish/verify — Sonnet, long — running. Worktrees m1192/m1182/m1165 created (mc/1.19.2, mc/1.18.2, mc/1.16.5 from upstream tips).
 - Session 12 handoff — lead — N-0B and O-A still running at handoff (no reports); state in handoff.md §4.
+- O-A finish — Sonnet, long — reviewed (build.gradle deps + compat_runtime incl. sodium+indium, fabric.mod.json, AW +Ingredient$*/ModelBakerImpl/WallBlock extendable, restored Create/Flywheel for E3); lead: processResources + validateAccessWidener green, patch script idempotent, 0 forge: refs; compileJava 1612 errors (Forge symbols, Create, Caffeine). Committed on mc/1.20.1 (58500c495).
+- O-B1 — Opus, long (precision override) — running in F:/wt/ob1 (branch o-b1). O-C1 + codemod — Sonnet, long — running in F:/wt/oc1 (branch o-c1). Disjoint file ownership; lead merges into mc/1.20.1.

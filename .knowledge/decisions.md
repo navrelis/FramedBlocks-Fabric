@@ -59,3 +59,6 @@
 - Session 11: 1.20.1 compat = JEI, REI, EMI, Jade, Supplementaries (upstream 1.20 integrates Supplementaries, not Amendments), Diagonal Fences/Windows, Team Reborn Energy (replaces the FE capability as on 1.21.1); Create Fabric 6.0.8.1 deferred to optional task O-E3; Forge-only compat dropped. Sodium 0.5 on 1.20.1 needs Indium (suggests + dev runtime).
 - Session 11: 1.20.1 keeps upstream's per-family model classes; a client mixin on ModelManager emulates Forge ModifyBakingResult/BakingCompleted so upstream's replaceModels code stays.
 - Session 11: 1.20.1 recipes/tags: forge: tags rewritten to Fabric 1.20.1 convention names (c:iron_ingots ...); tags absent on Fabric become item ids or own c: tag files.
+- Session 12: precision override O-B1 (Opus long): 1.20.1 render path (FRAPI emission, ModelManager replacement hook, overlay resolver); errors only visible in game.
+- Session 12: parallel 1.20.1 tasks run in per-task worktrees (F:/wt/ob1, F:/wt/oc1, ... branches o-<task>) off mc/1.20.1 so Gradle runs do not collide; strict file ownership, lead merges after review. Done-criterion per task = zero compile errors in owned files (whole tree compiles only after all lanes).
+- Session 12: 1.20.1 keeps Create/Flywheel compat sources for optional E3 (restored after the O-A agent deleted them); Caffeine replaced by Guava caches (not on the 1.20.1 classpath).
