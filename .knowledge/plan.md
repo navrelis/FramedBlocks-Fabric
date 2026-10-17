@@ -108,9 +108,10 @@ Per-version pipeline (refined per version from its map):
 | O-M | 1.20.1 port map | - | Sonnet long | done (docs/port/map.md on mc/1.20.1) |
 | O-A | 1.20.1 platform copy (A0) + build, identity, tag rewrite, deletions | O-M | Sonnet long | done (58500c495) |
 | O-B1 | 1.20.1 rendering core (platform/model fixes, ModifyBakingResult mixin, model events bridge) | O-A | Opus long (precision override) | in progress (F:/wt/ob1) |
-| O-C1 | 1.20.1 FramedBlocks/FBContent/configs (FCAP 8.0.3)/creative tab/Utils/ApiImpl/crafting + re-runnable tools/port/rewrite-imports.mjs | O-A | Sonnet long | in progress (F:/wt/oc1) |
-| O-B2, O-C2..C4b, O-N, O-L, O-E1..E3, O-T1, O-F1..F3, O-R | 1.20.1 tasks per map.md section 9 (L Opus short) | O-A | see map | open |
+| O-C1 | 1.20.1 FramedBlocks/FBContent/configs (FCAP 8.0.3)/creative tab/Utils/ApiImpl/crafting + re-runnable tools/port/rewrite-imports.mjs | O-A | Sonnet long | done (2ff989626) |
+| O-C3 | 1.20.1 transfer: platform/transfer 1.20.1 NBT fixes, storage/bookshelf/saw BE lookups, menus, fluid camo item, TR Energy, TransferSetup | O-C1 | Sonnet long | in progress (F:/wt/oc3) |
+| O-B2, O-C2, O-C4a, O-C4b, O-N, O-L, O-E1..E3, O-T1, O-F1..F3, O-R | 1.20.1 tasks per map.md section 9 (L Opus short) | O-A | see map | open |
 | P-M, S-M, V-M | port maps 1.19.2 (P, F:/wt/m1192), 1.18.2 (S, F:/wt/m1182), 1.16.5 (V, F:/wt/m1165); worktrees created session 12 | O-A (reuse 1.20.1 solutions) | Sonnet long each | open |
 | W-M | 26.3 port map + worktree F:/wt/m263 (merge mc/1.21.11) | N-F | Sonnet long | open |
 
-Usage tally: Sonnet 93 + O-C1 long = 95; Opus 28 + O-B1 long = 30. Opus share ~24 %.
+Usage tally: Sonnet 95 + O-C3 long = 97; Opus 30. Opus share ~24 %.
