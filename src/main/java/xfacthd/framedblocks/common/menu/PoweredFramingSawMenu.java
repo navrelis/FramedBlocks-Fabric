@@ -10,13 +10,14 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.*;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
+import xfacthd.framedblocks.platform.transfer.IItemHandler;
+import xfacthd.framedblocks.platform.transfer.IItemHandlerModifiable;
+import xfacthd.framedblocks.platform.transfer.RecipeWrapper;
+import xfacthd.framedblocks.platform.transfer.SlotItemHandler;
 
 import java.util.List;
 
@@ -252,7 +253,7 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         }
 
         @Override
-        public boolean mayPlace(@NotNull ItemStack stack)
+        public boolean mayPlace(ItemStack stack)
         {
             return active && super.mayPlace(stack);
         }

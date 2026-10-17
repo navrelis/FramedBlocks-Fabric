@@ -1,22 +1,19 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.ChiseledBookShelfBlock;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
+import xfacthd.framedblocks.platform.transfer.ItemStackHandler;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +22,15 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
     public static final String INVENTORY_NBT_KEY = "inventory";
     public static final String LAST_SLOT_NBT_KEY = "last_slot";
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(6);
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private final ItemStackHandler itemHandler = new ItemStackHandler(6)
+    {
+        @Override
+        protected void onContentsChanged(int slot)
+        {
+            setChanged();
+        }
+    };
+    private final ItemHandlerStorage itemStorage = new ItemHandlerStorage(itemHandler, () -> !isRemoved());
     private int lastInteractedSlot = -1;
 
     public FramedChiseledBookshelfBlockEntity(BlockPos pos, BlockState state)
@@ -69,28 +73,12 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
         updateState(lastInteractedSlot);
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
+    /**
+     * {@return the Transfer API view of the inventory owned by this block entity}
+     */
+    public Storage<ItemVariant> getItemStorage()
     {
-        if (cap == ForgeCapabilities.ITEM_HANDLER)
-        {
-            return lazyItemHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void onLoad()
-    {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    }
-
-    @Override
-    public void invalidateCaps()
-    {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
+        return itemStorage;
     }
 
     public List<ItemStack> getDrops()

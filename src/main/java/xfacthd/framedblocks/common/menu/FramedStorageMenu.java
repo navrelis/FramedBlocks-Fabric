@@ -8,12 +8,12 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.util.FramedUtils;
+import xfacthd.framedblocks.platform.transfer.IItemHandlerModifiable;
+import xfacthd.framedblocks.platform.transfer.SlotItemHandler;
 
 public class FramedStorageMenu extends AbstractContainerMenu
 {
@@ -27,14 +27,10 @@ public class FramedStorageMenu extends AbstractContainerMenu
         Preconditions.checkArgument(blockEntity instanceof FramedStorageBlockEntity);
         this.blockEntity = (FramedStorageBlockEntity) blockEntity;
 
-        IItemHandler blockInv = this.blockEntity
-                .getCapability(ForgeCapabilities.ITEM_HANDLER)
-                .orElseThrow(IllegalStateException::new);
         //noinspection ConstantConditions
-        if (this.blockEntity.getLevel().isClientSide())
-        {
-            blockInv = new ItemStackHandler(blockInv.getSlots());
-        }
+        IItemHandlerModifiable blockInv = FramedUtils.makeMenuItemHandler(
+                this.blockEntity.getItemHandler(), this.blockEntity.getLevel()
+        );
 
         for (int row = 0; row < 3; ++row)
         {

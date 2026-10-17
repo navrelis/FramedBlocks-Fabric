@@ -3,7 +3,7 @@ package xfacthd.framedblocks.platform.transfer;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Stand-in for NeoForge's {@code IItemHandler} with identical semantics.
+ * Stand-in for Forge's {@code IItemHandler} with identical semantics.
  * Exposed to the Fabric Transfer API through {@link ItemHandlerStorage}
  */
 public interface IItemHandler

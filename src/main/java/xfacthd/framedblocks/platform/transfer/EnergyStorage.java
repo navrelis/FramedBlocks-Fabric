@@ -1,12 +1,11 @@
 package xfacthd.framedblocks.platform.transfer;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 
 /**
- * Stand-in for NeoForge's {@code EnergyStorage}, saved as a plain int tag
+ * Stand-in for Forge's {@code EnergyStorage}, saved as a plain int tag
  */
 public class EnergyStorage implements IEnergyStorage
 {
@@ -94,12 +93,12 @@ public class EnergyStorage implements IEnergyStorage
         return maxReceive > 0;
     }
 
-    public Tag serializeNBT(HolderLookup.Provider provider)
+    public Tag serializeNBT()
     {
         return IntTag.valueOf(getEnergyStored());
     }
 
-    public void deserializeNBT(HolderLookup.Provider provider, Tag tag)
+    public void deserializeNBT(Tag tag)
     {
         if (!(tag instanceof IntTag intTag))
         {

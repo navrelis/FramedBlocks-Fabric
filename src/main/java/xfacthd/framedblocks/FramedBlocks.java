@@ -20,6 +20,7 @@ import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.shapes.ShapeReloader;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.capability.TransferSetup;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
@@ -62,6 +63,7 @@ public final class FramedBlocks implements ModInitializer
         ConnectionPredicates.PREDICATES.initialize();
 
         FBContent.init();
+        TransferSetup.init();
 
         // TODO C2: register networking (NetworkHandler.init()), replaces the four messages registered in FMLCommonSetupEvent
 

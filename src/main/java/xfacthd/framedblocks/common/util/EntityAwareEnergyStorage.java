@@ -1,16 +1,15 @@
 package xfacthd.framedblocks.common.util;
 
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.energy.EnergyStorage;
+import xfacthd.framedblocks.platform.transfer.EnergyStorage;
 
 public class EntityAwareEnergyStorage extends EnergyStorage
 {
-    private final BlockEntity be;
+    private final Runnable changeNotifier;
 
-    public EntityAwareEnergyStorage(int capacity, int maxReceive, int maxExtract, BlockEntity be)
+    public EntityAwareEnergyStorage(int capacity, int maxReceive, int maxExtract, Runnable changeNotifier)
     {
         super(capacity, maxReceive, maxExtract);
-        this.be = be;
+        this.changeNotifier = changeNotifier;
     }
 
     @Override
@@ -35,11 +34,43 @@ public class EntityAwareEnergyStorage extends EnergyStorage
         onContentsChanged(maxExtract, false);
     }
 
+    /**
+     * Adds energy without firing the change notifier, used by wrappers which fire it once their transaction commits
+     * @return the amount of energy that was actually added
+     */
+    public int receiveEnergySilently(int maxReceive)
+    {
+        return super.receiveEnergy(maxReceive, false);
+    }
+
+    /**
+     * Sets the stored energy without firing the change notifier, used by wrappers to restore a snapshot
+     */
+    public void setEnergySilently(int energy)
+    {
+        this.energy = Math.max(0, Math.min(capacity, energy));
+    }
+
+    public void notifyChanged()
+    {
+        changeNotifier.run();
+    }
+
     private void onContentsChanged(int diff, boolean simulate)
     {
         if (!simulate && diff > 0)
         {
-            be.setChanged();
+            changeNotifier.run();
         }
+    }
+
+    public int getMaxReceive()
+    {
+        return maxReceive;
+    }
+
+    public int getCapacity()
+    {
+        return capacity;
     }
 }

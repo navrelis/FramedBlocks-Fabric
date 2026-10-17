@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.platform.transfer;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -8,7 +7,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Stand-in for NeoForge's {@code ItemStackHandler}, including its NBT layout
+ * Stand-in for Forge's {@code ItemStackHandler}, including its NBT layout
  * ({@code Size} int and {@code Items} list of item compounds with an additional {@code Slot} int)
  */
 public class ItemStackHandler implements IItemHandlerModifiable
@@ -157,7 +156,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
         return true;
     }
 
-    public CompoundTag serializeNBT(HolderLookup.Provider provider)
+    public CompoundTag serializeNBT()
     {
         ListTag items = new ListTag();
         for (int i = 0; i < stacks.size(); i++)
@@ -166,7 +165,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
             {
                 CompoundTag itemTag = new CompoundTag();
                 itemTag.putInt(TAG_SLOT, i);
-                items.add(stacks.get(i).save(provider, itemTag));
+                items.add(stacks.get(i).save(itemTag));
             }
         }
         CompoundTag tag = new CompoundTag();
@@ -175,7 +174,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
         return tag;
     }
 
-    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag)
+    public void deserializeNBT(CompoundTag tag)
     {
         setSize(tag.contains(TAG_SIZE, Tag.TAG_INT) ? tag.getInt(TAG_SIZE) : stacks.size());
         ListTag items = tag.getList(TAG_ITEMS, Tag.TAG_COMPOUND);
@@ -185,7 +184,7 @@ public class ItemStackHandler implements IItemHandlerModifiable
             int slot = itemTag.getInt(TAG_SLOT);
             if (slot >= 0 && slot < stacks.size())
             {
-                ItemStack.parse(provider, itemTag).ifPresent(stack -> stacks.set(slot, stack));
+                stacks.set(slot, ItemStack.of(itemTag));
             }
         }
         onLoad();

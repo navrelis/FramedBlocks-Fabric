@@ -1,9 +1,12 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -14,21 +17,17 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.*;
-import net.minecraftforge.network.NetworkHooks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
+import xfacthd.framedblocks.platform.transfer.ItemHandlerStorage;
+import xfacthd.framedblocks.platform.transfer.ItemStackHandler;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable, Clearable
+public class FramedStorageBlockEntity extends FramedBlockEntity implements ExtendedScreenHandlerFactory, Nameable, Clearable
 {
     public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
     public static final String INVENTORY_NBT_KEY = "inventory";
@@ -41,7 +40,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
             FramedStorageBlockEntity.this.setChanged();
         }
     };
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private final ItemHandlerStorage itemStorage = new ItemHandlerStorage(itemHandler, () -> !isRemoved());
     private Component customName = null;
 
     public FramedStorageBlockEntity(BlockPos pos, BlockState state)
@@ -56,31 +55,31 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     public void open(ServerPlayer player)
     {
-        NetworkHooks.openScreen(player, this, worldPosition);
+        player.openMenu(this);
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
+    public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf)
     {
-        if (cap == ForgeCapabilities.ITEM_HANDLER)
-        {
-            return lazyItemHandler.cast();
-        }
-        return super.getCapability(cap, side);
+        buf.writeBlockPos(worldPosition);
     }
 
-    @Override
-    public void onLoad()
+    /**
+     * {@return the raw inventory, for use by menus and internal logic, external access must go through
+     * {@link #getItemStorage()}}
+     */
+    public ItemStackHandler getItemHandler()
     {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
+        return itemHandler;
     }
 
-    @Override
-    public void invalidateCaps()
+    /**
+     * {@return the Transfer API view of the inventory owned by this block entity}
+     * This is the only view over the slots of this inventory
+     */
+    public Storage<ItemVariant> getItemStorage()
     {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
+        return itemStorage;
     }
 
     public boolean isUsableByPlayer(Player player)

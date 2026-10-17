@@ -3,6 +3,8 @@ package xfacthd.framedblocks.platform.transfer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 
+import java.util.Objects;
+
 /**
  * Unit conversion between the millibucket amounts used by the mod ({@link #BUCKET_VOLUME} per bucket, as on NeoForge)
  * and the droplet amounts used by the Fabric Transfer API ({@link FluidConstants#BUCKET} per bucket).
@@ -26,7 +28,7 @@ public final class FluidUnits
 
     public static FluidVariant toVariant(FluidStack stack)
     {
-        return stack.isEmpty() ? FluidVariant.blank() : FluidVariant.of(stack.getFluid(), stack.getComponentsPatch());
+        return stack.isEmpty() ? FluidVariant.blank() : FluidVariant.of(stack.getFluid(), stack.getTag());
     }
 
     public static FluidStack toStack(FluidVariant variant, int millibuckets)
@@ -35,7 +37,7 @@ public final class FluidUnits
         {
             return FluidStack.EMPTY;
         }
-        return new FluidStack(variant.getFluid(), millibuckets, variant.getComponents());
+        return new FluidStack(variant.getFluid(), millibuckets, variant.copyNbt());
     }
 
     public static boolean matches(FluidVariant variant, FluidStack stack)
@@ -44,7 +46,7 @@ public final class FluidUnits
         {
             return false;
         }
-        return variant.isOf(stack.getFluid()) && variant.getComponents().equals(stack.getComponentsPatch());
+        return variant.isOf(stack.getFluid()) && Objects.equals(variant.getNbt(), stack.getTag());
     }
 
 

@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.platform.transfer;
 
 /**
- * Stand-in for NeoForge's {@code IFluidHandler} with identical semantics, amounts are in millibuckets.
+ * Stand-in for Forge's {@code IFluidHandler} with identical semantics, amounts are in millibuckets.
  * Exposed to the Fabric Transfer API through {@link FluidHandlerStorage}
  */
 public interface IFluidHandler
