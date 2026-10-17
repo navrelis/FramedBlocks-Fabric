@@ -103,14 +103,14 @@ Per-version pipeline (refined per version from its map):
 | MV0 | Push mc/1.21.1 | - | lead | done |
 | N-M | 1.21.11 port map | - | Sonnet long | done (docs/port/map.md on mc/1.21.11) |
 | N-0A | 1.21.11 build setup, identity, resource patch script, deletions, gametest copy | N-M | Sonnet long | done (committed) |
-| N-0B | 1.21.11 platform skeleton + codemod, tree compiles with stubs | N-0A | Sonnet long (+Opus short stub review) | in progress (session 12) |
+| N-0B | 1.21.11 platform skeleton + codemod, tree compiles with stubs | N-0A | Sonnet long (+Opus short stub review) | open (interrupted at session 12 handoff, partial uncommitted work in F:/wt/m12111) |
 | N-C1..C5, N-B1..B3, N-E1/E2, N-K, N-T, N-F, N-R | 1.21.11 lanes per map.md section 8 (B1, C5 Opus precision overrides) | N-0B | see map | open |
 | O-M | 1.20.1 port map | - | Sonnet long | done (docs/port/map.md on mc/1.20.1) |
 | O-A | 1.20.1 platform copy (A0) + build, identity, tag rewrite, deletions | O-M | Sonnet long | done (58500c495) |
 | O-B1 | 1.20.1 rendering core (platform/model fixes, ModifyBakingResult mixin, model events bridge) | O-A | Opus long (precision override) | done (ba00654dc, merged a5372ed26) |
 | O-C1 | 1.20.1 FramedBlocks/FBContent/configs (FCAP 8.0.3)/creative tab/Utils/ApiImpl/crafting + re-runnable tools/port/rewrite-imports.mjs | O-A | Sonnet long | done (2ff989626) |
 | O-C3 | 1.20.1 transfer: platform/transfer 1.20.1 NBT fixes, storage/bookshelf/saw BE lookups, menus, fluid camo item, TR Energy, TransferSetup | O-C1 | Sonnet long (+short corr) | done (9efd88599, merged 060e9070c) |
-| O-B2 | 1.20.1 leaf models client/model|data|render via tools/port/forge2platform.mjs + ghost renderer, GhostVertexConsumer, AnimationSplitterSource | O-B1 | Sonnet long | in progress (F:/wt/ob2) |
+| O-B2 | 1.20.1 leaf models client/model|data|render via tools/port/forge2platform.mjs + ghost renderer, GhostVertexConsumer, AnimationSplitterSource | O-B1 | Sonnet long | open (interrupted at handoff, partial uncommitted work in F:/wt/ob2) |
 | O-C2, O-C4a, O-C4b, O-N, O-L, O-E1..E3, O-T1, O-F1..F3, O-R | 1.20.1 tasks per map.md section 9 (L Opus short) | O-A | see map | open |
 | P-M, S-M, V-M | port maps 1.19.2 (P, F:/wt/m1192), 1.18.2 (S, F:/wt/m1182), 1.16.5 (V, F:/wt/m1165); worktrees created session 12 | O-A (reuse 1.20.1 solutions) | Sonnet long each | open |
 | W-M | 26.3 port map + worktree F:/wt/m263 (merge mc/1.21.11) | N-F | Sonnet long | open |
