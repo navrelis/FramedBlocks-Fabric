@@ -104,9 +104,9 @@ Per-version pipeline (refined per version from its map):
 | N-M | 1.21.11 port map | - | Sonnet long | done (docs/port/map.md on mc/1.21.11) |
 | N-0A | 1.21.11 build setup, identity, resource patch script, deletions, gametest copy | N-M | Sonnet long | done (committed) |
 | N-0B | 1.21.11 platform skeleton + codemod, tree compiles with stubs | N-0A | Sonnet long (+Opus short stub review) | done (840e866d8; Opus review: signatures OK to freeze, 2 transfer body bugs handed to N-C3) |
-| N-B1 | 1.21.11 rendering core (precision override) | N-0B | Opus long | open (interrupted at session 13 handoff, partial uncommitted work in F:/wt/nb1) |
-| N-C5 | 1.21.11 light (precision override) | N-0B | Opus long | open (interrupted, nothing on disk; restart in F:/wt/nc5) |
-| N-C1 | 1.21.11 registration/lifecycle, MixinSystemReport; done = dev server Done | N-0B | Sonnet long | open (interrupted, nothing on disk; restart in F:/wt/nc1) |
+| N-B1 | 1.21.11 rendering core (precision override) | N-0B | Opus long | in progress (session 14, resumed in F:/wt/nb1) |
+| N-C5 | 1.21.11 light (precision override) | N-0B | Opus long | in progress (session 14, restarted in F:/wt/nc5) |
+| N-C1 | 1.21.11 registration/lifecycle, MixinSystemReport; done = dev server Done | N-0B | Sonnet long | in progress (session 14, restarted in F:/wt/nc1) |
 | N-C2..C4, N-B2, N-B3, N-E1/E2, N-K, N-T, N-F, N-R | 1.21.11 lanes per map.md section 8 (B1, C5 Opus precision overrides) | N-0B | see map | open |
 | O-M | 1.20.1 port map | - | Sonnet long | done (docs/port/map.md on mc/1.20.1) |
 | O-A | 1.20.1 platform copy (A0) + build, identity, tag rewrite, deletions | O-M | Sonnet long | done (58500c495) |
@@ -115,13 +115,13 @@ Per-version pipeline (refined per version from its map):
 | O-C3 | 1.20.1 transfer: platform/transfer 1.20.1 NBT fixes, storage/bookshelf/saw BE lookups, menus, fluid camo item, TR Energy, TransferSetup | O-C1 | Sonnet long (+short corr) | done (9efd88599, merged 060e9070c) |
 | O-B2 | 1.20.1 leaf models client/model|data|render via tools/port/forge2platform.mjs + ghost renderer, GhostVertexConsumer, AnimationSplitterSource | O-B1 | Sonnet long | done (fb5985d9f, merged e68f6e8ce; 0 owned errors whole-tree + isolated, codemod idempotent) |
 | O-C2 | 1.20.1 networking: 4 FabricPackets, NetworkHandler/ClientNetworkHandler, CullingUpdateTracker(ServerLevel), FramingSawBlock ExtendedScreenHandlerFactory | O-C1 | Sonnet long | done (6d64633d1, merged 69d2dfa5f; also fixes upstream culling chunk-z bug) |
-| O-C4a | 1.20.1 non-light/non-render mixins + BlockHooks + plant design + docs/port/hooks-contract.md (C4b implements the IFramedBlock side) | O-C1 | Sonnet long | open (interrupted at session 13 handoff, partial uncommitted work in F:/wt/oc4a) |
+| O-C4a | 1.20.1 non-light/non-render mixins + BlockHooks + plant design + docs/port/hooks-contract.md (C4b implements the IFramedBlock side) | O-C1 | Sonnet long | in progress (session 14, resumed in F:/wt/oc4a after fast-forward to mc/1.20.1 4cd357ce3) |
 | O-E1 | 1.20.1 client wiring: FBClient ClientModInitializer, overlays, client util/screen, client block effects + client mixins (client.mixins.json) | O-B2, O-C2 | Sonnet long | done (merged; 530 errors whole-tree, 0 owned) |
 | O-C4b, O-N, O-L, O-E1..E3, O-T1, O-F1..F3, O-R | 1.20.1 tasks per map.md section 9 (L Opus short) | O-A | see map | open |
 | P-M, S-M, V-M | port maps 1.19.2 (P, F:/wt/m1192), 1.18.2 (S, F:/wt/m1182), 1.16.5 (V, F:/wt/m1165); worktrees created session 12 | O-A (reuse 1.20.1 solutions) | Sonnet long each | open |
 | W-M | 26.3 port map + worktree F:/wt/m263 (merge mc/1.21.11) | N-F | Sonnet long | open |
 
-Usage tally: Sonnet 97 + O-C3 corr short + O-B2 long = 100; Opus 30. Session 13: Sonnet +2 (O-B2 finish long-ish, N-0B finish short), Opus +1 (N-0B stub review short) -> Sonnet 102, Opus 31, share ~23 %. + O-C2 long, O-C4a long -> Sonnet 106, Opus 31, ~23 %. + N-B1 long, N-C5 long (overrides) -> Opus 35, share ~25 %. + O-C2 corr short, O-E1 long -> Sonnet 109, Opus 35, ~24 %. + N-C1 long -> Sonnet 111, Opus 35, ~24 %.
+Usage tally: Sonnet 97 + O-C3 corr short + O-B2 long = 100; Opus 30. Session 13: Sonnet +2 (O-B2 finish long-ish, N-0B finish short), Opus +1 (N-0B stub review short) -> Sonnet 102, Opus 31, share ~23 %. + O-C2 long, O-C4a long -> Sonnet 106, Opus 31, ~23 %. + N-B1 long, N-C5 long (overrides) -> Opus 35, share ~25 %. + O-C2 corr short, O-E1 long -> Sonnet 109, Opus 35, ~24 %. + N-C1 long -> Sonnet 111, Opus 35, ~24 %. Session 14 restarts: O-C4a long, N-C1 long (Sonnet), N-B1 long, N-C5 long (Opus, overrides; interrupted attempts counted again) -> Sonnet 115, Opus 39, ~25 %.
 
 1.20.1 cross-task hand-offs (from O-C1 report):
 - C2: `CullingUpdateTracker.onServerLevelTick(ServerLevel)` (registered on START_WORLD_TICK) + PlayerLookup; replace 5 `FramedBlocks.CHANNEL` uses; `NetworkHandler.init()` at `// TODO C2` in FramedBlocks; all 3 menus need ExtendedScreenHandlerFactory (FramingSawBlock too).
