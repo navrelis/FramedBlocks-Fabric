@@ -25,9 +25,9 @@ import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.net.ClientNetworkHandler;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
@@ -98,7 +98,7 @@ public class FramedSignScreen extends Screen
     @Override
     public void removed()
     {
-        FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getBlockPos(), front, lines));
+        ClientNetworkHandler.sendToServer(new SignUpdatePacket(sign.getBlockPos(), front, lines));
     }
 
     @Override

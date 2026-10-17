@@ -4,11 +4,10 @@ import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.ApiStatus;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.common.net.NetworkHandler;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -18,22 +17,14 @@ public final class CullingUpdateTracker
     private static final Map<ResourceKey<Level>, LongSet> UPDATED_POSITIONS = new IdentityHashMap<>();
 
     @ApiStatus.Internal
-    public static void onServerLevelTick(final TickEvent.LevelTickEvent event)
+    public static void onServerLevelTick(ServerLevel level)
     {
         // Send updates at the start of the next tick to ensure receipt after block update packet
-        if (event.phase != TickEvent.Phase.START || event.level.isClientSide())
-        {
-            return;
-        }
-
-        ResourceKey<Level> dim = event.level.dimension();
+        ResourceKey<Level> dim = level.dimension();
         LongSet positions = UPDATED_POSITIONS.get(dim);
         if (positions != null && !positions.isEmpty())
         {
-            FramedBlocks.CHANNEL.send(
-                    PacketDistributor.DIMENSION.with(() -> dim),
-                    new CullingUpdatePacket(positions)
-            );
+            NetworkHandler.sendToLevel(level, new CullingUpdatePacket(positions));
             positions.clear();
         }
     }
