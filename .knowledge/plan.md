@@ -115,3 +115,12 @@ Per-version pipeline (refined per version from its map):
 | W-M | 26.3 port map + worktree F:/wt/m263 (merge mc/1.21.11) | N-F | Sonnet long | open |
 
 Usage tally: Sonnet 95 + O-C3 long = 97; Opus 30. Opus share ~24 %.
+
+1.20.1 cross-task hand-offs (from O-C1 report):
+- C2: `CullingUpdateTracker.onServerLevelTick(ServerLevel)` (registered on START_WORLD_TICK) + PlayerLookup; replace 5 `FramedBlocks.CHANNEL` uses; `NetworkHandler.init()` at `// TODO C2` in FramedBlocks; all 3 menus need ExtendedScreenHandlerFactory (FramingSawBlock too).
+- C4a: MixinSystemReport (FramedBlocks.isInitialized/getBlockEntityWarning); sneak-bypass hooks call FramedToolItem.doItemsBypassSneak; ClientPacketListener mixin -> FramingSawRecipeCache.get(true).update(recipeManager); copy InvokerFireBlock.
+- C4b: IPlantable in FramedBlockEntity/IFramedBlock; recheck FramedBlueprintItem.
+- N: FramedBlockEntity wildcard `net.minecraftforge.common.*`; FramedBlockEntity + PoweredFramingSawBlockEntity must expose onLoad (FreshBlockEntityQueue wired).
+- O-B1: ModelUtils use weighted.wrapped (AW); FramedBlockModel FMLEnvironment -> Platform; FramedPane/FenceModel ModList -> Platform (B2); FramedDoubleBlockModel ConcatenatedListView import.
+- E1: ClientAccess destroyDelay field; StandingAndWallBlockGhostRenderBehaviour getPlacementState; FBClient Forge bus; ClientUtils.onClientTick, ClientEventHandler; Caffeine RemovalCause in FBClient.
+- E2/E3: ReiCompat Forge-only REI annotations; CreateCompat ObfuscationReflectionHelper.
