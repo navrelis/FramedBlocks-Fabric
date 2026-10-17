@@ -1,0 +1,9 @@
+{
+  "loader": "framedblocks_fabric:overlay",
+  "model": {
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+      "all": "framedblocks_fabric:block/slime_frame"
+    }
+  }
+}

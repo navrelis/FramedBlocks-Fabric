@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "c:stones"
+      }
+    }
+  ],
+  "material": 1536,
+  "result": {
+    "item": "framedblocks_fabric:framed_large_stone_button"
+  }
+}

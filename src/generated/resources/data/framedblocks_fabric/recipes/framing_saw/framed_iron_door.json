@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 2,
+      "ingredient": {
+        "tag": "c:iron_ingots"
+      }
+    }
+  ],
+  "material": 3072,
+  "result": {
+    "item": "framedblocks_fabric:framed_iron_door"
+  }
+}

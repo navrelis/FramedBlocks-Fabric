@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "c:copper_ingots"
+      }
+    }
+  ],
+  "material": 6144,
+  "result": {
+    "item": "framedblocks_fabric:framed_collapsible_copycat_block"
+  }
+}

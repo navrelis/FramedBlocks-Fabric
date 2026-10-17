@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 8,
+      "ingredient": {
+        "tag": "c:redstone_dusts"
+      }
+    }
+  ],
+  "material": 6144,
+  "result": {
+    "item": "framedblocks_fabric:framed_redstone_block"
+  }
+}

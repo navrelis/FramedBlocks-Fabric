@@ -1,0 +1,7 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "material": 4608,
+  "result": {
+    "item": "framedblocks_fabric:framed_sliced_stairs_panel"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "framedblocks_fabric:framed_hammer"
+    },
+    "P": {
+      "item": "framedblocks_fabric:framed_panel"
+    },
+    "S": {
+      "item": "framedblocks_fabric:framed_slope_panel"
+    }
+  },
+  "pattern": [
+    "PSH"
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_stacked_slope_panel"
+  },
+  "show_notification": true
+}

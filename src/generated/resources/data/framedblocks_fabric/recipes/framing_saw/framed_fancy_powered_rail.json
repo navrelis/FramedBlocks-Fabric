@@ -1,0 +1,22 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 6,
+      "ingredient": {
+        "tag": "c:gold_ingots"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "c:redstone_dusts"
+      }
+    }
+  ],
+  "material": 6144,
+  "result": {
+    "count": 6,
+    "item": "framedblocks_fabric:framed_fancy_powered_rail"
+  }
+}

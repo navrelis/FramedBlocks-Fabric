@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    }
+  },
+  "pattern": [
+    "R",
+    "F"
+  ],
+  "result": {
+    "count": 4,
+    "item": "framedblocks_fabric:framed_redstone_torch"
+  },
+  "show_notification": true
+}

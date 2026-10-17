@@ -1,0 +1,7 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "material": 6144,
+  "result": {
+    "item": "framedblocks_fabric:framed_tube"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "framedblocks_fabric:framed_slope"
+    },
+    {
+      "item": "minecraft:detector_rail"
+    }
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_detector_rail_slope"
+  }
+}

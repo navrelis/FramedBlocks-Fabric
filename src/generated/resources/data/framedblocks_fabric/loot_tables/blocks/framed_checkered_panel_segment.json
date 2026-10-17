@@ -1,0 +1,4 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "framedblocks_fabric:blocks/framed_checkered_panel_segment"
+}

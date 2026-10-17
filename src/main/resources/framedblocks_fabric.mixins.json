@@ -1,0 +1,15 @@
+{
+    "required": true,
+    "package": "xfacthd.framedblocks.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
+    "mixins": [
+        "MixinBlockStateBase",
+        "MixinMapItemSavedData"
+    ],
+    "client": [],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8"
+}

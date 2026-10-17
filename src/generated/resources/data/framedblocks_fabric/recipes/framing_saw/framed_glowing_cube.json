@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 4,
+      "ingredient": {
+        "item": "minecraft:glowstone_dust"
+      }
+    }
+  ],
+  "material": 6144,
+  "result": {
+    "item": "framedblocks_fabric:framed_glowing_cube"
+  }
+}

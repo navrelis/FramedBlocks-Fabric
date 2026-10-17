@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/lever_on",
+  "textures": {
+    "base": "framedblocks_fabric:block/white",
+    "particle": "framedblocks_fabric:block/framed_block"
+  }
+}

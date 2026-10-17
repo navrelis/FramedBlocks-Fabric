@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "framedblocks_fabric",
+  "version": "${version}",
+  "name": "FramedBlocks Fabric (Unofficial)",
+  "description": "Unofficial Fabric port of FramedBlocks by XFactHD. Building blocks in many shapes that take on the look of any block.",
+  "authors": [
+    "XFactHD"
+  ],
+  "contributors": [
+    "navrelis (Fabric port)"
+  ],
+  "contact": {
+    "homepage": "https://github.com/navrelis/FramedBlocks-Fabric",
+    "sources": "https://github.com/navrelis/FramedBlocks-Fabric",
+    "issues": "https://github.com/navrelis/FramedBlocks-Fabric/issues"
+  },
+  "license": "LGPL-3.0-only",
+  "icon": "assets/framedblocks_fabric/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "xfacthd.framedblocks.FramedBlocks"
+    ],
+    "client": [
+      "xfacthd.framedblocks.client.FBClient"
+    ],
+    "jei_mod_plugin": [
+      "xfacthd.framedblocks.common.compat.jei.FramedJeiPlugin"
+    ],
+    "rei_client": [
+      "xfacthd.framedblocks.common.compat.rei.FramedReiPlugin"
+    ],
+    "emi": [
+      "xfacthd.framedblocks.common.compat.emi.FramedEmiPlugin"
+    ],
+    "jade": [
+      "xfacthd.framedblocks.common.compat.jade.FramedJadePlugin"
+    ]
+  },
+  "mixins": [
+    "framedblocks_fabric.mixins.json",
+    "framedblocks_fabric.render.mixins.json",
+    "framedblocks_fabric.light.mixins.json",
+    "framedblocks_fabric.client.mixins.json"
+  ],
+  "accessWidener": "framedblocks_fabric.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric-api": ">=0.92.12",
+    "forgeconfigapiport": "*"
+  },
+  "suggests": {
+    "jei": "*",
+    "roughlyenoughitems": "*",
+    "emi": "*",
+    "jade": "*",
+    "supplementaries": "*",
+    "diagonalfences": "*",
+    "diagonalwindows": "*",
+    "team_reborn_energy": "*",
+    "indium": "*"
+  }
+}

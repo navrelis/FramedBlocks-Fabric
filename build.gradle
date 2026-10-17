@@ -1,76 +1,73 @@
 plugins {
-    id 'eclipse'
-    id 'idea'
+    id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev.legacyforge' version '2.0.134'
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 }
 
 version = mod_version
 group = 'xfacthd.framedblocks'
 
 base {
-    archivesName = 'FramedBlocks'
+    archivesName = 'FramedBlocksFabric'
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+}
 
-legacyForge {
-    version = "1.20.1-${forge_version}"
+// Set showcase=true to make the clientTest run build the showcase scenes and save screenshots for the project page
+// instead of running the smoke test. Optional: showcase_only=hero_cottage,glow_night limits the shots, showcase_variants=true
+// additionally saves alternative camera angles of every shot to a debug folder
+var showcaseRun = findProperty('showcase')?.toString()?.toLowerCase() == 'true'
+var showcaseOnly = findProperty('showcase_only')?.toString() ?: ''
+var showcaseVariants = findProperty('showcase_variants')?.toString()?.toLowerCase() == 'true'
+
+loom {
+    accessWidenerPath = file('src/main/resources/framedblocks_fabric.accesswidener')
 
     runs {
-        configureEach {
-            systemProperty 'forge.enabledGameTestNamespaces', 'framedblocks'
-            systemProperty 'terminal.ansi', 'true'
-
-            logLevel = org.slf4j.event.Level.DEBUG
-
-            sourceSet = project.sourceSets.test
+        // runClient only loads the main mod, this additionally loads the game test mod including the self-test and /fbtest commands
+        clientDev {
+            inherit client
+            source 'gametest'
+            ideConfigGenerated true
         }
 
-        client {
-            client()
-            gameDirectory = project.file('run')
-        }
-
-        server {
-            server()
-            gameDirectory = project.file('run_server')
-
-            programArgument '--nogui'
-        }
-
-        data {
-            data()
-            gameDirectory = project.file('run')
-
-            programArguments.addAll(
-                    '--mod', 'framedblocks',
-                    '--all',
-                    '--output', file('src/generated/resources/').getAbsolutePath(),
-                    '--existing', file('src/main/resources/').getAbsolutePath(),
-                    '--existing-mod', 'ae2'
-            )
-        }
-
-        gameTestServer {
-            type = "gameTestServer"
-            gameDirectory = project.file('run_gametest')
+        // Automated client smoke test, run via the runClientTest task. Only active with the framedblocks.clienttest property
+        // set, never part of the build. Use -Pcompat_runtime=sodium to run it with Sodium instead of Indigo
+        clientTest {
+            inherit client
+            source 'gametest'
+            runDir 'run/clienttest'
+            vmArg '-Dframedblocks.clienttest=true'
+            if (showcaseRun)
+            {
+                vmArg '-Dframedblocks.clienttest.showcase=true'
+                if (!showcaseOnly.isEmpty())
+                {
+                    vmArg "-Dframedblocks.clienttest.showcase.only=${showcaseOnly}"
+                }
+                if (showcaseVariants)
+                {
+                    vmArg '-Dframedblocks.clienttest.showcase.variants=true'
+                }
+            }
+            programArg '--width'
+            programArg showcaseRun ? '1920' : '1600'
+            programArg '--height'
+            programArg showcaseRun ? '1080' : '900'
+            ideConfigGenerated false
         }
     }
+}
 
-    mods {
-        framedblocks {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.test
-        }
-    }
-
-    addModdingDependenciesTo(project.sourceSets.test)
-
-    parchment {
-        minecraftVersion = "${minecraft_version}"
-        mappingsVersion = "${mapping_version}"
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = 'framedblocks_fabric_gametest'
+        enableGameTests = true
+        enableClientGameTests = false
     }
 }
 
@@ -78,211 +75,155 @@ sourceSets {
     main.resources {
         srcDir 'src/generated/resources'
     }
-
-    test {
-        java {
-            srcDir "src/test/java"
-        }
-        resources {
-            srcDir "src/test/resources"
-        }
-    }
 }
 
 repositories {
     maven {
-        name = 'MinecraftForge'
-        url = 'https://maven.minecraftforge.net/'
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
     }
     maven {
-        name = 'CurseMaven'
-        url = 'https://www.cursemaven.com'
+        name = 'Fuzs Mod Resources'
+        url = 'https://raw.githubusercontent.com/Fuzss/modresources/main/maven/'
         content {
-            includeGroup('curse.maven')
-        }
-    }
-    maven {
-        name = "tterrag's maven"
-        url = "https://maven.tterrag.com/"
-        content {
-            includeGroup('team.chisel.ctm')
-            includeGroup('com.tterrag.registrate')
-        }
-    }
-    maven {
-        name = 'Create maven'
-        url = 'https://maven.createmod.net/'
-        content {
-            includeGroup('com.simibubi.create')
-            includeGroup('net.createmod.ponder')
-            includeGroup('dev.engine-room.flywheel')
+            includeGroupByRegex('fuzs.*')
         }
     }
     maven {
         name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
-    }
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
+        url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup('mezz.jei')
+            includeGroup('net.mezzdev.config')
+        }
     }
     maven {
         name = "Shedaniel's maven"
-        url = "https://maven.shedaniel.me/"
+        url = 'https://maven.shedaniel.me/'
+        content {
+            includeGroupAndSubgroups('me.shedaniel')
+        }
     }
-    mavenCentral()
-    mavenLocal()
+    maven {
+        name = 'Architectury maven'
+        url = 'https://maven.architectury.dev/'
+        content {
+            includeGroup('dev.architectury')
+        }
+    }
+    maven {
+        name = 'TerraformersMC maven'
+        url = 'https://maven.terraformersmc.com/'
+        content {
+            includeGroup('dev.emi')
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth maven'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter {
+            includeGroup('maven.modrinth')
+        }
+    }
 }
 
 dependencies {
-    modCompileOnly "team.chisel.ctm:CTM:1.20.1-1.1.8+4"
-
-    //modRuntimeOnly "curse.maven:puzzleslib-495476:4621178" //Only needed when Diagonal Fences or Diagonal Windows is switched to implementation
-    modCompileOnly "curse.maven:diagonalfences-458048:4611775"
-    modCompileOnly "curse.maven:diagonalwindows-891328:4660584"
-
-    modCompileOnly "curse.maven:buildinggadgets-298187:3829297"
-
-    modImplementation ("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
-
-    modImplementation "curse.maven:athena-841890:5176879"
-    //modRuntimeOnly "curse.maven:resfullib-570073:5210240"
-    //modRuntimeOnly "curse.maven:chipped-456956:5270039"
-
-    modCompileOnly "curse.maven:xycraft_core-653786:4788862"
-    modCompileOnly "curse.maven:xycraft_world-653789:4788863"
-
-    modCompileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-    modCompileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
-    //modRuntimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
-
-    // Switch Arch, Cloth and REI-forge to impl for runtime testing
-    modCompileOnly "dev.architectury:architectury-forge:${arch_version}"
-    modCompileOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_version}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-    //modRuntimeOnly "curse.maven:reipc-521393:4723408"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}"
-    modCompileOnly "me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}"
-
-    modCompileOnly "dev.emi:emi-forge:${emi_version}+${minecraft_version}:api"
-    modRuntimeOnly "dev.emi:emi-forge:${emi_version}+${minecraft_version}"
-
-    //modRuntimeOnly "curse.maven:spark-361579:3767286"
-
-    //modRuntimeOnly "curse.maven:rubidium-574856:4684247"
-    //modRuntimeOnly "org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}+mc${embeddium_mc_version}"
-    //modRuntimeOnly "curse.maven:oculus-581495:5299671"
-    //modRuntimeOnly "curse.maven:starlight-forge-526854:4631193"
-
-    modCompileOnly ("com.simibubi.create:create-${create_mc_version}:${create_version}-${create_build_number}:slim") { transitive = false }
-    modCompileOnly "net.createmod.ponder:Ponder-Forge-${create_mc_version}:${ponder_version}"
-    modCompileOnly "dev.engine-room.flywheel:flywheel-forge-api-${create_mc_version}:${flywheel_version}-${flywheel_build_number}"
-    // Only needed when Create and Ponder are switched to implementation
-    //modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${create_mc_version}:${flywheel_version}-${flywheel_build_number}"
-    //modRuntimeOnly "com.tterrag.registrate:Registrate:${registrate_version}"
-
-    modCompileOnly "curse.maven:moonlight-499980:4621773"
-    modCompileOnly "curse.maven:supplementaries-412082:4622527"
-
-    //modRuntimeOnly "curse.maven:corelib-454372:4927036"
-    //modRuntimeOnly "curse.maven:fusion-854949:5005130"
-    //modRuntimeOnly "curse.maven:conglass-383129:5002550"
-
-    modCompileOnly "curse.maven:nocubes-309664:3944569"
-
-    modImplementation "curse.maven:guidebook-253874:4593765"
-
-    modCompileOnly "curse.maven:jade-324717:5072729"
-
-    modCompileOnly "curse.maven:atlasviewer-633577:4762356"
-
-    additionalRuntimeClasspath(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: caffeine_version)
-    jarJar(implementation(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: caffeine_version)) {
-        transitive(false)
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
     }
 
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.2.0-rc.4"))
-    jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.2.0-rc.4")) {
-        version {
-            strictly '[0.2.0-rc.4,)'
-            prefer '0.2.0-rc.4'
-        }
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+
+    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+    include "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+
+    // Upstream uses javax.annotation.Nullable in 35 files, Forge provided jsr305 transitively, Minecraft 1.20.1 does not. Compile time only
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+
+    // Optional integrations, none of these are required at runtime
+    modCompileOnly "mezz.jei:jei-${jei_mc_version}-fabric-api:${jei_version}"
+
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rei_version}"
+
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}+${emi_mc_version}:api"
+
+    modCompileOnly "maven.modrinth:jade:${jade_version}"
+
+    modCompileOnly("maven.modrinth:supplementaries:${supplementaries_version}") { transitive = false }
+    modCompileOnly("maven.modrinth:moonlight:${moonlight_version}") { transitive = false }
+
+    modCompileOnly("maven.modrinth:diagonal-fences:${diagonal_fences_version}") { transitive = false }
+    modCompileOnly("maven.modrinth:diagonal-windows:${diagonal_windows_version}") { transitive = false }
+
+    modCompileOnly "teamreborn:energy:${team_reborn_energy_version}"
+
+    // Only for the game tests of the Team Reborn Energy integration, never bundled or part of the main runtime
+    modGametestImplementation "teamreborn:energy:${team_reborn_energy_version}"
+
+    // Set compat_runtime=true to run JEI, EMI, REI and Jade in the dev client, or a comma-separated subset (e.g. jei,jade).
+    // Sodium is not part of "true" and has to be requested explicitly (e.g. sodium or jei,sodium).
+    // Sodium 0.5.x on 1.20.1 does not implement the Fabric Rendering API, so requesting sodium also adds Indium
+    var compatRuntime = findProperty('compat_runtime')?.toString()?.toLowerCase() ?: 'false'
+    var compatRuntimeAll = compatRuntime == 'true'
+    var compatRuntimeSet = compatRuntime.split(',').collect { it.trim() }
+    if (compatRuntimeAll || compatRuntimeSet.contains('jei'))
+    {
+        modLocalRuntime "mezz.jei:jei-${jei_mc_version}-fabric:${jei_version}"
     }
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    compileOnly 'org.jetbrains:annotations:26.0.1' // Needed because MDG legacy doesn't inject it automatically
+    if (compatRuntimeAll || compatRuntimeSet.contains('emi'))
+    {
+        modLocalRuntime "dev.emi:emi-fabric:${emi_version}+${emi_mc_version}"
+    }
+    if (compatRuntimeAll || compatRuntimeSet.contains('rei'))
+    {
+        modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+        modLocalRuntime "dev.architectury:architectury-fabric:${architectury_version}"
+        modLocalRuntime "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
+    }
+    if (compatRuntimeAll || compatRuntimeSet.contains('jade'))
+    {
+        modLocalRuntime "maven.modrinth:jade:${jade_version}"
+    }
+    if (compatRuntimeSet.contains('sodium'))
+    {
+        modLocalRuntime "maven.modrinth:sodium:${sodium_version}"
+        modLocalRuntime "maven.modrinth:indium:${indium_version}"
+    }
 }
 
-mixin {
-    add sourceSets.main, "framedblocks.refmap.json"
-    config "framedblocks.mixin.json"
-}
-
-// This block of code expands all declared replace properties in the specified resource targets.
-// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
-// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
-def replaceProperties = [
-        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-        forge_version: forge_version, forge_version_range: forge_version_range,
-        loader_version_range: loader_version_range, mod_version: mod_version
-]
-
-processResources {
-    //exclude("framedblocks.mixin.json")
-
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            version: project.version
+    ]
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
 
-    filesMatching(resourceTargets) {
+    filesMatching('fabric.mod.json') {
         expand replaceProperties
     }
 }
 
-processTestResources {
-    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
-}
-
-// Example for how to get properties into the manifest for reading by the runtime..
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                "Specification-Title"     : "framedblocks",
-                "Specification-Vendor"    : "XFactHD",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "XFactHD",
-                "MixinConfigs"            : "framedblocks.mixin.json"
-        ])
-    }
-
-    // The settings below make sure that your build is reproducible
-    // More information at https://docs.gradle.org/current/userguide/working_with_files.html#sec:reproducible_archives
-    preserveFileTimestamps = false
-    reproducibleFileOrder = true
-}
-
-test {
-    // The test sourceset is being (mis)used for non-standard tests
-    failOnNoDiscoveredTests = false
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
 }
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        register('mavenJava', MavenPublication) {
+            from components.java
         }
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url = "file://${project.projectDir}/mcmodsrepo"
         }
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

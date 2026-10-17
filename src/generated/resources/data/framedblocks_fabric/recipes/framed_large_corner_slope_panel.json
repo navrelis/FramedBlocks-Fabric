@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "framedblocks_fabric:framed_hammer"
+    },
+    "P": {
+      "item": "framedblocks_fabric:framed_slope_panel"
+    }
+  },
+  "pattern": [
+    "H  ",
+    " PP",
+    " P "
+  ],
+  "result": {
+    "count": 2,
+    "item": "framedblocks_fabric:framed_large_corner_slope_panel"
+  },
+  "show_notification": true
+}

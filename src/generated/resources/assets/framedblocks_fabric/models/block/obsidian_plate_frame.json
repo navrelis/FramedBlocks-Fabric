@@ -1,0 +1,14 @@
+{
+  "center": [
+    8.0,
+    0.5,
+    8.0
+  ],
+  "loader": "framedblocks_fabric:overlay",
+  "model": {
+    "parent": "framedblocks_fabric:block/framed_pressure_plate_frame_up",
+    "textures": {
+      "texture": "framedblocks_fabric:block/obsidian_plate_frame"
+    }
+  }
+}

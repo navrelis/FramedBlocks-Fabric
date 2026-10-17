@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "F F",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_wrench"
+  },
+  "show_notification": true
+}

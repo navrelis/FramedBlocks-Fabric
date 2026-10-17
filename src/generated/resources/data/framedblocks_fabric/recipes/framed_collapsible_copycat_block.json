@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "tag": "c:copper_ingots"
+    },
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    }
+  },
+  "pattern": [
+    "FCF",
+    "C C",
+    "FCF"
+  ],
+  "result": {
+    "count": 4,
+    "item": "framedblocks_fabric:framed_collapsible_copycat_block"
+  },
+  "show_notification": true
+}

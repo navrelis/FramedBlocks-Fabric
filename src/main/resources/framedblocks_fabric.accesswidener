@@ -1,0 +1,22 @@
+accessWidener	v2	named
+# Converted from the former accesstransformer.cfg of the Forge version (names are Mojang names of 1.20.1).
+# Not carried over (only used by the removed Forge data generators): RecipeProvider#getName and #has. ModelBakerImpl is kept because FluidModel still instantiates it (until task B1 reworks it)
+# Forge "protected" entries are mapped to "accessible" (public)
+
+accessible	method	net/minecraft/client/gui/GuiGraphics	innerBlit	(Lnet/minecraft/resources/ResourceLocation;IIIIIFFFF)V
+accessible	method	net/minecraft/nbt/NbtUtils	setValueHelper	(Lnet/minecraft/world/level/block/state/StateHolder;Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/String;Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/level/block/state/StateHolder;
+accessible	field	net/minecraft/world/level/block/PressurePlateBlock	sensitivity	Lnet/minecraft/world/level/block/PressurePlateBlock$Sensitivity;
+accessible	field	net/minecraft/client/particle/ParticleEngine	random	Lnet/minecraft/util/RandomSource;
+accessible	method	net/minecraft/server/network/ServerGamePacketListenerImpl	filterTextPacket	(Ljava/util/List;)Ljava/util/concurrent/CompletableFuture;
+accessible	method	net/minecraft/world/level/block/ChiseledBookShelfBlock	getRelativeHitCoordinatesForBlockFace	(Lnet/minecraft/world/phys/BlockHitResult;Lnet/minecraft/core/Direction;)Ljava/util/Optional;
+accessible	method	net/minecraft/world/level/block/ChiseledBookShelfBlock	getHitSlot	(Lnet/minecraft/world/phys/Vec2;)I
+accessible	method	net/minecraft/client/renderer/texture/atlas/SpriteSources	register	(Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lnet/minecraft/client/renderer/texture/atlas/SpriteSourceType;
+accessible	method	net/minecraft/world/level/block/WallBlock	makeShapes	(FFFFFF)Ljava/util/Map;
+accessible	method	net/minecraft/client/renderer/LevelRenderer	renderShape	(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDFFFF)V
+accessible	method	net/minecraft/world/entity/Entity	getBlockPosBelowThatAffectsMyMovement	()Lnet/minecraft/core/BlockPos;
+extendable	method	net/minecraft/world/level/block/WallBlock	makeShapes	(FFFFFF)Ljava/util/Map;
+accessible	class	net/minecraft/world/item/crafting/Ingredient$Value
+accessible	class	net/minecraft/world/item/crafting/Ingredient$TagValue
+accessible	class	net/minecraft/world/item/crafting/Ingredient$ItemValue
+accessible	class	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl
+accessible	method	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl	<init>	(Lnet/minecraft/client/resources/model/ModelBakery;Ljava/util/function/BiFunction;Lnet/minecraft/resources/ResourceLocation;)V

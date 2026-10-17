@@ -16,7 +16,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 
 public final class KeyMappings
 {
-    public static final String KEY_CATEGORY = FramedConstants.MOD_ID + ".key.categories.framedblocks";
+    public static final String KEY_CATEGORY = FramedConstants.MOD_ID + ".key.categories.framedblocks_fabric";
     public static final Lazy<KeyMapping> KEYMAPPING_UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
     public static final Lazy<KeyMapping> KEYMAPPING_WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
 

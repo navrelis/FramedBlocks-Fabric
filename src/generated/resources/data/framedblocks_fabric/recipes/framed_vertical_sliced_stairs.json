@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "E": {
+      "item": "framedblocks_fabric:framed_slab_edge"
+    },
+    "P": {
+      "item": "framedblocks_fabric:framed_panel"
+    },
+    "W": {
+      "item": "framedblocks_fabric:framed_wrench"
+    }
+  },
+  "pattern": [
+    "PEW"
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_vertical_sliced_stairs"
+  },
+  "show_notification": true
+}

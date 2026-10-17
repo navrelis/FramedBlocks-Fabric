@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "framedblocks_fabric:framed_half_slope"
+    },
+    "P": {
+      "item": "framedblocks_fabric:framed_panel"
+    }
+  },
+  "pattern": [
+    "PH"
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_vertical_sloped_stairs"
+  },
+  "show_notification": true
+}

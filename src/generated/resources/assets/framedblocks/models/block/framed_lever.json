@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/lever",
-  "textures": {
-    "base": "forge:white",
-    "particle": "framedblocks:block/framed_block"
-  }
-}

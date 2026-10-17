@@ -1,0 +1,7 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "material": 3072,
+  "result": {
+    "item": "framedblocks_fabric:framed_checkered_panel"
+  }
+}

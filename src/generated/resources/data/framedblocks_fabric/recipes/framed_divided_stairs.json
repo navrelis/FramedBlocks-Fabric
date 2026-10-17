@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": {
+      "item": "framedblocks_fabric:framed_half_stairs"
+    }
+  },
+  "pattern": [
+    "SS"
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_divided_stairs"
+  },
+  "show_notification": true
+}

@@ -13,21 +13,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 import java.util.List;
 import java.util.Optional;
 
-public sealed class AnimationSplitterSource implements SpriteSource permits AnimationSplitterSourceAV
+public class AnimationSplitterSource implements SpriteSource
 {
-    private static final boolean AV_LOADED = ModList.get().isLoaded("atlasviewer");
     private static SpriteSourceType TYPE = null;
     private static final Codec<AnimationSplitterSource> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
-    ).apply(inst, AV_LOADED ? AnimationSplitterSourceAV::new : AnimationSplitterSource::new));
+    ).apply(inst, AnimationSplitterSource::new));
 
     private final ResourceLocation resource;
     private final List<Frame> frames;
@@ -77,7 +75,7 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
         ).apply(inst, Frame::new));
     }
 
-    static sealed class FrameInstance implements SpriteSupplier permits AnimationSplitterSourceAV.FrameInstanceAV
+    static class FrameInstance implements SpriteSupplier
     {
         final Resource resource;
         private final ResourceLocation texPath;

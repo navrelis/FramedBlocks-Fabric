@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "G": {
+      "tag": "c:gold_ingots"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    }
+  },
+  "pattern": [
+    "G G",
+    "GFG",
+    "GRG"
+  ],
+  "result": {
+    "count": 6,
+    "item": "framedblocks_fabric:framed_fancy_powered_rail"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "S": {
+      "item": "framedblocks_fabric:framed_slab"
+    }
+  },
+  "pattern": [
+    "FFF",
+    "SSS",
+    "FFF"
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_chiseled_bookshelf"
+  },
+  "show_notification": true
+}

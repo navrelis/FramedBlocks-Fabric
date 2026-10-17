@@ -35,7 +35,7 @@ import java.util.function.*;
 public final class ClientUtils
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final ResourceLocation DUMMY_TEXTURE = new ResourceLocation("forge", "white");
+    public static final ResourceLocation DUMMY_TEXTURE = Utils.rl("block/white");
     /** List of properties which are always present and always need to be ignored */
     public static final List<Property<?>> IGNORE_ALWAYS = List.of(FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     /** {@link ClientUtils#IGNORE_ALWAYS} + solid */

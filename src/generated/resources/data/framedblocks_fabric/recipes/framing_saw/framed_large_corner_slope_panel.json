@@ -1,0 +1,7 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "material": 2304,
+  "result": {
+    "item": "framedblocks_fabric:framed_large_corner_slope_panel"
+  }
+}

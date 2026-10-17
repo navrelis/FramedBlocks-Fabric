@@ -1,9 +1,9 @@
 {
   "values": [
-    "framedblocks:framed_iron_door",
-    "framedblocks:framed_iron_trapdoor",
-    "framedblocks:framed_iron_gate",
-    "framedblocks:framing_saw",
-    "framedblocks:powered_framing_saw"
+    "framedblocks_fabric:framed_iron_door",
+    "framedblocks_fabric:framed_iron_trapdoor",
+    "framedblocks_fabric:framed_iron_gate",
+    "framedblocks_fabric:framing_saw",
+    "framedblocks_fabric:powered_framing_saw"
   ]
 }

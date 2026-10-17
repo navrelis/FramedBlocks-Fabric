@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "FSF",
+    "FSF"
+  ],
+  "result": {
+    "count": 3,
+    "item": "framedblocks_fabric:framed_fence"
+  },
+  "show_notification": true
+}

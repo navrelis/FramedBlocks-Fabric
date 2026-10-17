@@ -1,0 +1,7 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "material": 384,
+  "result": {
+    "item": "framedblocks_fabric:framed_wall_board"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "framedblocks_fabric:block/template_framed_item_frame",
+  "textures": {
+    "back": "framedblocks_fabric:block/white",
+    "front": "minecraft:block/glow_item_frame",
+    "particle": "framedblocks_fabric:block/framed_block",
+    "wood": "framedblocks_fabric:block/white"
+  }
+}

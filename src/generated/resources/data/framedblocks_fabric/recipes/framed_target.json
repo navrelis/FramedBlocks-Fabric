@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "H": {
+      "item": "minecraft:hay_block"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    }
+  },
+  "pattern": [
+    "FRF",
+    "RHR",
+    "FRF"
+  ],
+  "result": {
+    "item": "framedblocks_fabric:framed_target"
+  },
+  "show_notification": true
+}

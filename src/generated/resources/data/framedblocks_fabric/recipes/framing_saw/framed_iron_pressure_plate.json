@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks_fabric:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "c:iron_ingots"
+      }
+    }
+  ],
+  "material": 1536,
+  "result": {
+    "item": "framedblocks_fabric:framed_iron_pressure_plate"
+  }
+}

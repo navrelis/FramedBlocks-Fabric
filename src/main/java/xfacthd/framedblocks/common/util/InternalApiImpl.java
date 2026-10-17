@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
-import xfacthd.framedblocks.common.compat.starlight.StarlightCompat;
 
 public final class InternalApiImpl implements InternalAPI
 {
@@ -32,7 +31,7 @@ public final class InternalApiImpl implements InternalAPI
     @Override
     public BlockEntity getBlockEntityForLight(BlockGetter level, BlockPos pos)
     {
-        return StarlightCompat.getBlockEntityForLight(level, pos);
+        return getExistingBlockEntity(level, pos);
     }
 
     @Override
