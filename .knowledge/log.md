@@ -131,3 +131,4 @@
 - O-C2 — Sonnet, long (+1 short corr) — diff read (FabricPacket x4, NetworkHandler/ClientNetworkHandler, thenAcceptAsync on server for sign filter, PlayerLookup culling, saw ExtendedScreenHandlerFactory); 617 errors whole-tree, 0 in new/rewritten files (whole + isolated). Correction: upstream 9.4.3 culling chunk-z used getX -> fixed. Committed 6d64633d1, merged 69d2dfa5f. O-E1 — Sonnet, long — running in F:/wt/oe1.
 - O-E1 — Sonnet, long — diff read (FBClient ClientModInitializer 14-step init per contract §4, HUD overlays, ClientBlockEffects registry, 4 client mixins verified by javap, MixinBlockFaceHiding identical to 1.21.1; no duplicate break-sound mixin); 588 -> 530 errors, 0 owned. Merged into mc/1.20.1.
 - N-C1 — Sonnet, long — running in F:/wt/nc1.
+- Session 13 auto-handoff — lead — O-C4a, N-B1, N-C5, N-C1 stopped (O-C4a/N-B1 partial uncommitted, N-C5/N-C1 empty); state in handoff.md.
