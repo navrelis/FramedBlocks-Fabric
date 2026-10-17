@@ -1,8 +1,11 @@
 package xfacthd.framedblocks.api.model;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Throwables;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.util.concurrent.ExecutionError;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -14,9 +17,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
@@ -32,13 +32,17 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.model.*;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("deprecation")
 public abstract class FramedBlockModel extends BakedModelProxy
 {
-    private static final boolean DISABLE_QUAD_CACHE = !FMLEnvironment.production && TestProperties.DISABLE_MODEL_QUAD_CACHE;
+    private static final boolean DISABLE_QUAD_CACHE = !Platform.isProduction() && TestProperties.DISABLE_MODEL_QUAD_CACHE;
     private static final FramedBlockData DEFAULT_DATA = new FramedBlockData.Immutable(
             Blocks.AIR.defaultBlockState(), new boolean[6], false
     );
@@ -46,10 +50,11 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public static final ResourceLocation REINFORCEMENT_LOCATION = Utils.rl("block/framed_reinforcement");
     private static BakedModel reinforcementModel = null;
 
-    private final Cache<QuadCacheKey, QuadTable> quadCache = Caffeine.newBuilder()
+    // Guava caches with the same semantics as the Caffeine caches of the Forge version (Caffeine is not available)
+    private final Cache<QuadCacheKey, QuadTable> quadCache = CacheBuilder.newBuilder()
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
-    private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Caffeine.newBuilder()
+    private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = CacheBuilder.newBuilder()
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
     protected final BlockState state;
@@ -168,9 +173,10 @@ public abstract class FramedBlockModel extends BakedModelProxy
             BlockState keyState, BlockState camoState, RandomSource rand, ModelData data
     )
     {
-        return renderTypeCache.get(
+        return getOrCompute(
+                renderTypeCache,
                 makeCacheKey(keyState, null, data),
-                key -> buildRenderTypeCache(camoState, rand, data)
+                () -> buildRenderTypeCache(camoState, rand, data)
         );
     }
 
@@ -241,7 +247,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
             if (camoInRenderType)
             {
-                List<BakedQuad> modelQuads = model.getQuads(camoState, side, rand, camoData, renderType);
+                List<BakedQuad> modelQuads = ModelBridge.getQuads(model, camoState, side, rand, camoData, renderType);
                 if (modelQuads.isEmpty())
                 {
                     // Try extracting useful quads from the list of (supposedly) uncullable quads if querying cullable
@@ -258,7 +264,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
             if (addReinforcement && renderType == RenderType.cutout())
             {
-                Utils.copyAll(reinforcementModel.getQuads(camoState, side, rand, camoData, renderType), quads);
+                Utils.copyAll(ModelBridge.getQuads(reinforcementModel, camoState, side, rand, camoData, renderType), quads);
             }
 
             return quads;
@@ -271,9 +277,16 @@ public abstract class FramedBlockModel extends BakedModelProxy
                 return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement, altModel)
                         .getQuads(renderType, side);
             }
-            return quadCache.get(
-                    makeCacheKey(camoState, ctCtx, extraData),
-                    key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement, altModel)
+            QuadCacheKey cacheKey = makeCacheKey(camoState, ctCtx, extraData);
+            BlockState keyCamoState = cacheKey.state();
+            BlockState finalState = state;
+            ModelData finalCamoData = ctCtx != null ? camoData : ModelData.EMPTY;
+            boolean finalAddReinforcement = addReinforcement;
+            boolean finalAltModel = altModel;
+            return getOrCompute(
+                    quadCache,
+                    cacheKey,
+                    () -> buildQuadCache(finalState, keyCamoState, rand, extraData, finalCamoData, noCamo, finalAddReinforcement, finalAltModel)
             ).getQuads(renderType, side);
         }
     }
@@ -599,6 +612,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
     }
 
     @Override
+    protected final boolean ignoreLightEmissionForAmbientOcclusion(BlockState state, RenderType renderType)
+    {
+        // Replaces the MixinModelBlockRenderer of the Forge version
+        return useAmbientOcclusionWithLightEmission(state, renderType);
+    }
+
+    @Override
     public final ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData tileData)
     {
         if (!type.supportsConnectedTextures())
@@ -617,17 +637,27 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             BakedModel model = ModelCache.getModel(camoState);
             ModelData camoData;
-            try
+            if (model instanceof IBakedModelExtension extension)
             {
-                // Try getting camo data with the enclosing state, some mods may not like that
-                // This option provides better CT behaviour
-                camoData = model.getModelData(level, pos, state, tileData);
+                try
+                {
+                    // Try getting camo data with the enclosing state, some mods may not like that
+                    // This option provides better CT behaviour
+                    camoData = extension.getModelData(level, pos, state, tileData);
+                }
+                catch (Throwable t)
+                {
+                    // Fall back to getting camo data with the camo state if a mod didn't like it
+                    // This option may cause some CT weirdness
+                    camoData = extension.getModelData(level, pos, camoState, tileData);
+                }
             }
-            catch (Throwable t)
+            else
             {
-                // Fall back to getting camo data with the camo state if a mod didn't like it
-                // This option may cause some CT weirdness
-                camoData = model.getModelData(level, pos, camoState, tileData);
+                // Models implementing the Fabric Rendering API (i.e. connected textures models) are handed the given
+                // state as the state being rendered when their quads are captured and can therefore not be queried
+                // with the enclosing state. Vanilla models don't use model data at all
+                camoData = ModelBridge.getModelData(model, level, pos, camoState, ModelData.EMPTY);
             }
             tileData = tileData.derive().with(FramedBlockData.CAMO_DATA, camoData).build();
         }
@@ -660,6 +690,24 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public static void captureReinforcementModel(Map<ResourceLocation, BakedModel> models)
     {
         reinforcementModel = models.get(REINFORCEMENT_LOCATION);
+    }
+
+    /**
+     * Replacement for Caffeine's {@code Cache#get(Object, Function)}: returns the cached value or computes and caches
+     * it, exceptions thrown by the loader are re-thrown unwrapped
+     */
+    private static <K, V> V getOrCompute(Cache<K, V> cache, K key, Callable<? extends V> loader)
+    {
+        try
+        {
+            return cache.get(key, loader);
+        }
+        catch (ExecutionException | UncheckedExecutionException | ExecutionError e)
+        {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            Throwables.throwIfUnchecked(cause);
+            throw new RuntimeException(cause);
+        }
     }
 
 

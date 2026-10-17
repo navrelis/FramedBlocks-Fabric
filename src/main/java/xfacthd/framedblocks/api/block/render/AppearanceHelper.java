@@ -4,11 +4,9 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelDataManager;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -19,6 +17,9 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelDataHelper;
 
 import java.util.function.Predicate;
 
@@ -53,7 +54,7 @@ public final class AppearanceHelper
     )
     {
         IBlockType type = framedBlock.getBlockType();
-        if (!FMLEnvironment.dist.isClient() || !type.supportsConnectedTextures())
+        if (!Platform.isClient() || !type.supportsConnectedTextures())
         {
             return AIR;
         }
@@ -287,19 +288,19 @@ public final class AppearanceHelper
         return true;
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private static FramedBlockData getModelData(
             BlockGetter level, BlockPos pos, BlockState componentState, boolean mayBeSingle
     )
     {
-        ModelDataManager manager = level.getModelDataManager();
-        if (manager == null)
+        // The Forge version read the client-side model data cache, which only exists for client levels
+        if (level instanceof Level realLevel && !realLevel.isClientSide())
         {
             return null;
         }
 
-        ModelData data = ((ModelDataAccessor) manager).framedblocks$getCachedAt(pos);
-        if (data == null)
+        // Render data of the block entity, safe to query from chunk meshing threads through the render region
+        ModelData data = ModelDataHelper.get(level, pos);
+        if (data == ModelData.EMPTY)
         {
             return null;
         }
@@ -319,15 +320,6 @@ public final class AppearanceHelper
             return block.unpackNestedModelData(data, state, componentState).get(FramedBlockData.PROPERTY);
         }
         return null;
-    }
-
-
-
-    @ApiStatus.Internal
-    public interface ModelDataAccessor
-    {
-        @Nullable
-        ModelData framedblocks$getCachedAt(BlockPos pos);
     }
 
 

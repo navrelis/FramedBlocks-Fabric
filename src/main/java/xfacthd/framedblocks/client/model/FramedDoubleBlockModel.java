@@ -16,9 +16,6 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.*;
-import net.minecraftforge.common.util.ConcatenatedListView;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -26,6 +23,8 @@ import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.platform.model.*;
+import xfacthd.framedblocks.platform.util.ConcatenatedListView;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -39,7 +38,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     private final DoubleBlockTopInteractionMode particleMode;
     private final Vec3 handTransform;
     private final Tuple<BlockState, BlockState> dummyStates;
-    private Tuple<BakedModel, BakedModel> models = null;
+    private volatile Tuple<BakedModel, BakedModel> models = null;
 
     public FramedDoubleBlockModel(
             BlockState state,
@@ -63,10 +62,10 @@ public class FramedDoubleBlockModel extends BakedModelProxy
         Tuple<BakedModel, BakedModel> models = getModels();
 
         ModelData dataLeft = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_LEFT), EMPTY_FRAME);
-        quads.add(models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft, layer));
+        quads.add(ModelBridge.getQuads(models.getA(), dummyStates.getA(), side, rand, dataLeft, layer));
 
         ModelData dataRight = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_RIGHT), EMPTY_ALT_FRAME);
-        quads.add(invertTintIndizes(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight, layer)));
+        quads.add(invertTintIndizes(ModelBridge.getQuads(models.getB(), dummyStates.getB(), side, rand, dataRight, layer)));
 
         return ConcatenatedListView.of(quads);
     }
@@ -117,8 +116,8 @@ public class FramedDoubleBlockModel extends BakedModelProxy
         ModelData dataRight = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
 
         return ChunkRenderTypeSet.union(
-                models.getA().getRenderTypes(dummyStates.getA(), rand, dataLeft),
-                models.getB().getRenderTypes(dummyStates.getB(), rand, dataRight)
+                ModelBridge.getRenderTypes(models.getA(), dummyStates.getA(), rand, dataLeft),
+                ModelBridge.getRenderTypes(models.getB(), dummyStates.getB(), rand, dataRight)
         );
     }
 
@@ -130,8 +129,8 @@ public class FramedDoubleBlockModel extends BakedModelProxy
         ModelData dataLeft = Objects.requireNonNullElse(tileData.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
         ModelData dataRight = Objects.requireNonNullElse(tileData.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
 
-        dataLeft = models.getA().getModelData(level, pos, dummyStates.getA(), dataLeft);
-        dataRight = models.getB().getModelData(level, pos, dummyStates.getB(), dataRight);
+        dataLeft = ModelBridge.getModelData(models.getA(), level, pos, dummyStates.getA(), dataLeft);
+        dataRight = ModelBridge.getModelData(models.getB(), level, pos, dummyStates.getB(), dataRight);
 
         return tileData.derive()
                 .with(FramedDoubleBlockEntity.DATA_LEFT, dataLeft)
@@ -152,6 +151,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
 
     protected final Tuple<BakedModel, BakedModel> getModels()
     {
+        Tuple<BakedModel, BakedModel> models = this.models;
         if (models == null)
         {
             BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
@@ -159,6 +159,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
                     dispatcher.getBlockModel(dummyStates.getA()),
                     dispatcher.getBlockModel(dummyStates.getB())
             );
+            this.models = models;
         }
         return models;
     }
@@ -183,7 +184,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
             if (fbData != null && !fbData.getCamoState().isAir())
             {
                 BakedModel model = secondary ? getModels().getB() : getModels().getA();
-                return model.getParticleIcon(innerData);
+                return ModelBridge.getParticleIcon(model, innerData);
             }
         }
         return null;

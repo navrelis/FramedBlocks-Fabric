@@ -1,13 +1,16 @@
 package xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Suppliers;
-import com.mojang.math.Transformation;
+import net.fabricmc.fabric.api.client.model.loading.v1.FabricBakedModelManager;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
@@ -17,33 +20,29 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.client.model.*;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.model.*;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
+/**
+ * Model of a fluid used as camo.
+ * <p>
+ * The Forge version re-baked the bare fluid model with the still and flowing textures from the fluid's
+ * {@code IClientFluidTypeExtensions}. On Fabric the textures come from the fluid's {@link FluidRenderHandler} as
+ * sprites, the quads of the bare fluid model (baked with the textures of water) are therefore transferred onto the
+ * fluid's sprites instead, which yields identical quads without requiring access to the model baker
+ */
 @SuppressWarnings("deprecation")
-public final class FluidModel implements BakedModel
+public final class FluidModel implements BakedModel, IBakedModelExtension
 {
-    private static final ModelState SIMPLE_STATE = new SimpleModelState(Transformation.identity());
+    /** Additional model, must be registered through {@link ModelEventsBridge} */
     public static final ResourceLocation BARE_MODEL = Utils.rl("fluid/bare");
+    /** Additional model, must be registered through {@link ModelEventsBridge} */
     public static final ResourceLocation BARE_MODEL_SINGLE = Utils.rl("fluid/bare_single");
-    private static final Function<ResourceLocation, TextureAtlasSprite> SPRITE_GETTER = (loc ->
-            Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(loc)
-    );
-    private static final Supplier<ResourceLocation> WATER_STILL = Suppliers.memoize(() ->
-            IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture()
-    );
-    private static final Supplier<ResourceLocation> WATER_FLOWING = Suppliers.memoize(() ->
-            IClientFluidTypeExtensions.of(Fluids.WATER).getFlowingTexture()
-    );
+    private static final ResourceLocation WATER_STILL = new ResourceLocation("block/water_still");
+    private static final ResourceLocation WATER_FLOWING = new ResourceLocation("block/water_flow");
     private final RenderType fluidLayer;
     private final ChunkRenderTypeSet fluidLayerSet;
     private final Map<Direction, List<BakedQuad>> quads;
@@ -69,7 +68,7 @@ public final class FluidModel implements BakedModel
             @Nullable Direction side,
             RandomSource rand,
             ModelData extraData,
-            RenderType layer
+            @Nullable RenderType layer
     )
     {
         if (side == null || layer != fluidLayer)
@@ -116,6 +115,12 @@ public final class FluidModel implements BakedModel
     }
 
     @Override
+    public ItemTransforms getTransforms()
+    {
+        return ItemTransforms.NO_TRANSFORMS;
+    }
+
+    @Override
     public ItemOverrides getOverrides()
     {
         return ItemOverrides.EMPTY;
@@ -123,63 +128,100 @@ public final class FluidModel implements BakedModel
 
 
 
+    /**
+     * Create the model for the given fluid by transferring the quads of the bare fluid model, which is baked
+     * with the textures of water, onto the textures of the given fluid
+     */
     public static FluidModel create(Fluid fluid)
     {
-        ModelBakery modelBakery = Minecraft.getInstance().getModelManager().getModelBakery();
+        TextureAtlasSprite stillSprite = getFluidSprite(fluid, false);
+        TextureAtlasSprite flowingSprite = getFluidSprite(fluid, true);
+        boolean singleTexture = flowingSprite == stillSprite;
 
-        IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
-        ResourceLocation stillTexture = Preconditions.checkNotNull(
-                props.getStillTexture(),
-                "Fluid %s returned null from IClientFluidTypeExtensions#getStillTexture()",
-                fluid
+        ModelManager modelManager = Minecraft.getInstance().getModelManager();
+        BakedModel bareModel = ((FabricBakedModelManager) modelManager).getModel(singleTexture ? BARE_MODEL_SINGLE : BARE_MODEL);
+        Preconditions.checkState(
+                bareModel != null && bareModel != modelManager.getMissingModel(),
+                "Bare fluid model not loaded!"
         );
-        ResourceLocation flowingTexture = Preconditions.checkNotNull(
-                props.getFlowingTexture(),
-                "Fluid %s returned null from IClientFluidTypeExtensions#getFlowingTexture()",
-                fluid
-        );
-
-        boolean singleTexture = flowingTexture.equals(stillTexture);
-        UnbakedModel bareModel = modelBakery.getModel(singleTexture ? BARE_MODEL_SINGLE : BARE_MODEL);
-        Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
-
-        ResourceLocation fluidName = Preconditions.checkNotNull(
-                ForgeRegistries.FLUID_TYPES.get().getKey(fluid.getFluidType()),
-                "Cannot create FluidModel for unregistered FluidType of fluid %s",
-                fluid
-        );
-        ResourceLocation modelName = Utils.rl("fluid/" + fluidName.toString().replace(":", "_"));
-        Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(stillTexture, flowingTexture);
-        ModelBakery.ModelBakerImpl baker = modelBakery.new ModelBakerImpl((modelLoc, material) -> spriteGetter.apply(material), modelName);
-        BakedModel model = bareModel.bake(baker, spriteGetter, SIMPLE_STATE, modelName);
-        Preconditions.checkNotNull(model, "Failed to bake fluid model for fluid %s", fluid);
 
         Map<Direction, List<BakedQuad>> quads = new EnumMap<>(Direction.class);
-        BlockState defState = fluid.defaultFluidState().createLegacyBlock();
         RandomSource random = RandomSource.create();
         RenderType layer = ItemBlockRenderTypes.getRenderLayer(fluid.defaultFluidState());
 
         for (Direction side : Direction.values())
         {
-            quads.put(side, model.getQuads(defState, side, random, ModelData.EMPTY, layer));
+            List<BakedQuad> bareQuads = bareModel.getQuads(null, side, random);
+            List<BakedQuad> sideQuads = new ArrayList<>(bareQuads.size());
+            for (BakedQuad quad : bareQuads)
+            {
+                ResourceLocation texture = quad.getSprite().contents().name();
+                if (texture.equals(WATER_FLOWING))
+                {
+                    quad = retexture(quad, flowingSprite);
+                }
+                else if (texture.equals(WATER_STILL))
+                {
+                    quad = retexture(quad, stillSprite);
+                }
+                sideQuads.add(quad);
+            }
+            quads.put(side, List.copyOf(sideQuads));
         }
 
-        return new FluidModel(layer, quads, SPRITE_GETTER.apply(stillTexture));
+        return new FluidModel(layer, quads, stillSprite);
     }
 
-    private static Function<Material, TextureAtlasSprite> matToSprite(ResourceLocation stillTexture, ResourceLocation flowingTexture)
+    /**
+     * {@return the still or flowing sprite of the given fluid or the missing sprite if the fluid has none}
+     */
+    private static TextureAtlasSprite getFluidSprite(Fluid fluid, boolean flowing)
     {
-        return mat ->
+        // The empty fluid has no textures, use the missing texture to prevent crashes
+        if (fluid != Fluids.EMPTY)
         {
-            if (mat.texture().equals(WATER_FLOWING.get()))
+            FluidRenderHandler handler = FluidRenderHandlerRegistry.INSTANCE.get(fluid);
+            if (handler != null)
             {
-                return SPRITE_GETTER.apply(flowingTexture);
+                TextureAtlasSprite[] sprites = handler.getFluidSprites(null, null, fluid.defaultFluidState());
+                if (sprites != null && sprites.length > 0)
+                {
+                    TextureAtlasSprite sprite = sprites[flowing && sprites.length > 1 ? 1 : 0];
+                    if (sprite != null)
+                    {
+                        return sprite;
+                    }
+                }
             }
-            if (mat.texture().equals(WATER_STILL.get()))
-            {
-                return SPRITE_GETTER.apply(stillTexture);
-            }
-            return mat.sprite();
-        };
+        }
+        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(MissingTextureAtlasSprite.getLocation());
+    }
+
+    private static BakedQuad retexture(BakedQuad quad, TextureAtlasSprite sprite)
+    {
+        TextureAtlasSprite srcSprite = quad.getSprite();
+        if (srcSprite == sprite)
+        {
+            return quad;
+        }
+
+        int[] srcVertices = quad.getVertices();
+        int[] vertices = Arrays.copyOf(srcVertices, srcVertices.length);
+        for (int vert = 0; vert < 4; vert++)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+            float u = srcSprite.getUOffset(Float.intBitsToFloat(vertices[offset]));
+            float v = srcSprite.getVOffset(Float.intBitsToFloat(vertices[offset + 1]));
+            vertices[offset] = Float.floatToRawIntBits(sprite.getU(u));
+            vertices[offset + 1] = Float.floatToRawIntBits(sprite.getV(v));
+        }
+        return ExtendedBakedQuad.create(
+                vertices,
+                quad.getTintIndex(),
+                quad.getDirection(),
+                sprite,
+                quad.isShade(),
+                ExtendedBakedQuad.hasAmbientOcclusion(quad)
+        );
     }
 }

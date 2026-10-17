@@ -10,16 +10,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.IQuadTransformer;
-import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.model.*;
 
-import java.lang.invoke.MethodHandle;
 import java.util.*;
 
 public final class ModelUtils
@@ -119,7 +116,7 @@ public final class ModelUtils
 
     /**
      * Calculate face normals from vertex positions
-     * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
+     * Adapted from Forge's {@code ForgeHooksClient#fillNormal(int[], Direction)}
      */
     @Deprecated(forRemoval = true)
     public static void fillNormal(BakedQuad quad)
@@ -140,7 +137,7 @@ public final class ModelUtils
 
     /**
      * Calculate face normals from vertex positions
-     * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
+     * Adapted from Forge's {@code ForgeHooksClient#fillNormal(int[], Direction)}
      * @return The {@link Direction} closest to the calculated normal vector
      */
     public static Direction fillNormal(float[][] pos, float[][] normal)
@@ -353,12 +350,13 @@ public final class ModelUtils
      */
     public static BakedQuad invertTintIndex(BakedQuad quad)
     {
-        return new BakedQuad(
+        return ExtendedBakedQuad.create(
                 quad.getVertices(), //Don't need to copy the vertex data, it won't be modified by the caller
                 encodeSecondaryTintIndex(quad.getTintIndex()),
                 quad.getDirection(),
                 quad.getSprite(),
-                quad.isShade()
+                quad.isShade(),
+                ExtendedBakedQuad.hasAmbientOcclusion(quad)
         );
     }
 
@@ -378,30 +376,22 @@ public final class ModelUtils
         return camoData != null ? camoData : ModelData.EMPTY;
     }
 
-    private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
-
     public static List<BakedQuad> getAllCullableQuads(
             BakedModel model, BlockState state, RandomSource rand, ModelData data, RenderType renderType
     )
     {
         if (model instanceof WeightedBakedModel weighted)
         {
-            try
-            {
-                // Use wrapped model for consistency and to avoid issues with invisible faces
-                model = (BakedModel) WBM_WRAPPED_MODEL.invokeExact(weighted);
-            }
-            catch (Throwable e)
-            {
-                throw new RuntimeException("Failed to access field 'WeightedBakedModel#wrapped'", e);
-            }
+            // Use wrapped model for consistency and to avoid issues with invisible faces
+            // (field made accessible by the access widener)
+            model = weighted.wrapped;
             Objects.requireNonNull(model, "Wrapped model of WeightedBakedModel is null?!");
         }
 
         ArrayList<BakedQuad> quads = new ArrayList<>();
         for (Direction dir : Direction.values())
         {
-            List<BakedQuad> sideQuads = model.getQuads(state, dir, rand, data, renderType);
+            List<BakedQuad> sideQuads = ModelBridge.getQuads(model, state, dir, rand, data, renderType);
             if (sideQuads.isEmpty())
             {
                 // Try extracting useful quads from the list of (supposedly) uncullable quads if querying cullable
@@ -414,7 +404,7 @@ public final class ModelUtils
     }
 
     /**
-     * Guess the cull-face of quads returned by {@link BakedModel#getQuads(BlockState, Direction, RandomSource, ModelData, RenderType)}
+     * Guess the cull-face of quads returned by {@link ModelBridge#getQuads(BakedModel, BlockState, Direction, RandomSource, ModelData, RenderType)}
      * with a {@code null} side (i.e. supposedly uncullable quads) and filter them to return the ones applicable to the given
      * {@link Direction} and touching the block edge. This fixes blocks becoming invisible when mods forget to specify
      * cull-faces in their models
@@ -432,7 +422,7 @@ public final class ModelUtils
             Direction side
     )
     {
-        List<BakedQuad> nullQuads = model.getQuads(state, null, rand, data, renderType);
+        List<BakedQuad> nullQuads = ModelBridge.getQuads(model, state, null, rand, data, renderType);
         if (nullQuads.isEmpty()) return Collections.emptyList();
 
         List<BakedQuad> filtered = new ArrayList<>();

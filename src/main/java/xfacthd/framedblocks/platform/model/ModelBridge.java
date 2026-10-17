@@ -11,10 +11,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -47,7 +45,6 @@ import java.util.function.Supplier;
 public final class ModelBridge
 {
     static final ModelProperty<CapturedQuads> CAPTURED_QUADS = new ModelProperty<>();
-    private static final String STANDALONE_VARIANT = "fabric_resource";
     private static final long CONTEXT_FREE_SEED = 42L;
     private static final Direction[] DIRECTIONS = Direction.values();
     static final int AO_FALSE = 0;
@@ -169,20 +166,6 @@ public final class ModelBridge
     public static Object extractCapturedContext(ModelData data)
     {
         return data.get(CAPTURED_QUADS);
-    }
-
-    /**
-     * {@return the location under which a model loaded by its file path, outside any blockstate file or item, is
-     * stored in the model registry}
-     */
-    public static ModelResourceLocation standalone(ResourceLocation id)
-    {
-        return new ModelResourceLocation(id, STANDALONE_VARIANT);
-    }
-
-    public static boolean isStandalone(ModelResourceLocation id)
-    {
-        return id.getVariant().equals(STANDALONE_VARIANT);
     }
 
     /**
@@ -343,6 +326,30 @@ public final class ModelBridge
             Direction side = i < DIRECTIONS.length ? DIRECTIONS[i] : null;
             List<BakedQuad> quads = model.getQuads(state, side, randSupplier.get());
             emitQuads(emitter, quads, side, blendMode.ordinal(), ambientOcclusion, null);
+        }
+    }
+
+    /**
+     * Emit the item quads of the given model the way the Forge item renderer draws a model: each render pass
+     * returned by {@link #getRenderPasses(BakedModel, ItemStack, boolean)} is drawn once for every item render type
+     * returned by {@link #getRenderTypes(BakedModel, ItemStack, boolean)}, using the context-free quads of
+     * {@link BakedModel#getQuads(BlockState, Direction, RandomSource)} of the pass
+     * @apiNote Intended to be called from {@link BakedModel#emitItemQuads(ItemStack, Supplier, RenderContext)}
+     * of models which don't customize their item rendering beyond these methods
+     */
+    @SuppressWarnings("ForLoopReplaceableByForEach")
+    public static void emitItemRenderPasses(BakedModel model, ItemStack stack, Supplier<RandomSource> randSupplier, RenderContext context)
+    {
+        List<BakedModel> renderPasses = getRenderPasses(model, stack, true);
+        for (int i = 0; i < renderPasses.size(); i++)
+        {
+            BakedModel pass = renderPasses.get(i);
+            List<RenderType> renderTypes = getRenderTypes(pass, stack, true);
+            for (int j = 0; j < renderTypes.size(); j++)
+            {
+                BlendMode blendMode = RenderTypeHelper.getItemBlendMode(renderTypes.get(j));
+                emitVanillaQuads(pass, null, blendMode, randSupplier, context);
+            }
         }
     }
 

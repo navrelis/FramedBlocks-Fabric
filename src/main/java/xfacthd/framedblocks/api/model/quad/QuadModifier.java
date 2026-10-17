@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.platform.model.ExtendedBakedQuad;
 
 import java.util.Arrays;
 import java.util.List;
@@ -146,13 +147,13 @@ public final class QuadModifier
         vertexData = Arrays.copyOf(vertexData, vertexData.length);
         packVertexData(vertexData);
 
-        BakedQuad newQuad = new BakedQuad(
+        BakedQuad newQuad = ExtendedBakedQuad.create(
                 vertexData,
                 tintIndex == -1 ? data.quad.getTintIndex() : tintIndex,
                 normalDir,
                 data.quad.getSprite(),
                 !noShade && data.quad.isShade(),
-                data.quad.hasAmbientOcclusion()
+                ExtendedBakedQuad.hasAmbientOcclusion(data.quad)
         );
         quadConsumer.accept(newQuad);
     }
