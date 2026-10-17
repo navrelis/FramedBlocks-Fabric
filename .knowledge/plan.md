@@ -74,3 +74,34 @@ Usage tally session 9: Opus +1 (CF2 short incl. 1 short correction) -> ~28; Sonn
 
 
 Usage tally session 10: Sonnet +2 (DB1 short, R101 short) -> 77; Opus ~28. Opus share ~27 %.
+## Session 11+: multi-version ports
+
+Targets (upstream base -> branch, worktree, Java, Fabric API, mapping):
+| Ver | Upstream base | Branch | Worktree | Java | Fabric API | Notes |
+|-----|---------------|--------|----------|------|------------|-------|
+| 1.21.1 | our port 1.0.1 | mc/1.21.1 | main checkout | 21 | 0.116.17 | done, as is |
+| 1.21.11 | upstream/1.21.11 8c38a156c (11.0.0 WIP) | mc/1.21.11 | F:/wt/m12111 | 21 | 0.141.6+1.21.11 | FRAPI rewritten (FabricBlockStateModel), FCAP 21.11.1 v5 API, no EMI; Beta |
+| 26.3 | upstream/26.3 6b0aa6303 (12.0.0 dev) + merge mc/1.21.11 | mc/26.3 | F:/wt/m263 | 25 | 0.163.0+26.3 | unobfuscated, plugin fabric-loom, FRAPI pkg renderer.v1, FCAP 26.3.1; Beta |
+| 1.20.1 | upstream/1.20 5dc540401 (9.4.3) | mc/1.20.1 | F:/wt/m1201 | 17 | 0.92.12+1.20.1 | FRAPI FabricBakedModel, model-loading-api-v1, PacketByteBuf networking, FCAP 8.0.3 (ForgeConfigSpec) |
+| 1.19.2 | upstream/1.19.x f2962c3b7 (6.8.6) | mc/1.19.2 | F:/wt/m1192 | 17 | 0.77.0+1.19.2 | models-v0, rendering-data-attachment, FCAP 4.2.11; JEI only |
+| 1.18.2 | upstream/1.18.x 8c361d427 (5.11.5) | mc/1.18.2 | F:/wt/m1182 | 17 | 0.77.0+1.18.2 | as 1.19.2, FCAP 3.2.4; JEI only |
+| 1.16.5 | upstream/1.16.x 557ff653b (2.16.3) | mc/1.16.5 | F:/wt/m1165 | 8 | 0.42.0+1.16 | no gametest API, FCAP 1.0.2 (Modrinth maven), core only |
+
+Per-version pipeline (refined per version from its map):
+| Step | Task | Definition of done | Model |
+|------|------|--------------------|-------|
+| M | Port map: NeoForge/Forge API surface of the upstream branch, matching solution in mc/1.21.1, MC/Fabric API deltas, task split -> `docs/port/map.md` | Report covers every non-vanilla import package with file counts and a Fabric target | Sonnet long |
+| A | Build setup, mod id rename, identity files (license, README, icon) | Loom build reaches Java compilation | Sonnet long |
+| B | Rendering core on that version's FRAPI | Model/camo rendering compiles against platform types | Opus long (precision override, as B1) |
+| C | Platform layer, registration, configs, networking, BE sync, storage, hooks, light | No Forge/NeoForge imports left outside client | Sonnet long (split as the map says; light to Opus if per-position light exists) |
+| E | Client wiring + compat | Client compiles | Sonnet long |
+| F | Compile fix, server + client run, game tests, client smoke test | Build green, tests green, server Done, client PASS | Sonnet + lead |
+| R | Version `1.0.0+mc<ver>`, CurseForge upload, push | Uploaded, branch pushed | Sonnet short + lead |
+
+| ID | Task | Depends | Model / size | Status |
+|----|------|---------|--------------|--------|
+| MV0 | Push mc/1.21.1 | - | lead | open |
+| N-M | 1.21.11 port map | - | Sonnet long | open |
+| O-M | 1.20.1 port map | - | Sonnet long | open |
+
+Usage tally session 11: Sonnet +2 (MV-R long) -> 79; Opus 28. Opus share ~26 %.

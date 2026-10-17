@@ -23,3 +23,19 @@ Session 8 answers (2026-10-14):
 - CurseForge pictures: same style as the user's Unified Xaero Worldmap cards (F:\Coding\UnifiedXaeroWorldmap\docs\curseforge: HTML/CSS pixel cards, gold frame, headless Edge, lossless PNG, alt texts, description template with real text between cards). Real in-game screenshots from automated showcase client runs (about 2 runs) are approved.
 - CurseForge project: not created yet; prepare everything, upload later with the id and the user's final yes.
 - No playtest findings yet.
+
+## Session 11: multi-version (2026-10-17)
+Task: FramedBlocks Fabric for MC 1.21.1, 1.20.1, 1.16.5, 1.19.2, 1.18.2, 1.21.11, 26.3; test; upload to CurseForge and GitHub; branches `mc/<version>`.
+User accepted all defaults:
+1. Scope: port upstream's last release for each MC version with the 1.21.1 port's Fabric approach (1.16.5 = 2.16.3, 1.18.2 = 5.11.5, 1.19.2 = 6.8.6, 1.20.1 = 9.4.3). No backports of newer blocks.
+2. 1.21.11: upstream `1.21.11` tip (never released upstream). 26.3: built on our 1.21.11 port plus upstream 1.21.11 -> 26.3 changes, pinned to upstream `6b0aa6303`. Both uploaded as Beta.
+3. `mc/1.21.1` = current 1.0.1 as is (no 10.6.3 update). `1.21.1-fabric` stays.
+4. Integrations: only those upstream had for that version and that have a Fabric build; nothing new. EMI none on 1.21.11/26.3.
+5. Tests per version: `gradlew build`, upstream game tests where they exist, dedicated server to "Done", automated client smoke test (world, every framed block, 0 errors from our code). Visuals on manual checklist.
+6. CurseForge project 1744977, mod id `framedblocks_fabric`, version `1.0.0+mc<version>`, one MC version tag per file. Upload automatically with the curseforge-upload skill once a version passes all tests (Release; 1.21.11/26.3 Beta). User's go-ahead given for these uploads.
+7. GitHub: push `mc/*` branches to `origin` (public). Default branch unchanged. Never `private`.
+8. Order: two lanes in parallel, new (1.21.11 -> 26.3) and old (1.20.1 -> 1.19.2 -> 1.18.2 -> 1.16.5). `mc/1.21.1` pushed at once.
+9. Gradle may auto-provision JDK 8/17/25 (foojay).
+10. 26.3 range `~26.3` only.
+11. CurseForge description: add supported versions + feature differences; no new cards.
+12. `handoff.md` committed with the next status update; `docs/curseforge/dist/curseforge-description.md` stays untracked.

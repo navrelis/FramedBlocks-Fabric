@@ -9,7 +9,7 @@ Written: 2026-10-14 (session 9). Branch `1.21.1-fabric`, pushed to `origin` = ht
 ## Open (user-dependent)
 1. CurseForge project id (project not created yet).
 2. Upload only with the user's explicit final yes, using the `curseforge-upload` skill (`F:\Coding\CurseForgeUpload\curseforge-upload.ps1`; never write a new uploader):
-   - jar `build/libs/FramedBlocksFabric-10.5.3-fabric.1.jar`
+   - jar `build/libs/FramedBlocksFabric-1.0.0.jar`
    - description from `docs/curseforge/description.template.md`, after uploading `docs/curseforge/dist/img/*.png` and running `node tools/fill-urls.mjs`
    - `docs/curseforge/summary.txt`, icon `docs/images/icon.png`
 

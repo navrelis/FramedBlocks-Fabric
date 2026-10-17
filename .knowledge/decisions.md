@@ -50,3 +50,7 @@
 - Session 9: no retake of functional_blocks (weak but usable; alt lists visible blocks) to keep game-window runs few.
 - Session 9: integration status text updated to JEI/REI/EMI/Jade loading their plugin in the automated client test; GUIs still on the manual checklist.
 - Session 10: Diagonal Blocks factory overrides are registered before FBContent.init(): Diagonal Blocks decides per block when it is registered (Puzzles Lib replays only blocks already present when it subscribes), so with Diagonal Blocks initialising first the framed fence got no diagonal twin but was a target at tag load -> NPE.
+- Session 11: each port branch starts from the upstream branch tip (keeps upstream history, future upstream fixes can be merged) and is ported with our 1.21.1 port (`mc/1.21.1`) as the reference for Fabric solutions; per-version port maps live in `docs/port/` on each branch.
+- Session 11: `mc/26.3` = upstream/26.3 @6b0aa6303 with `mc/1.21.11` merged in (upstream/1.21.11 tip is an ancestor of upstream/26.3, so git's 3-way merge carries our Fabric changes forward).
+- Session 11: ports run in short-path worktrees `F:/wt/m<ver>` (Windows path length); central status board stays on `mc/1.21.1` in the main checkout.
+- Session 11: 1.16.5 targets Java 8 (no records/var/switch expressions/text blocks in that branch).
