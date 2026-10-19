@@ -171,3 +171,4 @@ S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 n
 - S20: O-F3 accepted, committed mc/1.20.1 81dde743f (local). N-T dispatched (Sonnet long, F:/wt/nt ff to 0ff48456d, gametest port to 1.21.11 API). Running: Q9 + N-T. Pending: upload yes for 1.1.0+mc1.21.1 and 1.0.0+mc1.20.1.
 - S20: Q9 nf12111 committed (see forge-neoforge board).
 - S20: dispatched Q9b (Sonnet long, F:/wt/nf263: merge mc/1.21.11-neoforge 4b2f7780d into mc/26.3-neoforge, no commit). Running: N-T + Q9b. Usage S20 so far: Sonnet S-F 2, I-F1165 2, O-F3 2, Q9 2, N-T 2, Q9b 2 = 12; Opus 0.
+- S20 S-R DONE: 1.1.0+mc1.21.1 uploaded to CurseForge project 1744977, file id 9257703 (Release, 1.21.1/Fabric/Java 21/Client/Server, sha256 91c45a65...). shapes/1.21.1 ab4945f6d (mod_version bump), merged into mc/1.21.1 4446d4692, pushed. Todo: docs/listing/metadata.md still says Version 1.0.1. Upload approval covered this one file only; port jars need new approval.

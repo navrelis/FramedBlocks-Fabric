@@ -180,7 +180,7 @@ Phase 1: salvage partial work, one worktree at a time.
 | Q5 | DONE 5e3ef3d99 (S20, lead build green): I-F1165 Forge 1.16.5 identity resume | F:/wt/fg1165 | build green (JDK 8), server Done, smoke PASS, committed | Sonnet long |
 Phase 2: finish 1.21.1 shapes.
 | Q6 | DONE 0275d67fc (S20): S-F: full build, gametests, runClientTest Indigo + `-Pcompat_runtime=sodium`, block counts in README/listing/CF template, changelog 1.1.0, manual checklist | F:/wt/shp | all green, docs updated | Sonnet short + lead |
-| Q7 | S-R: `mod_version` 1.1.0+mc1.21.1, build, upload (USER YES needed), merge shapes/1.21.1 into mc/1.21.1, push | F:/wt/shp, main | uploaded, pushed | lead |
+| Q7 | DONE (S20, file 9257703) S-R: `mod_version` 1.1.0+mc1.21.1, build, upload (USER YES needed), merge shapes/1.21.1 into mc/1.21.1, push | F:/wt/shp, main | uploaded, pushed | lead |
 Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take shapes from `mc/<ver>-(neo)forge`).
 | Q8 | 1.20.1 Fabric O-F3 client smoke Indigo + Sodium/Indium; release 1.0.0+mc1.20.1 (USER YES), push mc/1.20.1 | F:/wt/m1201 | PASS, uploaded, pushed | lead / Sonnet |
 | Q9 | NeoForge 1.21.11: S-GEO (253a024f4) then S-GEO-B into mc/1.21.11-neoforge; merge into mc/26.3-neoforge (rename script), verify 26.3 | nf12111, nf263 | builds + smoke green, committed | Sonnet |
