@@ -6,26 +6,26 @@ Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents
 | Ver | Branch | Worktree | Stage | Shapes | CurseForge file | Pushed |
 |-----|--------|----------|-------|--------|-----------------|--------|
 | 1.20.1 | mc/1.20.1 | F:/wt/m1201 | C/E/T lanes | waiting for mc/1.20.1-forge | - | no |
-| 1.19.2 | mc/1.19.2 | F:/wt/m1192 | P-M port map running (Sonnet long) | - | - | no |
+| 1.19.2 | mc/1.19.2 | F:/wt/m1192 | map done (b558451e5); P-A after 1.20.1 G2 | - | - | no |
 | 1.18.2 | mc/1.18.2 | F:/wt/m1182 | S-M port map running (Sonnet long) | - | - | no |
 | 1.16.5 | mc/1.16.5 | F:/wt/m1165 | upstream tip, map pending | - | - | no |
 
 ## 1.20.1 tasks
 | ID | Scope | Worktree / branch | Model | Status |
 |----|-------|-------------------|-------|--------|
-| O-C4a | non-client/non-light mixins, BlockHooks, plant design, hooks-contract.md, AW cleanup | F:/wt/oc4a / o-c4a | Sonnet long | running (resume S15) |
+| O-C4a | non-client/non-light mixins, BlockHooks, plant design, hooks-contract.md, AW cleanup | F:/wt/oc4a / o-c4a | Sonnet long | done (4b003aaec, merged f0125eb63) |
 | O-T1 | src/gametest from upstream src/test + port gametests | F:/wt/ot1 / o-t1 | Sonnet long | done (af068342d, merged 0e41c5a82) |
 | O-X | leftovers: ClientUtils.onClientTick, client API ModelData types, delete api/test, exclude Create/Flywheel until E3, ConTex check, Forge-ref grep | F:/wt/ox / o-x | Sonnet short | done (11d2dc1d2, merged 5a64b1ff2) |
 | O-E2 | compat JEI/REI/EMI/Jade/Supplementaries/Diagonal | F:/wt/oe2 / o-e2 | Sonnet long | done (aa4732f15, merged a35413434) |
-| O-N | BE core | - | Sonnet long | after O-C4a |
-| O-C4b | block classes per hooks-contract | - | Sonnet long | after O-C4a |
+| O-N | BE core per hooks-contract §5 | F:/wt/on / o-n | Sonnet long | running |
+| O-C4b | block classes per hooks-contract §4 | F:/wt/oc4b / o-c4b | Sonnet long | running |
 | O-L | light | - | Opus short (planned override: light-thread races corrupt worlds) | after O-N |
 | G1/G2, F1-F3 | full compile, gametests, server Done, client smoke Indigo + Sodium 0.5.13 + Indium | - | Sonnet + lead | open |
 | O-S | 18 shapes from mc/1.20.1-forge via codemod | - | Sonnet | waiting for fork shapes |
 | O-R | release, upload, push | - | lead | open |
 
 ## Usage tally (long = 2, short = 1), this lane from S15
-Sonnet 11, Opus 0 (Opus share 0 %). Precision overrides: O-L planned.
+Sonnet 15, Opus 0 (Opus share 0 %). Precision overrides: O-L planned.
 
 ## Log
 - S15 lane start: handoff checked against repo (accurate: mc/1.20.1 @4cd357ce3, oc4a partial 5M + 29 untracked). Worktrees ot1, oe2 created off 4cd357ce3. Dispatched O-C4a resume, O-T1, O-E2 (Sonnet long each).
@@ -35,5 +35,11 @@ Sonnet 11, Opus 0 (Opus share 0 %). Precision overrides: O-L planned.
 - O-X dispatched (Sonnet short).
 - O-X review: ClientUtils tick/fluid colour (FluidVariantRendering), platform ModelData in client API, api/test deleted, Create/Flywheel (+api/compat/create) excluded in build.gradle with TODO(E3) at 4 call sites (ApiImpl.canHideNeighborFaceInLevel now true). Agent whole tree 432 errors, 0 in changed files; remaining errors only api/block, common/block, common/blockentity, common/data, platform/util (C4a/C4b/N). Committed 11d2dc1d2, merged 5a64b1ff2.
 - S-M (1.18.2 port map) dispatched, Sonnet long.
+- User answer relayed by main lead (2026-10-19): eula=true allowed in dev run folders (run/eula.txt, not committed) of all worktrees for the dedicated server Done test.
+- Main lead is now session local_c4dab021-00ed-4c94-ac78-0fe574e17b14 (successor of local_c6a1710f); reports/questions go there.
+- O-C4a review: 27 common + 2 client mixins (BE sync wraps BlockEntity.load in the 2 client lambdas method_38542/method_31716, recipe sync at handleUpdateRecipes TAIL), MixinBlockStateBase map colour, AW cleanup done (ModelBakerImpl unused, single WeightedBakedModel.wrapped), +RailState.pos. Agent: ASM target checker 67 checks 0 problems, whole tree 529/0 owned, isolated 9 errors all O-C4b/O-N symbols. Committed 4b003aaec, merged f0125eb63. Doubts for F2: @Local captures unchecked, onBlockStateChange fires in setBlockState (as 1.21.1).
+- O-C4b dispatched (Sonnet long). O-N worktree created, waiting for slot.
+- P-M review: map 208 lines (verified probe: Loom 1.18.4/Gradle 9.7 build 1.19.2, FAPI 0.77.0 last, FCAP net.minecraftforge:forgeconfigapiport-fabric:4.2.11, FRAPI renderer-api 1.2.1 old generation -> platform/model rework, no FabricPacket/model-loading-api-v1, legacy light engine, Sodium 0.4.4 + Indium 1.0.9, culling bug present CullingUpdatePacket:40-41). Committed b558451e5 on mc/1.19.2. Lead decisions on its open questions: loader floor >=0.15.0 (MixinExtras bundled), dev loader 0.19.5; platform copy from mc/1.20.1 after G2 green; Create/Flywheel deferred as on 1.20.1 (optional E3), Supplementaries + Diagonal kept; JEI one version (latest 1.19.2 Fabric build) for compile + runtime unless its API breaks; per-position light via AuxLight store + new legacy-engine mixins (parity with Forge getLightEmission(state,level,pos)); Parchment 2022.11.27 ok. Planned 1.19.2 precision overrides: P-B1 (FRAPI 1.2.1 rendering rework, only visible in game) and P-L (light mixins on the legacy engine, world light corruption).
+- O-N dispatched (Sonnet long).
 
 ## Manual test checklist (per version, filled at release)
