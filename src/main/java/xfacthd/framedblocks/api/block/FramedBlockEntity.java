@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
@@ -22,11 +21,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.common.*;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,12 +29,17 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoResolvingLevelReader;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.common.data.camo.FluidCamoContainer;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.registry.ForgeRegistries;
+import xfacthd.framedblocks.platform.util.BlockHooks;
 import xfacthd.framedblocks.platform.util.ItemAbilities;
+import xfacthd.framedblocks.platform.util.TriState;
 
 import java.util.List;
 import java.util.Objects;
@@ -54,6 +53,8 @@ public class FramedBlockEntity extends BlockEntity
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
     public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
     private static final Direction[] DIRECTIONS = Direction.values();
+    private static final String KEY_CLIENT_SYNC_MARKER = "fb_client_sync";
+    private static final String KEY_INITIAL_SYNC_MARKER = "fb_initial_sync";
     private static final int DATA_VERSION = 3;
     protected static final int FLAG_GLOWING = 1;
     protected static final int FLAG_INTANGIBLE = 1 << 1;
@@ -94,7 +95,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return clearBlockCamo(player, camo, stack, secondary);
         }
-        else if (camo.getType().isFluid() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
+        else if (camo.getType().isFluid() && FluidCamoContainer.isFluidContainer(stack))
         {
             return clearFluidCamo(player, hand, camo, stack, secondary);
         }
@@ -102,7 +103,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return setBlockCamo(player, stack, secondary);
         }
-        else if (camo.isEmpty() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
+        else if (camo.isEmpty() && FluidCamoContainer.isFluidContainer(stack))
         {
             return setFluidCamo(player, stack, secondary);
         }
@@ -249,11 +250,7 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative() && FramedBlocksAPI.getInstance().shouldConsumeCamo())
                 {
-                    ItemStack result = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler ->
-                    {
-                        handler.drain(1000, IFluidHandler.FluidAction.EXECUTE);
-                        return handler.getContainer();
-                    }).orElse(ItemStack.EMPTY);
+                    ItemStack result = FluidCamoContainer.drainBucket(stack);
 
                     // Container holds fluid by type (i.e. bucket) -> got a new stack
                     if (result != stack)
@@ -613,7 +610,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public float getCamoExplosionResistance(Explosion explosion)
     {
-        float camoRes = camoContainer.getState().getExplosionResistance(level, worldPosition, explosion);
+        float camoRes = BlockHooks.getExplosionResistance(camoContainer.getState(), level, worldPosition, explosion);
         if (reinforced)
         {
             camoRes = Math.max(camoRes, Blocks.OBSIDIAN.getExplosionResistance());
@@ -627,7 +624,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return camoContainer.isEmpty() || camoContainer.getState().isFlammable(level, worldPosition, face);
+        return camoContainer.isEmpty() || BlockHooks.isFlammable(camoContainer.getState(), level, worldPosition, face);
     }
 
     public int getCamoFlammability(Direction face)
@@ -636,7 +633,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level, worldPosition, face);
+        return camoContainer.isEmpty() ? -1 : BlockHooks.getFlammability(camoContainer.getState(), level, worldPosition, face);
     }
 
     public int getCamoFireSpreadSpeed(Direction face)
@@ -645,7 +642,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
+        return camoContainer.isEmpty() ? -1 : BlockHooks.getFireSpreadSpeed(camoContainer.getState(), level, worldPosition, face);
     }
 
     public float getCamoShadeBrightness(float ownShade)
@@ -750,6 +747,8 @@ public class FramedBlockEntity extends BlockEntity
         return reinforced;
     }
 
+    // TODO O-L: still the Forge-era light check, must write the per-position emission into platform.light.AuxLight
+    //  (and provide getAuxLightEmission() used by AuxLight#rebuild(), plus the forceLightUpdate handling in onLoad())
     protected final void doLightUpdate()
     {
         //noinspection ConstantConditions
@@ -809,7 +808,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
-        return camoContainer.isEmpty() || camoContainer.getState().shouldDisplayFluidOverlay(level, pos, fluid);
+        return camoContainer.isEmpty() || BlockHooks.shouldDisplayFluidOverlay(camoContainer.getState(), level, pos, fluid);
     }
 
     public float getCamoFriction(BlockState state, @Nullable Entity entity)
@@ -823,25 +822,37 @@ public class FramedBlockEntity extends BlockEntity
     {
         if (!camo.isEmpty())
         {
-            return camo.getState().getFriction(be.level, be.worldPosition, entity);
+            return BlockHooks.getFriction(camo.getState(), be.level, be.worldPosition, entity);
         }
         return state.getBlock().getFriction();
     }
 
-    public boolean canCamoSustainPlant(Direction side, IPlantable plant)
+    /**
+     * {@return whether the camo of this block can sustain the given plant on the given side, evaluated with the
+     * plant's own survival rules by pretending that the camo block sits at the position of this block}
+     * @param level The level to evaluate in, usually the level of this block entity. Also valid during worldgen
+     * @param side The side of this block the plant is placed on
+     * @param plant The state of the plant
+     */
+    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant)
     {
-        return !camoContainer.isEmpty() && canSustainPlant(this, camoContainer, side, plant);
+        return canCamoSustainPlant(this, camoContainer, level, side, plant);
     }
 
-    public static boolean canSustainPlant(FramedBlockEntity be, CamoContainer camo, Direction side, IPlantable plant)
+    protected static TriState canCamoSustainPlant(
+            FramedBlockEntity be, CamoContainer camo, BlockGetter level, Direction side, BlockState plant
+    )
     {
-        BlockState state = camo.getState();
-        return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(be.level, be.worldPosition, side, plant);
+        if (camo.isEmpty())
+        {
+            return TriState.DEFAULT;
+        }
+        return CamoResolvingLevelReader.canPlantSurviveOnCamo(camo.getState(), level, be.worldPosition, side, plant);
     }
 
     public boolean doesCamoPreventDestructionByEntity(Entity entity)
     {
-        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level, worldPosition, entity))
+        if (reinforced && !BlockHooks.canEntityDestroy(Blocks.OBSIDIAN.defaultBlockState(), level, worldPosition, entity))
         {
             return false;
         }
@@ -856,10 +867,13 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         BlockState state = camo.getState();
-        return !state.canEntityDestroy(be.level, be.worldPosition, entity);
+        return !BlockHooks.canEntityDestroy(state, be.level, be.worldPosition, entity);
     }
 
-    @Override
+    /**
+     * Called at the start of the next level tick after this block entity was added to the level, see
+     * {@code FreshBlockEntityQueue}. There is no {@code BlockEntity#onLoad()} on Fabric
+     */
     public void onLoad()
     {
         //noinspection ConstantConditions
@@ -867,7 +881,6 @@ public class FramedBlockEntity extends BlockEntity
         {
             checkCamoSolid();
         }
-        super.onLoad();
     }
 
     @Override
@@ -915,20 +928,41 @@ public class FramedBlockEntity extends BlockEntity
         {
             CompoundTag tag = new CompoundTag();
             ((FramedBlockEntity) be).writeToDataPacket(tag);
+            tag.putBoolean(KEY_CLIENT_SYNC_MARKER, true);
             return tag;
         });
     }
 
-    @Override
-    public final void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+    /**
+     * Vanilla 1.20.1 handles both the initial update tag and the update packet by calling {@link #load(CompoundTag)}.
+     * Tags produced by {@link #getUpdatePacket()} and {@link #getUpdateTag()} are marked and routed to the respective
+     * handlers here by the mixins around the two vanilla call sites, all other tags are regular save data and must not
+     * be intercepted. The markers are only honoured on the client.
+     *
+     * @return true if the tag was handled and must not be loaded as save data
+     */
+    @ApiStatus.Internal
+    public final boolean handleSyncTag(CompoundTag tag)
     {
-        CompoundTag nbt = pkt.getTag();
-        if (nbt != null && readFromDataPacket(nbt))
+        if (level == null || !level.isClientSide())
         {
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            requestModelDataUpdate();
+            return false;
         }
+
+        if (tag.getBoolean(KEY_CLIENT_SYNC_MARKER))
+        {
+            if (readFromDataPacket(tag))
+            {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
+            return true;
+        }
+        if (tag.getBoolean(KEY_INITIAL_SYNC_MARKER))
+        {
+            handleUpdateTag(tag);
+            return true;
+        }
+        return false;
     }
 
     protected void writeToDataPacket(CompoundTag nbt)
@@ -1000,11 +1034,11 @@ public class FramedBlockEntity extends BlockEntity
 
         nbt.put(CAMO_NBT_KEY, CamoContainer.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
+        nbt.putBoolean(KEY_INITIAL_SYNC_MARKER, true);
 
         return nbt;
     }
 
-    @Override
     public void handleUpdateTag(CompoundTag nbt)
     {
         CamoContainer newCamo = CamoContainer.readFromNetwork(nbt.getCompound(CAMO_NBT_KEY));
@@ -1027,8 +1061,6 @@ public class FramedBlockEntity extends BlockEntity
             reinforced = newReinforced;
             modelData.setReinforced(reinforced);
         }
-
-        requestModelDataUpdate();
     }
 
     private byte writeFlags()
@@ -1049,7 +1081,17 @@ public class FramedBlockEntity extends BlockEntity
      * Model data
      */
 
+    /**
+     * Fabric render data hook ({@code RenderDataBlockEntity}), captured by the chunk builder when a section is
+     * (re)built. The model data is not cached: it is derived from mutable fields and a rebuild is always triggered
+     * by {@code Level#sendBlockUpdated()}
+     */
     @Override
+    public Object getRenderData()
+    {
+        return getModelData();
+    }
+
     public ModelData getModelData()
     {
         return ModelData.builder()
