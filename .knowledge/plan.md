@@ -132,3 +132,20 @@ Usage tally: Sonnet 97 + O-C3 corr short + O-B2 long = 100; Opus 30. Session 13:
 - E1: ClientAccess destroyDelay field; StandingAndWallBlockGhostRenderBehaviour getPlacementState; FBClient Forge bus; ClientUtils.onClientTick, ClientEventHandler; Caffeine RemovalCause in FBClient.
 - E2/E3: ReiCompat Forge-only REI annotations; CreateCompat ObfuscationReflectionHelper.
 - From O-B1 (docs/port/model-contract.md on mc/1.20.1): E1 FBClient: ModelEventsBridge.init + 3 listeners, register FluidModel.BARE_MODEL_SINGLE, drop onGeometryLoaderRegister + RemovalCause, BlockRenderLayerMap cutout for all framed blocks + saws; FramedClientUtils.clearModelCaches via ModelEventsBridge.getBakedModels; ClientApiImpl.extractCTContext via ModelBridge.extractCapturedContext; ClientUtils.getFluidColor via FluidRenderHandlerRegistry. N: FramedBlockEntity getRenderData() -> getModelData(), drop requestModelDataUpdate; ModelData imports in ~12 files. E1 (done) hand-offs: C4b delete 31 initializeClient overrides (list in log), TestUtils:517 -> ClientBlockEffects.of; ClientUtils.onClientTick(Minecraft) (C1 owner), FramedBlocksClientAPI ModelData/ModelProperty -> platform types; AW cleanup after C4a merge (duplicate WeightedBakedModel.wrapped, 2 ModelBakerImpl lines + stale comment); ConTexDataHandler.properties null before CLIENT_STARTED (check in F3). B2 (done; E1 registered in FBClient: BLOCK_OUTLINE CollapsibleBlockIndicatorRenderer::onBlockOutline BEFORE BlockOutlineRenderer::onBlockOutline, AFTER_TRANSLUCENT GhostBlockRenderer::onAfterTranslucent, drop forgeBus lines 111-118; C4b: VerticalAndWallBlockItem.getPlacementState -> public + drop removeFromBlockToItemMap, FramedWallBlock.makeShapes override -> public): contract script on client/model|data|render|screen|util + ghost renderer, GhostVertexConsumer, AnimationSplitterSource, ModList. AW cleanup: duplicate WeightedBakedModel.wrapped, unused ModelBakerImpl entries.
+
+## Session 15: shapes (lane S, main lead) + lane sessions
+Lanes: old Fabric (session lane-old-fabric, board .knowledge/lanes/old-fabric.md), new Fabric (lane-new-fabric, lanes/new-fabric.md), Forge/NeoForge (lane-forge-neoforge, lanes/forge-neoforge.md). Main lead: shapes on 1.21.1 Fabric, integration branch `shapes/1.21.1` (F:/wt/shp), then merge into mc/1.21.1, release `1.1.0+mc1.21.1`.
+
+| ID | Task | Depends | Model / size | Status |
+|----|------|---------|--------------|--------|
+| S-MAP | Touch-point checklist for a new block type -> docs/shapes/add-block-type.md | - | Sonnet long | in progress (F:/wt/smap) |
+| S-BPA | Backport slope edge slab/panel + 8 prism corner slope panels from upstream/1.21.11 | - | Sonnet long | in progress (F:/wt/sbpa) |
+| S-BPB | Backport board variants (corner, inner corner, divided, half; adapt to 1.21.1 floor/wall board) | S-MAP | Sonnet long | open |
+| S-BAN | Backport Framed Banner + wall banner (BE, renderer, patterns) | S-MAP | Sonnet long | open |
+| S-GEO | Faceted-curve geometry core + arch, inner arch, octagonal pillar, crown molding, diagonal brace (spec docs/shapes/) | S-MAP | Opus long (precision: new quad geometry + culling) | open |
+| S-RECT | Window frame, table, chair+stool, corbel, wall shelf | S-MAP | Sonnet long | open |
+| S-FUNC | Barrel (27-slot storage), crafting table (menu), redstone lamp (lit + light) | S-MAP | Sonnet long | open |
+| S-F | Merge all, full build + gametests + server Done + client smoke, manual checklist | all | Sonnet + lead | open |
+| S-R | Version 1.1.0+mc1.21.1, CurseForge upload, merge into mc/1.21.1, push | S-F | lead | open |
+
+Usage session 15 (main lead): Sonnet 2 long (S-MAP, S-BPA) = 4; Opus 0. Cumulative: Sonnet 119, Opus 39 (~25 %).
