@@ -147,6 +147,8 @@
     "framedblocks_fabric:framed_pillar_socket",
     "framedblocks_fabric:framed_split_pillar_socket",
     "framedblocks_fabric:framed_post",
+    "framedblocks_fabric:framed_octagonal_pillar",
+    "framedblocks_fabric:framed_diagonal_brace",
     "framedblocks_fabric:framed_corbel",
     "framedblocks_fabric:framed_collapsible_block",
     "framedblocks_fabric:framed_collapsible_copycat_block",

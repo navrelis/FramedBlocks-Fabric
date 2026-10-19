@@ -176,6 +176,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_PILLAR_SOCKET, FullFacePredicate.DIR);
         put(BlockType.FRAMED_SPLIT_PILLAR_SOCKET, FullFacePredicate.DIR);
         put(BlockType.FRAMED_POST, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_OCTAGONAL_PILLAR, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_DIAGONAL_BRACE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CORBEL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockFullFacePredicate());
         put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, new CollapsibleCopycatBlockFullFacePredicate());

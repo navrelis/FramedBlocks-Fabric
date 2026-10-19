@@ -438,6 +438,8 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_POST", "pillar")
                     .props(Property.vanilla("Direction.Axis", "axis", "AXIS", PropType.PRIMITIVE).withEarlyExit())
                     .dirs(new TestDir("boolean", "Post", null, "post_hor", "post_vert")),
+            entry("FRAMED_OCTAGONAL_PILLAR", "pillar"),
+            entry("FRAMED_DIAGONAL_BRACE", "pillar"),
             entry("FRAMED_CORBEL", "rect"),
             entry("FRAMED_COLLAPSIBLE_BLOCK", "misc"),
             entry("FRAMED_COLLAPSIBLE_COPYCAT_BLOCK", "misc"),

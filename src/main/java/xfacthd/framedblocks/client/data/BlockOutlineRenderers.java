@@ -3,6 +3,7 @@ package xfacthd.framedblocks.client.data;
 import xfacthd.framedblocks.api.render.RegisterOutlineRenderersEvent;
 import xfacthd.framedblocks.client.data.outline.*;
 import xfacthd.framedblocks.client.model.curved.*;
+import xfacthd.framedblocks.client.model.pillar.*;
 import xfacthd.framedblocks.client.model.slopepanelcorner.*;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -36,6 +37,8 @@ public final class BlockOutlineRenderers
         event.register(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeOutlineRenderer());
         event.register(BlockType.FRAMED_SLOPE_EDGE_SLAB, new SlopeEdgeSlabOutlineRenderer());
         event.register(BlockType.FRAMED_SLOPE_EDGE_PANEL, new SlopeEdgePanelOutlineRenderer());
+        event.register(BlockType.FRAMED_OCTAGONAL_PILLAR, new GeometryOutlineRenderer(FramedOctagonalPillarGeometry::new));
+        event.register(BlockType.FRAMED_DIAGONAL_BRACE, new GeometryOutlineRenderer(FramedDiagonalBraceGeometry::new));
         event.register(BlockType.FRAMED_ARCH, new GeometryOutlineRenderer(FramedArchGeometry::arch));
         event.register(BlockType.FRAMED_INNER_ARCH, new GeometryOutlineRenderer(FramedArchGeometry::innerArch));
         event.register(BlockType.FRAMED_SLOPED_STAIRS, SlopedStairsOutlineRenderer.INSTANCE);

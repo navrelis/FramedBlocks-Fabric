@@ -191,6 +191,8 @@ public enum BlockType implements IBlockType
     FRAMED_PILLAR_SOCKET                            ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, PillarSocketShapes::generate),
     FRAMED_SPLIT_PILLAR_SOCKET                      ( true, false, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, PillarSocketShapes::generate),
     FRAMED_POST                                     (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, PillarShapes.POST),
+    FRAMED_OCTAGONAL_PILLAR                         (false,  true, false,  true,  true,  true, false, false, null, OctagonalPillarShapes::generate),
+    FRAMED_DIAGONAL_BRACE                           (false,  true, false,  true,  true,  true, false, false, null, DiagonalBraceShapes::generate),
     FRAMED_CORBEL                                   (false, false, false,  true,  true,  true, false, false, null, CorbelShapes::generate),
     FRAMED_COLLAPSIBLE_BLOCK                        (false,  true,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE),
     FRAMED_COLLAPSIBLE_COPYCAT_BLOCK                (false, false,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE),

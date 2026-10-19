@@ -525,7 +525,8 @@ public final class ShowcaseScenes
     // region camo before/after
     private static final Block[] CAMO_BLOCKS = {
             Blocks.OAK_PLANKS, Blocks.STONE_BRICKS, Blocks.QUARTZ_BLOCK, Blocks.CHERRY_PLANKS,
-            Blocks.MOSSY_COBBLESTONE, Blocks.COPPER_BLOCK, Blocks.DEEPSLATE_TILES, Blocks.SANDSTONE
+            Blocks.MOSSY_COBBLESTONE, Blocks.COPPER_BLOCK, Blocks.DEEPSLATE_TILES, Blocks.SANDSTONE,
+            Blocks.SPRUCE_PLANKS, Blocks.BRICKS
     };
 
     private record Piece(BlockType type, int x, int z, String[] props) { }
@@ -538,20 +539,22 @@ public final class ShowcaseScenes
             new Piece(BlockType.FRAMED_PILLAR, 0, 2, new String[] { "axis=y" }),
             new Piece(BlockType.FRAMED_PANEL, 2, 2, new String[] { "facing=north" }),
             new Piece(BlockType.FRAMED_SLAB, 4, 2, new String[] { "top=false" }),
-            new Piece(BlockType.FRAMED_VERTICAL_STAIRS, 6, 2, new String[] { "facing=north" })
+            new Piece(BlockType.FRAMED_VERTICAL_STAIRS, 6, 2, new String[] { "facing=north" }),
+            new Piece(BlockType.FRAMED_OCTAGONAL_PILLAR, 0, 4, new String[] { "axis=y" }),
+            new Piece(BlockType.FRAMED_DIAGONAL_BRACE, 2, 4, new String[] { "facing=north" })
     );
 
     private static Scene camoScene()
     {
-        Cam cam = orbit(3.5, 0.5, 1.5, 4.8, 45, 12);
-        List<Cam> variants = List.of(orbit(3.5, 0.5, 1.5, 6.2, 52, 0), orbit(3.5, 0.5, 1.5, 5.2, 38, 25));
+        Cam cam = orbit(3.5, 0.5, 2.5, 6.2, 45, 12);
+        List<Cam> variants = List.of(orbit(3.5, 0.5, 2.5, 7.6, 52, 0), orbit(3.5, 0.5, 2.5, 6.6, 38, 25));
         Shot before = new Shot(
-                "camo_before.png", "Eight different framed shapes as empty frames: slope, stairs, corner slope, double slope, pillar, panel, slab, vertical stairs",
+                "camo_before.png", "Ten different framed shapes as empty frames: slope, stairs, corner slope, double slope, pillar, panel, slab, vertical stairs, octagonal pillar, diagonal brace",
                 4000, Kind.WORLD, cam, variants,
                 b -> placeCamoPieces(b, false), null
         );
         Shot after = new Shot(
-                "camo_after.png", "The same eight framed shapes with camos: oak planks, stone bricks, quartz, cherry planks, mossy cobblestone, copper, deepslate tiles, sandstone",
+                "camo_after.png", "The same ten framed shapes with camos: oak planks, stone bricks, quartz, cherry planks, mossy cobblestone, copper, deepslate tiles, sandstone, spruce planks, bricks",
                 4000, Kind.WORLD, cam, variants,
                 b -> placeCamoPieces(b, true), null
         );
@@ -595,7 +598,7 @@ public final class ShowcaseScenes
             BlockType.FRAMED_PANEL, BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, BlockType.FRAMED_CORNER_PILLAR, BlockType.FRAMED_THREEWAY_CORNER_PILLAR,
             BlockType.FRAMED_STAIRS, BlockType.FRAMED_HALF_STAIRS, BlockType.FRAMED_DIVIDED_STAIRS, BlockType.FRAMED_SLOPED_STAIRS,
             BlockType.FRAMED_VERTICAL_STAIRS, BlockType.FRAMED_VERTICAL_HALF_STAIRS, BlockType.FRAMED_PILLAR, BlockType.FRAMED_HALF_PILLAR,
-            BlockType.FRAMED_POST, BlockType.FRAMED_PRISM, BlockType.FRAMED_SLOPED_PRISM, BlockType.FRAMED_SLOPE_SLAB,
+            BlockType.FRAMED_POST, BlockType.FRAMED_OCTAGONAL_PILLAR, BlockType.FRAMED_DIAGONAL_BRACE, BlockType.FRAMED_PRISM, BlockType.FRAMED_SLOPED_PRISM, BlockType.FRAMED_SLOPE_SLAB,
             BlockType.FRAMED_ELEVATED_SLOPE_SLAB, BlockType.FRAMED_COMPOUND_SLOPE_SLAB, BlockType.FRAMED_FLAT_SLOPE_SLAB_CORNER, BlockType.FRAMED_SLOPE_PANEL,
             BlockType.FRAMED_EXTENDED_SLOPE_PANEL, BlockType.FRAMED_COMPOUND_SLOPE_PANEL, BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL, BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL,
             BlockType.FRAMED_PYRAMID, BlockType.FRAMED_PYRAMID_SLAB, BlockType.FRAMED_MINI_CUBE, BlockType.FRAMED_LATTICE_BLOCK
@@ -604,10 +607,10 @@ public final class ShowcaseScenes
     private static Scene showroomScene()
     {
         Shot shot = new Shot(
-                "shapes_showroom.png", "A showroom of 48 different framed shapes on pedestals, all with a smooth quartz camo so that the geometry reads",
+                "shapes_showroom.png", "A showroom of 50 different framed shapes on pedestals, all with a smooth quartz camo so that the geometry reads",
                 4000, Kind.WORLD,
-                orbit(7.5, 1.2, 5.5, 10, 55, 0),
-                List.of(orbit(7.5, 1.2, 5.5, 11.5, 48, 12), orbit(7.5, 1.2, 5.5, 9.5, 60, -10)),
+                orbit(7.5, 1.2, 6.5, 10.5, 55, 0),
+                List.of(orbit(7.5, 1.2, 6.5, 12, 48, 12), orbit(7.5, 1.2, 6.5, 10, 60, -10)),
                 null, null
         );
         return new Scene("showroom", 40, ShowcaseScenes::buildShowroom, List.of(shot));
