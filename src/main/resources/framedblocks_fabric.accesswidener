@@ -1,6 +1,6 @@
 accessWidener	v2	named
 # Converted from the former accesstransformer.cfg of the Forge version (names are Mojang names of 1.20.1).
-# Not carried over (only used by the removed Forge data generators): RecipeProvider#getName and #has. ModelBakerImpl is kept because FluidModel still instantiates it (until task B1 reworks it)
+# Not carried over (only used by the removed Forge data generators): RecipeProvider#getName and #has.
 # Forge "protected" entries are mapped to "accessible" (public)
 
 # O-C1: direct field/method access replacing the former ObfuscationReflectionHelper/MethodHandle lookups of Utils#unreflect*
@@ -32,9 +32,7 @@ extendable	method	net/minecraft/world/level/block/WallBlock	makeShapes	(FFFFFF)L
 accessible	class	net/minecraft/world/item/crafting/Ingredient$Value
 accessible	class	net/minecraft/world/item/crafting/Ingredient$TagValue
 accessible	class	net/minecraft/world/item/crafting/Ingredient$ItemValue
-accessible	class	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl
-accessible	method	net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl	<init>	(Lnet/minecraft/client/resources/model/ModelBakery;Ljava/util/function/BiFunction;Lnet/minecraft/resources/ResourceLocation;)V
 
-# O-B1 (rendering core)
-# ModelUtils#getAllCullableQuads() reads the wrapped model of weighted models (Forge version used reflection on the SRG name)
-accessible	field	net/minecraft/client/resources/model/WeightedBakedModel	wrapped	Lnet/minecraft/client/resources/model/BakedModel;
+# O-C4a (hooks)
+# MixinRailState reads the position of the neighbouring RailState (replaces the Forge patch of RailState#connectTo)
+accessible	field	net/minecraft/world/level/block/RailState	pos	Lnet/minecraft/core/BlockPos;

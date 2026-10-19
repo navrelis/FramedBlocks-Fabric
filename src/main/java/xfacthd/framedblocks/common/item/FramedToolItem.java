@@ -35,7 +35,8 @@ public class FramedToolItem extends Item
     /**
      * {@return whether both hands of the player allow the sneak state to be ignored when using an item on a block}
      * To be called from the (client and server) game mode hooks which replace Forge's patches in
-     * {@code ServerPlayerGameMode#useItemOn()} and {@code MultiPlayerGameMode#useItemOn()}
+     * {@code ServerPlayerGameMode#useItemOn()} and {@code MultiPlayerGameMode#useItemOn()}, see
+     * {@code MixinServerPlayerGameMode} (server) and {@code HookMultiPlayerGameMode} (client)
      */
     public static boolean doItemsBypassSneak(Player player, LevelReader level, BlockPos pos)
     {
