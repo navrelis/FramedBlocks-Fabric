@@ -20,6 +20,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | Branch | Base | Worktree | Identity | Build | Gametests | Server Done | Client smoke | Shapes | Uploaded | Pushed |
 |---|---|---|---|---|---|---|---|---|---|---|
 | mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 927/927 required (9661f5271) | Done 7.3 s | PASS 252 blocks, 0 errors | batches 1-2 (9661f5271) | - | no |
+| mc/1.18.2-forge | 8c361d427 | F:/wt/fg1182 | done 8edad77ef | green (lead, JDK 17) | not green: 12-104 required fail per run (baseline 12-19; 7 deterministic also upstream) | Done 25.1 s | PASS 144 blocks, 0 errors | - | - | no |
+| mc/1.21.1-forge | from mc/1.21.1-neoforge 9661f5271 | F:/wt/fg1211 | - | - | - | - | - | - | - | no |
 | mc/1.19.2-forge | f2962c3b7 | F:/wt/fg1192 | done b2f4f1d49 | green (lead, JDK 17) | 575/594 (19 required fail, flaky light + 3 prism; baseline 41 fail) | Done 110 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.20.1-forge | 5dc540401 | F:/wt/fg1201 | done 19a590815 | green (lead) | 805/805 required (26 optional occlusion fail, upstream) | Done 18.0 s; NeoForge 47.1.106 server Done 21.3 s | PASS 206 blocks, 0 mod errors | - | - | no |
 | mc/1.21.11-neoforge | 8c38a156c | F:/wt/nf12111 | done 018b25e77 | green (lead) | 1/1 (upstream has SelfTest only) | Done 11.1 s | PASS 247 blocks, 0 errors | - | - | no |
@@ -39,7 +41,9 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | running |
 | I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | done (018b25e77) |
 | I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | done (5075141f5) |
-| I-F1182 | Identity + tests, Forge 1.18.2 (`F:/wt/fg1182`, base 8c361d427 = 5.11.5) | Sonnet | running |
+| I-F1182 | Identity + tests, Forge 1.18.2 (`F:/wt/fg1182`, base 8c361d427 = 5.11.5) | Sonnet | done (8edad77ef) |
+| T-F1182 | 1.18.2 required gametests green | Sonnet | queued after T-F1192 (reuse its fix) |
+| M-F1211 | Port map NeoForge->Forge 1.21.1 (docs/port/forge-map.md) | Sonnet | running |
 
 ## Decisions (lane)
 - NeoForge 1.21.1 base = upstream/1.21 377748c11 (true 10.5.3, the Fabric port's base). First pick c6bfa184c was wrong (8 commits of 10.6.0 features after the 10.5.3 label); branch reset to 377748c11.
@@ -50,7 +54,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
-Sonnet 10 · Opus 0. Precision overrides: none.
+Sonnet 12 · Opus 0. Precision overrides: none.
 
 ## Log
 - 2026-10-19: lane started; shapes/1.21.1 has no shapes merged yet. R1 dispatched.
@@ -68,6 +72,8 @@ Sonnet 10 · Opus 0. Precision overrides: none.
 - 2026-10-19: main lead: shapes/1.21.1 9a304b803 = S-FUNC (barrel, crafting table, redstone lamp + small storage-menu shared changes). Queued as batch 3 (S3-*).
 - 2026-10-19: S1-N1211 accepted: src/main diff of eadb8b21c applied 1:1 (only GeometryOutlineRenderer mapped to NeoForge IQuadTransformer/ModelData), datagen providers + runData, upstream generator in src/test/codegen updated to reference version (byte-identical output), lead build green, committed 5c570dc0f. Outline renderers not seen in game (manual checklist). S2-N1211 to same agent.
 - 2026-10-19: S2-N1211 accepted: diff applied 1:1, no platform mapping, runData byte-identical to reference, generator rect entries restored, 927 required, smoke 252, lead build green, committed 9661f5271. S3-N1211 to same agent.
+- 2026-10-19: main lead is now session local_03797b9f ([3271db]).
+- 2026-10-19: I-F1182 accepted: diff read (same pattern as 1.19.2, OverlayRegistry ids in FBClient, culling z fix, forceExit false for smoke), lead build green, committed 8edad77ef. Gametests flaky under CPU load (other sessions at 100 %) -> T-F1182 after T-F1192. mc/1.21.1-forge branched from mc/1.21.1-neoforge 9661f5271, M-F1211 dispatched.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
