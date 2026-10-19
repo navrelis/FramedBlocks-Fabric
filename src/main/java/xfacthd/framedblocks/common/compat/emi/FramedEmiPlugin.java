@@ -22,7 +22,6 @@ import xfacthd.framedblocks.common.crafting.FramingSawRecipeCalculation;
 import java.util.List;
 import java.util.Set;
 
-@EmiEntrypoint
 public final class FramedEmiPlugin implements EmiPlugin
 {
     public static final Lazy<EmiStack> SAW_WORKSTATION = Lazy.of(() -> EmiStack.of(FBContent.BLOCK_FRAMING_SAW.get()));
