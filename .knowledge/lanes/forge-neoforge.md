@@ -19,6 +19,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 ## Branch status
 | Branch | Base | Worktree | Identity | Build | Gametests | Server Done | Client smoke | Shapes | Uploaded | Pushed |
 |---|---|---|---|---|---|---|---|---|---|---|
+| mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 877/892 (15 required fail; upstream baseline 510 fail; helper fixes from Fabric port) | Done 10.0 s | PASS 236 blocks, 0 errors | - | - | no |
 | mc/1.20.1-forge | 5dc540401 | F:/wt/fg1201 | done 19a590815 | green (lead) | 805/805 required (26 optional occlusion fail, upstream) | Done 18.0 s; NeoForge 47.1.106 server Done 21.3 s | PASS 206 blocks, 0 mod errors | - | - | no |
 | mc/1.21.11-neoforge | 8c38a156c | F:/wt/nf12111 | done 018b25e77 | green (lead) | 1/1 (upstream has SelfTest only) | Done 11.1 s | PASS 247 blocks, 0 errors | - | - | no |
 | mc/26.3-neoforge | 6b0aa6303 + merge 018b25e77 | F:/wt/nf263 | done 5075141f5 | green (lead) | 1/1 (SelfTest only upstream) | Done 3.1 s | PASS 253 blocks, 0 errors | - | - | no |
@@ -27,7 +28,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | Id | Task | Model | State |
 |---|---|---|---|
 | R1 | Research combo matrix, toolchains, upstream bases, CurseForge rules | Sonnet | done |
-| I-N1211 | Identity + tests, NeoForge 1.21.1 (`F:/wt/nf1211`, base 377748c11 = 10.5.3) | Sonnet | running (paused for base reset) |
+| I-N1211 | Identity + tests, NeoForge 1.21.1 (`F:/wt/nf1211`, base 377748c11 = 10.5.3) | Sonnet | done (cd11a23b0) |
+| T-N1211 | Fix 15 remaining required gametests on mc/1.21.1-neoforge (port Fabric port fixes) | Sonnet (same agent) | running |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
 | I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | running |
 | I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | done (018b25e77) |
@@ -38,10 +40,12 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - NeoForge 1.21.1 base = upstream/1.21 377748c11 (true 10.5.3, the Fabric port's base). First pick c6bfa184c was wrong (8 commits of 10.6.0 features after the 10.5.3 label); branch reset to 377748c11.
 - NeoForge 1.20.1: no own build; the Forge 1.20.1 jar gets the NeoForge tag only after a server-Done run on NeoForge 47.1.106.
 - Display name on Forge/NeoForge: `FramedBlocks (Unofficial)` (the Fabric name says "Fabric", wrong on other loaders); mod id stays `framedblocks_fabric`. Jar `FramedBlocksUnofficial-<loader>-<version>.jar`.
+- One task at a time per branch works directly in the branch worktree (F:/wt/nf1211 etc.); parallel tasks on one branch get their own F:/wt/<task> worktree.
+- Upstream gametests on NeoForge 1.21.1 fail ~510 required on unmodified upstream (full-speed test server vs fixed light delays, CONSUME vs SUCCESS, double-block targeting); fork ports the Fabric port's TestUtils fixes (tools/fork/patch-gametest-utils.mjs).
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
-Sonnet 7 · Opus 0. Precision overrides: none.
+Sonnet 8 · Opus 0. Precision overrides: none.
 
 ## Log
 - 2026-10-19: lane started; shapes/1.21.1 has no shapes merged yet. R1 dispatched.
@@ -52,6 +56,7 @@ Sonnet 7 · Opus 0. Precision overrides: none.
 - 2026-10-19: main lead is now session local_c4dab021 (successor of local_c6a1710f).
 - 2026-10-19: I-F1201 accepted: diff read (identity, ConTex dep removed -> reflective lookup of CT_STATE_PROPERTY, maven-publish removed), lead build green, committed 19a590815. NeoForge 47.1.106 server reached Done with the Forge jar -> 1.20.1 upload gets Forge + NeoForge tags. Open: upstream CullingUpdatePacket chunk-z bug (fixed in Fabric 1.20.1) not fixed in fork yet. mc/1.19.2-forge created, I-F1192 dispatched.
 - 2026-10-19: I-N263 accepted: staged diff vs 6b0aa6303 read (Java = literals + smoketest only), script now also moves data/<ns>/tags/framedblocks (26.3 block_overlay tags), lead build green, merge committed 5075141f5. mc/1.18.2-forge created, I-F1182 dispatched.
+- 2026-10-19: I-N1211 accepted: diff read (identity + TestUtils helper fixes 248 lines + client smoke test), lead build green, committed cd11a23b0. Gametests 15 required still red -> T-N1211 to same agent.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
