@@ -39,7 +39,7 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.*;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.internal.InternalAPI;
+import xfacthd.framedblocks.platform.light.AuxLight;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -170,22 +170,18 @@ public interface IFramedBlock extends EntityBlock, FabricBlock
         return InteractionResult.FAIL;
     }
 
+    /**
+     * Position-dependent light emission, consulted by the light engine instead of {@link BlockState#getLightEmission()}
+     * for all blocks implementing this interface (see {@link AuxLight}). Called from light worker threads and chunk
+     * section compile threads: overrides must only read and must not throw
+     */
     default int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
-        if (!state.getValue(FramedProperties.GLOWING))
+        if (!AuxLight.isGlowing(state))
         {
             return 0;
         }
-        if (pos == BlockPos.ZERO)
-        {
-            // Ensure chunk sections with this block are correctly considered as containing a light source
-            return 15;
-        }
-        if (InternalAPI.INSTANCE.getBlockEntityForLight(level, pos) instanceof FramedBlockEntity be)
-        {
-            return be.getLightValue();
-        }
-        return 0;
+        return AuxLight.get(level, pos);
     }
 
     default boolean playBreakSound(BlockState state, Level level, BlockPos pos)
