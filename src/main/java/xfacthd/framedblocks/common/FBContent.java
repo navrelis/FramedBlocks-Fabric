@@ -43,6 +43,7 @@ import xfacthd.framedblocks.common.block.slopeedge.*;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.block.cube.*;
+import xfacthd.framedblocks.common.block.curved.*;
 import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.pane.*;
@@ -141,6 +142,9 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER = registerBlock(FramedInnerThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER = registerBlock(FramedDoubleThreewayCornerBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_SLOPE_EDGE = registerBlock(FramedSlopeEdgeBlock::new, BlockType.FRAMED_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_CROWN_MOLDING = registerBlock(FramedCurvedBlock::new, BlockType.FRAMED_CROWN_MOLDING);
+    public static final Holder<Block> BLOCK_FRAMED_INNER_CROWN_MOLDING_CORNER = registerBlock(FramedCrownMoldingCornerBlock::new, BlockType.FRAMED_INNER_CROWN_MOLDING_CORNER);
+    public static final Holder<Block> BLOCK_FRAMED_OUTER_CROWN_MOLDING_CORNER = registerBlock(FramedCrownMoldingCornerBlock::new, BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_SLOPE_EDGE = registerBlock(FramedElevatedSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE = registerBlock(FramedElevatedDoubleSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_SLOPE_EDGE = registerBlock(FramedStackedSlopeEdgeBlock::new, BlockType.FRAMED_STACKED_SLOPE_EDGE);
@@ -156,6 +160,8 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE = registerBlock(FramedThreewayCornerSlopeEdgeBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_SLOPE_EDGE_SLAB = registerBlock(FramedSlopeEdgeSlabBlock::new, BlockType.FRAMED_SLOPE_EDGE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_SLOPE_EDGE_PANEL = registerBlock(FramedSlopeEdgePanelBlock::new, BlockType.FRAMED_SLOPE_EDGE_PANEL);
+    public static final Holder<Block> BLOCK_FRAMED_ARCH = registerBlock(FramedCurvedBlock::new, BlockType.FRAMED_ARCH);
+    public static final Holder<Block> BLOCK_FRAMED_INNER_ARCH = registerBlock(FramedCurvedBlock::new, BlockType.FRAMED_INNER_ARCH);
     public static final Holder<Block> BLOCK_FRAMED_SLAB = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_SLAB = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_ADJ_DOUBLE_SLAB = registerBlock(FramedAdjustableDoubleSlabBlock::standard, BlockType.FRAMED_ADJ_DOUBLE_SLAB);

@@ -18,6 +18,7 @@ import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
 import xfacthd.framedblocks.common.data.shapes.MoreCommonShapes;
 import xfacthd.framedblocks.common.data.shapes.SplitShapeGenerator;
 import xfacthd.framedblocks.common.data.shapes.cube.*;
+import xfacthd.framedblocks.common.data.shapes.curved.*;
 import xfacthd.framedblocks.common.data.shapes.door.*;
 import xfacthd.framedblocks.common.data.shapes.interactive.*;
 import xfacthd.framedblocks.common.data.shapes.pane.*;
@@ -59,6 +60,9 @@ public enum BlockType implements IBlockType
     FRAMED_INNER_THREEWAY_CORNER                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, ThreewayCornerShapes.INNER),
     FRAMED_DOUBLE_THREEWAY_CORNER                   ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_SLOPE_EDGE                               (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, new SlopeEdgeShapes()),
+    FRAMED_CROWN_MOLDING                            (false,  true, false,  true,  true,  true, false, false, null, CurvedShapes.CROWN_MOLDING),
+    FRAMED_INNER_CROWN_MOLDING_CORNER               (false,  true, false,  true,  true,  true, false, false, null, CrownMoldingCornerShapes.INNER),
+    FRAMED_OUTER_CROWN_MOLDING_CORNER               (false,  true, false,  true,  true,  true, false, false, null, CrownMoldingCornerShapes.OUTER),
     FRAMED_ELEVATED_SLOPE_EDGE                      ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, ElevatedSlopeEdgeShapes.INSTANCE),
     FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE               ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_STACKED_SLOPE_EDGE                       ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, ElevatedSlopeEdgeShapes.INSTANCE),
@@ -74,6 +78,8 @@ public enum BlockType implements IBlockType
     FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE         (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, ThreewayCornerSlopeEdgeShapes.INNER),
     FRAMED_SLOPE_EDGE_SLAB                          ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new SlopeEdgeSlabShapes()),
     FRAMED_SLOPE_EDGE_PANEL                         ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, new SlopeEdgePanelShapes()),
+    FRAMED_ARCH                                     (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, CurvedShapes.ARCH),
+    FRAMED_INNER_ARCH                               (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, CurvedShapes.INNER_ARCH),
     FRAMED_SLAB                                     ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, CommonShapes.SLAB_GENERATOR),
     FRAMED_DOUBLE_SLAB                              ( true, false, false, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_ADJ_DOUBLE_SLAB                          ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),

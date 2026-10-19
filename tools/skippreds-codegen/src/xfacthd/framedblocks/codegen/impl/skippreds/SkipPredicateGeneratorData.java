@@ -93,6 +93,9 @@ final class SkipPredicateGeneratorData
                             new TestDir("QuarterTriangleDir", "Tri", null, "slope_edge_tri_xz", "slope_edge_tri_y"),
                             new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y")
                     ),
+            entry("FRAMED_CROWN_MOLDING", "curved"),
+            entry("FRAMED_INNER_CROWN_MOLDING_CORNER", "curved"),
+            entry("FRAMED_OUTER_CROWN_MOLDING_CORNER", "curved"),
             entry("FRAMED_ELEVATED_SLOPE_EDGE", "slopeedge")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
@@ -181,6 +184,8 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfDir", "Half", null, "half_xz_vert", "half_y"),
                             new TestDir("QuarterTriangleDir", "Tri", null, "slope_edge_panel_tri_hor", "slope_edge_panel_tri_vert")
                     ),
+            entry("FRAMED_ARCH", "curved"),
+            entry("FRAMED_INNER_ARCH", "curved"),
             entry("FRAMED_SLAB", "slab")
                     .props(Property.api("boolean", "top", "TOP", PropType.PRIMITIVE))
                     .dirs(new TestDir("HalfDir", "Half", null, "half_xz_hor")),

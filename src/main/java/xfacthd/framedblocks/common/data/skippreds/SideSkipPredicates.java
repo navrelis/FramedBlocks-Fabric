@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data.skippreds;
 
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.skippreds.curved.*;
 import xfacthd.framedblocks.common.data.skippreds.door.*;
 import xfacthd.framedblocks.common.data.skippreds.misc.*;
 import xfacthd.framedblocks.common.data.skippreds.pane.*;
@@ -47,6 +48,9 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER, InnerThreewayCornerSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeSkipPredicate());
+        put(BlockType.FRAMED_CROWN_MOLDING, CrownMoldingSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_CROWN_MOLDING_CORNER, CrownMoldingSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER, CrownMoldingSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, new ElevatedSlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, SideSkipPredicate.FALSE);
@@ -62,6 +66,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_SLOPE_EDGE_SLAB, new SlopeEdgeSlabSkipPredicate());
         put(BlockType.FRAMED_SLOPE_EDGE_PANEL, new SlopeEdgePanelSkipPredicate());
+        put(BlockType.FRAMED_ARCH, ArchSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_ARCH, InnerArchSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, new SlabSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, SideSkipPredicate.FALSE);
