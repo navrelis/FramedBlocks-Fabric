@@ -22,7 +22,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 941/941 required (4286063b1) | Done 5.9 s | PASS 255 blocks, 0 errors | batches 1-3 (4286063b1) | - | no |
 | mc/1.18.2-forge | 8c361d427 | F:/wt/fg1182 | done 8edad77ef | green (lead, JDK 17) | not green: 12-104 required fail per run (baseline 12-19; 7 deterministic also upstream) | Done 25.1 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.21.1-forge | from mc/1.21.1-neoforge 9661f5271 | F:/wt/fg1211 | - | - | - | - | - | - | - | no |
-| mc/1.19.2-forge | f2962c3b7 | F:/wt/fg1192 | done b2f4f1d49 | green (lead, JDK 17) | 575/594 (19 required fail, flaky light + 3 prism; baseline 41 fail) | Done 110 s | PASS 144 blocks, 0 errors | - | - | no |
+| mc/1.19.2-forge | f2962c3b7 | F:/wt/fg1192 | done b2f4f1d49 | green (lead, JDK 17) | 594/594 required x7 (655c2ab66) | Done 110 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.20.1-forge | 5dc540401 | F:/wt/fg1201 | done 19a590815 | green (lead) | 805/805 required (26 optional occlusion fail, upstream) | Done 18.0 s; NeoForge 47.1.106 server Done 21.3 s | PASS 206 blocks, 0 mod errors | - | - | no |
 | mc/1.21.11-neoforge | 8c38a156c | F:/wt/nf12111 | done 018b25e77 | green (lead) | 1/1 (upstream has SelfTest only) | Done 11.1 s | PASS 247 blocks, 0 errors | - | - | no |
 | mc/26.3-neoforge | 6b0aa6303 + merge 018b25e77 | F:/wt/nf263 | done 5075141f5 | green (lead) | 1/1 (SelfTest only upstream) | Done 3.1 s | PASS 253 blocks, 0 errors | - | - | no |
@@ -39,11 +39,11 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | running |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
 | I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | done (b2f4f1d49) |
-| T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | running |
+| T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | done (655c2ab66) |
 | I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | done (018b25e77) |
 | I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | done (5075141f5) |
 | I-F1182 | Identity + tests, Forge 1.18.2 (`F:/wt/fg1182`, base 8c361d427 = 5.11.5) | Sonnet | done (8edad77ef) |
-| T-F1182 | 1.18.2 required gametests green | Sonnet | queued after T-F1192 (reuse its fix) |
+| T-F1182 | 1.18.2 required gametests green | Sonnet (T-F1192 agent) | running |
 | M-F1211 | Port map NeoForge->Forge 1.21.1 (docs/port/forge-map.md) | Sonnet | running |
 
 ## Decisions (lane)
@@ -76,6 +76,7 @@ Sonnet 13 · Opus 0. Precision overrides: none.
 - 2026-10-19: main lead is now session local_03797b9f ([3271db]).
 - 2026-10-19: I-F1182 accepted: diff read (same pattern as 1.19.2, OverlayRegistry ids in FBClient, culling z fix, forceExit false for smoke), lead build green, committed 8edad77ef. Gametests flaky under CPU load (other sessions at 100 %) -> T-F1182 after T-F1192. mc/1.21.1-forge branched from mc/1.21.1-neoforge 9661f5271, M-F1211 dispatched.
 - 2026-10-19: S3-N1211 accepted: diff read (barrel item handler via RegisterCapabilitiesEvent, close(Player) default keeps chest behaviour, Tags.* c: tags, 5 new FunctionalBlockTests incl. save/load), 941 required, smoke 255, lead build green, committed 4286063b1. S23-N12111 dispatched.
+- 2026-10-19: T-F1192 accepted: TestUtils waits for the light engine (POST_UPDATE marker via reflective addTask, double wait), double-prism aiming fix (test-only cause), 594/594 x7, lead build green, committed 655c2ab66. T-F1182 to same agent.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
