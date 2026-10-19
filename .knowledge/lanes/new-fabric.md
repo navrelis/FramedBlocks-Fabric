@@ -6,7 +6,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @a0d971fbf (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @24c514404 (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -21,12 +21,12 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C1 registration | `F:/wt/nc1` / `n-c1` | Sonnet | done e99be1c09, merged 7af4544cd |
 | N-C2 config/net/datamaps | `F:/wt/nc2` / `n-c2` | Sonnet | done, merged 2cbbe91dc (world/client paths unverified) |
 | N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | Sonnet done 88a66510f (not merged), Opus review running |
-| N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | running |
+| N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | done, merged 24c514404 (mixins apply on server: audit 29/29; behaviour unverified) |
 | N-C4b BE sync/rails | - | Sonnet | pending |
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | running |
-| N-E1 client wiring | - | Sonnet | pending |
+| N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | running |
 | N-K compat | - | Sonnet | pending |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting for `mc/1.21.11-neoforge` shapes |
 | N-T tests | - | Sonnet | pending |
@@ -35,7 +35,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 ## Model tally (this lane session)
 
-Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 review (short, planned in map: dupe-sensitive transactions). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2, N-B2, N-B3.
+Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 review (short, planned in map: dupe-sensitive transactions). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2, N-B2, N-B3, N-E1.
 
 ## Log
 
@@ -57,3 +57,6 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: N-B2 reviewed (6 files +159/-71; item mesh per stack with baked tints, FBClient registerItemModelTypes moved to RenderingSetup.initItemModels). Compile green by lead. Merged a0d971fbf.
 - 2026-10-19: dispatched N-B3 (Sonnet) in F:/wt/nb3.
 - 2026-10-19: N-C3 Sonnet done: 20 transfer/energy gametests + 1 pass via throw-away init script (rest of gametest set still red); found framed hopper/bookshelf unplaceable (vanilla isValidBlockState checks fixed type) and fixed. Compile green by lead; committed 88a66510f, merged mc/1.21.11 into n-c3 (platform-api.md count line conflict resolved by lead) b8ff7a60a. Opus short review dispatched before merge.
+- 2026-10-19: N-C4a reviewed (24 mixins appended, BlockHooks rewritten, IFramedBlock +2 defaults isLadder/makesOpenTrapdoorAboveClimbable, dead getPlaceSound copies removed). Agent forced all 29 target classes to load on runServer: 0 apply failures. Compile green by lead after merge 24c514404. Dropped minor hooks listed in contracts/n-c4a.md.
+- 2026-10-19: lead runs merged-tree dedicated server to Done (F:/wt/m12111, eula=true already set there, port 25651).
+- 2026-10-19: dispatched N-E1 (Sonnet) in F:/wt/ne1.
