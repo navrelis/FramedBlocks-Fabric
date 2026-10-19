@@ -6,7 +6,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @18e3a7e63 (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @a0d971fbf (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -24,8 +24,8 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | running |
 | N-C4b BE sync/rails | - | Sonnet | pending |
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
-| N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | running |
-| N-B3 overlays/outlines | - | Sonnet | pending |
+| N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
+| N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | running |
 | N-E1 client wiring | - | Sonnet | pending |
 | N-K compat | - | Sonnet | pending |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting for `mc/1.21.11-neoforge` shapes |
@@ -35,7 +35,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 ## Model tally (this lane session)
 
-Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2, N-B2.
+Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2, N-B2, N-B3.
 
 ## Log
 
@@ -54,3 +54,5 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-
 - 2026-10-19: main lead changed: local_c4dab021 is the new main lead (confirmed by the old lead local_c6a1710f). Reports and questions go there.
 - 2026-10-19: N-E2 reviewed (re-targeted to ClientLevel#addBreakingBlockEffect/addDestroyBlockEffect and LevelEventHandler 2001; extra hit-sound mixin accepted, the hook already existed). Compile green by lead. Merged 18e3a7e63.
 - 2026-10-19: dispatched N-B2 (Sonnet) in F:/wt/nb2.
+- 2026-10-19: N-B2 reviewed (6 files +159/-71; item mesh per stack with baked tints, FBClient registerItemModelTypes moved to RenderingSetup.initItemModels). Compile green by lead. Merged a0d971fbf.
+- 2026-10-19: dispatched N-B3 (Sonnet) in F:/wt/nb3.
