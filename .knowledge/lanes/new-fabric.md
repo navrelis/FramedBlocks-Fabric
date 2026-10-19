@@ -6,7 +6,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @24c514404 (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @52717c741 (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -25,9 +25,9 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C4b BE sync/rails | - | Sonnet | pending |
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
-| N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | running |
+| N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
 | N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | running |
-| N-K compat | - | Sonnet | pending |
+| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | running |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting for `mc/1.21.11-neoforge` shapes |
 | N-T tests | - | Sonnet | pending |
 | N-F integration | - | Sonnet + lead | pending |
@@ -35,7 +35,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 ## Model tally (this lane session)
 
-Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 review (short, planned in map: dupe-sensitive transactions). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2, N-B2, N-B3, N-E1.
+Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 review (short, planned in map: dupe-sensitive transactions). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2, N-B2, N-B3, N-E1, N-K.
 
 ## Log
 
@@ -62,3 +62,5 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: dispatched N-E1 (Sonnet) in F:/wt/ne1.
 - 2026-10-19: lead server check on mc/1.21.11 @24c514404: dedicated server "Done (9.002s)", clean stop/save; only WARNs = optional ScalableLux compat targets absent (expected) and offline mode. World creation with the light/hook mixins worked.
 - 2026-10-19: N-C3 Opus review: checks 1-6 OK; Finding 1 = fluid camo dupe (StackItemAccess.insert setPatch on count-0 stack keeps old fluid component when a tank item drains to empty in camo crafting); lang JSON raw newline; insert order deviates from NeoForge; capacity ignores isValid; risks A (outer-tx refund) / B (sided indices). Correction 1 sent to the same Sonnet agent.
+- 2026-10-19: N-B3 reviewed (WorldRenderBridge maps upstream render events to Fabric WorldRenderEvents; AfterParticles via mixin on LevelRenderer particle-pass lambda method_62213; ghost per-layer buffers via FRAPI; fluid sprites from FluidRenderHandlerRegistry; bare fluid model baked with FaceBakery). Compile green by lead after merge 52717c741.
+- 2026-10-19: dispatched N-K (Sonnet) in F:/wt/nk. Another main-lead handover claim (local_03797b9f) received; asked local_c4dab021 to confirm.
