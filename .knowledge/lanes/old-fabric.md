@@ -7,8 +7,8 @@ Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents
 |-----|--------|----------|-------|--------|-----------------|--------|
 | 1.20.1 | mc/1.20.1 | F:/wt/m1201 | C/E/T lanes | waiting for mc/1.20.1-forge | - | no |
 | 1.19.2 | mc/1.19.2 | F:/wt/m1192 | map done (b558451e5); P-A running (Sonnet long, platform copy from 88dd56e00) | - | - | no |
-| 1.18.2 | mc/1.18.2 | F:/wt/m1182 | S-M port map running (Sonnet long) | - | - | no |
-| 1.16.5 | mc/1.16.5 | F:/wt/m1165 | upstream tip, map pending | - | - | no |
+| 1.18.2 | mc/1.18.2 | F:/wt/m1182 | map done; S-A after pinned 1.19.2 port | - | - | no |
+| 1.16.5 | mc/1.16.5 | F:/wt/m1165 | V-M port map running (Sonnet long) | - | - | no |
 
 ## 1.20.1 tasks
 | ID | Scope | Worktree / branch | Model | Status |
@@ -19,13 +19,14 @@ Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents
 | O-E2 | compat JEI/REI/EMI/Jade/Supplementaries/Diagonal | F:/wt/oe2 / o-e2 | Sonnet long | done (aa4732f15, merged a35413434) |
 | O-N | BE core per hooks-contract §5 | F:/wt/on / o-n | Sonnet long | done (affa7b7d2, merged 0f03248d5) |
 | O-C4b | block classes per hooks-contract §4 | F:/wt/oc4b / o-c4b | Sonnet long | done (917bee4f1, merged 88dd56e00) |
-| O-L | light | F:/wt/ol / o-l | Opus short (planned override: light-thread races corrupt worlds) | running |
-| G1/G2, F1-F3 | full compile, gametests, server Done, client smoke Indigo + Sodium 0.5.13 + Indium | - | Sonnet + lead | open |
+| O-L | light | F:/wt/ol / o-l | Opus short (planned override: light-thread races corrupt worlds) | done (aa19a83c7, merged 77b986a56) |
+| O-F1/F2 | G2 compile (+ light-contract §2 IFramedBlock, FBContent RecipeType), build, 3 green gametest runs, server Done | F:/wt/of1 / o-f1 | Sonnet long | running |
+| O-F3 | client smoke Indigo + Sodium 0.5.13 + Indium | - | Sonnet + lead | open |
 | O-S | 18 shapes from mc/1.20.1-forge via codemod | - | Sonnet | waiting for fork shapes |
 | O-R | release, upload, push | - | lead | open |
 
 ## Usage tally (long = 2, short = 1), this lane from S15
-Sonnet 17, Opus 1 (Opus share 6 %). Precision overrides: O-L planned.
+Sonnet 21, Opus 1 (Opus share 6 %). Precision overrides: O-L planned.
 
 ## Log
 - S15 lane start: handoff checked against repo (accurate: mc/1.20.1 @4cd357ce3, oc4a partial 5M + 29 untracked). Worktrees ot1, oe2 created off 4cd357ce3. Dispatched O-C4a resume, O-T1, O-E2 (Sonnet long each).
@@ -47,5 +48,11 @@ Sonnet 17, Opus 1 (Opus share 6 %). Precision overrides: O-L planned.
 - Lead: whole-tree compile on mc/1.20.1 after O-N + O-C4b (pre G2).
 - Lead compile mc/1.20.1 @88dd56e00 (maxerrs): 2 errors left: AuxLight:159 (O-L running), FBContent:796 RecipeType.simple is Forge-only (-> F1).
 - P-A (1.19.2) dispatched early (settled platform parts from 88dd56e00, recorded for re-sync).
+- Main lead is now session local_03797b9f-f9a9-4945-891a-d6c1797fac73 ([3271db]); reports go there. shapes/1.21.1 @9a304b803 (S-RECT + S-FUNC).
+- O-L review: 9 light mixins (1.21.1 copies, ChunkSerializer.read 1.20.1 signature), light mixin json filled (required false), FramedBlockEntity doLightUpdate -> AuxLight.set, getAuxLightEmission, onLoad server doLightUpdate; light-contract.md (threading, mixin table, Starlight limitation). Block-side IFramedBlock.getLightEmission change sent back to the same agent after O-C4b merge.
+- S-M review: map ~200 lines (verified probe: Loom 1.18.4 + Gradle 9.7 build + runGameTest on 1.18.2, FAPI 0.77.0+1.18.2, FCAP net.minecraftforge:forgeconfigapiport-fabric:3.2.4, FRAPI 0.5.0 same generation as 1.19.2, old Forge IModelData + thread-local render layer -> new platform shims, JEI 10.2.1.1002 (+common), Sodium 0.4.1 + Indium 1.0.7, Supplementaries dropped (no Fabric build), culling bug present). Committed on mc/1.18.2. Lead decisions: port from upstream 1.18.x with the 1.19.2 port as source; S-A waits for a pinned mc/1.19.2 commit; Create deferred (optional S-E3); loader floor + AuxLight light design as 1.19.2; JEI = last 1.18.2 build if it compiles, else 10.2.1. Gametest structures: agent claims FAPI 0.77 loads SNBT from gametest/structures; vanilla data/<ns>/structures/*.nbt probably still works - verify in 1.20.1 F2 and tell P-T/S-T.
+- V-M (1.16.5 map) dispatched, Sonnet long.
+- O-L follow-up: agent could not merge mc/1.20.1 into o-l (its permission classifier refused); lead committed O-L as is (aa19a83c7) and merged o-l normally (77b986a56). IFramedBlock light change (light-contract §2) moved into O-F1. Agent scratch compile of the combined tree: 1 error (FBContent RecipeType.simple).
+- O-F1/F2 dispatched (Sonnet long).
 
 ## Manual test checklist (per version, filled at release)
