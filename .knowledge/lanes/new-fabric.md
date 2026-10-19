@@ -60,3 +60,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: N-C4a reviewed (24 mixins appended, BlockHooks rewritten, IFramedBlock +2 defaults isLadder/makesOpenTrapdoorAboveClimbable, dead getPlaceSound copies removed). Agent forced all 29 target classes to load on runServer: 0 apply failures. Compile green by lead after merge 24c514404. Dropped minor hooks listed in contracts/n-c4a.md.
 - 2026-10-19: lead runs merged-tree dedicated server to Done (F:/wt/m12111, eula=true already set there, port 25651).
 - 2026-10-19: dispatched N-E1 (Sonnet) in F:/wt/ne1.
+- 2026-10-19: lead server check on mc/1.21.11 @24c514404: dedicated server "Done (9.002s)", clean stop/save; only WARNs = optional ScalableLux compat targets absent (expected) and offline mode. World creation with the light/hook mixins worked.
