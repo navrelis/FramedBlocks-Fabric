@@ -2,7 +2,7 @@
 
 Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F:/wt/m12111/docs/port/map.md` §8, API: `docs/port/platform-api.md`, lane contracts: `docs/port/contracts/<lane>.md` (on `mc/1.21.11`).
 
-**Current lane lead: session "[2ffcd7]" (since 2026-10-19 afternoon). The previous lead `lane-new-fabric` (local_98fafdb8) is retired and told to stay idle. A new lane-lead session must announce itself to the main lead, lane-forge-neoforge, lane-old-fabric and the previous lane lead via SendMessage, and record it here.** Main lead: unconfirmed ([3271db] / [313af7] asked, see log).
+**Current lane lead: session "[2ffcd7]" (since 2026-10-19 afternoon). The previous lead `lane-new-fabric` (local_98fafdb8) is retired and told to stay idle. A new lane-lead session must announce itself to the main lead, lane-forge-neoforge, lane-old-fabric and the previous lane lead via SendMessage, and record it here.** Main lead: **[3271db] = local_03797b9f** (confirmed by it and by the previous main lead [313af7] = local_c4dab021, now read-only; authoritative record `.knowledge/plan.md` § Session 15 "Main lead:"). Reports go to local_03797b9f.
 
 ## Status per version
 
@@ -73,3 +73,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: coordination: lead [2ffcd7] announced itself to lane-forge-neoforge [30aadf] (asked for the shape commit on mc/1.21.11-neoforge), lane-old-fabric [a4cc3a], previous lane lead [69ee22] (retired, stay idle) and main-lead candidates [3271db] and [313af7] (asked who is main lead).
 - 2026-10-19: dispatched N-T (Sonnet) in F:/wt/nt @ee6684253: whole gametest set compile + runGameTest; main-code bugs are reported, not fixed in N-T.
 - 2026-10-19: lane-forge-neoforge ack: batches 2+3 (window frame, table, chair, stool, corbel, wall shelf; barrel, crafting table, redstone lamp) being ported to mc/1.21.11-neoforge (S23-N12111); hash follows per batch, then mc/26.3-neoforge. N-S starts per batch on arrival.
+- 2026-10-19: main lead confirmed = [3271db] local_03797b9f (local_c4dab021 confirms handover, read-only). Shapes on shapes/1.21.1 @1578d028b: S-BPA, S-RECT, S-FUNC, S-BPB; S-GEO in gate, S-BAN in progress, then S-GEO-B (octagonal pillar, diagonal brace). Boards/banner/slope edge/prism corner = upstream-native on 1.21.11.
