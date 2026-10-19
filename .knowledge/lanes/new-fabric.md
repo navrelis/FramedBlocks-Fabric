@@ -6,7 +6,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @ed8236522 (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @edb3afdc1 (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -17,11 +17,11 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-0A build | - | Sonnet | done 1b21581c1 |
 | N-0B skeleton | - | Sonnet + Opus review | done 840e866d8 |
 | N-B1 rendering core | `F:/wt/nb1` / `n-b1` | Opus (override) | done ae1633178, merged ed8236522 (runtime unverified until N-F) |
-| N-C5 light | `F:/wt/nc5` / `n-c5` | Opus (override) | running (restart) |
+| N-C5 light | `F:/wt/nc5` / `n-c5` | Opus (override) | done, merged edb3afdc1 (runtime unverified; gametest set does not compile yet) |
 | N-C1 registration | `F:/wt/nc1` / `n-c1` | Sonnet | done e99be1c09, merged 7af4544cd |
 | N-C2 config/net/datamaps | `F:/wt/nc2` / `n-c2` | Sonnet | running |
 | N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | running (Sonnet) |
-| N-C4a world hooks | - | Sonnet | pending |
+| N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | running |
 | N-C4b BE sync/rails | - | Sonnet | pending |
 | N-E2 client effects | - | Sonnet | pending |
 | N-B2 item models | - | Sonnet | pending |
@@ -35,7 +35,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 ## Model tally (this lane session)
 
-Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1, N-C2, N-C3.
+Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1, N-C2, N-C3, N-C4a.
 
 ## Log
 
@@ -45,3 +45,6 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-
 - 2026-10-19: dispatched N-C2 (Sonnet) in F:/wt/nc2.
 - 2026-10-19: N-B1 reviewed (diff 35 files +1782/-71 read in key parts: codec dispatch on neoforge:definition_type via BlockModelDefinition mixin, BakedQuad @Unique carrier, ModelManager.apply RETURN for BakingCompleted; compile+AW green by lead before and after merge). Risks for N-F: mixins into records, Sodium hooks checked vs 0.8.13 only, createGeometryKey null. Committed ae1633178, merged ed8236522.
 - 2026-10-19: dispatched N-C3 (Sonnet) in F:/wt/nc3 with the 6 Opus transfer findings.
+- 2026-10-19: N-C5 reviewed (key mixins read: SerializableChunkData snapshot on server thread, record field as Fabric API attachments; FramedBlockEntity +1 internal getter; compile+AW green by lead before/after merge). Gametest set: 631 errors outside light tests (old FabricGameTest API) -> N-T. Merged edb3afdc1.
+- 2026-10-19: EULA: lead error, N-C1 brief let the agent write eula=true in F:/wt/nc1/run; reverted to false, N-C2/N-C3 told not to accept; question sent to main lead/user. Server checks stop at the EULA prompt until answered.
+- 2026-10-19: dispatched N-C4a (Sonnet) in F:/wt/nc4a.
