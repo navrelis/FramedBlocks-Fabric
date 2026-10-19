@@ -68,6 +68,12 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
                 case FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE -> testAgainstInnerThreewayCornerSlopeEdge(
                         dir, top, adjState, side
                 );
+                case FRAMED_SLOPE_EDGE_SLAB -> testAgainstSlopeEdgeSlab(
+                        dir, top, adjState, side
+                );
+                case FRAMED_SLOPE_EDGE_PANEL -> testAgainstSlopeEdgePanel(
+                        dir, top, adjState, side
+                );
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(
                         dir, top, adjState, side
                 );
@@ -256,6 +262,30 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
         boolean adjAlt = adjState.getValue(PropertyHolder.ALT_TYPE);
 
         return SlabDirs.MasonryCornerSegment.getStairDir(dir, top, side).isEqualTo(SlopeEdgeDirs.InnerThreewayCornerSlopeEdge.getStairDir(adjDir, adjTop, adjRight, adjAlt, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SLOPE_EDGE_SLAB)
+    private static boolean testAgainstSlopeEdgeSlab(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return SlabDirs.MasonryCornerSegment.getHalfDir(dir, top, side).isEqualTo(SlopeEdgeDirs.SlopeEdgeSlab.getHalfDir(adjDir, adjTopHalf, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SLOPE_EDGE_PANEL)
+    private static boolean testAgainstSlopeEdgePanel(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
+
+        return SlabDirs.MasonryCornerSegment.getHalfDir(dir, top, side).isEqualTo(SlopeEdgeDirs.SlopeEdgePanel.getHalfDir(adjDir, adjRot, adjFront, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)

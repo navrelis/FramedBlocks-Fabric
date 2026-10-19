@@ -57,6 +57,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, InnerCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_SLOPE_EDGE_SLAB, SlopeSlabFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_SLOPE_EDGE_PANEL, SlopePanelFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, FullFacePredicate.TOP);
         put(BlockType.FRAMED_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
@@ -232,6 +234,14 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, new StackedInnerCornerSlopePanelFullFacePredicate());
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W, new StackedInnerCornerSlopePanelWallFullFacePredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, InnerPrismSlopePanelCornerFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, InnerPrismSlopePanelCornerWallFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, InnerPrismSlopePanelCornerFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, InnerPrismSlopePanelCornerWallFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_GLOWING_CUBE, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_PYRAMID, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);
