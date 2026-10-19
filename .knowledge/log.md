@@ -164,3 +164,5 @@
 - S19: P-B1 merged into mc/1.19.2 a8281d57b; I-F1165 (Sonnet) dispatched in F:/wt/fg1165.
 - S19 automatic handoff (context limit): S-F (F:/wt/sf, partial docs) and I-F1165 (F:/wt/fg1165) stopped, uncommitted; stale lock possible. State: handoff-2026-10-19-5c903302-b.md.
 S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 none ours); first report sent to team lead. Dispatched S-F (Sonnet long, F:/wt/sf, review partial docs + gates + changelog) and I-F1165 (Sonnet long, F:/wt/fg1165, identity resume, full brief). Upload yes for 1.1.0+mc1.21.1 to be asked after S-F gates.
+- S20: S-F (Sonnet long) reviewed by lead, committed s-f e1655673b, merged shapes/1.21.1 0275d67fc (generator zero-diff), pushed. Gates (agent): build 996 req/27 opt, runClientTest Indigo + Sodium PASS, runServer Done. Counts 269 blocks / 232 with item / 28 new. Changelog 1.1.0 written. Upload yes requested via team lead.
+- S20: I-F1165 (Sonnet long) reported done (build, server Done, smoke 63/63); lead diff review OK, lead build gate running in F:/wt/fg1165.
