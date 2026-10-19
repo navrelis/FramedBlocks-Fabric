@@ -141,10 +141,10 @@ Main lead (authoritative, update on every handover): session "Project lead setup
 |----|------|---------|--------------|--------|
 | S-MAP | Touch-point checklist for a new block type -> docs/shapes/add-block-type.md | - | Sonnet long | done (merged f30297fb3; skip-pred generator only in upstream history, datagen none) |
 | S-BPA | Backport slope edge slab/panel + 8 prism corner slope panels from upstream/1.21.11 (+ generator in tools/skippreds-codegen) | - | Sonnet long | done (eadb8b21c, merged 661897f30; lead: build 928/928 req, 27 known optional, runClientTest PASS) |
-| S-BPB | Backport board variants (corner, inner corner, divided, half; adapt to 1.21.1 floor/wall board) | S-MAP | Sonnet long | in progress (S17 finish: Sonnet, F:/wt/sbpb; partial compiled green) |
+| S-BPB | Backport board variants (corner, inner corner, divided, half; adapt to 1.21.1 floor/wall board) | S-MAP | Sonnet long | done (6f153fc25, merged 1578d028b; lead gate 973/973 req, 27 optional, client PASS) |
 | S-BAN | Backport Framed Banner + wall banner (BE, renderer, patterns) | S-MAP | Opus long (S17 precision override: BER/camo flag rendering on 1.21.1) | in progress (S17, Opus, F:/wt/sban) |
-| S-GEO | Faceted-arc geometry core + arch, inner arch, crown molding (+inner/outer corner) + docs/shapes/curved-shapes.md | S-MAP | Opus long (precision override: new quad geometry, UV/normals, culling) | in review (s-geo 6cccc5d47; S17 lead gate: build 970/970 req + 27 optional; runClientTest FAIL: 5 types missing in SideSkipPredicates -> Opus short correction running) |
-| S-GEO-B | Octagonal pillar (12x12, chamfer 3.5 px, AXIS) + diagonal brace | S-GEO | Sonnet long | open |
+| S-GEO | Faceted-arc geometry core + arch, inner arch, crown molding (+inner/outer corner) + docs/shapes/curved-shapes.md | S-MAP | Opus long (precision override: new quad geometry, UV/normals, culling) | done (correction eb742f5f1: skip preds were empty files, written + PredicateMapTests; merged 253a024f4; lead gate 988/988 req, 27 optional, client PASS) |
+| S-GEO-B | Octagonal pillar (12x12, chamfer 3.5 px, AXIS) + diagonal brace | S-GEO | Sonnet long | in progress (S17, Sonnet, F:/wt/sgeob at 253a024f4) |
 | S-RECT | Window frame (connecting), table (connecting legs), chair + stool, corbel, wall shelf | S-MAP | Sonnet long | done (eea29645c, merged a559b5153; lead: build 944/944 req, 27 known optional, runClientTest PASS) |
 | S-GEN | Skip-pred generator in repo at tools/skippreds-codegen (+2 upstream predicate fixes) | - | Sonnet (part of S-BPA) | done (in 661897f30) |
 | S-FUNC | Barrel (27-slot, FACING/OPEN, recessed lid), crafting table (CraftingMenu subclass), redstone lamp (LIT, light 15, emissive when lit) | S-MAP | Sonnet long | done (merged into shapes/1.21.1 after merging S-RECT; lead gate on merged tree: build 957/957 req, 27 known optional, runClientTest PASS 0 skipped/0 findings) |
@@ -152,4 +152,4 @@ Main lead (authoritative, update on every handover): session "Project lead setup
 | S-R | Version 1.1.0+mc1.21.1, CurseForge upload, merge into mc/1.21.1, push | S-F | lead | open |
 
 Usage session 15 (main lead): Sonnet S-MAP, S-BPA, S-RECT, S-FUNC long = 8; Opus S-GEO long = 2. S16 (successor main lead, session [313af7]): Opus S-GEO long +2, Sonnet S-FUNC long +2, S-RECT long +2, S-BPB long +2, S-BAN long +2. Cumulative: Sonnet 131, Opus 43 (~25 %). Lane sessions keep their own tallies in .knowledge/lanes/.
-S17 (main lead session [3271db]): Sonnet S-BPB finish long +2, Opus S-BAN long +2 (override) -> Sonnet 133, Opus 45; S-GEO correction Opus short +1 -> Opus 46 (~26 %).
+S17 (main lead session [3271db]): Sonnet S-BPB finish long +2, Opus S-BAN long +2 (override) -> Sonnet 133, Opus 45; S-GEO correction Opus short +1 -> Opus 46; S-GEO-B Sonnet long +2, lang-merge helper Sonnet short +1 -> Sonnet 136, Opus 46 (~25 %).
