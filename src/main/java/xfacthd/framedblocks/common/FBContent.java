@@ -274,6 +274,8 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_PILLAR_SOCKET = registerBlock(FramedPillarSocketBlock::new, BlockType.FRAMED_PILLAR_SOCKET);
     public static final Holder<Block> BLOCK_FRAMED_SPLIT_PILLAR_SOCKET = registerBlock(FramedSplitPillarSocketBlock::new, BlockType.FRAMED_SPLIT_PILLAR_SOCKET);
     public static final Holder<Block> BLOCK_FRAMED_POST = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
+    public static final Holder<Block> BLOCK_FRAMED_OCTAGONAL_PILLAR = registerBlock(FramedOctagonalPillarBlock::new, BlockType.FRAMED_OCTAGONAL_PILLAR);
+    public static final Holder<Block> BLOCK_FRAMED_DIAGONAL_BRACE = registerBlock(FramedDiagonalBraceBlock::new, BlockType.FRAMED_DIAGONAL_BRACE);
     public static final Holder<Block> BLOCK_FRAMED_CORBEL = registerBlock(FramedWallMountedBlock::new, BlockType.FRAMED_CORBEL);
     public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_BLOCK = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = registerBlock(FramedCollapsibleCopycatBlock::new, BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);

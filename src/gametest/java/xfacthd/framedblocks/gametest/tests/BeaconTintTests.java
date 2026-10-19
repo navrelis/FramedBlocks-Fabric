@@ -63,6 +63,7 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_PANE,
             BlockType.FRAMED_FLOWER_POT,
             BlockType.FRAMED_POST,
+            BlockType.FRAMED_DIAGONAL_BRACE,
             BlockType.FRAMED_HALF_STAIRS,
             BlockType.FRAMED_DOUBLE_HALF_STAIRS,
             BlockType.FRAMED_SLOPE_PANEL,
@@ -151,7 +152,7 @@ public class BeaconTintTests implements FabricGameTest
             BlockState state = block.defaultBlockState();
             return switch (blockType)
             {
-                case FRAMED_PILLAR -> state.setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+                case FRAMED_PILLAR, FRAMED_OCTAGONAL_PILLAR -> state.setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
                 case FRAMED_HALF_PILLAR -> state.setValue(BlockStateProperties.FACING, Direction.DOWN);
                 case FRAMED_PRISM -> state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
                 case FRAMED_SLOPED_PRISM -> state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_NORTH);
