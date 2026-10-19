@@ -6,7 +6,7 @@ Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents
 | Ver | Branch | Worktree | Stage | Shapes | CurseForge file | Pushed |
 |-----|--------|----------|-------|--------|-----------------|--------|
 | 1.20.1 | mc/1.20.1 | F:/wt/m1201 | build + gametests + server green; F3 client smoke next | waiting for mc/1.20.1-forge | - | no |
-| 1.19.2 | mc/1.19.2 | F:/wt/m1192 | P-A done (d3a97c2d1); P-B1 running (Opus long, override) | - | - | no |
+| 1.19.2 | mc/1.19.2 | F:/wt/m1192 | P-A done (d3a97c2d1); P-B1 merged a8281d57b; next wave 1 (P-C1, P-C3, P-T, P-C4a) | - | - | no |
 | 1.18.2 | mc/1.18.2 | F:/wt/m1182 | map done; S-A after pinned 1.19.2 port | - | - | no |
 | 1.16.5 | mc/1.16.5 | F:/wt/m1165 | V-M open (interrupted, nothing on disk) | - | - | no |
 
@@ -62,7 +62,7 @@ Sonnet 25, Opus 3 (Opus share 13 %). Precision overrides: O-L (done), P-B1 (FRAP
 |----|-------|-------------------|-------|--------|
 | P-M | port map | m1192 | Sonnet long | done (b558451e5) |
 | P-A | build, identity, platform copy | m1192 | Sonnet long | done (d3a97c2d1) |
-| P-B1 | rendering core FRAPI 1.2.1 | F:/wt/pb1 / p-b1 | Opus long (override) | open (interrupted, partial uncommitted in F:/wt/pb1) |
+| P-B1 | rendering core FRAPI 1.2.1 | F:/wt/pb1 / p-b1 | Opus long (override) | done (f91f64616, merged a8281d57b; lead whole-tree compile 560 errors, 0 in B1 files; 5 in ClientUtils non-B1 half -> P-E1/P-C1; model-contract.md) |
 | P-C1 | registration, lifecycle, configs | F:/wt/pc1 / p-c1 | Sonnet long | open (interrupted, nothing on disk) |
 | P-C3, P-T, P-C4a | wave 1 | - | Sonnet | open |
 - New-fabric lane lead is now session [2ffcd7]. Old-fabric server port range set to 25601-25649 (told O-F1).
@@ -77,3 +77,4 @@ Sonnet 25, Opus 3 (Opus share 13 %). Precision overrides: O-L (done), P-B1 (FRAP
 ## Manual test checklist (per version, filled at release)
 - 2026-10-19 (S19): the user stopped all FramedBlocks sessions after the overload; one single FramedBlocks lead session (started by team lead local_df490f5d) now owns this lane, the other lanes and the main-lead role. Old lane sessions stay idle. Disk verified against the handoffs. Order of work: .knowledge/plan.md § Session 19.
 - 2026-10-19 (S19): P-B1 resumed (Opus, override) in F:/wt/pb1 on the 24-file partial.
+- 2026-10-19 (S19): P-B1 accepted (kept partial + fixes: ModelReplaceHelper, DUMMY_TEXTURE framedblocks_fabric:block/white, EmptyBlockAndTintGetter implements RenderAttachedBlockView; 2 javap-verified mixins MixinModelManager/MixinItemRenderer). Lead compile: 560 total, 0 in B1 files. Committed f91f64616, merged into mc/1.19.2 a8281d57b. In-game risks listed in docs/port/model-contract.md (cutout registration in P-E1, glowing AO, captured FRAPI camos, Sodium without Indium = frame only).
