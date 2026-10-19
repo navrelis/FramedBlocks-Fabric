@@ -37,7 +37,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | S1-N1211 | Shapes batch 1 (slope edge slab/panel, 8 prism corner slope panels; ref 661897f30) -> mc/1.21.1-neoforge | Sonnet | done (5c570dc0f) |
 | S2-N1211 | Shapes batch 2 S-RECT (a559b5153) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (9661f5271) |
 | S3-N1211 | Shapes batch 3 S-FUNC (9a304b803) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (4286063b1) |
-| S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | running |
+| S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | interrupted by reboot (82 files partial) -> resumed |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
 | I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | done (b2f4f1d49) |
 | T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | done (655c2ab66) |
@@ -45,8 +45,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | done (5075141f5) |
 | I-F1182 | Identity + tests, Forge 1.18.2 (`F:/wt/fg1182`, base 8c361d427 = 5.11.5) | Sonnet | done (8edad77ef) |
 | T-F1182 | 1.18.2 required gametests green | Sonnet (T-F1192 agent) | done (5468d9136) |
-| I-F1165 | Identity + tests, Forge 1.16.5 (`F:/wt/fg1165`, base 557ff653b = 2.16.3, Java 8) | Sonnet | running |
-| M-F1211 | Port map NeoForge->Forge 1.21.1 (docs/port/forge-map.md) | Sonnet | running |
+| I-F1165 | Identity + tests, Forge 1.16.5 (`F:/wt/fg1165`, base 557ff653b = 2.16.3, Java 8) | Sonnet | interrupted by reboot (397 files partial) -> waits for a slot |
+| M-F1211 | Port map NeoForge->Forge 1.21.1 (docs/port/forge-map.md) | Sonnet | interrupted by reboot (nothing on disk) -> resumed, read-only |
 
 ## Decisions (lane)
 - NeoForge 1.21.1 base = upstream/1.21 377748c11 (true 10.5.3, the Fabric port's base). First pick c6bfa184c was wrong (8 commits of 10.6.0 features after the 10.5.3 label); branch reset to 377748c11.
@@ -54,6 +54,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - Display name on Forge/NeoForge: `FramedBlocks (Unofficial)` (the Fabric name says "Fabric", wrong on other loaders); mod id stays `framedblocks_fabric`. Jar `FramedBlocksUnofficial-<loader>-<version>.jar`.
 - One task at a time per branch works directly in the branch worktree (F:/wt/nf1211 etc.); parallel tasks on one branch get their own F:/wt/<task> worktree.
 - Upstream gametests on NeoForge 1.21.1 fail ~510 required on unmodified upstream (full-speed test server vs fixed light delays, CONSUME vs SUCCESS, double-block targeting); fork ports the Fabric port's TestUtils fixes (tools/fork/patch-gametest-utils.mjs).
+- Resource rules after the 11:55Z reboot (user, mandatory): count java/javaw processes before any Gradle/game run, wait while >= 8; max ONE Gradle invocation and ONE game client at a time in this lane (subagents included); max 2 subagents alive; `./gradlew --stop` in the worktree after a build batch; kill gametest/game clients as soon as results are taken.
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
@@ -81,6 +82,8 @@ Sonnet 14 · Opus 0. Precision overrides: none.
 - 2026-10-19: T-F1192 accepted: TestUtils waits for the light engine (POST_UPDATE marker via reflective addTask, double wait), double-prism aiming fix (test-only cause), 594/594 x7, lead build green, committed 655c2ab66. T-F1182 to same agent.
 - 2026-10-19: new-fabric lane is now session local_ce066f6d ([2ffcd7]); it takes shape code from mc/1.21.11-neoforge and mc/26.3-neoforge -> send it each shape commit hash.
 - 2026-10-19: T-F1182 accepted (same helper fix; hitSecondary found via class hierarchy), 595/595 x5, lead build green, committed 5468d9136. mc/1.16.5-forge created, I-F1165 dispatched.
+- 2026-10-19: main lead: shapes/1.21.1 1578d028b = S-BPB (half/divided/corner/inner corner/double corner board; upstream b8f2c4596, native on 1.21.11/26.x) -> batch 4; 253a024f4 = S-GEO (arch, inner arch, crown molding + inner/outer corner; non-upstream; PredicateMapTests) -> batch 5. Queued for mc/1.21.1-neoforge (4+5), 1.21.11/26.3 (5 only).
+- 2026-10-19 ~11:55Z: PC rebooted (overload). Verified on disk: all committed work intact; nf12111 (S23) and fg1165 (I-F1165) have partial uncommitted work, fg1211 map nothing. New resource rules recorded above.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
