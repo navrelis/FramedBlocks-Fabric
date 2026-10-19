@@ -4,6 +4,8 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 **Current lane lead: session "[2ffcd7]" (since 2026-10-19 afternoon). The previous lead `lane-new-fabric` (local_98fafdb8) is retired and told to stay idle. A new lane-lead session must announce itself to the main lead, lane-forge-neoforge, lane-old-fabric and the previous lane lead via SendMessage, and record it here.** Main lead: **[3271db] = local_03797b9f** (confirmed by it and by the previous main lead [313af7] = local_c4dab021, now read-only; authoritative record `.knowledge/plan.md` § Session 15 "Main lead:"). Reports go to local_03797b9f.
 
+**Resource rules (user, after the 11:55Z reboot, mandatory):** count Java processes before any Gradle/server/client start (wait while >= 8); one Gradle invocation and one game client at a time for the whole lane incl. subagents; max 2 subagents alive (lane runs 1 at a time since they all build); Gradle with `--no-daemon` instead of `gradlew --stop` (stop would kill other sessions' daemons); kill clients/servers as soon as results are taken.
+
 ## Status per version
 
 | Version | Branch | Worktree | State | Release |
@@ -24,14 +26,14 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C2 config/net/datamaps | `F:/wt/nc2` / `n-c2` | Sonnet | done, merged 2cbbe91dc (world/client paths unverified) |
 | N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | done 6d319fda4, merged 597eb6e2d (dupe fixed; 24/24 transfer+energy gametests by lead) |
 | N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | done, merged 24c514404 (mixins apply on server: audit 29/29; behaviour unverified) |
-| N-C4b BE sync/rails | `F:/wt/nc4b` / `n-c4b` | Sonnet | in progress |
+| N-C4b BE sync/rails | `F:/wt/nc4b` / `n-c4b` | Sonnet | resumed after reboot (partial edits: 16 files + 6 new) |
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
 | N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | done 255210fbf, merged ee6684253 (runtime unverified) |
-| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | in progress (restarted) |
+| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | killed by reboot; partial uncommitted edits (8 files + probe ZzProbe.java) — resume after N-C4b |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting: Forge lane porting batches 2+3 (S-RECT, S-FUNC) to mc/1.21.11-neoforge (task S23-N12111), sends hash per batch; later S-GEO, pillar/brace, boards, banner |
-| N-T tests | `F:/wt/nt` / `n-t` | Sonnet | in progress (owns src/gametest; N-C4b told not to edit it) |
+| N-T tests | `F:/wt/nt` / `n-t` | Sonnet | killed by reboot, no edits; restart after N-K (owns src/gametest) |
 | N-F integration | - | Sonnet + lead | pending |
 | N-R release | - | lead | pending |
 
@@ -75,3 +77,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: lane-forge-neoforge ack: batches 2+3 (window frame, table, chair, stool, corbel, wall shelf; barrel, crafting table, redstone lamp) being ported to mc/1.21.11-neoforge (S23-N12111); hash follows per batch, then mc/26.3-neoforge. N-S starts per batch on arrival.
 - 2026-10-19: main lead confirmed = [3271db] local_03797b9f (local_c4dab021 confirms handover, read-only). Shapes on shapes/1.21.1 @1578d028b: S-BPA, S-RECT, S-FUNC, S-BPB; S-GEO in gate, S-BAN in progress, then S-GEO-B (octagonal pillar, diagonal brace). Boards/banner/slope edge/prism corner = upstream-native on 1.21.11.
 - 2026-10-19: main lead: shapes/1.21.1 @253a024f4 (pushed) adds S-BPB (boards, upstream-native here) and S-GEO (arch, inner arch, crown molding + corners; non-upstream, Forge lane ports it to mc/1.21.11-neoforge). Gate 988/988, client PASS.
+- 2026-10-19: PC rebooted ~11:55Z (overload, ~20 JVMs). All 3 agents dead. On disk: m12111 clean @ee6684253; nk partial (8 files + ZzProbe.java); nc4b partial (16 mod + 6 new); nt clean. New resource rules adopted (see top). Resumed N-C4b alone with the rules; N-K then N-T follow one at a time.
