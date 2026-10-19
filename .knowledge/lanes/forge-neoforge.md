@@ -37,7 +37,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | S1-N1211 | Shapes batch 1 (slope edge slab/panel, 8 prism corner slope panels; ref 661897f30) -> mc/1.21.1-neoforge | Sonnet | done (5c570dc0f) |
 | S2-N1211 | Shapes batch 2 S-RECT (a559b5153) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (9661f5271) |
 | S3-N1211 | Shapes batch 3 S-FUNC (9a304b803) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (4286063b1) |
-| S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | in progress (session 16, resumed on the 82-file partial state) |
+| S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | done (a470eaac5, S19 lead gate) |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
 | I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | done (b2f4f1d49) |
 | T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | done (655c2ab66) |
@@ -92,3 +92,4 @@ To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), n
 - 2026-10-19 (session 16, 9bf4dc3a): resumed from the handoff. Verified all worktrees match the handoff (committed work intact, nf12111 82 partial files, fg1165 397 partial files, fg1211 clean). Java processes at start: 0. mc/1.21.1-forge fast-forwarded to 4286063b1 so the port map covers batch 3. S23-N12111 re-dispatched (Sonnet, resumes partial state, only Gradle user), M-F1211 re-dispatched (Sonnet, read-only). Main lead is now session local_b8208f6c ([7d5ce0]); local_03797b9f retired (read-only).
 - 2026-10-19: main lead [7d5ce0]: shapes/1.21.1 ab0233647 = S-BAN (framed banner + wall banner, 2 types; native on 1.21.11+/26.x) -> batch 6 for mc/1.21.1-neoforge and the 1.20.1/1.19.2/1.18.2/1.16.5 Forge branches. S-GEO-B (octagonal pillar, diagonal brace) hash to follow.
 - 2026-10-19 (S19): the user stopped all FramedBlocks sessions after the overload; one single FramedBlocks lead session (started by team lead local_df490f5d) now owns this lane, the other lanes and the main-lead role. Old lane sessions stay idle. Disk verified against the handoffs. Order of work: .knowledge/plan.md § Session 19.
+- 2026-10-19 (S19): S23-N12111 accepted. Lead gate: compileJava --rerun + build + runServerSmoke green (Done 0.78 s, SERVERTEST FUNCTIONAL checks=17 failures=0). Committed a470eaac5 on mc/1.21.11-neoforge. Open from the agent: models not checked by eye, skip-predicate generator not re-run (check in Q9).
