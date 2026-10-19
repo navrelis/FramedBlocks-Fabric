@@ -49,3 +49,4 @@ Answers (form, 2026-10-19):
 4. CurseForge: same project 1744977 for all loaders.
 5. Parallel: one lead session per lane allowed.
 Stated defaults (not objected): order = shapes on 1.21.1 Fabric first (release `1.1.0+mc1.21.1`), then Fabric ports per handoff, Forge/NeoForge last; branches `mc/<ver>` (Fabric), `mc/<ver>-forge`, `mc/<ver>-neoforge` on `origin`; mod id `framedblocks_fabric` everywhere; builds with the new shapes are `1.1.0+mc<ver>`; 1.21.11/26.3 Beta, rest Release; auto-upload after tests (go-ahead from session 11 still applies).
+6. EULA (2026-10-19): user allows eula=true in the dev run folders (run/eula.txt) of all worktrees for the dedicated-server "Done" test. Forwarded to all three lanes.

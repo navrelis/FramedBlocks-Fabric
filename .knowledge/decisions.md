@@ -77,3 +77,5 @@
 - S15: S-GEO is a precision override (Opus): new faceted quad geometry with UV/normal correctness and culling, errors are visual and hard to detect automatically. Octagonal pillar + diagonal brace split off to Sonnet (S-GEO-B) to keep Opus share low.
 - S15: crown molding gets inner/outer corner pieces (rooms need them); arches get no corner pieces for now.
 - S15: new types use hand-written skip predicates (same-type neighbours only); generator entries are bare KNOWN_TYPES lines so the generator keeps working.
+- S16: S-RECT resumed rather than restarted (only 4 compile errors); lead committed the WIP on s-rect and merged shapes/1.21.1 first so the agent has tools/skippreds-codegen.
+- S16: one main lead at a time: the successor session [313af7] owns the shape lane and .knowledge/*.md; the previous session (local_c6a1710f) only reads (user asked the sessions to coordinate).
