@@ -77,6 +77,7 @@ import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
 import xfacthd.framedblocks.client.render.debug.FramedBlockDebugRenderer;
 import xfacthd.framedblocks.client.render.debug.impl.*;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
+import xfacthd.framedblocks.client.render.item.BannerItemRenderer;
 import xfacthd.framedblocks.client.render.item.TankItemRenderer;
 import xfacthd.framedblocks.client.render.particle.ClientBlockEffects;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
@@ -175,6 +176,7 @@ public final class FBClient implements ClientModInitializer
         BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
         BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
+        BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_BANNER.value(), FramedBannerRenderer::new);
     }
 
     private static void registerColorProviders()
@@ -243,6 +245,7 @@ public final class FBClient implements ClientModInitializer
     private static void registerItemRenderers()
     {
         BuiltinItemRendererRegistry.INSTANCE.register(FBContent.BLOCK_FRAMED_TANK.value().asItem(), new TankItemRenderer());
+        BuiltinItemRendererRegistry.INSTANCE.register(FBContent.BLOCK_FRAMED_BANNER.value().asItem(), new BannerItemRenderer());
     }
 
     private static void registerSpriteSources()
@@ -308,6 +311,7 @@ public final class FBClient implements ClientModInitializer
         ModelWrappingManager.onModelsLoaded();
         FluidCamoClientHandler.clearModelCache();
         FramedChestRenderer.onModelsLoaded(mc.getModelManager());
+        FramedBannerRenderer.onModelsLoaded(mc.getModelManager());
         //noinspection deprecation
         ConnectionPredicateDebugRenderer.captureDummySprite(mc.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS));
     }
@@ -584,6 +588,8 @@ public final class FBClient implements ClientModInitializer
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LAYERED_CUBE, FramedLayeredCubeGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LIGHTNING_ROD, FramedLightningRodGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PATH, FramedPathGeometry::new, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_BANNER, FramedBannerGeometry::new, StateMerger.IGNORE_ALL);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_BANNER, FramedBannerGeometry::new, StateMerger.IGNORE_ALL);
     }
 
 

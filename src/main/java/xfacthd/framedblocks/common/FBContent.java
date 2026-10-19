@@ -46,6 +46,7 @@ import xfacthd.framedblocks.common.block.cube.*;
 import xfacthd.framedblocks.common.block.curved.*;
 import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
+import xfacthd.framedblocks.common.block.interactive.banner.*;
 import xfacthd.framedblocks.common.block.pane.*;
 import xfacthd.framedblocks.common.block.pillar.*;
 import xfacthd.framedblocks.common.block.prism.*;
@@ -387,6 +388,8 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_LAYERED_CUBE = registerBlock(FramedLayeredCubeBlock::new, BlockType.FRAMED_LAYERED_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_LIGHTNING_ROD = registerBlock(FramedLightningRodBlock::new, BlockType.FRAMED_LIGHTNING_ROD);
     public static final Holder<Block> BLOCK_FRAMED_PATH = registerBlock(FramedPathBlock::new, BlockType.FRAMED_PATH);
+    public static final Holder<Block> BLOCK_FRAMED_BANNER = registerBlock(FramedBannerBlock::new, BlockType.FRAMED_BANNER);
+    public static final Holder<Block> BLOCK_FRAMED_WALL_BANNER = registerBlock(FramedWallBannerBlock::new, BlockType.FRAMED_WALL_BANNER);
     // endregion
 
     // region Special Blocks
@@ -664,6 +667,10 @@ public final class FBContent
     public static final DeferredBlockEntity<FramedHopperBlockEntity> BE_TYPE_FRAMED_HOPPER = registerBlockEntity(
             FramedHopperBlockEntity::new,
             BlockType.FRAMED_HOPPER
+    );
+    public static final DeferredBlockEntity<FramedBannerBlockEntity> BE_TYPE_FRAMED_BANNER = registerBlockEntity(
+            FramedBannerBlockEntity::new,
+            BlockType.FRAMED_BANNER, BlockType.FRAMED_WALL_BANNER
     );
     // endregion
 

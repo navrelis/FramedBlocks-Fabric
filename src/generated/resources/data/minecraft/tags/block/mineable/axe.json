@@ -256,6 +256,8 @@
     "framedblocks_fabric:framed_soul_lantern",
     "framedblocks_fabric:framed_hopper",
     "framedblocks_fabric:framed_layered_cube",
-    "framedblocks_fabric:framed_path"
+    "framedblocks_fabric:framed_path",
+    "framedblocks_fabric:framed_banner",
+    "framedblocks_fabric:framed_wall_banner"
   ]
 }

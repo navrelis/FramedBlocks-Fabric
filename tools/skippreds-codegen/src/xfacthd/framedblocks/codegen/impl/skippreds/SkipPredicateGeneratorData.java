@@ -886,7 +886,9 @@ final class SkipPredicateGeneratorData
                                     .withExcludedTypes("FRAMED_LAYERED_CUBE")
                     ),
             entry("FRAMED_LIGHTNING_ROD", IGNORED_PKG),
-            entry("FRAMED_PATH", IGNORED_PKG)
+            entry("FRAMED_PATH", IGNORED_PKG),
+            entry("FRAMED_BANNER", IGNORED_PKG),
+            entry("FRAMED_WALL_BANNER", IGNORED_PKG)
     );
 
     private static EntryBuilder entry(String type, String subPackage)

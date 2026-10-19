@@ -304,7 +304,9 @@ public enum BlockType implements IBlockType
     FRAMED_HOPPER                                   (false, false,  true, false,  true, false, false, false, ConTexMode.FULL_EDGE),
     FRAMED_LAYERED_CUBE                             ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, LayeredCubeShapes::generate),
     FRAMED_LIGHTNING_ROD                            (false, false, false,  true,  true, false, false, false, null),
-    FRAMED_PATH                                     ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Block.box(0, 0, 0, 16, 15, 16))
+    FRAMED_PATH                                     ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Block.box(0, 0, 0, 16, 15, 16)),
+    FRAMED_BANNER                                   (false, false,  true, false,  true, false, false, false, null, Block.box(4, 0, 4, 12, 16, 12)),
+    FRAMED_WALL_BANNER                              (false, false,  true, false, false, false, false, false, null, WallBannerShapes::generate)
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

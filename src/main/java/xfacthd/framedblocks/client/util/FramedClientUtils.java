@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.util;
 
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
+import xfacthd.framedblocks.client.render.block.FramedBannerRenderer;
 import xfacthd.framedblocks.client.render.block.FramedChestRenderer;
 
 public final class FramedClientUtils
@@ -10,6 +11,7 @@ public final class FramedClientUtils
         ModelWrappingManager.clearModelCaches();
 
         FramedChestRenderer.clearModelCaches();
+        FramedBannerRenderer.clearModelCaches();
     }
 
 
