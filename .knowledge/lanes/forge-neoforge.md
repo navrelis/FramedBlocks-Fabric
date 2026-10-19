@@ -19,6 +19,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 ## Branch status
 | Branch | Base | Worktree | Identity | Build | Gametests | Server Done | Client smoke | Shapes | Uploaded | Pushed |
 |---|---|---|---|---|---|---|---|---|---|---|
+| mc/1.21.11-neoforge | 8c38a156c | F:/wt/nf12111 | done 018b25e77 | green (lead) | 1/1 (upstream has SelfTest only) | Done 11.1 s | PASS 247 blocks, 0 errors | - | - | no |
 
 ## Tasks
 | Id | Task | Model | State |
@@ -26,7 +27,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | R1 | Research combo matrix, toolchains, upstream bases, CurseForge rules | Sonnet | done |
 | I-N1211 | Identity + tests, NeoForge 1.21.1 (`F:/wt/nf1211`, base 377748c11 = 10.5.3) | Sonnet | running (paused for base reset) |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | running |
-| I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | running |
+| I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | done (018b25e77) |
+| I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | running |
 
 ## Decisions (lane)
 - NeoForge 1.21.1 base = upstream/1.21 377748c11 (true 10.5.3, the Fabric port's base). First pick c6bfa184c was wrong (8 commits of 10.6.0 features after the 10.5.3 label); branch reset to 377748c11.
@@ -35,12 +37,13 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
-Sonnet 4 · Opus 0. Precision overrides: none.
+Sonnet 5 · Opus 0. Precision overrides: none.
 
 ## Log
 - 2026-10-19: lane started; shapes/1.21.1 has no shapes merged yet. R1 dispatched.
 - 2026-10-19: branches mc/1.21.1-neoforge (c6bfa184c), mc/1.21.11-neoforge (8c38a156c) created; I-N1211, I-N12111 dispatched.
 - 2026-10-19: R1 done (10 builds: Forge x7, NeoForge x3). 1.21.1 base corrected to 377748c11. mc/1.20.1-forge (5dc540401) created, I-F1201 dispatched.
+- 2026-10-19: I-N12111 accepted: diff read (identity only, 30 Java literals, build.gradle runs), lead build green, committed 018b25e77. mc/26.3-neoforge created, merge started, I-N263 dispatched.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
