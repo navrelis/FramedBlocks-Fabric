@@ -135,6 +135,7 @@ Usage tally: Sonnet 97 + O-C3 corr short + O-B2 long = 100; Opus 30. Session 13:
 
 ## Session 15: shapes (lane S, main lead) + lane sessions
 Lanes: old Fabric (session lane-old-fabric, board .knowledge/lanes/old-fabric.md), new Fabric (lane-new-fabric, lanes/new-fabric.md), Forge/NeoForge (lane-forge-neoforge, lanes/forge-neoforge.md). Main lead: shapes on 1.21.1 Fabric, integration branch `shapes/1.21.1` (F:/wt/shp), then merge into mc/1.21.1, release `1.1.0+mc1.21.1`.
+Main lead (authoritative, update on every handover): session "Project lead setup and planning [3271db]" = local_03797b9f-f9a9-4945-891a-d6c1797fac73, since 2026-10-19 ~13:00. Chain: local_c6a1710f -> local_c4dab021 [313af7] -> local_03797b9f [3271db]. Previous leads are read-only. Lane sessions and new lane/lead sessions send reports here; a new main lead must update this line and announce itself to all lanes.
 
 | ID | Task | Depends | Model / size | Status |
 |----|------|---------|--------------|--------|
