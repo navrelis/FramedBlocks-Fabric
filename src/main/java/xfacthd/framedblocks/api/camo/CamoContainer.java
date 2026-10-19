@@ -15,6 +15,7 @@ import net.minecraft.world.level.material.MapColor;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.platform.util.BlockHooks;
 
 public abstract class CamoContainer
 {
@@ -64,7 +65,7 @@ public abstract class CamoContainer
      */
     public float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
-        return state.getBeaconColorMultiplier(level, pos, beaconPos);
+        return BlockHooks.getBeaconColorMultiplier(state, level, pos, beaconPos);
     }
 
     /**
@@ -182,7 +183,7 @@ public abstract class CamoContainer
         }
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
-        Factory factory = FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry().getValue(id);
+        Factory factory = FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry().get(id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);

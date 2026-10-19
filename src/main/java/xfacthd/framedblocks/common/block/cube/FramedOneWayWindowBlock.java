@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.block.cube;
 
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -18,10 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -32,7 +28,6 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
-import java.util.function.Consumer;
 
 public class FramedOneWayWindowBlock extends FramedBlock
 {
@@ -162,37 +157,6 @@ public class FramedOneWayWindowBlock extends FramedBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedOwnableBlockEntity(pos, state);
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(new FramedBlockRenderProperties()
-        {
-            @Override
-            protected boolean addHitEffectsUnsuppressed(
-                    BlockState state, Level level, BlockHitResult hit, FramedBlockEntity be, ParticleEngine engine
-            )
-            {
-                if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
-                {
-                    ParticleHelper.Client.addHitEffects(state, level, hit, Blocks.TINTED_GLASS.defaultBlockState(), engine);
-                }
-                return super.addHitEffectsUnsuppressed(state, level, hit, be, engine);
-            }
-
-            @Override
-            protected boolean addDestroyEffectsUnsuppressed(
-                    BlockState state, Level level, BlockPos pos, FramedBlockEntity be, ParticleEngine engine
-            )
-            {
-                if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
-                {
-                    ParticleHelper.Client.addDestroyEffects(state, level, pos, Blocks.TINTED_GLASS.defaultBlockState(), engine);
-                }
-                return super.addDestroyEffectsUnsuppressed(state, level, pos, be, engine);
-            }
-        });
     }
 
 

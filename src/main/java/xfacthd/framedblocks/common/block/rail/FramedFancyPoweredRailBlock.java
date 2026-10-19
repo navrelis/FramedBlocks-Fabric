@@ -16,33 +16,37 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFramedBlock
+public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFramedBlock, IPoweredRailBlock
 {
     private final BlockType type;
+    private final boolean poweredRail;
 
     private FramedFancyPoweredRailBlock(BlockType type, boolean isPoweredRail)
     {
         super(IFramedBlock.createProperties(type)
-                .noCollission(),
-                isPoweredRail
+                .noCollission()
         );
         this.type = type;
+        this.poweredRail = isPoweredRail;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
         );
+    }
+
+    @Override
+    public boolean isPoweredRail()
+    {
+        return poweredRail;
     }
 
     @Override
@@ -133,12 +137,6 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
     public IBlockType getBlockType()
     {
         return type;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
 

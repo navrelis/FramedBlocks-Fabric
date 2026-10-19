@@ -17,16 +17,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedTorchBlock extends TorchBlock implements IFramedBlock
@@ -89,7 +86,7 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return Math.max(state.getLightEmission(), super.getLightEmission(state, level, pos));
+        return Math.max(state.getLightEmission(), IFramedBlock.super.getLightEmission(state, level, pos));
     }
 
     @Override
@@ -113,11 +110,5 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
                 new Item.Properties(),
                 Direction.DOWN
         );
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 }

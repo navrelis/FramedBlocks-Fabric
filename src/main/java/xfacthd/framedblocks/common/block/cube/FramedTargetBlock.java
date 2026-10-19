@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block.cube;
 
 import net.minecraft.core.BlockPos;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +10,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -20,21 +24,27 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedTargetBlock extends TargetBlock implements IFramedBlock
 {
+    // Indexed by DyeColor#getId(), replaces the Forge-added DyeColor#getColor(ItemStack)
+    private static final List<TagKey<Item>> DYE_TAGS = List.of(
+            ConventionalItemTags.WHITE_DYES, ConventionalItemTags.ORANGE_DYES, ConventionalItemTags.MAGENTA_DYES,
+            ConventionalItemTags.LIGHT_BLUE_DYES, ConventionalItemTags.YELLOW_DYES, ConventionalItemTags.LIME_DYES,
+            ConventionalItemTags.PINK_DYES, ConventionalItemTags.GRAY_DYES, ConventionalItemTags.LIGHT_GRAY_DYES,
+            ConventionalItemTags.CYAN_DYES, ConventionalItemTags.PURPLE_DYES, ConventionalItemTags.BLUE_DYES,
+            ConventionalItemTags.BROWN_DYES, ConventionalItemTags.GREEN_DYES, ConventionalItemTags.RED_DYES,
+            ConventionalItemTags.BLACK_DYES
+    );
+
     public FramedTargetBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_TARGET));
@@ -66,7 +76,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty() && level.getBlockEntity(pos) instanceof FramedTargetBlockEntity be)
         {
-            DyeColor dye = DyeColor.getColor(stack);
+            DyeColor dye = getDyeColor(stack);
             if (dye != null && be.setOverlayColor(dye))
             {
                 level.playSound(player, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -77,6 +87,23 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
         }
 
         return InteractionResult.PASS;
+    }
+
+    @Nullable
+    private static DyeColor getDyeColor(ItemStack stack)
+    {
+        if (stack.getItem() instanceof DyeItem dye)
+        {
+            return dye.getDyeColor();
+        }
+        for (DyeColor color : DyeColor.values())
+        {
+            if (stack.is(DYE_TAGS.get(color.getId())))
+            {
+                return color;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -154,12 +181,6 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
-    {
-        return canCamoSustainPlant(state, level, pos, side, plant);
-    }
-
-    @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         return true;
@@ -169,12 +190,6 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedTargetBlockEntity(pos, state);
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
     @Override
