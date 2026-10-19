@@ -20,14 +20,14 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C5 light | `F:/wt/nc5` / `n-c5` | Opus (override) | done, merged edb3afdc1 (runtime unverified; gametest set does not compile yet) |
 | N-C1 registration | `F:/wt/nc1` / `n-c1` | Sonnet | done e99be1c09, merged 7af4544cd |
 | N-C2 config/net/datamaps | `F:/wt/nc2` / `n-c2` | Sonnet | done, merged 2cbbe91dc (world/client paths unverified) |
-| N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | Opus review done (1 dupe found), Sonnet correction 1 running |
+| N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | Opus review done (1 dupe found); correction 1 INTERRUPTED (partial uncommitted edits in F:/wt/nc3) |
 | N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | done, merged 24c514404 (mixins apply on server: audit 29/29; behaviour unverified) |
 | N-C4b BE sync/rails | - | Sonnet | pending |
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
-| N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | running |
-| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | running |
+| N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | open (interrupted, no edits) |
+| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | open (interrupted, no edits) |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting for `mc/1.21.11-neoforge` shapes |
 | N-T tests | - | Sonnet | pending |
 | N-F integration | - | Sonnet + lead | pending |
@@ -64,3 +64,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: N-C3 Opus review: checks 1-6 OK; Finding 1 = fluid camo dupe (StackItemAccess.insert setPatch on count-0 stack keeps old fluid component when a tank item drains to empty in camo crafting); lang JSON raw newline; insert order deviates from NeoForge; capacity ignores isValid; risks A (outer-tx refund) / B (sided indices). Correction 1 sent to the same Sonnet agent.
 - 2026-10-19: N-B3 reviewed (WorldRenderBridge maps upstream render events to Fabric WorldRenderEvents; AfterParticles via mixin on LevelRenderer particle-pass lambda method_62213; ghost per-layer buffers via FRAPI; fluid sprites from FluidRenderHandlerRegistry; bare fluid model baked with FaceBakery). Compile green by lead after merge 52717c741.
 - 2026-10-19: dispatched N-K (Sonnet) in F:/wt/nk. Another main-lead handover claim (local_03797b9f) received; asked local_c4dab021 to confirm.
+- 2026-10-19: automatic handoff: all agents stopped. Handoff file: F:/Coding/FramedBlocksFabric/handoff-2026-10-19-2c5466b7.md
