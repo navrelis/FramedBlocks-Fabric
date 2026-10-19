@@ -19,6 +19,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 ## Branch status
 | Branch | Base | Worktree | Identity | Build | Gametests | Server Done | Client smoke | Shapes | Uploaded | Pushed |
 |---|---|---|---|---|---|---|---|---|---|---|
+| mc/1.20.1-forge | 5dc540401 | F:/wt/fg1201 | done 19a590815 | green (lead) | 805/805 required (26 optional occlusion fail, upstream) | Done 18.0 s; NeoForge 47.1.106 server Done 21.3 s | PASS 206 blocks, 0 mod errors | - | - | no |
 | mc/1.21.11-neoforge | 8c38a156c | F:/wt/nf12111 | done 018b25e77 | green (lead) | 1/1 (upstream has SelfTest only) | Done 11.1 s | PASS 247 blocks, 0 errors | - | - | no |
 
 ## Tasks
@@ -26,7 +27,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 |---|---|---|---|
 | R1 | Research combo matrix, toolchains, upstream bases, CurseForge rules | Sonnet | done |
 | I-N1211 | Identity + tests, NeoForge 1.21.1 (`F:/wt/nf1211`, base 377748c11 = 10.5.3) | Sonnet | running (paused for base reset) |
-| I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | running |
+| I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
+| I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | running |
 | I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | done (018b25e77) |
 | I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | running |
 
@@ -37,13 +39,16 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
-Sonnet 5 · Opus 0. Precision overrides: none.
+Sonnet 6 · Opus 0. Precision overrides: none.
 
 ## Log
 - 2026-10-19: lane started; shapes/1.21.1 has no shapes merged yet. R1 dispatched.
 - 2026-10-19: branches mc/1.21.1-neoforge (c6bfa184c), mc/1.21.11-neoforge (8c38a156c) created; I-N1211, I-N12111 dispatched.
 - 2026-10-19: R1 done (10 builds: Forge x7, NeoForge x3). 1.21.1 base corrected to 377748c11. mc/1.20.1-forge (5dc540401) created, I-F1201 dispatched.
 - 2026-10-19: I-N12111 accepted: diff read (identity only, 30 Java literals, build.gradle runs), lead build green, committed 018b25e77. mc/26.3-neoforge created, merge started, I-N263 dispatched.
+- 2026-10-19: main lead: shapes/1.21.1 merge 661897f30 = slope edge slab/panel + 8 prism corner slope panels (upstream 49af28240, 0b2ed0fb1; native on 1.21.11/26.3) + tools/skippreds-codegen + docs/shapes/add-block-type.md. Queued S1-N1211 (port into mc/1.21.1-neoforge) after I-N1211.
+- 2026-10-19: main lead is now session local_c4dab021 (successor of local_c6a1710f).
+- 2026-10-19: I-F1201 accepted: diff read (identity, ConTex dep removed -> reflective lookup of CT_STATE_PROPERTY, maven-publish removed), lead build green, committed 19a590815. NeoForge 47.1.106 server reached Done with the Forge jar -> 1.20.1 upload gets Forge + NeoForge tags. Open: upstream CullingUpdatePacket chunk-z bug (fixed in Fabric 1.20.1) not fixed in fork yet. mc/1.19.2-forge created, I-F1192 dispatched.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
