@@ -33,8 +33,7 @@ import xfacthd.framedblocks.platform.transfer.SlotItemHandler;
  * final commit, consistent rollback of nested transactions, restricted access to the powered saw and the bucket based
  * fluid camo handling.
  * <p>
- * The test sources have not been compiled yet: the gametest wiring (task T1) and the other lanes of the port are
- * required for that
+ * Registered through the {@code fabric-gametest} entrypoint of the test mod (src/gametest/resources/fabric.mod.json)
  */
 public class TransferTests implements FabricGameTest
 {
