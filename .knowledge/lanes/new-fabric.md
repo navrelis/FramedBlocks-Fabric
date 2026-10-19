@@ -12,7 +12,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @ee6684253 (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @d1fe7c853 (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -28,12 +28,12 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C2 config/net/datamaps | `F:/wt/nc2` / `n-c2` | Sonnet | done, merged 2cbbe91dc (world/client paths unverified) |
 | N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | done 6d319fda4, merged 597eb6e2d (dupe fixed; 24/24 transfer+energy gametests by lead) |
 | N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | done, merged 24c514404 (mixins apply on server: audit 29/29; behaviour unverified) |
-| N-C4b BE sync/rails | `F:/wt/nc4b` / `n-c4b` | Sonnet | resumed after reboot (partial edits: 16 files + 6 new) |
+| N-C4b BE sync/rails | `F:/wt/nc4b` / `n-c4b` | Sonnet | done 950bc98a8, merged d1fe7c853 (server Done + 10/10 common mixin targets apply; 2 client mixins compile-only) |
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
 | N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | done 255210fbf, merged ee6684253 (runtime unverified) |
-| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | killed by reboot; partial uncommitted edits (8 files + probe ZzProbe.java) — resume after N-C4b |
+| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | resumed (alone) |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting: Forge lane porting batches 2+3 (S-RECT, S-FUNC) to mc/1.21.11-neoforge (task S23-N12111), sends hash per batch; later S-GEO, pillar/brace, boards, banner |
 | N-T tests | `F:/wt/nt` / `n-t` | Sonnet | killed by reboot, no edits; restart after N-K (owns src/gametest) |
 | N-F integration | - | Sonnet + lead | pending |
@@ -84,3 +84,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: refs changed after reboot: this lane [e7e3e1], Forge lane [76dd47], old Fabric lane [4a1078], main lead [7d5ce0]. New ref sent to all three.
 - 2026-10-19: team lead: Forge/NeoForge lane handed off, successor "probably local_90a515ff" (unconfirmed; direct send failed "not found"). Old Forge lane [76dd47] had my new ref before the handoff. TODO: send the shape-hash request to the confirmed successor.
 - 2026-10-19: main lead: S-BAN merged into shapes/1.21.1 ab0233647 (pushed); upstream-native on 1.21.11/26.3, nothing to port. Next: S-GEO-B.
+- 2026-10-19: N-C4b reviewed (BlockEntitySyncExtension dispatch via WrapOperation on loadWithComponents in LevelChunk lambda method_31716 and ClientPacketListener lambda method_38542; brush/sneak bypass = NeoForge useItemOn rule on both sides, UseBlockCallback removed; map colour ModifyReturnValue; PoweredRailBlock SHAPE->getShapeProperty and rail-kind connection; RailState isValidRailShape; 6 minecart rail-kind sites; dead registerDefaultState removed). Agent: server Done, audit 0/10 failures; client mixins unverified until N-F. Lead compile green; committed 950bc98a8, merged d1fe7c853 (count-line conflict resolved), merged tree compile green. Proposed gametests (rail power, map colour, sneak bypass, brush, update-tag dispatch) go to N-T. N-K resumed alone.
