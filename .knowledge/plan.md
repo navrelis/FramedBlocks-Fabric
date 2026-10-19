@@ -177,7 +177,7 @@ Phase 1: salvage partial work, one worktree at a time.
 | Q2 | DONE 73cf68ca9: S-GEO-B octagonal pillar + diagonal brace: compile partial, finish per handoff-dd5e648e §5.1 spec | F:/wt/sgeob | build >= 992 req / 27 opt, runClientTest PASS, generator zero-diff, merged into shapes/1.21.1, pushed | Sonnet long |
 | Q3 | DONE 0ff48456d: N-K compat finish (1.21.11 Fabric) | F:/wt/nk | compile+AW green, server Done, committed, merged into mc/1.21.11 | Sonnet long |
 | Q4 | DONE a8281d57b: P-B1 1.19.2 rendering core (FRAPI 1.2.1) resume | F:/wt/pb1 | owned files compile, model-contract.md, committed, merged into mc/1.19.2 | Opus long (override, as planned) |
-| Q5 | IN REVIEW (S20: agent done, lead gate running): I-F1165 Forge 1.16.5 identity resume | F:/wt/fg1165 | build green (JDK 8), server Done, smoke PASS, committed | Sonnet long |
+| Q5 | DONE 5e3ef3d99 (S20, lead build green): I-F1165 Forge 1.16.5 identity resume | F:/wt/fg1165 | build green (JDK 8), server Done, smoke PASS, committed | Sonnet long |
 Phase 2: finish 1.21.1 shapes.
 | Q6 | DONE 0275d67fc (S20): S-F: full build, gametests, runClientTest Indigo + `-Pcompat_runtime=sodium`, block counts in README/listing/CF template, changelog 1.1.0, manual checklist | F:/wt/shp | all green, docs updated | Sonnet short + lead |
 | Q7 | S-R: `mod_version` 1.1.0+mc1.21.1, build, upload (USER YES needed), merge shapes/1.21.1 into mc/1.21.1, push | F:/wt/shp, main | uploaded, pushed | lead |
