@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.api.test;
+package xfacthd.framedblocks.gametest.util;
 
 public record TestDelay(int delay) implements TestRunnable
 {

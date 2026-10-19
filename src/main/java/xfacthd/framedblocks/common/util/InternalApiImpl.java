@@ -13,7 +13,6 @@ import net.minecraft.world.level.chunk.LightChunk;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 
 public final class InternalApiImpl implements InternalAPI
 {
@@ -21,10 +20,7 @@ public final class InternalApiImpl implements InternalAPI
     @Nullable
     public BlockEntity getExistingBlockEntity(BlockGetter level, BlockPos pos)
     {
-        if (FlywheelCompat.isVirtualLevel(level))
-        {
-            return level.getBlockEntity(pos);
-        }
+        // TODO(E3): restore "if (FlywheelCompat.isVirtualLevel(level)) { return level.getBlockEntity(pos); }" once Flywheel compat is back
         return getExistingBlockEntity0(level, pos);
     }
 

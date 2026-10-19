@@ -1,11 +1,15 @@
-package xfacthd.framedblocks.api.test;
+package xfacthd.framedblocks.gametest.util;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.*;
+import net.minecraft.server.level.ThreadedLevelLightEngine;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -18,17 +22,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.common.ForgeHooks;
-import xfacthd.framedblocks.platform.Platform;
-import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.block.render.IClientBlockEffects;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.render.particle.ClientBlockEffects;
+import xfacthd.framedblocks.common.util.EventHandler;
+import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.light.AuxLight;
+import xfacthd.framedblocks.platform.util.BlockHooks;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -47,12 +55,15 @@ public final class TestUtils
     private static final BlockPos BEACON_TINT_BEACON = new BlockPos(0, 0, 0);
     private static final Predicate<float[]> BEACON_PREDICATE_RED = arr -> Arrays.equals(arr, DyeColor.RED.getTextureDiffuseColors());
     private static final String BEACON_COLOR_TEXT_RED = Arrays.toString(DyeColor.RED.getTextureDiffuseColors());
+    private static final long LIGHT_TIMEOUT_SECONDS = 10;
+    private static final long LIGHT_TIMEOUT_NANOS = TimeUnit.SECONDS.toNanos(LIGHT_TIMEOUT_SECONDS);
+    private static final long LIGHT_POLL_INTERVAL_NANOS = TimeUnit.MICROSECONDS.toNanos(100);
 
     public static boolean assertFramedBlock(GameTestHelper helper, Block block)
     {
         if (!(block instanceof IFramedBlock))
         {
-            helper.fail(String.format("Expected instance of IFramedBlock, got %s", ForgeRegistries.BLOCKS.getKey(block)));
+            helper.fail(String.format("Expected instance of IFramedBlock, got %s", BuiltInRegistries.BLOCK.getKey(block)));
             return false;
         }
         return true;
@@ -144,7 +155,7 @@ public final class TestUtils
         Player player = helper.makeMockPlayer();
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
-        ForgeHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP);
+        EventHandler.onBlockLeftClick(player, helper.getLevel(), InteractionHand.MAIN_HAND, helper.absolutePos(pos), Direction.UP);
     }
 
     /**
@@ -226,7 +237,7 @@ public final class TestUtils
 
         if (!((IFramedBlock) block).getBlockType().canOccludeWithSolidCamo())
         {
-            helper.fail(String.format("Block %s can not occlude with a solid camo", ForgeRegistries.BLOCKS.getKey(block)));
+            helper.fail(String.format("Block %s can not occlude with a solid camo", BuiltInRegistries.BLOCK.getKey(block)));
             return false;
         }
         return true;
@@ -295,14 +306,12 @@ public final class TestUtils
 
         chainTasks(helper, List.of(
                 () -> helper.setBlock(blockPos, state),
-                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
                     assertBlockLight(helper, blockPos, lightPos, 13);
                 },
                 () -> applyCamo(helper, blockPos, Blocks.GLASS, camoSides),
-                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
@@ -310,7 +319,6 @@ public final class TestUtils
                 },
                 () -> applyCamo(helper, blockPos, Blocks.AIR, camoSides),
                 () -> applyCamo(helper, blockPos, Blocks.GRANITE, camoSides),
-                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, true);
@@ -338,25 +346,18 @@ public final class TestUtils
                 () -> helper.setBlock(EMISSION_BLOCK, state),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check base emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLOWSTONE, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, glowstoneLight), //Check camo emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check camo emission reset
                 () -> clickWithItem(helper, EMISSION_BLOCK, Items.GLOWSTONE_DUST),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission without camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLASS, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with non-solid camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after non-solid camo removed
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GRANITE, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with solid camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after solid camo removed
                 helper::succeed
         ));
@@ -364,7 +365,8 @@ public final class TestUtils
 
     public static void assertBlockLightEmission(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, int light)
     {
-        int emission = helper.getLevel().getLightEmission(helper.absolutePos(blockPos));
+        BlockPos absPos = helper.absolutePos(blockPos);
+        int emission = AuxLight.getEmission(helper.getLevel().getBlockState(absPos), helper.getLevel(), absPos);
         if (emission != light)
         {
             BlockState state = helper.getBlockState(blockPos);
@@ -380,6 +382,44 @@ public final class TestUtils
     }
 
     private static void assertBlockLight(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, int light)
+    {
+        awaitLight(helper, () -> assertBlockLightNow(helper, blockPos, lightPos, light));
+    }
+
+    /**
+     * Waits for the light engine to settle on the expected value by repeating the given check until it passes.
+     * <p>
+     * The light engine processes updates on worker threads while the game test server ticks without pausing, a fixed
+     * delay in ticks therefore doesn't guarantee that a light change was applied by the time the light level is checked.
+     * The wait blocks the server thread (and therefore doesn't use up game test ticks) for at most
+     * {@value #LIGHT_TIMEOUT_SECONDS} seconds, the last failure is rethrown if the expected value never shows up.
+     * The light engine has to be kicked manually because queued light tasks are only processed once an update is
+     * scheduled, which is otherwise done by the server thread when ticking the chunk source
+     */
+    private static void awaitLight(GameTestHelper helper, Runnable check)
+    {
+        ThreadedLevelLightEngine lightEngine = helper.getLevel().getChunkSource().getLightEngine();
+        long start = System.nanoTime();
+        while (true)
+        {
+            try
+            {
+                check.run();
+                return;
+            }
+            catch (GameTestAssertException e)
+            {
+                if (System.nanoTime() - start > LIGHT_TIMEOUT_NANOS)
+                {
+                    throw e;
+                }
+            }
+            lightEngine.tryScheduleUpdate();
+            LockSupport.parkNanos(LIGHT_POLL_INTERVAL_NANOS);
+        }
+    }
+
+    private static void assertBlockLightNow(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, int light)
     {
         int actualLight = helper.getLevel().getLightEngine().getRawBrightness(helper.absolutePos(lightPos), 15);
         if (actualLight != light)
@@ -446,10 +486,10 @@ public final class TestUtils
 
                     Player player = helper.makeMockPlayer();
                     CollisionContext ctx = CollisionContext.of(player);
-                    //noinspection ConstantConditions
-                    ForgeRegistries.ITEMS.tags()
-                            .getTag(Utils.DISABLE_INTANGIBLE)
+                    BuiltInRegistries.ITEM.getTag(Utils.DISABLE_INTANGIBLE)
                             .stream()
+                            .flatMap(HolderSet::stream)
+                            .map(Holder::value)
                             .forEach(item ->
                             {
                                 player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
@@ -459,7 +499,7 @@ public final class TestUtils
                                         INTANGIBILITY_BLOCK,
                                         !be.isIntangible(ctx),
                                         () -> String.format(
-                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks:disable_intangible'",
+                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks_fabric:disable_intangible'",
                                                 state.getBlock(),
                                                 item
                                         )
@@ -470,7 +510,7 @@ public final class TestUtils
                                         INTANGIBILITY_BLOCK,
                                         !currState.getShape(helper.getLevel(), pos, ctx).isEmpty(),
                                         () -> String.format(
-                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks:disable_intangible'",
+                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks_fabric:disable_intangible'",
                                                 state.getBlock(),
                                                 item
                                         )
@@ -514,12 +554,12 @@ public final class TestUtils
     {
         public static void testHasParticleOverride(GameTestHelper helper, BlockState state)
         {
-            IClientBlockExtensions blockExt = IClientBlockExtensions.of(state);
+            IClientBlockEffects blockExt = ClientBlockEffects.of(state);
             assertTrue(
                     helper,
                     INTANGIBILITY_BLOCK,
                     blockExt instanceof FramedBlockRenderProperties,
-                    () -> String.format("Block '%s' doesn't have required IClientBlockExtensions", state.getBlock())
+                    () -> String.format("Block '%s' doesn't have required client block effects", state.getBlock())
             );
 
             BlockPos pos = helper.absolutePos(INTANGIBILITY_BLOCK);
@@ -561,7 +601,8 @@ public final class TestUtils
         BlockState state = helper.getBlockState(BEACON_TINT_BLOCK);
         assertFramedBlock(helper, state.getBlock());
 
-        float[] tint = state.getBeaconColorMultiplier(
+        float[] tint = BlockHooks.getBeaconColorMultiplier(
+                state,
                 helper.getLevel(),
                 helper.absolutePos(BEACON_TINT_BLOCK),
                 helper.absolutePos(BEACON_TINT_BEACON)
