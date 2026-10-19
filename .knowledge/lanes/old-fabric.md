@@ -5,7 +5,7 @@ Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents
 ## Status per version
 | Ver | Branch | Worktree | Stage | Shapes | CurseForge file | Pushed |
 |-----|--------|----------|-------|--------|-----------------|--------|
-| 1.20.1 | mc/1.20.1 | F:/wt/m1201 | build + gametests + server green; F3 client smoke next | waiting for mc/1.20.1-forge | - | no |
+| 1.20.1 | mc/1.20.1 | F:/wt/m1201 | client smoke done; released 1.0.0+mc1.20.1 | waiting for mc/1.20.1-forge | 9257720 | yes |
 | 1.19.2 | mc/1.19.2 | F:/wt/m1192 | P-A done (d3a97c2d1); P-B1 merged a8281d57b; next wave 1 (P-C1, P-C3, P-T, P-C4a) | - | - | no |
 | 1.18.2 | mc/1.18.2 | F:/wt/m1182 | map done; S-A after pinned 1.19.2 port | - | - | no |
 | 1.16.5 | mc/1.16.5 | F:/wt/m1165 | V-M open (interrupted, nothing on disk) | - | - | no |
