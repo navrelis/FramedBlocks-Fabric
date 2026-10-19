@@ -19,7 +19,7 @@ Files:
 * `B/client/model/curved/ProfileFrame.java` - local coordinate frame, `B/client/model/curved/CurvedQuads.java` - the quad helper.
 * `B/common/data/shapes/curved/{CurvedShapes,CrownMoldingCornerShapes}.java` - VoxelShapes.
 * Predicates: `facepreds/curved/ArchFullFacePredicate`, `conpreds/curved/ArchConnectionPredicate`,
-  `skippreds/curved/{ArchSkipPredicate,CrownMoldingSkipPredicate}` (all hand-written, the skip-predicate generator only carries bare
+  `skippreds/curved/{ArchSkipPredicate,InnerArchSkipPredicate,CrownMoldingSkipPredicate}` (all hand-written, the skip-predicate generator only carries bare
   `KNOWN_TYPES` entries for these types).
 
 ## 1. Coordinates and orientation
@@ -151,13 +151,17 @@ log camo shows the same face on the cove of a corner and of the molding running 
 
 Side skip predicates (only between these types, no generated predicate knows them):
 
-* `ArchSkipPredicate` (arch, inner arch): the caps of two blocks of the same type with identical `FACING_HOR`/`SLOPE_TYPE` touching
-  along the extrusion axis hide each other.
+* `ArchSkipPredicate` (arch) and `InnerArchSkipPredicate` (inner arch, two classes so that the `@CullTest` targets stay strictly
+  same-type): the caps of two blocks of the same type with identical `FACING_HOR`/`SLOPE_TYPE` touching along the extrusion axis
+  hide each other. Back and base are full faces and culled by the generic full face path.
 * `CrownMoldingSkipPredicate` (molding and both corners): each boundary face gets a descriptor - "molding profile attached to faces
-  A and B" (caps of the straight molding, open ends of the inner corner, the two faces of the outer corner) or "half face at edge E"
-  (back and base half of the straight molding, wall halves of the inner corner). Touching faces with identical descriptors hide each
+  A and B" (caps of the straight molding, open ends of the inner corner, the two faces of the outer corner), "half face at edge E"
+  (back and base half of the straight molding, wall halves of the inner corner), "L at edges A and B" (shared face of the inner
+  corner) or "quarter at edges A and B" (shared face of the outer corner). Touching faces with identical descriptors hide each
   other, so moldings in a row, moldings running into a corner piece and back-to-back moldings cull their shared faces (important for
   translucent camos).
+* All five are registered in `SideSkipPredicates`. The game test `PredicateMapTests` checks that every type has a mapping in every
+  predicate map and compares these predicates for all state pairs against the face slices of the block shapes.
 
 ## 5. VoxelShapes and outline
 
