@@ -145,7 +145,10 @@ public final class ClientTestReport
                 others.add(event);
             }
         }
-        List<String> selfTestFindings = selfTestLines.stream().filter(line -> !line.startsWith("INFO")).toList();
+        List<String> selfTestFindings = selfTestLines.stream()
+                .filter(line -> !line.startsWith("INFO"))
+                .filter(line -> !isKnownBenignMessage(line))
+                .toList();
 
         Verdict verdict = requested;
         List<String> reasons = new ArrayList<>(failures);
@@ -193,6 +196,10 @@ public final class ClientTestReport
     private static boolean isKnownBenign(LogCapture.LoggedEvent event)
     {
         String message = event.message();
+        if (isKnownBenignMessage(message) || isFirstRunConfigCorrection(event))
+        {
+            return true;
+        }
         String lower = message.toLowerCase();
         if (lower.contains("modmenu") || lower.contains("mod menu"))
         {
@@ -207,6 +214,34 @@ public final class ClientTestReport
                         || message.contains("com/electronwill/nightconfig/core/io/IoUtils")
                         || message.contains("de/siphalor/amecs")
         );
+    }
+
+    /**
+     * On 1.20.1 the framed_tile BE type is valid for every non-special block, including the double blocks which have their
+     * own BE type but are not flagged as having a special tile (upstream behavior of the 1.20.1 line, the BE type to use
+     * is always chosen explicitly by the block). The self-test of the 1.21.1 line, which excludes double blocks from the
+     * default BE type, reports this overlap
+     */
+    private static boolean isKnownBenignMessage(String message)
+    {
+        return message.contains("is valid for multiple BE types")
+                && message.contains("framedblocks_fabric:framed_tile")
+                && message.contains("(double: true, special: false)");
+    }
+
+    /**
+     * Forge Config API Port logs these when it creates a config file in a fresh run directory, they do not occur on
+     * later runs and do not indicate a problem with our config specs
+     */
+    private static boolean isFirstRunConfigCorrection(LogCapture.LoggedEvent event)
+    {
+        if (!"Forge Config API Port".equals(event.logger()))
+        {
+            return false;
+        }
+        String message = event.message();
+        return (message.contains("Configuration file") && message.contains("is not correct. Correcting"))
+                || (message.startsWith("Incorrect key ") && message.contains("was corrected from null to its default"));
     }
 
     private String buildMarkdown(Data data)

@@ -16,6 +16,10 @@ java {
     withSourcesJar()
 }
 
+// Dev runtime only: Sodium 0.5.x refuses to start when the LWJGL jar of the dev environment reports 3.3.2-snapshot instead
+// of 3.3.1 (Sodium issue 2561), although the jar is the 3.3.1 one Minecraft 1.20.1 ships. Only used when Sodium is requested
+var sodiumRequested = (findProperty('compat_runtime')?.toString()?.toLowerCase() ?: 'false').split(',').collect { it.trim() }.contains('sodium')
+
 loom {
     accessWidenerPath = file('src/main/resources/framedblocks_fabric.accesswidener')
 
@@ -25,6 +29,10 @@ loom {
             inherit client
             source 'gametest'
             ideConfigGenerated true
+            if (sodiumRequested)
+            {
+                vmArg '-Dsodium.checks.issue2561=false'
+            }
         }
 
         // Automated client smoke test, run via the runClientTest task. Only active with the framedblocks.clienttest property
@@ -38,6 +46,10 @@ loom {
             programArg '1600'
             programArg '--height'
             programArg '900'
+            if (sodiumRequested)
+            {
+                vmArg '-Dsodium.checks.issue2561=false'
+            }
             ideConfigGenerated false
         }
     }
