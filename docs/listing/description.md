@@ -4,7 +4,11 @@
 
 ## What it adds
 
-FramedBlocks adds "framed" versions of many block shapes: slabs, panels, slopes, stairs, corner pieces, pillars, double and checkered variants and more, plus functional blocks such as doors, trapdoors, gates, signs, chests, hoppers, tanks, rails and item frames. The registry holds 236 blocks (about 230 framed shapes).
+FramedBlocks adds "framed" versions of many block shapes: slabs, panels, slopes, stairs, corner pieces, pillars, double and checkered variants and more, plus functional blocks such as doors, trapdoors, gates, signs, chests, hoppers, tanks, rails and item frames. The registry holds 269 blocks (over 230 framed shapes, 232 of them with an item of their own).
+
+## New in 1.1.0
+
+28 new framed shapes. 12 are backported from newer upstream FramedBlocks versions: slope edge slab, slope edge panel, small and large prism corner slope panels (outer and inner), half board, divided board, corner board, inner corner board, double corner board and the framed banner (placed on a wall it becomes the wall banner). 16 are new in this port: arch, inner arch, crown molding with inner and outer corner, octagonal pillar, window frame, table, chair, stool, diagonal brace, corbel, wall shelf, barrel (27 slots), crafting table and redstone lamp (emits light level 15 when powered).
 
 ## Camouflaging
 

@@ -1,4 +1,4 @@
-FramedBlocks Fabric is an unofficial port of FramedBlocks by XFactHD to the Fabric mod loader, for Minecraft 1.21.1. It adds framed versions of about 230 block shapes. A framed block starts out as an empty wooden frame and takes on the look of almost any other block, so you can build slopes, corners, panels and many more shapes in any material.
+FramedBlocks Fabric is an unofficial port of FramedBlocks by XFactHD to the Fabric mod loader, for Minecraft 1.21.1. It adds framed versions of over 230 block shapes. A framed block starts out as an empty wooden frame and takes on the look of almost any other block, so you can build slopes, corners, panels and many more shapes in any material.
 
 Last updated: October 2026
 
@@ -8,9 +8,9 @@ Last updated: October 2026
 
 Place a framed block and right-click it with a block item: the frame now looks like that block and also uses its sounds. Fluids can be applied the same way. The Framed Hammer takes the camo off again. Blocks with block entities and untagged non-solid blocks cannot be used as a camo.
 
-![About 230 framed shapes. 236 blocks in the registry. 231 framed shapes with an item. 2 Framing Saws to switch between shapes. A picture of 48 different framed shapes on pedestals, all with the same smooth quartz camo. Shapes include cubes, slabs, panels, slopes, stairs, corner and prism pieces, pillars, slope edges, slope panel and slab corners, pyramids, checkered and layered variants, collapsible blocks and double blocks.](dist/img/03-shapes.png)
+![Over 230 framed shapes. 269 blocks in the registry. 232 framed shapes with an item. 2 Framing Saws to switch between shapes. A picture of 48 different framed shapes on pedestals, all with the same smooth quartz camo. Shapes include cubes, slabs, panels, slopes, stairs, corner and prism pieces, pillars, slope edges, slope panel and slab corners, pyramids, checkered and layered variants, collapsible blocks and double blocks.](dist/img/03-shapes.png)
 
-The block registry of the mod holds 236 blocks. 231 of them are framed shapes with their own item; the rest are three wall-mounted torch variants and the two saws. The shapes range from simple cubes, slabs and panels to slope edges, pyramids and collapsible blocks.
+The block registry of the mod holds 269 blocks. 232 of them are framed shapes with their own item; the rest are 35 framed blocks without an item of their own (wall-mounted variants, vertical half slopes, waterloggable pressure plates and a few multi-part blocks) and the two saws. The shapes range from simple cubes, slabs and panels to slope edges, pyramids and collapsible blocks.
 
 ![Two camos in one block. Double blocks hold two framed parts in one block space, and each part takes its own camo. A picture of ten double blocks, each with two different camos. Up close: the roof of a cottage, built from framed slopes and inner and outer corner slopes with wood plank camos.](dist/img/04-double.png)
 
@@ -59,9 +59,10 @@ The look a framed block takes on is called its camo.
 
 ## Which shapes are there?
 
-The block registry contains 236 blocks: 231 framed shapes that have an item, three wall-mounted torch variants that share the item of their floor torch, the Framing Saw and the Powered Framing Saw.
+The block registry contains 269 blocks: 232 framed shapes that have an item, 35 further framed blocks without an item of their own (wall-mounted variants of torches, signs, the banner and corner slope panels, vertical half slopes, waterloggable pressure plates and a few multi-part blocks, which are produced by the item of another shape), the Framing Saw and the Powered Framing Saw.
 
 - **Building shapes:** cubes, slabs, panels, slopes, stairs, corner and prism pieces, pillars, slope edges, slope panel and slope slab corners, pyramids, checkered and layered variants, collapsible blocks and double blocks.
+- **New in 1.1.0:** 28 new shapes. 12 are backported from newer upstream FramedBlocks versions: slope edge slab, slope edge panel, small and large prism corner slope panels (outer and inner), half board, divided board, corner board, inner corner board, double corner board and the framed banner (placed on a wall it becomes the wall banner). 16 are new in this port: arch, inner arch, crown molding with inner and outer corner, octagonal pillar, window frame, table, chair, stool, diagonal brace, corbel, wall shelf, barrel (27 slots), crafting table and redstone lamp (emits light level 15 when powered).
 - **Functional blocks:** doors, iron doors, trapdoors, gates, fences, walls, ladders, levers, buttons, pressure plates, signs and hanging signs, torches, lanterns, flower pots, item frames, bookshelves, chests, hoppers, secret storage, tanks, bars, panes, a lightning rod, a target block, a bouncy cube, a redstone block, rails and rail slopes.
 
 ## Tools and upgrades
