@@ -12,12 +12,14 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.property.StairsType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 import xfacthd.framedblocks.common.data.skippreds.misc.MiscDirs;
+import xfacthd.framedblocks.common.data.skippreds.pane.PaneDirs;
 import xfacthd.framedblocks.common.data.skippreds.pillar.PillarDirs;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabDirs;
 import xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
@@ -68,6 +70,12 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE -> testAgainstInnerThreewayCornerSlopeEdge(
                         dir, type, adjState, side
                 );
+                case FRAMED_SLOPE_EDGE_SLAB -> testAgainstSlopeEdgeSlab(
+                        dir, type, adjState, side
+                );
+                case FRAMED_SLOPE_EDGE_PANEL -> testAgainstSlopeEdgePanel(
+                        dir, type, adjState, side
+                );
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(
                         dir, type, adjState, side
                 );
@@ -93,6 +101,15 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
                         dir, type, adjState, side
                 );
                 case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
+                        dir, type, adjState, side
+                );
+                case FRAMED_HALF_BOARD -> testAgainstHalfBoard(
+                        dir, type, adjState, side
+                );
+                case FRAMED_CORNER_BOARD -> testAgainstCornerBoard(
+                        dir, type, adjState, side
+                );
+                case FRAMED_INNER_CORNER_BOARD -> testAgainstInnerCornerBoard(
                         dir, type, adjState, side
                 );
                 case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
@@ -279,6 +296,30 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return StairsDirs.VerticalStairs.getStairDir(dir, type, side).isEqualTo(SlopeEdgeDirs.InnerThreewayCornerSlopeEdge.getStairDir(adjDir, adjTop, adjRight, adjAlt, side.getOpposite()));
     }
 
+    @CullTest.TestTarget(BlockType.FRAMED_SLOPE_EDGE_SLAB)
+    private static boolean testAgainstSlopeEdgeSlab(
+            Direction dir, StairsType type, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return StairsDirs.VerticalStairs.getHalfDir(dir, type, side).isEqualTo(SlopeEdgeDirs.SlopeEdgeSlab.getHalfDir(adjDir, adjTopHalf, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_SLOPE_EDGE_PANEL)
+    private static boolean testAgainstSlopeEdgePanel(
+            Direction dir, StairsType type, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
+
+        return StairsDirs.VerticalStairs.getHalfDir(dir, type, side).isEqualTo(SlopeEdgeDirs.SlopeEdgePanel.getHalfDir(adjDir, adjRot, adjFront, side.getOpposite()));
+    }
+
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_EDGE)
     private static boolean testAgainstSlabEdge(
             Direction dir, StairsType type, BlockState adjState, Direction side
@@ -382,6 +423,33 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
 
         return StairsDirs.VerticalStairs.getStairDir(dir, type, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getStairDir(adjDir, adjTop, side.getOpposite())) ||
                StairsDirs.VerticalStairs.getCornerDir(dir, type, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getCornerDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_HALF_BOARD)
+    private static boolean testAgainstHalfBoard(
+            Direction dir, StairsType type, BlockState adjState, Direction side
+    )
+    {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return StairsDirs.VerticalStairs.getHalfDir(dir, type, side).isEqualTo(PaneDirs.HalfBoard.getHalfDir(adjCmpDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_CORNER_BOARD)
+    private static boolean testAgainstCornerBoard(
+            Direction dir, StairsType type, BlockState adjState, Direction side
+    )
+    {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return StairsDirs.VerticalStairs.getCornerDir(dir, type, side).isEqualTo(PaneDirs.CornerBoard.getCornerDir(adjCmpDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_INNER_CORNER_BOARD)
+    private static boolean testAgainstInnerCornerBoard(
+            Direction dir, StairsType type, BlockState adjState, Direction side
+    )
+    {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return StairsDirs.VerticalStairs.getStairDir(dir, type, side).isEqualTo(PaneDirs.InnerCornerBoard.getStairDir(adjCmpDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)

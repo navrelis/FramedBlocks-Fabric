@@ -4,6 +4,8 @@ import xfacthd.framedblocks.platform.Platform;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
@@ -33,21 +35,34 @@ public abstract class BlockTypeMap<T>
 
     private void check()
     {
-        int missing = 0;
+        List<BlockType> missing = findMissingTypes();
+        for (BlockType type : missing)
+        {
+            FramedBlocks.LOGGER.error(
+                    "Type '{}' missing mapping in '{}'", type, getClass().getSimpleName()
+            );
+        }
+        if (!missing.isEmpty())
+        {
+            FramedBlocks.LOGGER.error("Found {} missing mappings in '{}'", missing.size(), getClass().getSimpleName());
+        }
+    }
+
+    /**
+     * {@return all types without an explicit mapping (these silently use the default value)}, only meaningful after
+     * {@link #initialize()} was called
+     */
+    public final List<BlockType> findMissingTypes()
+    {
+        List<BlockType> missing = new ArrayList<>();
         for (int i = 0; i < TYPE_COUNT; i++)
         {
             if (values[i] == null)
             {
-                missing++;
-                FramedBlocks.LOGGER.error(
-                        "Type '{}' missing mapping in '{}'", TYPES[i], getClass().getSimpleName()
-                );
+                missing.add(TYPES[i]);
             }
         }
-        if (missing > 0)
-        {
-            FramedBlocks.LOGGER.error("Found {} missing mappings in '{}'", missing, getClass().getSimpleName());
-        }
+        return missing;
     }
 
     protected final void put(BlockType type, T value)

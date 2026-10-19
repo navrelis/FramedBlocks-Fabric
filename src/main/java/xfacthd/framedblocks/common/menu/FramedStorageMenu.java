@@ -54,6 +54,11 @@ public class FramedStorageMenu extends AbstractContainerMenu
         FramedUtils.addPlayerInvSlots(this::addSlot, inv, 8, y + 13);
     }
 
+    public IStorageBlockItemHandler getItemHandler()
+    {
+        return itemHandler;
+    }
+
     public int getRowCount()
     {
         return itemHandler.getSlots() / 9;
@@ -103,6 +108,6 @@ public class FramedStorageMenu extends AbstractContainerMenu
     public void removed(Player player)
     {
         super.removed(player);
-        itemHandler.close();
+        itemHandler.close(player);
     }
 }

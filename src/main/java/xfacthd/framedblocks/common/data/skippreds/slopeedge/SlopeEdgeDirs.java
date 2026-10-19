@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.data.skippreds.slopeedge;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerType;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.skippreds.CornerDir;
 import xfacthd.framedblocks.common.data.skippreds.HalfDir;
@@ -477,5 +478,63 @@ public final class SlopeEdgeDirs
         }
 
         private InnerThreewayCornerSlopeEdge() { }
+    }
+
+    public static final class SlopeEdgeSlab
+    {
+        public static QuarterTriangleDir getTriDir(Direction dir, boolean topHalf, boolean top, Direction side)
+        {
+            if (side.getAxis() == dir.getClockWise().getAxis())
+            {
+                Direction backFace = top ? Direction.UP : Direction.DOWN;
+                return QuarterTriangleDir.fromDirections(dir, backFace, top != topHalf);
+            }
+            return QuarterTriangleDir.NULL;
+        }
+
+        public static HalfDir getHalfDir(Direction dir, boolean topHalf, boolean top, Direction side)
+        {
+            if (side == dir)
+            {
+                return HalfDir.fromDirections(side, topHalf ? Direction.UP : Direction.DOWN);
+            }
+            Direction frontFace = top ? Direction.DOWN : Direction.UP;
+            if (side == frontFace && topHalf != top)
+            {
+                return HalfDir.fromDirections(side, dir);
+            }
+            return HalfDir.NULL;
+        }
+
+        private SlopeEdgeSlab() { }
+    }
+
+    public static final class SlopeEdgePanel
+    {
+        public static QuarterTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
+        {
+            Direction backEdge = rot.withFacing(dir).getOpposite();
+            if (side.getAxis() != dir.getAxis() && side.getAxis() != backEdge.getAxis())
+            {
+                return QuarterTriangleDir.fromDirections(dir, backEdge, front);
+            }
+            return QuarterTriangleDir.NULL;
+        }
+
+        public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
+        {
+            Direction backEdge = rot.withFacing(dir).getOpposite();
+            if (side == dir.getOpposite() && front)
+            {
+                return HalfDir.fromDirections(side, backEdge);
+            }
+            if (side == backEdge)
+            {
+                return HalfDir.fromDirections(side, front ? dir.getOpposite() : dir);
+            }
+            return HalfDir.NULL;
+        }
+
+        private SlopeEdgePanel() { }
     }
 }

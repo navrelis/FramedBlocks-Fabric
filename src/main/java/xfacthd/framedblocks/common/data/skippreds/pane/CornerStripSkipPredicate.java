@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
@@ -37,6 +38,12 @@ public final class CornerStripSkipPredicate implements SideSkipPredicate
                 case FRAMED_WALL_BOARD -> testAgainstWallBoard(
                         dir, type, adjState, side
                 );
+                case FRAMED_HALF_BOARD -> testAgainstHalfBoard(
+                        dir, type, adjState, side
+                );
+                case FRAMED_INNER_CORNER_BOARD -> testAgainstInnerCornerBoard(
+                        dir, type, adjState, side
+                );
                 default -> false;
             };
         }
@@ -51,7 +58,8 @@ public final class CornerStripSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
-        return PaneDirs.CornerStrip.getHalfDir(dir, type, side).isEqualTo(PaneDirs.CornerStrip.getHalfDir(adjDir, adjType, side.getOpposite()));
+        return PaneDirs.CornerStrip.getHalfDir(dir, type, side).isEqualTo(PaneDirs.CornerStrip.getHalfDir(adjDir, adjType, side.getOpposite())) ||
+               PaneDirs.CornerStrip.getCornerDir(dir, type, side).isEqualTo(PaneDirs.CornerStrip.getCornerDir(adjDir, adjType, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_FLOOR_BOARD)
@@ -70,5 +78,23 @@ public final class CornerStripSkipPredicate implements SideSkipPredicate
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         return PaneDirs.CornerStrip.getHalfDir(dir, type, side).isEqualTo(PaneDirs.WallBoard.getHalfDir(adjDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_HALF_BOARD)
+    private static boolean testAgainstHalfBoard(
+            Direction dir, SlopeType type, BlockState adjState, Direction side
+    )
+    {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return PaneDirs.CornerStrip.getHalfDir(dir, type, side).isEqualTo(PaneDirs.HalfBoard.getEdgeDir(adjCmpDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_INNER_CORNER_BOARD)
+    private static boolean testAgainstInnerCornerBoard(
+            Direction dir, SlopeType type, BlockState adjState, Direction side
+    )
+    {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return PaneDirs.CornerStrip.getHalfDir(dir, type, side).isEqualTo(PaneDirs.InnerCornerBoard.getEdgeDir(adjCmpDir, side.getOpposite()));
     }
 }

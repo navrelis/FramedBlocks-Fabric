@@ -173,6 +173,22 @@ public final class ShapeUtils
         return rotatedShape;
     }
 
+    public static VoxelShape mirrorShapeAlongY(VoxelShape shape)
+    {
+        return mirrorShapeUnoptimizedAlongY(shape).optimize();
+    }
+
+    public static VoxelShape mirrorShapeUnoptimizedAlongY(VoxelShape shape)
+    {
+        VoxelShape mirroredShape = Shapes.empty();
+        for (AABB box : shape.toAabbs())
+        {
+            VoxelShape boxShape = Shapes.create(box.minX, 1D - box.maxY, box.minZ, box.maxX, 1D - box.minY, box.maxZ);
+            mirroredShape = orUnoptimized(mirroredShape, boxShape);
+        }
+        return mirroredShape;
+    }
+
     public static void makeHorizontalRotations(VoxelShape shape, Direction srcDir, VoxelShape[] out, int baseOffset)
     {
         if (Utils.isY(srcDir))

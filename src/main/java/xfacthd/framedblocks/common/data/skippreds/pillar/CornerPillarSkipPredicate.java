@@ -12,12 +12,14 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.property.StairsType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 import xfacthd.framedblocks.common.data.skippreds.misc.MiscDirs;
+import xfacthd.framedblocks.common.data.skippreds.pane.PaneDirs;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabDirs;
 import xfacthd.framedblocks.common.data.skippreds.slope.SlopeDirs;
 import xfacthd.framedblocks.common.data.skippreds.slopeedge.SlopeEdgeDirs;
@@ -61,6 +63,9 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_CORNER_SLOPE_EDGE -> testAgainstElevatedCornerSlopeEdge(
                         dir, adjState, side
                 );
+                case FRAMED_SLOPE_EDGE_PANEL -> testAgainstSlopeEdgePanel(
+                        dir, adjState, side
+                );
                 case FRAMED_SLAB_CORNER -> testAgainstSlabCorner(
                         dir, adjState, side
                 );
@@ -80,6 +85,12 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
                         dir, adjState, side
                 );
                 case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
+                        dir, adjState, side
+                );
+                case FRAMED_HALF_BOARD -> testAgainstHalfBoard(
+                        dir, adjState, side
+                );
+                case FRAMED_CORNER_BOARD -> testAgainstCornerBoard(
                         dir, adjState, side
                 );
                 case FRAMED_PILLAR_SOCKET -> testAgainstPillarSocket(
@@ -205,6 +216,18 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
                PillarDirs.CornerPillar.getCornerDir(dir, side).isEqualTo(SlopeEdgeDirs.ElevatedCornerSlopeEdge.getCornerDir(adjDir, adjType, side.getOpposite()));
     }
 
+    @CullTest.TestTarget(BlockType.FRAMED_SLOPE_EDGE_PANEL)
+    private static boolean testAgainstSlopeEdgePanel(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
+
+        return PillarDirs.CornerPillar.getHalfDir(dir, side).isEqualTo(SlopeEdgeDirs.SlopeEdgePanel.getHalfDir(adjDir, adjRot, adjFront, side.getOpposite()));
+    }
+
     @CullTest.TestTarget(BlockType.FRAMED_SLAB_CORNER)
     private static boolean testAgainstSlabCorner(
             Direction dir, BlockState adjState, Direction side
@@ -282,6 +305,24 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         return PillarDirs.CornerPillar.getCornerDir(dir, side).isEqualTo(PillarDirs.ThreewayCornerPillar.getCornerDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_HALF_BOARD)
+    private static boolean testAgainstHalfBoard(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return PillarDirs.CornerPillar.getHalfDir(dir, side).isEqualTo(PaneDirs.HalfBoard.getHalfDir(adjCmpDir, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_CORNER_BOARD)
+    private static boolean testAgainstCornerBoard(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
+        return PillarDirs.CornerPillar.getCornerDir(dir, side).isEqualTo(PaneDirs.CornerBoard.getCornerDir(adjCmpDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_PILLAR_SOCKET)

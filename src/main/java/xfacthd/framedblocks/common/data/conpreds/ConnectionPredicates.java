@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data.conpreds;
 
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.conpreds.curved.*;
 import xfacthd.framedblocks.common.data.conpreds.door.*;
 import xfacthd.framedblocks.common.data.conpreds.misc.*;
 import xfacthd.framedblocks.common.data.conpreds.pane.*;
@@ -46,6 +47,9 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, DoubleThreewayCornerConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_CROWN_MOLDING, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_INNER_CROWN_MOLDING_CORNER, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, new ElevatedSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, new ElevatedDoubleSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, new StackedSlopeEdgeConnectionPredicate());
@@ -59,6 +63,10 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, new StackedInnerCornerSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE, new ThreewayCornerSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_SLOPE_EDGE_SLAB, new SlopeEdgeSlabConnectionPredicate());
+        put(BlockType.FRAMED_SLOPE_EDGE_PANEL, new SlopeEdgePanelConnectionPredicate());
+        put(BlockType.FRAMED_ARCH, ArchConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_ARCH, ArchConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, new SlabConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
@@ -131,15 +139,24 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_REDSTONE_WALL_TORCH, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_FLOOR_BOARD, new FloorBoardConnectionPredicate());
         put(BlockType.FRAMED_WALL_BOARD, new WallBoardConnectionPredicate());
+        put(BlockType.FRAMED_HALF_BOARD, new HalfBoardConnectionPredicate());
+        put(BlockType.FRAMED_DIVIDED_BOARD, new DividedBoardConnectionPredicate());
+        put(BlockType.FRAMED_CORNER_BOARD, new CornerBoardConnectionPredicate());
+        put(BlockType.FRAMED_INNER_CORNER_BOARD, new InnerCornerBoardConnectionPredicate());
+        put(BlockType.FRAMED_DOUBLE_CORNER_BOARD, new DoubleCornerBoardConnectionPredicate());
+        put(BlockType.FRAMED_WALL_SHELF, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_CORNER_STRIP, new CornerStripConnectionPredicate());
         put(BlockType.FRAMED_LATTICE_BLOCK, LatticeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_THICK_LATTICE, LatticeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_CHEST, new ChestConnectionPredicate());
         put(BlockType.FRAMED_SECRET_STORAGE, ConnectionPredicate.FULL_EDGE);
+        put(BlockType.FRAMED_BARREL, ConnectionPredicate.FULL_FACE);
+        put(BlockType.FRAMED_CRAFTING_TABLE, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_TANK, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_BARS, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PANE, PaneConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_HORIZONTAL_PANE, new HorizontalPaneConnectionPredicate());
+        put(BlockType.FRAMED_WINDOW_FRAME, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_POWERED_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
@@ -153,11 +170,17 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, SlopeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_FLOWER_POT, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_TABLE, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_CHAIR, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_STOOL, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PILLAR, PillarConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_HALF_PILLAR, new HalfPillarConnectionPredicate());
         put(BlockType.FRAMED_PILLAR_SOCKET, new PillarSocketConnectionPredicate());
         put(BlockType.FRAMED_SPLIT_PILLAR_SOCKET, new SplitPillarSocketConnectionPredicate());
         put(BlockType.FRAMED_POST, PillarConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_OCTAGONAL_PILLAR, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_DIAGONAL_BRACE, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_CORBEL, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockConnectionPredicate());
         put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, new CollapsibleCopycatConnectionPredicate());
         put(BlockType.FRAMED_BOUNCY_CUBE, ConnectionPredicate.FULL_EDGE);
@@ -228,7 +251,16 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W, new StackedCornerSlopePanelWallConnectionPredicate());
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, new StackedInnerCornerSlopePanelConnectionPredicate());
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W, new StackedInnerCornerSlopePanelWallConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, new SmallPrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, new SmallPrismSlopePanelCornerWallConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL, new LargePrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W, new LargePrismSlopePanelCornerWallConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, new SmallInnerPrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, new SmallInnerPrismSlopePanelCornerWallConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismSlopePanelCornerConnectionPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismSlopePanelCornerWallConnectionPredicate());
         put(BlockType.FRAMED_GLOWING_CUBE, ConnectionPredicate.FULL_EDGE);
+        put(BlockType.FRAMED_REDSTONE_LAMP, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_PYRAMID, new PyramidConnectionPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, new ElevatedPyramidSlabConnectionPredicate());
@@ -262,5 +294,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_LAYERED_CUBE, new LayeredCubeConnectionPredicate());
         put(BlockType.FRAMED_LIGHTNING_ROD, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PATH, new PathConnectionPredicate());
+        put(BlockType.FRAMED_BANNER, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_WALL_BANNER, ConnectionPredicate.FALSE);
     }
 }

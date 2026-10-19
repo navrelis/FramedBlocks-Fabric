@@ -52,12 +52,14 @@ import xfacthd.framedblocks.client.data.extensions.block.OneWayWindowClientBlock
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.cube.*;
+import xfacthd.framedblocks.client.model.curved.*;
 import xfacthd.framedblocks.client.model.door.*;
 import xfacthd.framedblocks.client.model.interactive.*;
 import xfacthd.framedblocks.client.model.pane.*;
 import xfacthd.framedblocks.client.model.pillar.*;
 import xfacthd.framedblocks.client.model.prism.*;
 import xfacthd.framedblocks.client.model.rail.*;
+import xfacthd.framedblocks.client.model.rect.*;
 import xfacthd.framedblocks.client.model.slab.*;
 import xfacthd.framedblocks.client.model.slope.*;
 import xfacthd.framedblocks.client.model.slopeedge.*;
@@ -75,6 +77,7 @@ import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
 import xfacthd.framedblocks.client.render.debug.FramedBlockDebugRenderer;
 import xfacthd.framedblocks.client.render.debug.impl.*;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
+import xfacthd.framedblocks.client.render.item.BannerItemRenderer;
 import xfacthd.framedblocks.client.render.item.TankItemRenderer;
 import xfacthd.framedblocks.client.render.particle.ClientBlockEffects;
 import xfacthd.framedblocks.client.render.particle.FluidSpriteParticle;
@@ -173,6 +176,7 @@ public final class FBClient implements ClientModInitializer
         BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
         BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_TANK.value(), FramedTankRenderer::new);
+        BlockEntityRenderers.register(FBContent.BE_TYPE_FRAMED_BANNER.value(), FramedBannerRenderer::new);
     }
 
     private static void registerColorProviders()
@@ -241,6 +245,7 @@ public final class FBClient implements ClientModInitializer
     private static void registerItemRenderers()
     {
         BuiltinItemRendererRegistry.INSTANCE.register(FBContent.BLOCK_FRAMED_TANK.value().asItem(), new TankItemRenderer());
+        BuiltinItemRendererRegistry.INSTANCE.register(FBContent.BLOCK_FRAMED_BANNER.value().asItem(), new BannerItemRenderer());
     }
 
     private static void registerSpriteSources()
@@ -306,6 +311,7 @@ public final class FBClient implements ClientModInitializer
         ModelWrappingManager.onModelsLoaded();
         FluidCamoClientHandler.clearModelCache();
         FramedChestRenderer.onModelsLoaded(mc.getModelManager());
+        FramedBannerRenderer.onModelsLoaded(mc.getModelManager());
         //noinspection deprecation
         ConnectionPredicateDebugRenderer.captureDummySprite(mc.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS));
     }
@@ -337,6 +343,9 @@ public final class FBClient implements ClientModInitializer
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER, FramedInnerThreewayCornerGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLOPE_EDGE, FramedSlopeEdgeGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CROWN_MOLDING, FramedCrownMoldingGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_CROWN_MOLDING_CORNER, FramedCrownMoldingCornerGeometry::inner, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_OUTER_CROWN_MOLDING_CORNER, FramedCrownMoldingCornerGeometry::outer, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE, FramedElevatedSlopeEdgeGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
@@ -350,6 +359,10 @@ public final class FBClient implements ClientModInitializer
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_SLOPE_EDGE, FramedThreewayCornerSlopeEdgeGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, FramedInnerThreewayCornerSlopeEdgeGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLOPE_EDGE_SLAB, FramedSlopeEdgeSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLOPE_EDGE_PANEL, FramedSlopeEdgePanelGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_ARCH, FramedArchGeometry::arch, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_ARCH, FramedArchGeometry::innerArch, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLAB, FramedSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, NullCullPredicate.ALWAYS, WrapHelper.IGNORE_SOLID);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_ADJ_DOUBLE_SLAB, NullCullPredicate.ALWAYS, AdjustableDoubleBlockItemModelInfo.STANDARD, WrapHelper.IGNORE_SOLID);
@@ -422,15 +435,24 @@ public final class FBClient implements ClientModInitializer
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH, FramedRedstoneWallTorchGeometry::new, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_FLOOR, FramedFloorBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_BOARD, FramedWallBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_HALF_BOARD, FramedHalfBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_DIVIDED_BOARD, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORNER_BOARD, FramedCornerBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_CORNER_BOARD, FramedInnerCornerBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_CORNER_BOARD, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_SHELF, FramedRectGeometry::wallShelf, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORNER_STRIP, FramedCornerStripGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LATTICE, FramedLatticeGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_THICK_LATTICE, FramedLatticeGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHEST, FramedChestGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SECRET_STORAGE, FramedCubeGeometry::new, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_BARREL, FramedBarrelGeometry::new, Utils.concat(Set.of(BlockStateProperties.OPEN), WrapHelper.IGNORE_ALWAYS));
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CRAFTING_TABLE, FramedCubeGeometry::new, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_TANK, FramedCubeGeometry::new, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_BARS, FramedBarsGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PANE, FramedPaneGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE, FramedHorizontalPaneGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_WINDOW_FRAME, FramedRectGeometry::windowFrame, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_RAIL_SLOPE, FramedRailSlopeGeometry::normal, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE, FramedRailSlopeGeometry::powered, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE, FramedRailSlopeGeometry::detector, WrapHelper.IGNORE_DEFAULT);
@@ -444,11 +466,17 @@ public final class FBClient implements ClientModInitializer
         wrapDoubleModel(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_FLOWER_POT, FramedFlowerPotGeometry::new, WrapHelper.IGNORE_ALWAYS);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_TABLE, FramedRectGeometry::table, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHAIR, FramedRectGeometry::chair, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_STOOL, FramedRectGeometry::stool, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PILLAR, FramedPillarGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_HALF_PILLAR, FramedHalfPillarGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PILLAR_SOCKET, FramedPillarSocketGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_SPLIT_PILLAR_SOCKET, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_POST, FramedPillarGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_OCTAGONAL_PILLAR, FramedOctagonalPillarGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_DIAGONAL_BRACE, FramedDiagonalBraceGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORBEL, FramedRectGeometry::corbel, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, FramedCollapsibleBlockGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, FramedCollapsibleCopycatBlockGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, FramedMarkedCubeGeometry::slime, WrapHelper.IGNORE_SOLID);
@@ -519,7 +547,16 @@ public final class FBClient implements ClientModInitializer
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL, NullCullPredicate.ONLY_LEFT, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER, FramedSmallPrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_PRISM_SLOPE_PANEL_CORNER_WALL, FramedSmallPrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER, FramedLargePrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_PRISM_SLOPE_PANEL_CORNER_WALL, FramedLargePrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER, FramedSmallInnerPrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SMALL_INNER_PRISM_SLOPE_PANEL_CORNER_WALL, FramedSmallInnerPrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER, FramedLargeInnerPrismSlopePanelCornerGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL, FramedLargeInnerPrismSlopePanelCornerWallGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_GLOWING_CUBE, FramedGlowingCubeGeometry::new, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_REDSTONE_LAMP, FramedRedstoneLampGeometry::new, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PYRAMID, FramedPyramidGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, FramedPyramidSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB, FramedElevatedPyramidSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
@@ -553,6 +590,8 @@ public final class FBClient implements ClientModInitializer
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LAYERED_CUBE, FramedLayeredCubeGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LIGHTNING_ROD, FramedLightningRodGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PATH, FramedPathGeometry::new, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_BANNER, FramedBannerGeometry::new, StateMerger.IGNORE_ALL);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_BANNER, FramedBannerGeometry::new, StateMerger.IGNORE_ALL);
     }
 
 

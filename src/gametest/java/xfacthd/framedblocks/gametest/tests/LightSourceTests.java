@@ -107,6 +107,7 @@ public class LightSourceTests implements FabricGameTest
         return switch ((BlockType) type)
         {
             case FRAMED_DIVIDED_SLAB,
+                 FRAMED_DIVIDED_BOARD,
                  FRAMED_DOUBLE_PANEL,
                  FRAMED_DOUBLE_SLOPE_PANEL,
                  FRAMED_INV_DOUBLE_SLOPE_PANEL,

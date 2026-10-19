@@ -2,6 +2,9 @@ package xfacthd.framedblocks.client.data;
 
 import xfacthd.framedblocks.api.render.RegisterOutlineRenderersEvent;
 import xfacthd.framedblocks.client.data.outline.*;
+import xfacthd.framedblocks.client.model.curved.*;
+import xfacthd.framedblocks.client.model.pillar.*;
+import xfacthd.framedblocks.client.model.slopepanelcorner.*;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public final class BlockOutlineRenderers
@@ -19,6 +22,9 @@ public final class BlockOutlineRenderers
         event.register(BlockType.FRAMED_THREEWAY_CORNER, new ThreewayCornerOutlineRenderer());
         event.register(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerOutlineRenderer());
         event.register(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeOutlineRenderer());
+        event.register(BlockType.FRAMED_CROWN_MOLDING, new GeometryOutlineRenderer(FramedCrownMoldingGeometry::new));
+        event.register(BlockType.FRAMED_INNER_CROWN_MOLDING_CORNER, new GeometryOutlineRenderer(FramedCrownMoldingCornerGeometry::inner));
+        event.register(BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER, new GeometryOutlineRenderer(FramedCrownMoldingCornerGeometry::outer));
         event.register(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, ElevatedSlopeEdgeOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_STACKED_SLOPE_EDGE, ElevatedSlopeEdgeOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_CORNER_SLOPE_EDGE, new CornerSlopeEdgeOutlineRenderer());
@@ -29,6 +35,12 @@ public final class BlockOutlineRenderers
         event.register(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, ElevatedInnerCornerSlopeEdgeOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE, new ThreewayCornerSlopeEdgeOutlineRenderer());
         event.register(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeOutlineRenderer());
+        event.register(BlockType.FRAMED_SLOPE_EDGE_SLAB, new SlopeEdgeSlabOutlineRenderer());
+        event.register(BlockType.FRAMED_SLOPE_EDGE_PANEL, new SlopeEdgePanelOutlineRenderer());
+        event.register(BlockType.FRAMED_OCTAGONAL_PILLAR, new GeometryOutlineRenderer(FramedOctagonalPillarGeometry::new));
+        event.register(BlockType.FRAMED_DIAGONAL_BRACE, new GeometryOutlineRenderer(FramedDiagonalBraceGeometry::new));
+        event.register(BlockType.FRAMED_ARCH, new GeometryOutlineRenderer(FramedArchGeometry::arch));
+        event.register(BlockType.FRAMED_INNER_ARCH, new GeometryOutlineRenderer(FramedArchGeometry::innerArch));
         event.register(BlockType.FRAMED_SLOPED_STAIRS, SlopedStairsOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLAB, SlopedStairsOutlineRenderer.INSTANCE);
         event.register(BlockType.FRAMED_SLICED_SLOPED_STAIRS_SLOPE, SlopedStairsOutlineRenderer.INSTANCE);
@@ -90,6 +102,14 @@ public final class BlockOutlineRenderers
         event.register(BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W, new ExtendedCornerSlopePanelWallOutlineRenderer());
         event.register(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, new ExtendedInnerCornerSlopePanelOutlineRenderer());
         event.register(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W, new ExtendedInnerCornerSlopePanelWallOutlineRenderer());
+        event.register(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, new GeometryOutlineRenderer(FramedSmallPrismSlopePanelCornerGeometry::new));
+        event.register(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, new GeometryOutlineRenderer(FramedSmallPrismSlopePanelCornerWallGeometry::new));
+        event.register(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL, new GeometryOutlineRenderer(FramedLargePrismSlopePanelCornerGeometry::new));
+        event.register(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W, new GeometryOutlineRenderer(FramedLargePrismSlopePanelCornerWallGeometry::new));
+        event.register(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, new GeometryOutlineRenderer(FramedSmallInnerPrismSlopePanelCornerGeometry::new));
+        event.register(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, new GeometryOutlineRenderer(FramedSmallInnerPrismSlopePanelCornerWallGeometry::new));
+        event.register(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new GeometryOutlineRenderer(FramedLargeInnerPrismSlopePanelCornerGeometry::new));
+        event.register(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new GeometryOutlineRenderer(FramedLargeInnerPrismSlopePanelCornerWallGeometry::new));
         event.register(BlockType.FRAMED_PYRAMID, new PyramidOutlineRenderer());
         event.register(BlockType.FRAMED_PYRAMID_SLAB, new PyramidSlabOutlineRenderer());
         event.register(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, ElevatedPyramidSlabOutlineRenderer.INSTANCE);

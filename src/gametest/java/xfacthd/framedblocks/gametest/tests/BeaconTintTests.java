@@ -63,6 +63,7 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_PANE,
             BlockType.FRAMED_FLOWER_POT,
             BlockType.FRAMED_POST,
+            BlockType.FRAMED_DIAGONAL_BRACE,
             BlockType.FRAMED_HALF_STAIRS,
             BlockType.FRAMED_DOUBLE_HALF_STAIRS,
             BlockType.FRAMED_SLOPE_PANEL,
@@ -77,7 +78,14 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W,
             BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL,
             BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W,
+            BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL,
+            BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W,
             BlockType.FRAMED_WALL_BOARD,
+            BlockType.FRAMED_HALF_BOARD,
+            BlockType.FRAMED_CORNER_BOARD,
+            BlockType.FRAMED_INNER_CORNER_BOARD,
+            BlockType.FRAMED_WALL_SHELF,
+            BlockType.FRAMED_WINDOW_FRAME,
             BlockType.FRAMED_CORNER_STRIP,
             BlockType.FRAMED_GATE,
             BlockType.FRAMED_IRON_GATE,
@@ -93,10 +101,14 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_CHECKERED_PANEL,
             BlockType.FRAMED_CORNER_SLOPE_EDGE,
             BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE,
+            BlockType.FRAMED_SLOPE_EDGE_PANEL,
+            BlockType.FRAMED_CROWN_MOLDING,
+            BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER,
             BlockType.FRAMED_CHAIN,
             BlockType.FRAMED_LANTERN,
             BlockType.FRAMED_SOUL_LANTERN,
-            BlockType.FRAMED_LIGHTNING_ROD
+            BlockType.FRAMED_LIGHTNING_ROD,
+            BlockType.FRAMED_WALL_BANNER
     );
 
     @GameTestGenerator
@@ -140,7 +152,7 @@ public class BeaconTintTests implements FabricGameTest
             BlockState state = block.defaultBlockState();
             return switch (blockType)
             {
-                case FRAMED_PILLAR -> state.setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+                case FRAMED_PILLAR, FRAMED_OCTAGONAL_PILLAR -> state.setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
                 case FRAMED_HALF_PILLAR -> state.setValue(BlockStateProperties.FACING, Direction.DOWN);
                 case FRAMED_PRISM -> state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
                 case FRAMED_SLOPED_PRISM -> state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_NORTH);
@@ -179,6 +191,7 @@ public class BeaconTintTests implements FabricGameTest
         return switch ((BlockType) type)
         {
             case FRAMED_DIVIDED_SLAB,
+                 FRAMED_DIVIDED_BOARD,
                  FRAMED_DOUBLE_PANEL,
                  FRAMED_DOUBLE_SLOPE_PANEL,
                  FRAMED_INV_DOUBLE_SLOPE_PANEL,
