@@ -46,7 +46,7 @@ Edge with a temporary profile and closes only that one. A full build takes about
 |---|---|---|
 | `01-hero.png` | Logo, name, tagline "Over 200 framed shapes. Any block's look.", Fabric and Minecraft 1.21.1 chips, unofficial port line | `hero_cottage` as dimmed backdrop |
 | `02-camo.png` | Any block, any shape: before and after, right-click with a block, Framed Hammer, what is not accepted | `camo_before`, `camo_after` |
-| `03-shapes.png` | About 230 framed shapes: 236 / 231 / 2 stat tiles, shape categories | `shapes_showroom` |
+| `03-shapes.png` | Over 230 framed shapes: 269 / 232 / 2 stat tiles, shape categories | `shapes_showroom` |
 | `04-double.png` | Two camos in one block | `double_blocks`, `detail_closeup` |
 | `05-light-fluids.png` | Glowstone dust and glowing camos, fluid camos | `glow_night`, `fluid_camo` |
 | `06-functional.png` | Ten functional blocks with their item textures, the rest as chips | `functional_blocks` |

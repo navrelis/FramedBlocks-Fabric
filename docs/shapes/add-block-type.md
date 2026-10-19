@@ -43,7 +43,7 @@ Facts in this file were read from the code in this worktree; things marked **(un
 | 19 | Crafting recipe + advancement | `R/data/framedblocks_fabric/recipe/framed_x.json` + `R/data/framedblocks_fabric/advancement/recipes/building_blocks/framed_x.json` | optional (49af28240 added none; Path/Layered Cube/Lightning Rod have none) |
 | 20 | Other tags / extras | `R/data/minecraft/tags/block/*.json`, `R/data/c/tags/...`, `R/data/framedblocks_fabric/tags/block/group/full.json`, `B/common/data/BlueprintBehaviours.java`, `CapabilitySetup`, menu/screen/renderer registrations | by feature (sections 7, 10) |
 | 21 | Tests | `src/gametest/...` (section 9) | `BeaconTintTests.NON_TINTING`, `LightSourceTests`, optional `OcclusionTests` |
-| 22 | Counts in docs (optional) | `README.md:15`, `docs/listing/description.md:7`, `docs/curseforge/description.template.md:11,13,62` ("236 blocks / 231 shapes") | release hygiene |
+| 22 | Counts in docs (optional) | `README.md:15`, `docs/listing/description.md:7`, `docs/curseforge/description.template.md:11,13,62` ("269 blocks / 232 shapes with an item" as of 1.1.0) | release hygiene |
 
 Reference diff of upstream's two-type commit (1.21.11 layout) and where each file lives in this 1.21.1 port:
 
@@ -279,4 +279,4 @@ Minimum gate for a new type: `build` green + read the self-test log lines for th
 * Gradle was deliberately not run (other agents use it): task names `runGametest`/`runClientTest`/`runClientDev` come from `README.md`, `build.gradle` run configs and Loom's naming; build/test durations are estimates from `.knowledge`.
 * Vanilla-subclass notes for crafting table / barrel / redstone lamp (section 10.2/10.3) are based on vanilla 1.21.1 behaviour as I know it, not on decompiled sources in this worktree.
 * `gradlew build` runs the game tests but the exact hook (`check` dependency created by `fabricApi.configureTests`) was inferred from `.knowledge/report.md` ("`gradlew build` green with 900 required game tests").
-* Documentation counts (`236 blocks` etc.) in README/CurseForge/listing docs are hard-coded text and must be updated by hand when the registry grows (~25 new types).
+* Documentation counts (`269 blocks` etc.) in README/CurseForge/listing docs are hard-coded text and must be updated by hand when the registry grows (~25 new types).
