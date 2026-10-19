@@ -79,3 +79,4 @@
 - S15: new types use hand-written skip predicates (same-type neighbours only); generator entries are bare KNOWN_TYPES lines so the generator keeps working.
 - S16: S-RECT resumed rather than restarted (only 4 compile errors); lead committed the WIP on s-rect and merged shapes/1.21.1 first so the agent has tools/skippreds-codegen.
 - S16: one main lead at a time: the successor session [313af7] owns the shape lane and .knowledge/*.md; the previous session (local_c6a1710f) only reads (user asked the sessions to coordinate).
+- S17: S-BAN moved to Opus (precision override): 26.x special-model/render-state flag must be remapped to a 1.21.1 BER with camo quads; visual errors hard to detect.

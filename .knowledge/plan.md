@@ -140,9 +140,9 @@ Lanes: old Fabric (session lane-old-fabric, board .knowledge/lanes/old-fabric.md
 |----|------|---------|--------------|--------|
 | S-MAP | Touch-point checklist for a new block type -> docs/shapes/add-block-type.md | - | Sonnet long | done (merged f30297fb3; skip-pred generator only in upstream history, datagen none) |
 | S-BPA | Backport slope edge slab/panel + 8 prism corner slope panels from upstream/1.21.11 (+ generator in tools/skippreds-codegen) | - | Sonnet long | done (eadb8b21c, merged 661897f30; lead: build 928/928 req, 27 known optional, runClientTest PASS) |
-| S-BPB | Backport board variants (corner, inner corner, divided, half; adapt to 1.21.1 floor/wall board) | S-MAP | Sonnet long | in progress (S16, Sonnet, F:/wt/sbpb at a559b5153; source upstream b8f2c4596: half/corner/inner corner/divided/double corner board) |
-| S-BAN | Backport Framed Banner + wall banner (BE, renderer, patterns) | S-MAP | Sonnet long | in progress (S16, Sonnet, F:/wt/sban at a559b5153; upstream 0da24dec6 + fc8b95758 + f94b873c5 + 9e228166a) |
-| S-GEO | Faceted-arc geometry core + arch, inner arch, crown molding (+inner/outer corner) + docs/shapes/curved-shapes.md | S-MAP | Opus long (precision override: new quad geometry, UV/normals, culling) | in progress (S16 restart, Opus, F:/wt/sgeo at 661897f30) |
+| S-BPB | Backport board variants (corner, inner corner, divided, half; adapt to 1.21.1 floor/wall board) | S-MAP | Sonnet long | in progress (S17 finish: Sonnet, F:/wt/sbpb; partial compiled green) |
+| S-BAN | Backport Framed Banner + wall banner (BE, renderer, patterns) | S-MAP | Opus long (S17 precision override: BER/camo flag rendering on 1.21.1) | in progress (S17, Opus, F:/wt/sban) |
+| S-GEO | Faceted-arc geometry core + arch, inner arch, crown molding (+inner/outer corner) + docs/shapes/curved-shapes.md | S-MAP | Opus long (precision override: new quad geometry, UV/normals, culling) | in review (s-geo 6cccc5d47; S17 lead gate: build 970/970 req + 27 optional; runClientTest FAIL: 5 types missing in SideSkipPredicates -> Opus short correction running) |
 | S-GEO-B | Octagonal pillar (12x12, chamfer 3.5 px, AXIS) + diagonal brace | S-GEO | Sonnet long | open |
 | S-RECT | Window frame (connecting), table (connecting legs), chair + stool, corbel, wall shelf | S-MAP | Sonnet long | done (eea29645c, merged a559b5153; lead: build 944/944 req, 27 known optional, runClientTest PASS) |
 | S-GEN | Skip-pred generator in repo at tools/skippreds-codegen (+2 upstream predicate fixes) | - | Sonnet (part of S-BPA) | done (in 661897f30) |
@@ -151,3 +151,4 @@ Lanes: old Fabric (session lane-old-fabric, board .knowledge/lanes/old-fabric.md
 | S-R | Version 1.1.0+mc1.21.1, CurseForge upload, merge into mc/1.21.1, push | S-F | lead | open |
 
 Usage session 15 (main lead): Sonnet S-MAP, S-BPA, S-RECT, S-FUNC long = 8; Opus S-GEO long = 2. S16 (successor main lead, session [313af7]): Opus S-GEO long +2, Sonnet S-FUNC long +2, S-RECT long +2, S-BPB long +2, S-BAN long +2. Cumulative: Sonnet 131, Opus 43 (~25 %). Lane sessions keep their own tallies in .knowledge/lanes/.
+S17 (main lead session [3271db]): Sonnet S-BPB finish long +2, Opus S-BAN long +2 (override) -> Sonnet 133, Opus 45; S-GEO correction Opus short +1 -> Opus 46 (~26 %).
