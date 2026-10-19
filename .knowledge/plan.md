@@ -139,13 +139,13 @@ Lanes: old Fabric (session lane-old-fabric, board .knowledge/lanes/old-fabric.md
 | ID | Task | Depends | Model / size | Status |
 |----|------|---------|--------------|--------|
 | S-MAP | Touch-point checklist for a new block type -> docs/shapes/add-block-type.md | - | Sonnet long | done (merged f30297fb3; skip-pred generator only in upstream history, datagen none) |
-| S-BPA | Backport slope edge slab/panel + 8 prism corner slope panels from upstream/1.21.11 (+ generator in tools/skippreds-codegen) | - | Sonnet long | in review (agent: build green 928 req pass; lead build + runClientTest running) |
+| S-BPA | Backport slope edge slab/panel + 8 prism corner slope panels from upstream/1.21.11 (+ generator in tools/skippreds-codegen) | - | Sonnet long | done (eadb8b21c, merged 661897f30; lead: build 928/928 req, 27 known optional, runClientTest PASS) |
 | S-BPB | Backport board variants (corner, inner corner, divided, half; adapt to 1.21.1 floor/wall board) | S-MAP | Sonnet long | open |
 | S-BAN | Backport Framed Banner + wall banner (BE, renderer, patterns) | S-MAP | Sonnet long | open |
 | S-GEO | Faceted-arc geometry core + arch, inner arch, crown molding (+inner/outer corner) + docs/shapes/curved-shapes.md | S-MAP | Opus long (precision override: new quad geometry, UV/normals, culling) | in progress (F:/wt/sgeo) |
 | S-GEO-B | Octagonal pillar (12x12, chamfer 3.5 px, AXIS) + diagonal brace | S-GEO | Sonnet long | open |
 | S-RECT | Window frame (connecting), table (connecting legs), chair + stool, corbel, wall shelf | S-MAP | Sonnet long | in progress (F:/wt/srect) |
-| S-GEN | Skip-pred generator in repo at tools/skippreds-codegen (+2 upstream predicate fixes); folded into S-BPA by message | - | Sonnet (part of S-BPA) | in progress |
+| S-GEN | Skip-pred generator in repo at tools/skippreds-codegen (+2 upstream predicate fixes) | - | Sonnet (part of S-BPA) | done (in 661897f30) |
 | S-FUNC | Barrel (27-slot, FACING/OPEN, recessed lid), crafting table (CraftingMenu subclass), redstone lamp (LIT, light 15, emissive when lit) | S-MAP | Sonnet long | in progress (F:/wt/sfunc) |
 | S-F | Merge all, full build + gametests + server Done + client smoke, manual checklist | all | Sonnet + lead | open |
 | S-R | Version 1.1.0+mc1.21.1, CurseForge upload, merge into mc/1.21.1, push | S-F | lead | open |

@@ -137,3 +137,4 @@
 - S15 dispatch: S-MAP (Sonnet long, F:/wt/smap), S-BPA (Sonnet long, F:/wt/sbpa). Lane sessions started: lane-old-fabric, lane-new-fabric, lane-forge-neoforge.
 - S15: S-MAP done (Sonnet long) - doc reviewed, merged f30297fb3. Dispatch S-GEO (Opus long, override), S-RECT (Sonnet long); S-BPA told to put generator in tools/skippreds-codegen.
 - S15: S-BPA reported (Sonnet long): 10 types, generator in tools/, build green 928 req; lead review of core diffs OK, lead build + client test running. Dispatch S-FUNC (Sonnet long).
+- S15: S-BPA reviewed + verified by lead (build 928/928 req, runClientTest PASS), committed eadb8b21c, merged 661897f30. Manual check pending: prism panel outlines (GeometryOutlineRenderer), culling in game.
