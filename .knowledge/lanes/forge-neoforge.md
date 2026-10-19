@@ -20,7 +20,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | Branch | Base | Worktree | Identity | Build | Gametests | Server Done | Client smoke | Shapes | Uploaded | Pushed |
 |---|---|---|---|---|---|---|---|---|---|---|
 | mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 941/941 required (4286063b1) | Done 5.9 s | PASS 255 blocks, 0 errors | batches 1-3 (4286063b1) | - | no |
-| mc/1.18.2-forge | 8c361d427 | F:/wt/fg1182 | done 8edad77ef | green (lead, JDK 17) | not green: 12-104 required fail per run (baseline 12-19; 7 deterministic also upstream) | Done 25.1 s | PASS 144 blocks, 0 errors | - | - | no |
+| mc/1.18.2-forge | 8c361d427 | F:/wt/fg1182 | done 8edad77ef | green (lead, JDK 17) | 595/595 required x5 (5468d9136) | Done 25.1 s | PASS 144 blocks, 0 errors | - | - | no |
+| mc/1.16.5-forge | 557ff653b | F:/wt/fg1165 | running | - | n/a (no gametest API) | - | - | - | - | no |
 | mc/1.21.1-forge | from mc/1.21.1-neoforge 9661f5271 | F:/wt/fg1211 | - | - | - | - | - | - | - | no |
 | mc/1.19.2-forge | f2962c3b7 | F:/wt/fg1192 | done b2f4f1d49 | green (lead, JDK 17) | 594/594 required x7 (655c2ab66) | Done 110 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.20.1-forge | 5dc540401 | F:/wt/fg1201 | done 19a590815 | green (lead) | 805/805 required (26 optional occlusion fail, upstream) | Done 18.0 s; NeoForge 47.1.106 server Done 21.3 s | PASS 206 blocks, 0 mod errors | - | - | no |
@@ -43,7 +44,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | done (018b25e77) |
 | I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | done (5075141f5) |
 | I-F1182 | Identity + tests, Forge 1.18.2 (`F:/wt/fg1182`, base 8c361d427 = 5.11.5) | Sonnet | done (8edad77ef) |
-| T-F1182 | 1.18.2 required gametests green | Sonnet (T-F1192 agent) | running |
+| T-F1182 | 1.18.2 required gametests green | Sonnet (T-F1192 agent) | done (5468d9136) |
+| I-F1165 | Identity + tests, Forge 1.16.5 (`F:/wt/fg1165`, base 557ff653b = 2.16.3, Java 8) | Sonnet | running |
 | M-F1211 | Port map NeoForge->Forge 1.21.1 (docs/port/forge-map.md) | Sonnet | running |
 
 ## Decisions (lane)
@@ -55,7 +57,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
-Sonnet 13 · Opus 0. Precision overrides: none.
+Sonnet 14 · Opus 0. Precision overrides: none.
 
 ## Log
 - 2026-10-19: lane started; shapes/1.21.1 has no shapes merged yet. R1 dispatched.
@@ -77,6 +79,8 @@ Sonnet 13 · Opus 0. Precision overrides: none.
 - 2026-10-19: I-F1182 accepted: diff read (same pattern as 1.19.2, OverlayRegistry ids in FBClient, culling z fix, forceExit false for smoke), lead build green, committed 8edad77ef. Gametests flaky under CPU load (other sessions at 100 %) -> T-F1182 after T-F1192. mc/1.21.1-forge branched from mc/1.21.1-neoforge 9661f5271, M-F1211 dispatched.
 - 2026-10-19: S3-N1211 accepted: diff read (barrel item handler via RegisterCapabilitiesEvent, close(Player) default keeps chest behaviour, Tags.* c: tags, 5 new FunctionalBlockTests incl. save/load), 941 required, smoke 255, lead build green, committed 4286063b1. S23-N12111 dispatched.
 - 2026-10-19: T-F1192 accepted: TestUtils waits for the light engine (POST_UPDATE marker via reflective addTask, double wait), double-prism aiming fix (test-only cause), 594/594 x7, lead build green, committed 655c2ab66. T-F1182 to same agent.
+- 2026-10-19: new-fabric lane is now session local_ce066f6d ([2ffcd7]); it takes shape code from mc/1.21.11-neoforge and mc/26.3-neoforge -> send it each shape commit hash.
+- 2026-10-19: T-F1182 accepted (same helper fix; hitSecondary found via class hierarchy), 595/595 x5, lead build green, committed 5468d9136. mc/1.16.5-forge created, I-F1165 dispatched.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
