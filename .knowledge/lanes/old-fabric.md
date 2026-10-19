@@ -1,14 +1,14 @@
 # Lane board: old Fabric (1.20.1 -> 1.19.2 -> 1.18.2 -> 1.16.5)
 
-Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents implement in `F:/wt/<task>` off the version branch, never commit. Max 3 subagents in parallel. Release with the 18 shapes = `1.1.0+mc<ver>` (or `1.0.0+mc<ver>` first if shapes are not ready).
+Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents implement in `F:/wt/<task>` off the version branch, never commit. Resource rules after the 2026-10-19 reboot (user): Java process count < 8 before any Gradle/client run, one Gradle + one client at a time in this lane (incl. subagents), max 2 subagents, --no-daemon, never gradlew --stop. Dedicated server ports for this lane: 25601-25649 (new-fabric uses 25651-25699). Release with the 18 shapes = `1.1.0+mc<ver>` (or `1.0.0+mc<ver>` first if shapes are not ready).
 
 ## Status per version
 | Ver | Branch | Worktree | Stage | Shapes | CurseForge file | Pushed |
 |-----|--------|----------|-------|--------|-----------------|--------|
-| 1.20.1 | mc/1.20.1 | F:/wt/m1201 | C/E/T lanes | waiting for mc/1.20.1-forge | - | no |
-| 1.19.2 | mc/1.19.2 | F:/wt/m1192 | map done (b558451e5); P-A running (Sonnet long, platform copy from 88dd56e00) | - | - | no |
+| 1.20.1 | mc/1.20.1 | F:/wt/m1201 | build + gametests + server green; F3 client smoke next | waiting for mc/1.20.1-forge | - | no |
+| 1.19.2 | mc/1.19.2 | F:/wt/m1192 | P-A done (d3a97c2d1); P-B1 running (Opus long, override) | - | - | no |
 | 1.18.2 | mc/1.18.2 | F:/wt/m1182 | map done; S-A after pinned 1.19.2 port | - | - | no |
-| 1.16.5 | mc/1.16.5 | F:/wt/m1165 | V-M port map running (Sonnet long) | - | - | no |
+| 1.16.5 | mc/1.16.5 | F:/wt/m1165 | V-M open (interrupted, nothing on disk) | - | - | no |
 
 ## 1.20.1 tasks
 | ID | Scope | Worktree / branch | Model | Status |
@@ -20,13 +20,13 @@ Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents
 | O-N | BE core per hooks-contract §5 | F:/wt/on / o-n | Sonnet long | done (affa7b7d2, merged 0f03248d5) |
 | O-C4b | block classes per hooks-contract §4 | F:/wt/oc4b / o-c4b | Sonnet long | done (917bee4f1, merged 88dd56e00) |
 | O-L | light | F:/wt/ol / o-l | Opus short (planned override: light-thread races corrupt worlds) | done (aa19a83c7, merged 77b986a56) |
-| O-F1/F2 | G2 compile (+ light-contract §2 IFramedBlock, FBContent RecipeType), build, 3 green gametest runs, server Done | F:/wt/of1 / o-f1 | Sonnet long | running |
+| O-F1/F2 | G2 compile (+ light-contract §2 IFramedBlock, FBContent RecipeType), build, 3 green gametest runs, server Done | F:/wt/of1 / o-f1 | Sonnet long | done (e30d55a3b, merged 4ce1b2746) |
 | O-F3 | client smoke Indigo + Sodium 0.5.13 + Indium | - | Sonnet + lead | open |
 | O-S | 18 shapes from mc/1.20.1-forge via codemod | - | Sonnet | waiting for fork shapes |
 | O-R | release, upload, push | - | lead | open |
 
 ## Usage tally (long = 2, short = 1), this lane from S15
-Sonnet 21, Opus 1 (Opus share 6 %). Precision overrides: O-L planned.
+Sonnet 25, Opus 3 (Opus share 13 %). Precision overrides: O-L (done), P-B1 (FRAPI 1.2.1 rendering rework, errors only visible in game).
 
 ## Log
 - S15 lane start: handoff checked against repo (accurate: mc/1.20.1 @4cd357ce3, oc4a partial 5M + 29 untracked). Worktrees ot1, oe2 created off 4cd357ce3. Dispatched O-C4a resume, O-T1, O-E2 (Sonnet long each).
@@ -54,5 +54,25 @@ Sonnet 21, Opus 1 (Opus share 6 %). Precision overrides: O-L planned.
 - V-M (1.16.5 map) dispatched, Sonnet long.
 - O-L follow-up: agent could not merge mc/1.20.1 into o-l (its permission classifier refused); lead committed O-L as is (aa19a83c7) and merged o-l normally (77b986a56). IFramedBlock light change (light-contract §2) moved into O-F1. Agent scratch compile of the combined tree: 1 error (FBContent RecipeType.simple).
 - O-F1/F2 dispatched (Sonnet long).
+- P-A review: 1178 files (build Loom 1.18.4/Gradle 9.7, FAPI 0.77.0, FCAP 4.2.11 modApi with net.fabricmc excludes (its pom dragged loader 0.14.9 -> duplicate loader), JEI 11.68.0.1087 compile+runtime, fabric.mod.json loader >=0.15.0, resources renamed, c: tags, platform copy from 88dd56e00 recorded in docs/port/platform-copy.md, codemods ran, 790 errors in game code by design). Committed d3a97c2d1 on mc/1.19.2.
+- P-B1 dispatched (Opus long, override) in F:/wt/pb1.
+
+## 1.19.2 tasks
+| ID | Scope | Worktree / branch | Model | Status |
+|----|-------|-------------------|-------|--------|
+| P-M | port map | m1192 | Sonnet long | done (b558451e5) |
+| P-A | build, identity, platform copy | m1192 | Sonnet long | done (d3a97c2d1) |
+| P-B1 | rendering core FRAPI 1.2.1 | F:/wt/pb1 / p-b1 | Opus long (override) | open (interrupted, partial uncommitted in F:/wt/pb1) |
+| P-C1 | registration, lifecycle, configs | F:/wt/pc1 / p-c1 | Sonnet long | open (interrupted, nothing on disk) |
+| P-C3, P-T, P-C4a | wave 1 | - | Sonnet | open |
+- New-fabric lane lead is now session [2ffcd7]. Old-fabric server port range set to 25601-25649 (told O-F1).
+- O-F1/F2 review: 2 fixes (IFramedBlock AuxLight getLightEmission per light-contract §2, FBContent anonymous RecipeType). Agent: compileJava/compileGametestJava/build green; gametests 822 tests, 822/822 required in build + 3 consecutive runs, 26 optional occlusion light tests fail (upstream known-failing list); AuxLightStoreTests + 198 lightsource tests pass; self-test 52020 states 0 mismatches; 0 ERROR from our mod; mixins 27/29 common (2 client-only), 7/9 light (2 client) applied; .nbt structures in data/<ns>/structures load fine (no SNBT needed on 0.92.12); runServer Done 19.6 s on port 25601, clean stop. Committed e30d55a3b, merged 4ce1b2746. Lead: own build on mc/1.20.1 running (= 4th gametest run, under load).
+- Asked lane-forge-neoforge for the shapes ETA on mc/1.20.1-forge.
+- P-C1 (1.19.2) dispatched, Sonnet long.
+- Forge lane: mc/1.20.1-forge shapes several hours away (shape set not finished on shapes/1.21.1). Decision: release Fabric 1.20.1 as 1.0.0+mc1.20.1 after F3, shapes later as 1.1.0 (allowed by brief).
+- 2026-10-19 ~11:55Z PC reboot (overload). Killed: V-M (1.16.5 map, nothing on disk), P-B1 (partial work in F:/wt/pb1, 24 files), P-C1 (nothing on disk), lead build on m1201 (log cut during gametests; jar 13:50 exists). New resource rules adopted (header). Main lead now [7d5ce0] local_dd5e648e-1434-4573-b52d-863002b4c441; new-fabric lead [e7e3e1]. shapes/1.21.1 @ab0233647 (S-BAN merged), S-GEO-B next.
+- Resume: lead re-runs build on m1201 (--no-daemon); P-B1 resumed with the same agent + resource rules.
+- Lead build on mc/1.20.1 @4ce1b2746 (--no-daemon) after reboot: BUILD SUCCESSFUL, All 822 required tests passed, 26 optional fail. Then user ordered a stop: P-B1, P-C1 stopped. Handoff: F:/Coding/FramedBlocksFabric/handoff-2026-10-19-old-fabric.md.
 
 ## Manual test checklist (per version, filled at release)
+- 2026-10-19 (S19): the user stopped all FramedBlocks sessions after the overload; one single FramedBlocks lead session (started by team lead local_df490f5d) now owns this lane, the other lanes and the main-lead role. Old lane sessions stay idle. Disk verified against the handoffs. Order of work: .knowledge/plan.md § Session 19.

@@ -162,3 +162,34 @@ Successor sessions and handoffs must copy these rules.
 
 Usage session 15 (main lead): Sonnet S-MAP, S-BPA, S-RECT, S-FUNC long = 8; Opus S-GEO long = 2. S16 (successor main lead, session [313af7]): Opus S-GEO long +2, Sonnet S-FUNC long +2, S-RECT long +2, S-BPB long +2, S-BAN long +2. Cumulative: Sonnet 131, Opus 43 (~25 %). Lane sessions keep their own tallies in .knowledge/lanes/.
 S17 (main lead session [3271db]): Sonnet S-BPB finish long +2, Opus S-BAN long +2 (override) -> Sonnet 133, Opus 45; S-GEO correction Opus short +1 -> Opus 46; S-GEO-B Sonnet long +2, lang-merge helper Sonnet short +1 -> Sonnet 136, Opus 46 (~25 %).
+
+## Session 19: one FramedBlocks lead for shapes + all three lanes (2026-10-19, after the overload stop)
+Lead: the single FramedBlocks lead session started by the team lead local_df490f5d-d088-4a69-be30-b2db9789ed45 (title "FramedBlocks single lead"; find its id via the team lead's linked sessions). It owns the main-lead role and the old-Fabric, new-Fabric and Forge/NeoForge lanes. The old sessions (main lead local_dd5e648e, lanes local_629eedcd, local_90a515ff, local_ce066f6d) are idle and get no work. Lane boards in `.knowledge/lanes/` stay the per-lane detail; this section is the one queue.
+Rules in force (user, via team lead): resource rules above (Java < 8, ONE Gradle and ONE client at a time for this whole session incl. subagents, max 2 subagents, `--no-daemon`, never `gradlew --stop`, kill clients after results); no new/forked/proposed sessions (ask the team lead first); CurseForge uploads only after the user's explicit yes (via team lead); push to `origin` only, never force; lead writes no project code, subagents never commit, lead gates and merges; generator zero-diff check after every merge into shapes/1.21.1. Gradle lock for subagents: `F:/wt/.locks/fb-gradle.lock` (create before Gradle, delete after; wait while it exists). Report to the team lead (5 lines) at milestones, blockers, every 30 min, before handoff.
+
+Disk verified at session start (git status/log per worktree, origin refs): all handoff claims hold. Pushed: shapes/1.21.1 ab0233647, mc/1.21.1 up to 21b4a6b04. Everything else local only. Dirty: sgeob 27, nf12111 85, nk 7, pb1 24, fg1165 397. Java count 0.
+
+### Merged queue (do in order; one Gradle at a time)
+Phase 1: salvage partial work, one worktree at a time.
+| # | Task | Where | Done when | Model |
+|---|---|---|---|---|
+| Q1 | S23-N12111 lead build + commit (shapes batches 2+3 on NeoForge 1.21.11) | F:/wt/nf12111 | `gradlew --no-daemon build` green, 85 files committed, hash on new-fabric + forge boards | lead |
+| Q2 | S-GEO-B octagonal pillar + diagonal brace: compile partial, finish per handoff-dd5e648e §5.1 spec | F:/wt/sgeob | build >= 992 req / 27 opt, runClientTest PASS, generator zero-diff, merged into shapes/1.21.1, pushed | Sonnet long |
+| Q3 | N-K compat finish (1.21.11 Fabric) | F:/wt/nk | compile+AW green, server Done, committed, merged into mc/1.21.11 | Sonnet long |
+| Q4 | P-B1 1.19.2 rendering core (FRAPI 1.2.1) resume | F:/wt/pb1 | owned files compile, model-contract.md, committed, merged into mc/1.19.2 | Opus long (override, as planned) |
+| Q5 | I-F1165 Forge 1.16.5 identity resume | F:/wt/fg1165 | build green (JDK 8), server Done, smoke PASS, committed | Sonnet long |
+Phase 2: finish 1.21.1 shapes.
+| Q6 | S-F: full build, gametests, runClientTest Indigo + `-Pcompat_runtime=sodium`, block counts in README/listing/CF template, changelog 1.1.0, manual checklist | F:/wt/shp | all green, docs updated | Sonnet short + lead |
+| Q7 | S-R: `mod_version` 1.1.0+mc1.21.1, build, upload (USER YES needed), merge shapes/1.21.1 into mc/1.21.1, push | F:/wt/shp, main | uploaded, pushed | lead |
+Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take shapes from `mc/<ver>-(neo)forge`).
+| Q8 | 1.20.1 Fabric O-F3 client smoke Indigo + Sodium/Indium; release 1.0.0+mc1.20.1 (USER YES), push mc/1.20.1 | F:/wt/m1201 | PASS, uploaded, pushed | lead / Sonnet |
+| Q9 | NeoForge 1.21.11: S-GEO (253a024f4) then S-GEO-B into mc/1.21.11-neoforge; merge into mc/26.3-neoforge (rename script), verify 26.3 | nf12111, nf263 | builds + smoke green, committed | Sonnet |
+| Q10 | Fabric 1.21.11: N-T gametests (n-t onto d1fe7c853), N-S 13 shapes from mc/1.21.11-neoforge, N-F integration (build, gametests, server, client Indigo + Sodium 0.8.15), N-R 1.1.0+mc1.21.11 Beta (USER YES), push | m12111, nt | per new-fabric board | Sonnet + lead |
+| Q11 | NeoForge 1.21.1 batches 4 S-BPB, 5 S-GEO, 6 S-BAN, 7 S-GEO-B; release 1.1.0 (USER YES), push | nf1211 | per forge board | Sonnet |
+| Q12 | Forge 1.20.1 all shapes + CullingUpdatePacket z fix; Fabric 1.20.1 O-S shapes; both 1.1.0 releases (USER YES), push | fg1201, m1201 | per boards | Sonnet |
+| Q13 | Fabric 1.19.2 waves after P-B1: P-C1, P-C3, P-T, P-C4a, P-B2, P-C2, P-C4b, P-N, P-E1, P-E2, P-L (Opus), F1-F3; Forge 1.19.2 shapes; P-S; releases | m1192, fg1192 | per old-fabric board / map §10 | Sonnet (+Opus P-L) |
+| Q14 | Fabric 1.18.2 S-A.. per map (S-B1 Opus); Forge 1.18.2 shapes; S-S; releases | m1182, fg1182 | per boards | Sonnet (+Opus) |
+| Q15 | Forge 1.21.1: M-F1211 port map, port lanes; then Forge 1.21.11 and 26.3 ports | fg1211 | per forge board | Sonnet (+Opus render core) |
+| Q16 | Fabric 26.3: W-M map, m263 from upstream/26.3 + merge mc/1.21.11, lanes, Beta release | m263 | per new-fabric handoff §5.9 | Sonnet + lead |
+| Q17 | 1.16.5: V-M Fabric map + port; Forge 1.16.5 shapes; releases | m1165, fg1165 | per boards | Sonnet |
+| Q18 | Final acceptance: all branches pushed, uploads done, Graphify, report | all | per handoff-58422b61 §5.5 | lead |

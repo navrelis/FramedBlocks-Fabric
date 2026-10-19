@@ -157,3 +157,5 @@
 - S18 start (main lead session [7d5ce0] = local_dd5e648e): handoff-2026-10-19-58422b61.md checked against repo: accurate (sban clean 577bd2ab7, sgeob clean 253a024f4, shapes/1.21.1 pushed at 253a024f4, 0 Java procs). Lanes + [3271db] told to report to [7d5ce0]. S-BAN gate build started (--no-daemon).
 - S18: S-BAN lead gate on merged tree 577bd2ab7: build 991/991 req, 27 optional; runClientTest running.
 - S18: S-BAN runClientTest PASS, 0 missing mapping; merged into shapes/1.21.1 ab0233647, pushed; lanes informed. sgeob fast-forwarded to ab0233647. S-GEO-B - Sonnet, long - dispatched in F:/wt/sgeob.
+- S18 STOP (user order via team lead local_df490f5d): S-GEO-B Sonnet agent stopped with partial uncommitted files in F:/wt/sgeob (never compiled); no Gradle/client running; handoff-2026-10-19-dd5e648e.md written; nothing committed after 21b4a6b04.
+- S19 start: single FramedBlocks lead (started by team lead local_df490f5d) owns main lead + 3 lanes. All 4 handoffs verified on disk (sgeob 27, nf12111 85, nk 7, pb1 24, fg1165 397 dirty files; nothing else running, 0 JVMs). Merged queue in plan.md § Session 19.
