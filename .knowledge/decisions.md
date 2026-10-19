@@ -70,3 +70,7 @@
 - Session 13: 1.20.1 fixes upstream 9.4.3's CullingUpdatePacket chunk z (getX -> getZ); obvious bug, check 1.19.2/1.18.2 for the same.
 - Session 14: parallel 1.21.11 lanes write their contracts to separate files docs/port/contracts/<lane>.md instead of appending to platform-api.md (avoids end-of-file merge conflicts). AW stays append-only; a lane whose merge conflicts rebases/merges mc/1.21.11 itself.
 - Session 14: O-C4a also does the 1.20.1 AW cleanup (duplicate WeightedBakedModel.wrapped, unused ModelBakerImpl lines), as it is the only 1.20.1 lane running.
+- S15: blank shape selection read as the stated default (all 18 shapes); user can still cut the list.
+- S15: shapes are built first on a 1.21.1 integration branch `shapes/1.21.1` (worktree F:/wt/shp); each shape task in its own worktree off it; this 1.21.1 code is the reference other versions port from.
+- S15: three lane lead sessions (old Fabric 1.20.1->1.16.5, new Fabric 1.21.11->26.3, Forge/NeoForge) each own their branches/worktrees and a board file `.knowledge/lanes/<lane>.md`; the main lead keeps `.knowledge/*.md`. Lane sessions commit only their lane file in the main checkout. Max 3 subagents per lane session (machine load: parallel Gradle).
+- S15: Forge/NeoForge forks keep upstream's loader code (no Fabric platform layer) and only rename identity + add shapes; NeoForge->Forge ports (1.21.1+) only where Forge publishes that MC version.

@@ -39,3 +39,13 @@ User accepted all defaults:
 10. 26.3 range `~26.3` only.
 11. CurseForge description: add supported versions + feature differences; no new cards.
 12. `handoff.md` committed with the next status update; `docs/curseforge/dist/curseforge-description.md` stays untracked.
+
+## Session 15: new shapes + Forge/NeoForge (2026-10-19)
+Task: (1) propose 10-20 new shapes/framed blocks, implement the approved ones on Fabric 1.21.1; (2) continue the handoff; (3) port the final mod to Fabric, NeoForge and Forge for 1.21.1, 1.20.1, 1.16.5, 1.19.2, 1.18.2, 1.21.11, 26.3. New sessions/worktrees/many subagents allowed.
+Answers (form, 2026-10-19):
+1. Shapes: user left both shape groups blank; stated default applies = all 18 (backports from newer upstream: slope edge slab, slope edge panel, prism corner slope panels (8), corner/inner corner/divided boards, banner (+wall); new: arch, inner arch, octagonal pillar, window frame, table, chair+stool, diagonal brace, crown molding, corbel, wall shelf, barrel, crafting table, redstone lamp).
+2. Shapes go into all versions and loaders.
+3. Forge/NeoForge: full fork per loader (upstream code of that version + new shapes, mod id `framedblocks_fabric`). Combos where the loader does not exist for that MC version are skipped.
+4. CurseForge: same project 1744977 for all loaders.
+5. Parallel: one lead session per lane allowed.
+Stated defaults (not objected): order = shapes on 1.21.1 Fabric first (release `1.1.0+mc1.21.1`), then Fabric ports per handoff, Forge/NeoForge last; branches `mc/<ver>` (Fabric), `mc/<ver>-forge`, `mc/<ver>-neoforge` on `origin`; mod id `framedblocks_fabric` everywhere; builds with the new shapes are `1.1.0+mc<ver>`; 1.21.11/26.3 Beta, rest Release; auto-upload after tests (go-ahead from session 11 still applies).
