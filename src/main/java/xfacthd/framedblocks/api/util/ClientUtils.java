@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.event.TickEvent;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import xfacthd.framedblocks.platform.registry.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +55,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
+     * @param models The location->model map given by the model baking event
      * @param blockModelGen The block model factory
      * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
      *                     properties don't influence the model (i.e. waterlogging).
@@ -74,7 +74,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
+     * @param models The location->model map given by the model baking event
      * @param blockModelGen The block model factory
      * @param itemModelSource The {@link BlockState} whose model should be used as the item model
      * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
@@ -95,7 +95,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
+     * @param models The location->model map given by the model baking event
      * @param blockModelGen The block model factory
      * @param stateMerger Custom BlockState merging function, allows for fine-grained deduplication of models when certain
      *                    properties or specific value ranges of a property don't influence the model (i.e. redstone power
@@ -115,7 +115,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
+     * @param models The location->model map given by the model baking event
      * @param blockModelGen The block model factory
      * @param itemModelSource The {@link BlockState} whose model should be used as the item model
      * @param stateMerger Custom BlockState merging function, allows for fine-grained deduplication of models when certain
@@ -239,7 +239,7 @@ public final class ClientUtils
 
     public static int getFluidColor(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
-        return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
+        return FluidVariantRendering.getColor(FluidVariant.of(fluid.getType()), level, pos);
     }
 
     public static boolean isDummyTexture(BakedQuad quad)
@@ -276,9 +276,9 @@ public final class ClientUtils
     private static ResourceKey<Level> lastDimension = null;
 
     @ApiStatus.Internal
-    public static void onClientTick(TickEvent.ClientTickEvent event)
+    public static void onClientTick(Minecraft mc)
     {
-        if (event.phase != TickEvent.Phase.END || tasks.isEmpty()) { return; }
+        if (tasks.isEmpty()) { return; }
 
         Level level = Minecraft.getInstance().level;
         if (level == null || level.dimension() != lastDimension)

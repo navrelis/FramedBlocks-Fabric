@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import xfacthd.framedblocks.platform.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -29,7 +28,7 @@ import java.util.Objects;
  * {@link ItemStack} in the main hand.
  * <p>
  * Must be registered via {@link FramedBlocksClientAPI#registerGhostRenderBehaviour(GhostRenderBehaviour, Item...)} or
- * {@link FramedBlocksClientAPI#registerGhostRenderBehaviour(GhostRenderBehaviour, Block...)} in {@link FMLClientSetupEvent}
+ * {@link FramedBlocksClientAPI#registerGhostRenderBehaviour(GhostRenderBehaviour, Block...)} during client initialization
  * </p>
  */
 public interface GhostRenderBehaviour

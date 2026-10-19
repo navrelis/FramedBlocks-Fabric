@@ -53,6 +53,10 @@ fabricApi {
 }
 
 sourceSets {
+    // until task E3 (Create/Flywheel compat; Create is not on the classpath)
+    main.java {
+        exclude 'xfacthd/framedblocks/common/compat/create/**', 'xfacthd/framedblocks/common/compat/flywheel/**', 'xfacthd/framedblocks/api/compat/create/**'
+    }
     main.resources {
         srcDir 'src/generated/resources'
     }

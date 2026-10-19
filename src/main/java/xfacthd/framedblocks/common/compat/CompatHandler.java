@@ -1,8 +1,6 @@
 package xfacthd.framedblocks.common.compat;
 
-import xfacthd.framedblocks.common.compat.create.CreateCompat;
 import xfacthd.framedblocks.common.compat.emi.EmiCompat;
-import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.compat.rei.ReiCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
@@ -11,9 +9,9 @@ public final class CompatHandler
 {
     public static void init()
     {
-        CreateCompat.init();
+        // TODO(E3): CreateCompat.init();
         EmiCompat.init();
-        FlywheelCompat.init();
+        // TODO(E3): FlywheelCompat.init();
         JeiCompat.init();
         ReiCompat.init();
         SupplementariesCompat.init();
@@ -21,7 +19,7 @@ public final class CompatHandler
 
     public static void commonSetup()
     {
-        CreateCompat.commonSetup();
+        // TODO(E3): CreateCompat.commonSetup();
     }
 
 

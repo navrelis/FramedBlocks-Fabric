@@ -14,7 +14,6 @@ import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 
@@ -102,7 +101,8 @@ public final class ApiImpl implements FramedBlocksAPI
     @Override
     public boolean canHideNeighborFaceInLevel(BlockGetter level)
     {
-        return !FlywheelCompat.isVirtualLevel(level);
+        // TODO(E3): restore "return !FlywheelCompat.isVirtualLevel(level);" once Flywheel compat is back
+        return true;
     }
 
     @Override
