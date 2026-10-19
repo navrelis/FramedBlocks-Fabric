@@ -137,6 +137,14 @@ Usage tally: Sonnet 97 + O-C3 corr short + O-B2 long = 100; Opus 30. Session 13:
 Lanes: old Fabric (session lane-old-fabric, board .knowledge/lanes/old-fabric.md), new Fabric (lane-new-fabric, lanes/new-fabric.md), Forge/NeoForge (lane-forge-neoforge, lanes/forge-neoforge.md). Main lead: shapes on 1.21.1 Fabric, integration branch `shapes/1.21.1` (F:/wt/shp), then merge into mc/1.21.1, release `1.1.0+mc1.21.1`.
 Main lead (authoritative, update on every handover): session "Project lead setup and planning [3271db]" = local_03797b9f-f9a9-4945-891a-d6c1797fac73, since 2026-10-19 ~13:00. Chain: local_c6a1710f -> local_c4dab021 [313af7] -> local_03797b9f [3271db]. Previous leads are read-only. Lane sessions and new lane/lead sessions send reports here; a new main lead must update this line and announce itself to all lanes.
 
+**Resource rules (mandatory for every FramedBlocks session and its subagents, user rule after the 2026-10-19 ~11:55Z reboot from overload):**
+1. Before any Gradle build, test run or Minecraft client: count Java processes (PowerShell `(Get-Process java,javaw -ErrorAction SilentlyContinue).Count`); if >= 8, wait 60 s and re-check; start only when < 8.
+2. Per session at most ONE Gradle invocation and ONE game client at a time (subagents included); no parallel builds across worktrees within one session.
+3. At most 2 subagents alive at once per session; subagents running Gradle follow rule 1.
+4. Free the build JVM after a build batch. Main lead practice: run builds with `--no-daemon`, because `gradlew --stop` stops ALL daemons of that Gradle version on the machine, which would also kill other sessions' builds. Kill smoke/game clients as soon as screenshots or results are taken.
+5. After any restart, assume nothing is still running; re-verify on disk (git status, MERGE_HEAD, outputs) before trusting earlier reports.
+Successor sessions and handoffs must copy these rules.
+
 | ID | Task | Depends | Model / size | Status |
 |----|------|---------|--------------|--------|
 | S-MAP | Touch-point checklist for a new block type -> docs/shapes/add-block-type.md | - | Sonnet long | done (merged f30297fb3; skip-pred generator only in upstream history, datagen none) |

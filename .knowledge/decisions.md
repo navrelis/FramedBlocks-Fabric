@@ -80,3 +80,4 @@
 - S16: S-RECT resumed rather than restarted (only 4 compile errors); lead committed the WIP on s-rect and merged shapes/1.21.1 first so the agent has tools/skippreds-codegen.
 - S16: one main lead at a time: the successor session [313af7] owns the shape lane and .knowledge/*.md; the previous session (local_c6a1710f) only reads (user asked the sessions to coordinate).
 - S17: S-BAN moved to Opus (precision override): 26.x special-model/render-state flag must be remapped to a 1.21.1 BER with camo quads; visual errors hard to detect.
+- S17: user rule (relayed by recovery session local_df490f5d after PC reboot ~11:55Z for overload): resource rules 1-5 adopted (plan.md § Session 15); rule 4 implemented as --no-daemon instead of gradlew --stop (--stop kills every daemon of the Gradle version machine-wide, incl. other sessions' builds). Max 2 subagents per session.
