@@ -5,6 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.platform.transfer.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.common.blockentity.special.FramedBarrelBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
@@ -58,6 +59,19 @@ public final class StorageBlockItemStackHandler extends ItemStackHandler impleme
         if (be instanceof FramedChestBlockEntity chest)
         {
             chest.close();
+        }
+    }
+
+    @Override
+    public void close(Player player)
+    {
+        if (be instanceof FramedBarrelBlockEntity barrel)
+        {
+            barrel.stopOpen(player);
+        }
+        else
+        {
+            close();
         }
     }
 

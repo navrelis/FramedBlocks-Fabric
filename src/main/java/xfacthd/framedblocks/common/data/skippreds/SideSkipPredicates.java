@@ -138,6 +138,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_THICK_LATTICE, new ThickLatticeSkipPredicate());
         put(BlockType.FRAMED_CHEST, new ChestSkipPredicate());
         put(BlockType.FRAMED_SECRET_STORAGE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_BARREL, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CRAFTING_TABLE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_TANK, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_BARS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PANE, new PaneSkipPredicate());
@@ -239,6 +241,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismSlopePanelCornerSkipPredicate());
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismSlopePanelCornerWallSkipPredicate());
         put(BlockType.FRAMED_GLOWING_CUBE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_REDSTONE_LAMP, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PYRAMID, new PyramidSkipPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, new ElevatedPyramidSlabSkipPredicate());
