@@ -22,6 +22,11 @@ public final class CapabilitySetup
                 FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.value()
         );
 
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, side) -> be.getItemStorage(),
+                FBContent.BE_TYPE_FRAMED_BARREL.value()
+        );
+
         // Resolves the single or double chest layout lazily, see FramedChestBlockEntity#getItemStorage()
         ItemStorage.SIDED.registerForBlockEntity(
                 (be, side) -> be.getItemStorage(),

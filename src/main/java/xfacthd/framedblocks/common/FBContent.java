@@ -49,6 +49,7 @@ import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.pane.*;
 import xfacthd.framedblocks.common.block.pillar.*;
 import xfacthd.framedblocks.common.block.prism.*;
+import xfacthd.framedblocks.common.block.rect.*;
 import xfacthd.framedblocks.common.block.slab.*;
 import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
@@ -233,15 +234,19 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_REDSTONE_WALL_TORCH = registerBlock(FramedRedstoneWallTorchBlock::new, BlockType.FRAMED_REDSTONE_WALL_TORCH);
     public static final Holder<Block> BLOCK_FRAMED_FLOOR = registerBlock(FramedFloorBlock::new, BlockType.FRAMED_FLOOR_BOARD);
     public static final Holder<Block> BLOCK_FRAMED_WALL_BOARD = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
+    public static final Holder<Block> BLOCK_FRAMED_WALL_SHELF = registerBlock(FramedWallMountedBlock::new, BlockType.FRAMED_WALL_SHELF);
     public static final Holder<Block> BLOCK_FRAMED_CORNER_STRIP = registerBlock(FramedCornerStripBlock::new, BlockType.FRAMED_CORNER_STRIP);
     public static final Holder<Block> BLOCK_FRAMED_LATTICE = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_LATTICE_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_THICK_LATTICE = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_THICK_LATTICE);
     public static final Holder<Block> BLOCK_FRAMED_CHEST = registerBlock(FramedChestBlock::new, BlockType.FRAMED_CHEST);
     public static final Holder<Block> BLOCK_FRAMED_SECRET_STORAGE = registerBlock(FramedStorageBlock::new, BlockType.FRAMED_SECRET_STORAGE);
+    public static final Holder<Block> BLOCK_FRAMED_BARREL = registerBlock(FramedBarrelBlock::new, BlockType.FRAMED_BARREL);
+    public static final Holder<Block> BLOCK_FRAMED_CRAFTING_TABLE = registerBlock(FramedCraftingTableBlock::new, BlockType.FRAMED_CRAFTING_TABLE);
     public static final Holder<Block> BLOCK_FRAMED_TANK = registerBlock(FramedTankBlock::new, BlockType.FRAMED_TANK);
     public static final Holder<Block> BLOCK_FRAMED_BARS = registerBlock(FramedPaneBlock::new, BlockType.FRAMED_BARS);
     public static final Holder<Block> BLOCK_FRAMED_PANE = registerBlock(FramedPaneBlock::new, BlockType.FRAMED_PANE);
     public static final Holder<Block> BLOCK_FRAMED_HORIZONTAL_PANE = registerBlock(FramedHorizontalPaneBlock::new, BlockType.FRAMED_HORIZONTAL_PANE);
+    public static final Holder<Block> BLOCK_FRAMED_WINDOW_FRAME = registerBlock(FramedWindowFrameBlock::new, BlockType.FRAMED_WINDOW_FRAME);
     public static final Holder<Block> BLOCK_FRAMED_RAIL_SLOPE = registerBlock(FramedRailSlopeBlock::normal, BlockType.FRAMED_RAIL_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_POWERED_RAIL_SLOPE = registerBlock(FramedPoweredRailSlopeBlock::powered, BlockType.FRAMED_POWERED_RAIL_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_DETECTOR_RAIL_SLOPE = registerBlock(FramedDetectorRailSlopeBlock::normal, BlockType.FRAMED_DETECTOR_RAIL_SLOPE);
@@ -255,11 +260,15 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE = registerBlock(FramedDetectorRailSlopeBlock::fancy, BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE = registerBlock(FramedPoweredRailSlopeBlock::activatorFancy, BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_FLOWER_POT = registerBlock(FramedFlowerPotBlock::new, BlockType.FRAMED_FLOWER_POT);
+    public static final Holder<Block> BLOCK_FRAMED_TABLE = registerBlock(FramedTableBlock::new, BlockType.FRAMED_TABLE);
+    public static final Holder<Block> BLOCK_FRAMED_CHAIR = registerBlock(FramedChairBlock::new, BlockType.FRAMED_CHAIR);
+    public static final Holder<Block> BLOCK_FRAMED_STOOL = registerBlock(FramedStoolBlock::new, BlockType.FRAMED_STOOL);
     public static final Holder<Block> BLOCK_FRAMED_PILLAR = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_PILLAR);
     public static final Holder<Block> BLOCK_FRAMED_HALF_PILLAR = registerBlock(FramedHalfPillarBlock::new, BlockType.FRAMED_HALF_PILLAR);
     public static final Holder<Block> BLOCK_FRAMED_PILLAR_SOCKET = registerBlock(FramedPillarSocketBlock::new, BlockType.FRAMED_PILLAR_SOCKET);
     public static final Holder<Block> BLOCK_FRAMED_SPLIT_PILLAR_SOCKET = registerBlock(FramedSplitPillarSocketBlock::new, BlockType.FRAMED_SPLIT_PILLAR_SOCKET);
     public static final Holder<Block> BLOCK_FRAMED_POST = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
+    public static final Holder<Block> BLOCK_FRAMED_CORBEL = registerBlock(FramedWallMountedBlock::new, BlockType.FRAMED_CORBEL);
     public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_BLOCK = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = registerBlock(FramedCollapsibleCopycatBlock::new, BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_BOUNCY_CUBE = registerBlock(FramedBouncyCubeBlock::new, BlockType.FRAMED_BOUNCY_CUBE);
@@ -339,6 +348,7 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER = registerBlock(FramedSolidPrismSlopePanelCornerBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_LARGE_INNER_PRISM_SLOPE_PANEL_CORNER_WALL = registerBlock(FramedSolidPrismSlopePanelCornerWallBlock::new, BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_GLOWING_CUBE = registerBlock(FramedGlowingCubeBlock::new, BlockType.FRAMED_GLOWING_CUBE);
+    public static final Holder<Block> BLOCK_FRAMED_REDSTONE_LAMP = registerBlock(FramedRedstoneLampBlock::new, BlockType.FRAMED_REDSTONE_LAMP);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID = registerBlock(FramedConnectingPyramidBlock::new, BlockType.FRAMED_PYRAMID);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID_SLAB = registerBlock(FramedPyramidBlock::new, BlockType.FRAMED_PYRAMID_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_PYRAMID_SLAB = registerBlock(FramedConnectingPyramidBlock::new, BlockType.FRAMED_ELEVATED_PYRAMID_SLAB);
@@ -526,6 +536,10 @@ public final class FBContent
     public static final DeferredBlockEntity<FramedChestBlockEntity> BE_TYPE_FRAMED_CHEST = registerBlockEntity(
             FramedChestBlockEntity::new,
             BlockType.FRAMED_CHEST
+    );
+    public static final DeferredBlockEntity<FramedBarrelBlockEntity> BE_TYPE_FRAMED_BARREL = registerBlockEntity(
+            FramedBarrelBlockEntity::new,
+            BlockType.FRAMED_BARREL
     );
     public static final DeferredBlockEntity<FramedStorageBlockEntity> BE_TYPE_FRAMED_SECRET_STORAGE = registerBlockEntity(
             FramedStorageBlockEntity::new,

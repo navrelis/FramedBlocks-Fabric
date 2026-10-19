@@ -344,6 +344,7 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_WALL_BOARD", "pane")
                     .props(Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE))
                     .dirs(new TestDir("HalfDir", "Half", null, "board_xz_vert", "board_y")),
+            entry("FRAMED_WALL_SHELF", "rect"),
             entry("FRAMED_CORNER_STRIP", "pane")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
@@ -376,10 +377,13 @@ final class SkipPredicateGeneratorData
                     .dirs(new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")),
             entry("FRAMED_CHEST", "misc"),
             entry("FRAMED_SECRET_STORAGE", IGNORED_PKG),
+            entry("FRAMED_BARREL", IGNORED_PKG),
+            entry("FRAMED_CRAFTING_TABLE", IGNORED_PKG),
             entry("FRAMED_TANK", IGNORED_PKG),
             entry("FRAMED_BARS", "pane"),
             entry("FRAMED_PANE", "pane"),
             entry("FRAMED_HORIZONTAL_PANE", "pane"),
+            entry("FRAMED_WINDOW_FRAME", "rect"),
             entry("FRAMED_RAIL_SLOPE", "slope")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE)
@@ -396,6 +400,9 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_FANCY_DETECTOR_RAIL", IGNORED_PKG),
             entry("FRAMED_FANCY_ACTIVATOR_RAIL", IGNORED_PKG),
             entry("FRAMED_FLOWER_POT", IGNORED_PKG),
+            entry("FRAMED_TABLE", "rect"),
+            entry("FRAMED_CHAIR", "rect"),
+            entry("FRAMED_STOOL", "rect"),
             entry("FRAMED_PILLAR", "pillar")
                     .props(Property.vanilla("Direction.Axis", "axis", "AXIS", PropType.PRIMITIVE).withEarlyExit())
                     .dirs(new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")),
@@ -411,6 +418,7 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_POST", "pillar")
                     .props(Property.vanilla("Direction.Axis", "axis", "AXIS", PropType.PRIMITIVE).withEarlyExit())
                     .dirs(new TestDir("boolean", "Post", null, "post_hor", "post_vert")),
+            entry("FRAMED_CORBEL", "rect"),
             entry("FRAMED_COLLAPSIBLE_BLOCK", "misc"),
             entry("FRAMED_COLLAPSIBLE_COPYCAT_BLOCK", "misc"),
             entry("FRAMED_BOUNCY_CUBE", IGNORED_PKG),
@@ -737,6 +745,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("TriangleDir", "FrontTri", null, "slope_tri_xz")
                     ),
             entry("FRAMED_GLOWING_CUBE", "cube"),
+            entry("FRAMED_REDSTONE_LAMP", IGNORED_PKG),
             entry("FRAMED_PYRAMID", "slope")
                     .props(
                             Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE)

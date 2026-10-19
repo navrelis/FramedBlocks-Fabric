@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.data.facepreds;
 
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.facepreds.door.*;
@@ -136,15 +137,19 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_REDSTONE_WALL_TORCH, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_FLOOR_BOARD, FullFacePredicate.TOP);
         put(BlockType.FRAMED_WALL_BOARD, FullFacePredicate.HOR_DIR);
+        put(BlockType.FRAMED_WALL_SHELF, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CORNER_STRIP, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_LATTICE_BLOCK, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_THICK_LATTICE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CHEST, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SECRET_STORAGE, FullFacePredicate.TRUE);
+        put(BlockType.FRAMED_BARREL, FullFacePredicate.NOT_DIR);
+        put(BlockType.FRAMED_CRAFTING_TABLE, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_TANK, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_BARS, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PANE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_HORIZONTAL_PANE, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_WINDOW_FRAME, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_POWERED_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
@@ -158,11 +163,15 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_FLOWER_POT, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_TABLE, (state, side) -> side == Direction.UP);
+        put(BlockType.FRAMED_CHAIR, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_STOOL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PILLAR, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_HALF_PILLAR, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PILLAR_SOCKET, FullFacePredicate.DIR);
         put(BlockType.FRAMED_SPLIT_PILLAR_SOCKET, FullFacePredicate.DIR);
         put(BlockType.FRAMED_POST, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CORBEL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockFullFacePredicate());
         put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, new CollapsibleCopycatBlockFullFacePredicate());
         put(BlockType.FRAMED_BOUNCY_CUBE, FullFacePredicate.TRUE);
@@ -242,6 +251,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, InnerPrismSlopePanelCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, InnerPrismSlopePanelCornerWallFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_GLOWING_CUBE, FullFacePredicate.TRUE);
+        put(BlockType.FRAMED_REDSTONE_LAMP, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_PYRAMID, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);

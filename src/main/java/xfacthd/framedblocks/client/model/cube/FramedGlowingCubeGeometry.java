@@ -16,9 +16,20 @@ public class FramedGlowingCubeGeometry extends FramedCubeGeometry
 {
     private static final IQuadTransformer FULLBRIGHT_TRANSFORMER = QuadTransformers.settingMaxEmissivity();
 
+    private final boolean glowing;
+
     public FramedGlowingCubeGeometry(GeometryFactory.Context ctx)
     {
+        this(ctx, true);
+    }
+
+    /**
+     * @param glowing Whether the quads should be rendered fullbright, allows subclasses to toggle the effect by state
+     */
+    protected FramedGlowingCubeGeometry(GeometryFactory.Context ctx, boolean glowing)
+    {
         super(ctx);
+        this.glowing = glowing;
     }
 
     @Override
@@ -43,12 +54,12 @@ public class FramedGlowingCubeGeometry extends FramedCubeGeometry
     @Override
     public boolean hasUncachedPostProcessing()
     {
-        return true;
+        return glowing;
     }
 
     @Override
     public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
     {
-        return TriState.FALSE;
+        return glowing ? TriState.FALSE : super.useAmbientOcclusion(state, data, renderType);
     }
 }
