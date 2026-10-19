@@ -23,6 +23,7 @@ import xfacthd.framedblocks.common.data.shapes.interactive.*;
 import xfacthd.framedblocks.common.data.shapes.pane.*;
 import xfacthd.framedblocks.common.data.shapes.pillar.*;
 import xfacthd.framedblocks.common.data.shapes.prism.*;
+import xfacthd.framedblocks.common.data.shapes.rect.*;
 import xfacthd.framedblocks.common.data.shapes.sign.*;
 import xfacthd.framedblocks.common.data.shapes.slab.*;
 import xfacthd.framedblocks.common.data.shapes.slope.*;
@@ -145,6 +146,7 @@ public enum BlockType implements IBlockType
     FRAMED_REDSTONE_WALL_TORCH                      (false, false, false, false, false, false, false, false, null),
     FRAMED_FLOOR_BOARD                              ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FloorBoardShapes::generate),
     FRAMED_WALL_BOARD                               ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, WallBoardShapes::generate),
+    FRAMED_WALL_SHELF                               (false, false, false,  true,  true,  true, false, false, null, WallShelfShapes::generate),
     FRAMED_CORNER_STRIP                             (false, false, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, CornerStripShapes::generate),
     FRAMED_LATTICE_BLOCK                            (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED, LatticeShapes.THIN),
     FRAMED_THICK_LATTICE                            (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED, LatticeShapes.THICK),
@@ -154,6 +156,7 @@ public enum BlockType implements IBlockType
     FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true, null),
     FRAMED_PANE                                     (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED),
     FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, Block.box(0, 7, 0, 16, 9, 16)),
+    FRAMED_WINDOW_FRAME                             (false, false, false,  true,  true,  true, false, false, null, WindowFrameShapes::generate),
     FRAMED_RAIL_SLOPE                               ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, SlopeShapes.INSTANCE),
     FRAMED_POWERED_RAIL_SLOPE                       ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, SlopeShapes.INSTANCE),
     FRAMED_DETECTOR_RAIL_SLOPE                      ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, SlopeShapes.INSTANCE),
@@ -167,11 +170,15 @@ public enum BlockType implements IBlockType
     FRAMED_FANCY_DETECTOR_RAIL_SLOPE                ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, SlopeShapes.INSTANCE),
     FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE               ( true,  true,  true,  true,  true, false,  true, false, ConTexMode.FULL_FACE, SlopeShapes.INSTANCE),
     FRAMED_FLOWER_POT                               (false, false,  true, false,  true, false, false, false, null, Block.box(5, 0, 5, 11, 6, 11)),
+    FRAMED_TABLE                                    (false, false, false,  true,  true,  true, false, false, null, TableShapes::generate),
+    FRAMED_CHAIR                                    (false, false, false,  true,  true,  true, false, false, null, SeatShapes::generateChair),
+    FRAMED_STOOL                                    (false, false, false,  true,  true,  true, false, false, null, SeatShapes::generateStool),
     FRAMED_PILLAR                                   (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, PillarShapes.PILLAR),
     FRAMED_HALF_PILLAR                              (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, HalfPillarShapes::generate),
     FRAMED_PILLAR_SOCKET                            ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, PillarSocketShapes::generate),
     FRAMED_SPLIT_PILLAR_SOCKET                      ( true, false, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, PillarSocketShapes::generate),
     FRAMED_POST                                     (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, PillarShapes.POST),
+    FRAMED_CORBEL                                   (false, false, false,  true,  true,  true, false, false, null, CorbelShapes::generate),
     FRAMED_COLLAPSIBLE_BLOCK                        (false,  true,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE),
     FRAMED_COLLAPSIBLE_COPYCAT_BLOCK                (false, false,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE),
     FRAMED_BOUNCY_CUBE                              ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE, Shapes.block()),

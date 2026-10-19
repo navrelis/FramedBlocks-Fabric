@@ -80,6 +80,8 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL,
             BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W,
             BlockType.FRAMED_WALL_BOARD,
+            BlockType.FRAMED_WALL_SHELF,
+            BlockType.FRAMED_WINDOW_FRAME,
             BlockType.FRAMED_CORNER_STRIP,
             BlockType.FRAMED_GATE,
             BlockType.FRAMED_IRON_GATE,
