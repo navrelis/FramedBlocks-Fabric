@@ -30,7 +30,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
 | N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | done 255210fbf, merged ee6684253 (runtime unverified) |
 | N-K compat | `F:/wt/nk` / `n-k` | Sonnet | in progress (restarted) |
-| N-S shapes (13 non-upstream) | - | Sonnet | waiting for `mc/1.21.11-neoforge` shapes |
+| N-S shapes (13 non-upstream) | - | Sonnet | waiting: Forge lane porting batches 2+3 (S-RECT, S-FUNC) to mc/1.21.11-neoforge (task S23-N12111), sends hash per batch; later S-GEO, pillar/brace, boards, banner |
 | N-T tests | `F:/wt/nt` / `n-t` | Sonnet | in progress (owns src/gametest; N-C4b told not to edit it) |
 | N-F integration | - | Sonnet + lead | pending |
 | N-R release | - | lead | pending |
@@ -72,3 +72,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: N-E1 reviewed (HUD layer attached after PLAYER_LIST (addLast would draw over the chat screen), status bar heights from HudStatusBarHeightRegistry with 39 fallback, DISCONNECT hops to client thread, SpinningItem PiP renderer no longer reads gameRenderer in its ctor (NPE at startup on Fabric), chest/sign render bounds = accepted deviation, init timing documented). Agent: server Done. Lead compile green; committed 255210fbf, merged ee6684253 (platform-api count-line conflict resolved by lead), compile green.
 - 2026-10-19: coordination: lead [2ffcd7] announced itself to lane-forge-neoforge [30aadf] (asked for the shape commit on mc/1.21.11-neoforge), lane-old-fabric [a4cc3a], previous lane lead [69ee22] (retired, stay idle) and main-lead candidates [3271db] and [313af7] (asked who is main lead).
 - 2026-10-19: dispatched N-T (Sonnet) in F:/wt/nt @ee6684253: whole gametest set compile + runGameTest; main-code bugs are reported, not fixed in N-T.
+- 2026-10-19: lane-forge-neoforge ack: batches 2+3 (window frame, table, chair, stool, corbel, wall shelf; barrel, crafting table, redstone lamp) being ported to mc/1.21.11-neoforge (S23-N12111); hash follows per batch, then mc/26.3-neoforge. N-S starts per batch on arrival.
