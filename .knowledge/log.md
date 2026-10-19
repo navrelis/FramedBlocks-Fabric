@@ -133,3 +133,4 @@
 - N-C1 — Sonnet, long — running in F:/wt/nc1.
 - Session 13 auto-handoff — lead — O-C4a, N-B1, N-C5, N-C1 stopped (O-C4a/N-B1 partial uncommitted, N-C5/N-C1 empty); state in handoff.md.
 - S14 dispatch: O-C4a resume (Sonnet long, F:/wt/oc4a ff to 4cd357ce3), N-B1 resume (Opus long, override), N-C5 restart (Opus long, override), N-C1 restart (Sonnet long). 1.21.11 lane contracts go to docs/port/contracts/<lane>.md to avoid parallel append conflicts in platform-api.md.
+- S14 /handoff: all 4 agents stopped after minutes, almost no new work; state in handoff.md §4.

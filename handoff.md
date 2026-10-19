@@ -1,5 +1,7 @@
-# Handoff: FramedBlocks Fabric multi-version ports (end of session 13)
-Written: 2026-10-17 · Branch (main checkout): `mc/1.21.1` · Last commit: `603fa301c Status board: O-E1 merged, N-C1 running` (pushed)
+# Handoff: FramedBlocks Fabric multi-version ports (end of session 14)
+Written: 2026-10-17 · Branch (main checkout): `mc/1.21.1` · Last commit: `20de3dc41 Status board: session 14 dispatch (O-C4a, N-B1, N-C5, N-C1)` (pushed)
+
+Session 14 was short: it verified the session-13 handoff against the repo (accurate), committed + pushed it (a8ff76df2), fast-forwarded `o-c4a` to `mc/1.20.1` 4cd357ce3 (partial work kept, no conflicts), removed stale folders F:/wt/ob2, oc2, oe1 (+ worktree registration of oe1, prune), re-dispatched O-C4a, N-B1, N-C5, N-C1, then the user called /handoff and all 4 agents were stopped after a few minutes. Almost no new work landed (see §4). Sections 5–9 below are still valid.
 
 ## 1. Goal
 User task (verbatim): "make FramedBlocks Fabric on all the following versions for Fabric 1.21.1, 1.20.1, 1.16.5, 1.19.2, 1.18.2, 1.21.11, 26.3 — then test and upload to curseforge and also to github. each branch should be mc/version_number".
@@ -34,12 +36,14 @@ All user answers are in `.knowledge/requirements.md` § "Session 11" (all defaul
 
 Main checkout: board commits pushed through 603fa301c. Cleanup done: worktrees ob1, oc1, oc3, h1, h6, sc1, up2, up3 removed; `F:/wt/ob2`, `F:/wt/oc2`, `F:/wt/oe1` registrations removed/merged but directories may still exist (Gradle daemon held files: "Permission denied") — delete the folders after `gradlew --stop`; `git worktree prune`.
 
-## 4. In progress when stopped (all 4 agents killed by this handoff)
-- **O-C4a** (1.20.1 mixins + hooks), Sonnet, `F:/wt/oc4a` (branch `o-c4a` @e68f6e8ce — older base, merge mc/1.20.1 into it or rebase before finishing): **partial, uncommitted, unverified**. 5 modified tracked files (+70/−5) + ~29 untracked new files: `api/camo/CamoResolvingLevelReader.java`, `mixin/InvokerFireBlock`, `MixinAbstractHorse`, `MixinAbstractMinecart`, `MixinBeaconBlockEntity`, `MixinBlockItem`, `MixinBoat`, `MixinChorusPlantBlock`, … State of `docs/port/hooks-contract.md` and of the mixin json unknown. Brief summary: owns `mixin/**` except `mixin/light/**`, `mixin/client/render/**` and E1's client mixins; plus `MixinClientPacketListener` (recipe cache `FramingSawRecipeCache.get(true).update(recipeManager)`), `platform/util/BlockHooks`, `CamoResolvingLevelReader` + `MixinPlantSurvival`, `framedblocks_fabric.mixins.json`, `FramedMixinConfigPlugin`, sneak-bypass part of `FramedToolItem`, AW append-only, new `docs/port/hooks-contract.md` (mixin → BlockHooks → exact IFramedBlock/BE signature for C4b). Must not edit `IFramedBlock`, `AbstractFramedBlock`, `common/block/**`, `FramedBlockEntity`. Done: 0 owned errors (whole + isolated) except listed contract-pending ones, validateAccessWidener green, per-mixin table with verified 1.20.1 descriptors. Note: E1 already ships client HookMultiPlayerGameMode; O-C4a writes only the server sneak mixin (MixinServerPlayerGameMode). Reference: `F:/Coding/FramedBlocksFabric/src/main/java/xfacthd/framedblocks/mixin/**`.
-- **N-B1** (1.21.11 rendering core, Opus, precision override), `F:/wt/nb1` (branch `n-b1` @840e866d8): **partial, uncommitted, unverified**; 3 modified files (+241/−32), untracked `mixin/client/render/`, `platform/model/{BakedQuadExtension,CapturedBlockModelPart,FixedLayerModelPart}.java`. Last message: "Now the big one, FramedBlockModel." Compile state unknown. Brief points in §5.
-- **N-C5** (1.21.11 light, Opus, precision override), `F:/wt/nc5`: **nothing on disk** (0 changes) — restart from scratch.
-- **N-C1** (1.21.11 registration/lifecycle, Sonnet), `F:/wt/nc1`: **nothing on disk** — restart.
-- Main checkout: `handoff.md` (this file) and the `.knowledge/` interrupt edits uncommitted; `docs/curseforge/dist/curseforge-description.md` untracked by decision.
+## 4. In progress when stopped (all 4 agents stopped by /handoff in session 14; all work uncommitted, unverified)
+- **O-C4a** (1.20.1 mixins + hooks), Sonnet, `F:/wt/oc4a` (branch `o-c4a`, now **fast-forwarded to mc/1.20.1 @4cd357ce3**, so no merge needed any more). Same partial state as at the end of session 13: 5 modified files (FramedToolItem, FramedMixinConfigPlugin, MixinBlockStateBase, AW, framedblocks_fabric.mixins.json; +70/−5) + 29 untracked files (`api/camo/CamoResolvingLevelReader`, `mixin/InvokerFireBlock`, Mixin{AbstractHorse,AbstractMinecart,BeaconBlockEntity,BlockItem,Boat,ChorusPlantBlock,CocoaBlock,EnderDragon,Entity,ExperienceOrb,ExplosionDamageCalculator,FireBlock,FlyingMob,ItemEntity,LavaFluid,LevelChunkHooks,LivingEntity,PlantSurvival,PoweredRailBlock,RailDefaultState,RailState,ServerPlayerGameMode,SystemReport,WitherBoss,WitherSkull}, `mixin/client/MixinClientPacketListener`, `mixin/client/MixinLevelChunkSyncTag`). No `docs/port/hooks-contract.md` yet. Full brief = §5.2.1 + session-14 additions: also do the AW cleanup (duplicate `WeightedBakedModel.wrapped`, 2 unused `ModelBakery$ModelBakerImpl` lines + stale comment), register its own client mixins in the `client` array of framedblocks_fabric.mixins.json (not E1’s client json), delete anything that duplicates O-E1’s client mixins.
+- **N-B1** (1.21.11 rendering core, Opus, override), `F:/wt/nb1` (branch `n-b1` @840e866d8): same partial state as session 13 (3 modified platform/model files BakedColors/BakedNormals/BakedQuadHelper +241/−32; untracked `mixin/client/render/`, `platform/model/{BakedQuadExtension,CapturedBlockModelPart,FixedLayerModelPart}.java`). Agent was reading FBClient when stopped. Compile state unknown.
+- **N-C5** (1.21.11 light, Opus, override), `F:/wt/nc5`: **nothing on disk** — restart.
+- **N-C1** (1.21.11 registration, Sonnet), `F:/wt/nc1`: tiny start: `FramedBlocks.java` +3, `framedblocks_fabric.mixins.json` +3/−1, untracked `mixin/MixinSystemReport.java` and **`mixin/TempMixinRailCtor.java` (a probe/temp file — delete it unless the agent explains it)**. Treat as restart.
+- Session-14 briefs (for re-use) differ from session 13 in one point: each 1.21.11 lane writes its contract to its own new file `docs/port/contracts/<lane>.md` (n-b1.md, n-c5.md, n-c1.md) instead of appending to platform-api.md (decision recorded). Briefs also say: never run `gradlew --stop` / never kill foreign Java processes while other agents run Gradle.
+- Main checkout: clean except `docs/curseforge/dist/curseforge-description.md` (untracked by decision) and this handoff.md + .knowledge edits (uncommitted).
+- Old stray worktrees `.claude/worktrees/agent-{a2286a443d313fa2d,a9f9ff46b3d64d273,add38820c998cbaba}`: clean, from session 7 (pre-public-rewrite history on `private/1.21.1-fabric`); harmless, can be removed with `git worktree remove`.
 
 ## 5. Open work (ordered)
 Max 2 Sonnet + 2 Opus in parallel, each in its own worktree, strict ownership.
@@ -81,14 +85,14 @@ See `.knowledge/decisions.md`. Session 13 additions: flower pot HANGING dropped 
 Nothing runnable yet. Per version later: camo rendering (solid/cutout/translucent/tinted/emissive/CT mods, double blocks' second-half tint, face culling) with Indigo and Sodium (1.20.1: + Indium); glowing camo AO; item rendering GUI/hand incl. double-block hand transform; overlay models; fluid camo; reinforcement + breaking overlay; F3+T reload; light emission; JEI/REI/EMI/Jade GUIs; framing saw screens; powered saw with/without energy; rails; plants on camo; ghost block preview + custom outlines + collapsible indicator (outline order); HUD overlays; hit/destroy particles and break sounds follow camo.
 
 ## 9. Usage so far
-Cumulative ≈ Sonnet 111 units, Opus 35 → Opus share ~24 %. Precision overrides: O-B1 (done), N-B1 + N-C5 (started, interrupted). Planned: O-L.
+Cumulative ≈ Sonnet 115, Opus 39 → Opus share ~25 % (session 14 restarts counted, though they produced almost nothing). Precision overrides: O-B1 (done), N-B1 + N-C5 (interrupted twice). Planned: O-L.
 
 ## 10. How to resume
-1. Read `.knowledge/requirements.md`, `plan.md` (incl. the hand-off list at its end), `decisions.md`; then `F:/wt/m12111/docs/port/{map,platform-api}.md` and `F:/wt/m1201/docs/port/{map,model-contract}.md`.
-2. Commit this `handoff.md` + `.knowledge/` on `mc/1.21.1` and push.
-3. `git -C F:/wt/oc4a status`, `git -C F:/wt/nb1 status`: inspect partial O-C4a and N-B1 work; re-delegate both to finish (O-C4a Sonnet after merging mc/1.20.1 into o-c4a; N-B1 Opus). Restart N-C5 (Opus) and N-C1 (Sonnet) in their empty worktrees (`F:/wt/nc5`, `F:/wt/nc1`).
-4. After O-C4a: O-N and O-C4b (Sonnet). After N-C1: N-C2/N-C3 (include §5.1.4 transfer findings).
-5. Keep the board updated; `gradlew --stop` then delete stale folders `F:/wt/ob2`, `F:/wt/oc2`, `F:/wt/oe1` and `git worktree prune`.
+1. Read `.knowledge/requirements.md` (§ Session 11), `plan.md` (§ Session 11+ and the hand-off list at its end), `decisions.md`; then `F:/wt/m12111/docs/port/{map,platform-api}.md` (map §8 task split, platform-api "Manual edits" B/C/D tables name each lane’s silent losses) and `F:/wt/m1201/docs/port/{map,model-contract}.md`.
+2. Commit this handoff.md + .knowledge on `mc/1.21.1` and push.
+3. Re-dispatch the 4 lanes in parallel with the scopes in §4/§5 (2 Opus: N-B1 resume in F:/wt/nb1, N-C5 restart in F:/wt/nc5; 2 Sonnet: O-C4a resume in F:/wt/oc4a, N-C1 restart in F:/wt/nc1 — tell N-C1 about the leftover TempMixinRailCtor). Then review each diff, commit in the lane worktree, `git merge --no-ff` into the version branch.
+4. After O-C4a: O-N and O-C4b (Sonnet). After N-C1: N-C2, then N-C3 with the §5.1.4 transfer findings.
+5. Keep the board updated. Verification commands: §2.
 
 ### Task text for the next session
 "Continue the work described in handoff.md (FramedBlocks Fabric multi-version ports: mc/1.21.1 done; 1.20.1 in F:/wt/m1201 with partial O-C4a in F:/wt/oc4a; 1.21.11 in F:/wt/m12111 with partial N-B1 in F:/wt/nb1, N-C5/N-C1 to restart; then 26.3, 1.19.2, 1.18.2, 1.16.5; test, upload each to CurseForge project 1744977 automatically, push mc/<version> branches). Read it fully, check it against the repo state first (it may be slightly out of date), then continue with section 10 and section 5."
