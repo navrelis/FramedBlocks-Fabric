@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.data.facepreds;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.facepreds.door.*;
+import xfacthd.framedblocks.common.data.facepreds.curved.*;
 import xfacthd.framedblocks.common.data.facepreds.misc.*;
 import xfacthd.framedblocks.common.data.facepreds.prism.*;
 import xfacthd.framedblocks.common.data.facepreds.slope.*;
@@ -43,6 +44,9 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER, InnerThreewayCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, DoubleThreewayCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_SLOPE_EDGE, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CROWN_MOLDING, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_INNER_CROWN_MOLDING_CORNER, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
@@ -58,6 +62,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SLOPE_EDGE_SLAB, SlopeSlabFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_SLOPE_EDGE_PANEL, SlopePanelFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_ARCH, ArchFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_ARCH, ArchFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, FullFacePredicate.TOP);
         put(BlockType.FRAMED_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);

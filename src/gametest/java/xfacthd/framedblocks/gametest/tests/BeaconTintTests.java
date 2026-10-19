@@ -96,6 +96,8 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_CORNER_SLOPE_EDGE,
             BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE,
             BlockType.FRAMED_SLOPE_EDGE_PANEL,
+            BlockType.FRAMED_CROWN_MOLDING,
+            BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER,
             BlockType.FRAMED_CHAIN,
             BlockType.FRAMED_LANTERN,
             BlockType.FRAMED_SOUL_LANTERN,

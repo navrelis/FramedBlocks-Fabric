@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data.conpreds;
 
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.conpreds.curved.*;
 import xfacthd.framedblocks.common.data.conpreds.door.*;
 import xfacthd.framedblocks.common.data.conpreds.misc.*;
 import xfacthd.framedblocks.common.data.conpreds.pane.*;
@@ -46,6 +47,9 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, DoubleThreewayCornerConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_CROWN_MOLDING, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_INNER_CROWN_MOLDING_CORNER, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, new ElevatedSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, new ElevatedDoubleSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, new StackedSlopeEdgeConnectionPredicate());
@@ -61,6 +65,8 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_SLOPE_EDGE_SLAB, new SlopeEdgeSlabConnectionPredicate());
         put(BlockType.FRAMED_SLOPE_EDGE_PANEL, new SlopeEdgePanelConnectionPredicate());
+        put(BlockType.FRAMED_ARCH, ArchConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_ARCH, ArchConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, new SlabConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, DoubleSlabConnectionPredicate.INSTANCE);
