@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data.skippreds;
 
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.skippreds.curved.*;
 import xfacthd.framedblocks.common.data.skippreds.door.*;
 import xfacthd.framedblocks.common.data.skippreds.misc.*;
 import xfacthd.framedblocks.common.data.skippreds.pane.*;
@@ -47,6 +48,9 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER, InnerThreewayCornerSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeSkipPredicate());
+        put(BlockType.FRAMED_CROWN_MOLDING, CrownMoldingSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_CROWN_MOLDING_CORNER, CrownMoldingSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER, CrownMoldingSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, new ElevatedSlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STACKED_SLOPE_EDGE, SideSkipPredicate.FALSE);
@@ -62,6 +66,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_SLOPE_EDGE_SLAB, new SlopeEdgeSlabSkipPredicate());
         put(BlockType.FRAMED_SLOPE_EDGE_PANEL, new SlopeEdgePanelSkipPredicate());
+        put(BlockType.FRAMED_ARCH, ArchSkipPredicate.INSTANCE);
+        put(BlockType.FRAMED_INNER_ARCH, InnerArchSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, new SlabSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, SideSkipPredicate.FALSE);
@@ -134,12 +140,19 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_REDSTONE_WALL_TORCH, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_FLOOR_BOARD, new FloorBoardSkipPredicate());
         put(BlockType.FRAMED_WALL_BOARD, new WallBoardSkipPredicate());
+        put(BlockType.FRAMED_HALF_BOARD, new HalfBoardSkipPredicate());
+        put(BlockType.FRAMED_DIVIDED_BOARD, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CORNER_BOARD, new CornerBoardSkipPredicate());
+        put(BlockType.FRAMED_INNER_CORNER_BOARD, new InnerCornerBoardSkipPredicate());
+        put(BlockType.FRAMED_DOUBLE_CORNER_BOARD, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_WALL_SHELF, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_CORNER_STRIP, new CornerStripSkipPredicate());
         put(BlockType.FRAMED_LATTICE_BLOCK, new LatticeSkipPredicate());
         put(BlockType.FRAMED_THICK_LATTICE, new ThickLatticeSkipPredicate());
         put(BlockType.FRAMED_CHEST, new ChestSkipPredicate());
         put(BlockType.FRAMED_SECRET_STORAGE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_BARREL, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CRAFTING_TABLE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_TANK, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_BARS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PANE, new PaneSkipPredicate());
@@ -246,6 +259,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismSlopePanelCornerSkipPredicate());
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismSlopePanelCornerWallSkipPredicate());
         put(BlockType.FRAMED_GLOWING_CUBE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_REDSTONE_LAMP, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PYRAMID, new PyramidSkipPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, new ElevatedPyramidSlabSkipPredicate());

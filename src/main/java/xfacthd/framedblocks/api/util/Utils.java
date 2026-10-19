@@ -272,6 +272,104 @@ public final class Utils
         return dirByNormal(nx, ny, nz);
     }
 
+    /**
+     * Determine the closest edge ("cross" quadrant) of the face with the given normal that the given hit position is at
+     * @param face The normal of the face that was hit
+     * @param hitVec The absolute or block-relative hit position
+     * @return the direction pointing from the face's center to the closest edge
+     */
+    public static Direction getDirByCross(Direction face, Vec3 hitVec)
+    {
+        hitVec = fraction(hitVec);
+
+        if (isY(face))
+        {
+            double x = hitVec.x() - .5;
+            double z = hitVec.z() - .5;
+            if (Math.max(Math.abs(x), Math.abs(z)) == Math.abs(x))
+            {
+                return x > 0 ? Direction.EAST : Direction.WEST;
+            }
+            else
+            {
+                return z > 0 ? Direction.SOUTH : Direction.NORTH;
+            }
+        }
+        else
+        {
+            double xz = (isX(face) ? hitVec.z() : hitVec.x()) - .5;
+            double y = hitVec.y() - .5;
+
+            if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
+            {
+                if (isX(face))
+                {
+                    return xz < 0 ? Direction.NORTH : Direction.SOUTH;
+                }
+                else
+                {
+                    return (xz < 0) ? Direction.WEST : Direction.EAST;
+                }
+            }
+            else
+            {
+                return y < 0 ? Direction.DOWN : Direction.UP;
+            }
+        }
+    }
+
+    /**
+     * Determine the closest corner quadrant of the face with the given normal that the given hit position is at.
+     * The returned direction is one of the two edge directions making up the corner
+     * @param face The normal of the face that was hit
+     * @param hitVec The absolute or block-relative hit position
+     */
+    public static Direction getDirByCorner(Direction face, Vec3 hitVec)
+    {
+        hitVec = fraction(hitVec);
+
+        if (isY(face))
+        {
+            double x = hitVec.x() - .5;
+            double z = hitVec.z() - .5;
+            if (z < 0)
+            {
+                return x > 0 ? Direction.EAST : Direction.NORTH;
+            }
+            else
+            {
+                return x > 0 ? Direction.SOUTH : Direction.WEST;
+            }
+        }
+        else
+        {
+            double xz = fractionInDir(hitVec, face.getClockWise()) - .5;
+            double y = hitVec.y() - .5;
+            if (y > 0)
+            {
+                if (xz > 0)
+                {
+                    return face.getClockWise();
+                }
+                else
+                {
+                    return Direction.UP;
+                }
+            }
+            else
+            {
+                if (xz > 0)
+                {
+                    return Direction.DOWN;
+                }
+                else
+                {
+                    return face.getCounterClockWise();
+                }
+            }
+        }
+    }
+
     /** @deprecated Use {@link #getPerpendicularAxis(Direction.Axis, Direction.Axis)} instead */
     @Deprecated(forRemoval = true)
     public static Direction.Axis nextAxisNotEqualTo(Direction.Axis axis, Direction.Axis except)

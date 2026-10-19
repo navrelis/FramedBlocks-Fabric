@@ -80,6 +80,9 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL,
             BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W,
             BlockType.FRAMED_WALL_BOARD,
+            BlockType.FRAMED_HALF_BOARD,
+            BlockType.FRAMED_CORNER_BOARD,
+            BlockType.FRAMED_INNER_CORNER_BOARD,
             BlockType.FRAMED_WALL_SHELF,
             BlockType.FRAMED_WINDOW_FRAME,
             BlockType.FRAMED_CORNER_STRIP,
@@ -98,6 +101,8 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_CORNER_SLOPE_EDGE,
             BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE,
             BlockType.FRAMED_SLOPE_EDGE_PANEL,
+            BlockType.FRAMED_CROWN_MOLDING,
+            BlockType.FRAMED_OUTER_CROWN_MOLDING_CORNER,
             BlockType.FRAMED_CHAIN,
             BlockType.FRAMED_LANTERN,
             BlockType.FRAMED_SOUL_LANTERN,
@@ -185,6 +190,7 @@ public class BeaconTintTests implements FabricGameTest
         return switch ((BlockType) type)
         {
             case FRAMED_DIVIDED_SLAB,
+                 FRAMED_DIVIDED_BOARD,
                  FRAMED_DOUBLE_PANEL,
                  FRAMED_DOUBLE_SLOPE_PANEL,
                  FRAMED_INV_DOUBLE_SLOPE_PANEL,

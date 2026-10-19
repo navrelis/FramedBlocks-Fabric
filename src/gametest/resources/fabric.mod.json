@@ -21,6 +21,8 @@
       "xfacthd.framedblocks.gametest.tests.InteractionTests",
       "xfacthd.framedblocks.gametest.tests.LightSourceTests",
       "xfacthd.framedblocks.gametest.tests.OcclusionTests",
+      "xfacthd.framedblocks.gametest.tests.PredicateMapTests",
+      "xfacthd.framedblocks.gametest.FunctionalBlockTests",
       "xfacthd.framedblocks.gametest.BlockEntityLoadTests",
       "xfacthd.framedblocks.gametest.TransferTests",
       "xfacthd.framedblocks.gametest.TestCommandTests",

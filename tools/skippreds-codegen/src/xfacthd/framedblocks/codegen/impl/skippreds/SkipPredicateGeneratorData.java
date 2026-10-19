@@ -93,6 +93,9 @@ final class SkipPredicateGeneratorData
                             new TestDir("QuarterTriangleDir", "Tri", null, "slope_edge_tri_xz", "slope_edge_tri_y"),
                             new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y")
                     ),
+            entry("FRAMED_CROWN_MOLDING", "curved"),
+            entry("FRAMED_INNER_CROWN_MOLDING_CORNER", "curved"),
+            entry("FRAMED_OUTER_CROWN_MOLDING_CORNER", "curved"),
             entry("FRAMED_ELEVATED_SLOPE_EDGE", "slopeedge")
                     .props(
                             Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
@@ -181,6 +184,8 @@ final class SkipPredicateGeneratorData
                             new TestDir("HalfDir", "Half", null, "half_xz_vert", "half_y"),
                             new TestDir("QuarterTriangleDir", "Tri", null, "slope_edge_panel_tri_hor", "slope_edge_panel_tri_vert")
                     ),
+            entry("FRAMED_ARCH", "curved"),
+            entry("FRAMED_INNER_ARCH", "curved"),
             entry("FRAMED_SLAB", "slab")
                     .props(Property.api("boolean", "top", "TOP", PropType.PRIMITIVE))
                     .dirs(new TestDir("HalfDir", "Half", null, "half_xz_hor")),
@@ -339,6 +344,26 @@ final class SkipPredicateGeneratorData
             entry("FRAMED_WALL_BOARD", "pane")
                     .props(Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE))
                     .dirs(new TestDir("HalfDir", "Half", null, "board_xz_vert", "board_y")),
+            entry("FRAMED_HALF_BOARD", "pane")
+                    .props(Property.internal("CompoundDirection", "cmpDir", "FACING_DIR", PropType.CUSTOM))
+                    .dirs(
+                            new TestDir("HalfDir", "Edge", null, "board_xz_hor", "board_xz_vert", "board_y"),
+                            new TestDir("CornerDir", "HalfEdge", null, "half_board_half_edge"),
+                            new TestDir("HalfDir", "Half", null, "half_xz_hor", "half_xz_vert", "half_y")
+                    ),
+            entry("FRAMED_CORNER_BOARD", "pane")
+                    .props(Property.internal("CompoundDirection", "cmpDir", "FACING_DIR", PropType.CUSTOM))
+                    .dirs(
+                            new TestDir("CornerDir", "HalfEdge", null, "half_board_half_edge"),
+                            new TestDir("CornerDir", "Corner", null, "corner_xz", "corner_y")
+                    ),
+            entry("FRAMED_INNER_CORNER_BOARD", "pane")
+                    .props(Property.internal("CompoundDirection", "cmpDir", "FACING_DIR", PropType.CUSTOM))
+                    .dirs(
+                            new TestDir("HalfDir", "Edge", null, "board_xz_hor", "board_xz_vert", "board_y"),
+                            new TestDir("CornerDir", "HalfEdge", null, "half_board_half_edge"),
+                            new TestDir("TriangleDir", "Stair", null, "stair_xz", "stair_y")
+                    ),
             entry("FRAMED_WALL_SHELF", "rect"),
             entry("FRAMED_CORNER_STRIP", "pane")
                     .props(
@@ -372,6 +397,8 @@ final class SkipPredicateGeneratorData
                     .dirs(new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")),
             entry("FRAMED_CHEST", "misc"),
             entry("FRAMED_SECRET_STORAGE", IGNORED_PKG),
+            entry("FRAMED_BARREL", IGNORED_PKG),
+            entry("FRAMED_CRAFTING_TABLE", IGNORED_PKG),
             entry("FRAMED_TANK", IGNORED_PKG),
             entry("FRAMED_BARS", "pane"),
             entry("FRAMED_PANE", "pane"),
@@ -738,6 +765,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("TriangleDir", "FrontTri", null, "slope_tri_xz")
                     ),
             entry("FRAMED_GLOWING_CUBE", "cube"),
+            entry("FRAMED_REDSTONE_LAMP", IGNORED_PKG),
             entry("FRAMED_PYRAMID", "slope")
                     .props(
                             Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE)
