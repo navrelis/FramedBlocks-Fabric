@@ -135,3 +135,4 @@
 - S14 dispatch: O-C4a resume (Sonnet long, F:/wt/oc4a ff to 4cd357ce3), N-B1 resume (Opus long, override), N-C5 restart (Opus long, override), N-C1 restart (Sonnet long). 1.21.11 lane contracts go to docs/port/contracts/<lane>.md to avoid parallel append conflicts in platform-api.md.
 - S14 /handoff: all 4 agents stopped after minutes, almost no new work; state in handoff.md §4.
 - S15 dispatch: S-MAP (Sonnet long, F:/wt/smap), S-BPA (Sonnet long, F:/wt/sbpa). Lane sessions started: lane-old-fabric, lane-new-fabric, lane-forge-neoforge.
+- S15: S-MAP done (Sonnet long) - doc reviewed, merged f30297fb3. Dispatch S-GEO (Opus long, override), S-RECT (Sonnet long); S-BPA told to put generator in tools/skippreds-codegen.

@@ -74,3 +74,6 @@
 - S15: shapes are built first on a 1.21.1 integration branch `shapes/1.21.1` (worktree F:/wt/shp); each shape task in its own worktree off it; this 1.21.1 code is the reference other versions port from.
 - S15: three lane lead sessions (old Fabric 1.20.1->1.16.5, new Fabric 1.21.11->26.3, Forge/NeoForge) each own their branches/worktrees and a board file `.knowledge/lanes/<lane>.md`; the main lead keeps `.knowledge/*.md`. Lane sessions commit only their lane file in the main checkout. Max 3 subagents per lane session (machine load: parallel Gradle).
 - S15: Forge/NeoForge forks keep upstream's loader code (no Fabric platform layer) and only rename identity + add shapes; NeoForge->Forge ports (1.21.1+) only where Forge publishes that MC version.
+- S15: S-GEO is a precision override (Opus): new faceted quad geometry with UV/normal correctness and culling, errors are visual and hard to detect automatically. Octagonal pillar + diagonal brace split off to Sonnet (S-GEO-B) to keep Opus share low.
+- S15: crown molding gets inner/outer corner pieces (rooms need them); arches get no corner pieces for now.
+- S15: new types use hand-written skip predicates (same-type neighbours only); generator entries are bare KNOWN_TYPES lines so the generator keeps working.
