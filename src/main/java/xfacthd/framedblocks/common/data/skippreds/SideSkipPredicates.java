@@ -59,6 +59,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_EDGE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_THREEWAY_CORNER_SLOPE_EDGE, new ThreewayCornerSlopeEdgeSkipPredicate());
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER_SLOPE_EDGE, new InnerThreewayCornerSlopeEdgeSkipPredicate());
+        put(BlockType.FRAMED_SLOPE_EDGE_SLAB, new SlopeEdgeSlabSkipPredicate());
+        put(BlockType.FRAMED_SLOPE_EDGE_PANEL, new SlopeEdgePanelSkipPredicate());
         put(BlockType.FRAMED_SLAB, new SlabSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ADJ_DOUBLE_SLAB, SideSkipPredicate.FALSE);
@@ -228,6 +230,14 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL, new SmallPrismSlopePanelCornerSkipPredicate());
+        put(BlockType.FRAMED_SMALL_PRISM_CORNER_SLOPE_PANEL_W, new SmallPrismSlopePanelCornerWallSkipPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL, new LargePrismSlopePanelCornerSkipPredicate());
+        put(BlockType.FRAMED_LARGE_PRISM_CORNER_SLOPE_PANEL_W, new LargePrismSlopePanelCornerWallSkipPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL, new SmallInnerPrismSlopePanelCornerSkipPredicate());
+        put(BlockType.FRAMED_SMALL_INNER_PRISM_CORNER_SLOPE_PANEL_W, new SmallInnerPrismSlopePanelCornerWallSkipPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismSlopePanelCornerSkipPredicate());
+        put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismSlopePanelCornerWallSkipPredicate());
         put(BlockType.FRAMED_GLOWING_CUBE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PYRAMID, new PyramidSkipPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, SideSkipPredicate.FALSE);
