@@ -153,7 +153,7 @@ Successor sessions and handoffs must copy these rules.
 | S-BPB | Backport board variants (corner, inner corner, divided, half; adapt to 1.21.1 floor/wall board) | S-MAP | Sonnet long | done (6f153fc25, merged 1578d028b; lead gate 973/973 req, 27 optional, client PASS) |
 | S-BAN | Backport Framed Banner + wall banner (BE, renderer, patterns) | S-MAP | Opus long (S17 precision override: BER/camo flag rendering on 1.21.1) | done (155e555ca, merged ab0233647; S18 lead gate on merged tree 991/991 req, 27 optional, client PASS, 0 missing mapping) |
 | S-GEO | Faceted-arc geometry core + arch, inner arch, crown molding (+inner/outer corner) + docs/shapes/curved-shapes.md | S-MAP | Opus long (precision override: new quad geometry, UV/normals, culling) | done (correction eb742f5f1: skip preds were empty files, written + PredicateMapTests; merged 253a024f4; lead gate 988/988 req, 27 optional, client PASS) |
-| S-GEO-B | Octagonal pillar (12x12, chamfer 3.5 px, AXIS) + diagonal brace | S-GEO | Sonnet long | in progress (S18: Sonnet long, F:/wt/sgeob at ab0233647) |
+| S-GEO-B | Octagonal pillar (12x12, chamfer 3.5 px, AXIS) + diagonal brace | S-GEO | Sonnet long | done (5d2193e22, merged 73cf68ca9; S19 lead gate 996/996 req, 27 optional, client PASS, 0 missing mapping, generator zero-diff) |
 | S-RECT | Window frame (connecting), table (connecting legs), chair + stool, corbel, wall shelf | S-MAP | Sonnet long | done (eea29645c, merged a559b5153; lead: build 944/944 req, 27 known optional, runClientTest PASS) |
 | S-GEN | Skip-pred generator in repo at tools/skippreds-codegen (+2 upstream predicate fixes) | - | Sonnet (part of S-BPA) | done (in 661897f30) |
 | S-FUNC | Barrel (27-slot, FACING/OPEN, recessed lid), crafting table (CraftingMenu subclass), redstone lamp (LIT, light 15, emissive when lit) | S-MAP | Sonnet long | done (merged into shapes/1.21.1 after merging S-RECT; lead gate on merged tree: build 957/957 req, 27 known optional, runClientTest PASS 0 skipped/0 findings) |
@@ -174,7 +174,7 @@ Phase 1: salvage partial work, one worktree at a time.
 | # | Task | Where | Done when | Model |
 |---|---|---|---|---|
 | Q1 | DONE a470eaac5: S23-N12111 lead build + commit (shapes batches 2+3 on NeoForge 1.21.11) | F:/wt/nf12111 | `gradlew --no-daemon build` green, 85 files committed, hash on new-fabric + forge boards | lead |
-| Q2 | S-GEO-B octagonal pillar + diagonal brace: compile partial, finish per handoff-dd5e648e §5.1 spec | F:/wt/sgeob | build >= 992 req / 27 opt, runClientTest PASS, generator zero-diff, merged into shapes/1.21.1, pushed | Sonnet long |
+| Q2 | DONE 73cf68ca9: S-GEO-B octagonal pillar + diagonal brace: compile partial, finish per handoff-dd5e648e §5.1 spec | F:/wt/sgeob | build >= 992 req / 27 opt, runClientTest PASS, generator zero-diff, merged into shapes/1.21.1, pushed | Sonnet long |
 | Q3 | N-K compat finish (1.21.11 Fabric) | F:/wt/nk | compile+AW green, server Done, committed, merged into mc/1.21.11 | Sonnet long |
 | Q4 | P-B1 1.19.2 rendering core (FRAPI 1.2.1) resume | F:/wt/pb1 | owned files compile, model-contract.md, committed, merged into mc/1.19.2 | Opus long (override, as planned) |
 | Q5 | I-F1165 Forge 1.16.5 identity resume | F:/wt/fg1165 | build green (JDK 8), server Done, smoke PASS, committed | Sonnet long |

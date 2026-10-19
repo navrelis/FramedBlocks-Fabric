@@ -76,3 +76,4 @@ Sonnet 25, Opus 3 (Opus share 13 %). Precision overrides: O-L (done), P-B1 (FRAP
 
 ## Manual test checklist (per version, filled at release)
 - 2026-10-19 (S19): the user stopped all FramedBlocks sessions after the overload; one single FramedBlocks lead session (started by team lead local_df490f5d) now owns this lane, the other lanes and the main-lead role. Old lane sessions stay idle. Disk verified against the handoffs. Order of work: .knowledge/plan.md § Session 19.
+- 2026-10-19 (S19): P-B1 resumed (Opus, override) in F:/wt/pb1 on the 24-file partial.
