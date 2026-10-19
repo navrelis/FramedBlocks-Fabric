@@ -4,10 +4,38 @@
     "compatibilityLevel": "JAVA_17",
     "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
     "mixins": [
+        "InvokerFireBlock",
+        "MixinAbstractHorse",
+        "MixinAbstractMinecart",
+        "MixinBeaconBlockEntity",
+        "MixinBlockItem",
         "MixinBlockStateBase",
-        "MixinMapItemSavedData"
+        "MixinBoat",
+        "MixinCamel",
+        "MixinEnderDragon",
+        "MixinEntity",
+        "MixinExperienceOrb",
+        "MixinExplosionDamageCalculator",
+        "MixinFireBlock",
+        "MixinFlyingMob",
+        "MixinItemEntity",
+        "MixinLavaFluid",
+        "MixinLevelChunkHooks",
+        "MixinLivingEntity",
+        "MixinMapItemSavedData",
+        "MixinPlantSurvival",
+        "MixinPoweredRailBlock",
+        "MixinRailDefaultState",
+        "MixinRailState",
+        "MixinServerPlayerGameMode",
+        "MixinSystemReport",
+        "MixinWitherBoss",
+        "MixinWitherSkull"
     ],
-    "client": [],
+    "client": [
+        "client.MixinClientPacketListener",
+        "client.MixinLevelChunkSyncTag"
+    ],
     "injectors": {
         "defaultRequire": 1
     },

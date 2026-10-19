@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
+import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -7,8 +8,15 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("unused") // Referenced by mixin config
 public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
 {
+    /**
+     * Fully qualified names of debugging mixins which must only be applied in a development environment, there are
+     * none right now (the port for 1.21.1 has {@code xfacthd.framedblocks.mixin.client.DevMixinLevelRenderer})
+     */
+    private static final Set<String> DEV_ONLY_MIXINS = Set.of();
+
     @Override
     public void onLoad(String mixinPackage) { }
 
@@ -21,6 +29,10 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName)
     {
+        if (DEV_ONLY_MIXINS.contains(mixinClassName))
+        {
+            return FabricLoader.getInstance().isDevelopmentEnvironment();
+        }
         return true;
     }
 
