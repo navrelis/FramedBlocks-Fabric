@@ -35,6 +35,7 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.camo.FluidCamoContainer;
+import xfacthd.framedblocks.platform.light.AuxLight;
 import xfacthd.framedblocks.platform.model.ModelData;
 import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import xfacthd.framedblocks.platform.util.BlockHooks;
@@ -747,12 +748,28 @@ public class FramedBlockEntity extends BlockEntity
         return reinforced;
     }
 
-    // TODO O-L: still the Forge-era light check, must write the per-position emission into platform.light.AuxLight
-    //  (and provide getAuxLightEmission() used by AuxLight#rebuild(), plus the forceLightUpdate handling in onLoad())
+    /**
+     * Store the current light emission of this block in the per-position light store of its chunk. The store queues
+     * a light check at this position after the write if the stored value changed (see {@link AuxLight}).
+     * Must only be called on the thread owning the level (server or client thread), the light store has a single
+     * writer per chunk. The call is dropped if the chunk is not fully loaded yet, {@code AuxLight#rebuild()} and
+     * {@link #onLoad()} pick the value up once it is
+     */
     protected final void doLightUpdate()
     {
-        //noinspection ConstantConditions
-        level.getChunkSource().getLightEngine().checkBlock(worldPosition);
+        if (level != null)
+        {
+            AuxLight.set(level, worldPosition, getLightValue());
+        }
+    }
+
+    /**
+     * {@return the light emission to be stored for this block, used to rebuild the stored emissions of a chunk}
+     */
+    @ApiStatus.Internal
+    public final int getAuxLightEmission()
+    {
+        return getLightValue();
     }
 
     public IFramedBlock getBlock()
@@ -877,9 +894,18 @@ public class FramedBlockEntity extends BlockEntity
     public void onLoad()
     {
         //noinspection ConstantConditions
-        if (!level.isClientSide() && recheckStates)
+        if (!level.isClientSide())
         {
-            checkCamoSolid();
+            if (recheckStates)
+            {
+                checkCamoSolid();
+            }
+            // Ensure blocks placed by exactly copying BlockState and BlockEntity (structure blocks, /clone, schematic
+            // mods) and block entities promoted from pending NBT correctly store their light emission (upstream
+            // forceLightUpdate). Unconditional instead of upstream's flag: AuxLight#set() is a no-op without light
+            // check when the stored value is already correct, which also covers the second camo of double blocks
+            // and clears stale entries
+            doLightUpdate();
         }
     }
 
@@ -1167,5 +1193,12 @@ public class FramedBlockEntity extends BlockEntity
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
         reinforced = nbt.getBoolean("reinforced");
+
+        if (glowing)
+        {
+            // Upstream fix for exactly copied BlockState and BlockEntity: make sure the GLOWING property matches,
+            // the light emission itself is stored by onLoad()
+            recheckStates = true;
+        }
     }
 }
