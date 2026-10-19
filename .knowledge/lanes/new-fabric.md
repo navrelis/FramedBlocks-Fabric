@@ -6,7 +6,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @52717c741 (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @597eb6e2d (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -20,9 +20,9 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C5 light | `F:/wt/nc5` / `n-c5` | Opus (override) | done, merged edb3afdc1 (runtime unverified; gametest set does not compile yet) |
 | N-C1 registration | `F:/wt/nc1` / `n-c1` | Sonnet | done e99be1c09, merged 7af4544cd |
 | N-C2 config/net/datamaps | `F:/wt/nc2` / `n-c2` | Sonnet | done, merged 2cbbe91dc (world/client paths unverified) |
-| N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | finishing correction 1 (fresh Sonnet agent, session 2ffcd7) |
+| N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | done 6d319fda4, merged 597eb6e2d (dupe fixed; 24/24 transfer+energy gametests by lead) |
 | N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | done, merged 24c514404 (mixins apply on server: audit 29/29; behaviour unverified) |
-| N-C4b BE sync/rails | - | Sonnet | pending |
+| N-C4b BE sync/rails | `F:/wt/nc4b` / `n-c4b` | Sonnet | in progress |
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
@@ -66,3 +66,5 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: dispatched N-K (Sonnet) in F:/wt/nk. Another main-lead handover claim (local_03797b9f) received; asked local_c4dab021 to confirm.
 - 2026-10-19: automatic handoff: all agents stopped. Handoff file: F:/Coding/FramedBlocksFabric/handoff-2026-10-19-2c5466b7.md
 - 2026-10-19: new lane lead session 2ffcd7 took over from handoff-2026-10-19-2c5466b7.md; repo state matches handoff; mc/1.21.11 @52717c741 compile+AW green; mc/1.21.11-neoforge still has no shapes (tip 018b25e77). Dispatched N-C3 finish, N-E1 restart, N-K restart (all Sonnet).
+- 2026-10-19: N-C3 finish reviewed (setState sets count>=1 while resetting components then final count: drain-to-empty no longer keeps fluid; plain slot order + arg checks as NeoForge 21.11.45; capacity 0 for invalid; sided WorldlyContainer index mapping instead of throwing; lang 
+). Lead: JSON ok, compile+AW green, throw-away gametests 24/24. Committed 6d319fda4, merged 597eb6e2d (compile green). Dispatched N-C4b (Sonnet) in F:/wt/nc4b.
