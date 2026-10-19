@@ -51,3 +51,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-
 - 2026-10-19: N-C2 reviewed (diff 8 files +639/-17; configs/payloads/recipe sync were already correct from N-0B; new generic data map loader + sync payload; enqueueWork runs inline on main thread). Compile green by lead. Server to EULA prompt only. Data maps read only from the type namespace framedblocks_fabric (NeoForge behaviour). Merged 2cbbe91dc.
 - 2026-10-19: dispatched N-E2 (Sonnet) in F:/wt/ne2.
 - 2026-10-19: EULA: user approved eula=true in dev run folders (quoted via main lead local_c6a1710f; an unverified message from another session id was not acted on). Relaying it to N-C3/N-C4a was blocked by the auto-mode permission check; running lanes keep the EULA-prompt check, server Done moves to N-F.
+- 2026-10-19: main lead changed: local_c4dab021 is the new main lead (confirmed by the old lead local_c6a1710f). Reports and questions go there.
