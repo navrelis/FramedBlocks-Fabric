@@ -170,3 +170,4 @@ S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 n
 - S20: dispatched O-F3 (Sonnet long, F:/wt/m1201, client smoke Indigo + Sodium/Indium) and Q9 (Sonnet long, F:/wt/nf12111, S-GEO + S-GEO-B into NeoForge 1.21.11). Upload yes still pending (asked via team lead).
 - S20: O-F3 accepted, committed mc/1.20.1 81dde743f (local). N-T dispatched (Sonnet long, F:/wt/nt ff to 0ff48456d, gametest port to 1.21.11 API). Running: Q9 + N-T. Pending: upload yes for 1.1.0+mc1.21.1 and 1.0.0+mc1.20.1.
 - S20: Q9 nf12111 committed (see forge-neoforge board).
+- S20: dispatched Q9b (Sonnet long, F:/wt/nf263: merge mc/1.21.11-neoforge 4b2f7780d into mc/26.3-neoforge, no commit). Running: N-T + Q9b. Usage S20 so far: Sonnet S-F 2, I-F1165 2, O-F3 2, Q9 2, N-T 2, Q9b 2 = 12; Opus 0.
