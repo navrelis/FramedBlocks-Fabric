@@ -793,7 +793,16 @@ public final class FBContent
     @SuppressWarnings("SameParameterValue")
     private static <T extends Recipe<?>> RegistryObject<RecipeType<T>> createRecipeType(String name)
     {
-        return RECIPE_TYPES.register(name, () -> RecipeType.simple(Utils.rl(name)));
+        return RECIPE_TYPES.register(name, () -> new RecipeType<T>()
+                {
+                    private final String id = Utils.rl(name).toString();
+
+                    @Override
+                    public String toString()
+                    {
+                        return id;
+                    }
+                });
     }
 
 
