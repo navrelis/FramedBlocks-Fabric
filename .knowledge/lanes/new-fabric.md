@@ -83,3 +83,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: main lead handover to [7d5ce0] local_b8208f6c announced (message came from local_dd5e648e); matches the plan.md main-lead line (working copy). Reports now go to local_b8208f6c. S-BAN (banner, upstream-native here) in gate; then S-GEO-B.
 - 2026-10-19: refs changed after reboot: this lane [e7e3e1], Forge lane [76dd47], old Fabric lane [4a1078], main lead [7d5ce0]. New ref sent to all three.
 - 2026-10-19: team lead: Forge/NeoForge lane handed off, successor "probably local_90a515ff" (unconfirmed; direct send failed "not found"). Old Forge lane [76dd47] had my new ref before the handoff. TODO: send the shape-hash request to the confirmed successor.
+- 2026-10-19: main lead: S-BAN merged into shapes/1.21.1 ab0233647 (pushed); upstream-native on 1.21.11/26.3, nothing to port. Next: S-GEO-B.
