@@ -20,6 +20,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | Branch | Base | Worktree | Identity | Build | Gametests | Server Done | Client smoke | Shapes | Uploaded | Pushed |
 |---|---|---|---|---|---|---|---|---|---|---|
 | mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 884/884 required (a9d2f219a) | Done 10.0 s | PASS 236 blocks, 0 errors | - | - | no |
+| mc/1.19.2-forge | f2962c3b7 | F:/wt/fg1192 | done b2f4f1d49 | green (lead, JDK 17) | 575/594 (19 required fail, flaky light + 3 prism; baseline 41 fail) | Done 110 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.20.1-forge | 5dc540401 | F:/wt/fg1201 | done 19a590815 | green (lead) | 805/805 required (26 optional occlusion fail, upstream) | Done 18.0 s; NeoForge 47.1.106 server Done 21.3 s | PASS 206 blocks, 0 mod errors | - | - | no |
 | mc/1.21.11-neoforge | 8c38a156c | F:/wt/nf12111 | done 018b25e77 | green (lead) | 1/1 (upstream has SelfTest only) | Done 11.1 s | PASS 247 blocks, 0 errors | - | - | no |
 | mc/26.3-neoforge | 6b0aa6303 + merge 018b25e77 | F:/wt/nf263 | done 5075141f5 | green (lead) | 1/1 (SelfTest only upstream) | Done 3.1 s | PASS 253 blocks, 0 errors | - | - | no |
@@ -32,7 +33,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | T-N1211 | Fix 15 remaining required gametests on mc/1.21.1-neoforge (port Fabric port fixes) | Sonnet (same agent) | done (a9d2f219a) |
 | S1-N1211 | Shapes batch 1 (slope edge slab/panel, 8 prism corner slope panels; ref 661897f30) -> mc/1.21.1-neoforge | Sonnet | running |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
-| I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | running |
+| I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | done (b2f4f1d49) |
+| T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | running |
 | I-N12111 | Identity + tests, NeoForge 1.21.11 (`F:/wt/nf12111`, base 8c38a156c) | Sonnet | done (018b25e77) |
 | I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | done (5075141f5) |
 | I-F1182 | Identity + tests, Forge 1.18.2 (`F:/wt/fg1182`, base 8c361d427 = 5.11.5) | Sonnet | running |
@@ -46,7 +48,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
-Sonnet 9 · Opus 0. Precision overrides: none.
+Sonnet 10 · Opus 0. Precision overrides: none.
 
 ## Log
 - 2026-10-19: lane started; shapes/1.21.1 has no shapes merged yet. R1 dispatched.
@@ -59,6 +61,8 @@ Sonnet 9 · Opus 0. Precision overrides: none.
 - 2026-10-19: I-N263 accepted: staged diff vs 6b0aa6303 read (Java = literals + smoketest only), script now also moves data/<ns>/tags/framedblocks (26.3 block_overlay tags), lead build green, merge committed 5075141f5. mc/1.18.2-forge created, I-F1182 dispatched.
 - 2026-10-19: I-N1211 accepted: diff read (identity + TestUtils helper fixes 248 lines + client smoke test), lead build green, committed cd11a23b0. Gametests 15 required still red -> T-N1211 to same agent.
 - 2026-10-19: T-N1211 accepted: diff read (test lists as Fabric port, IFramedDoubleBlockEntity aiming, sign REMOVE_WAX was unreachable upstream -> fixed, listed in NOTICE), 884/884 required x2, committed a9d2f219a. S1-N1211 dispatched.
+- 2026-10-19: main lead: shapes/1.21.1 a559b5153 = S-RECT (window frame, table, chair, stool, corbel, wall shelf; non-upstream). Queued as batch 2 (S2-*).
+- 2026-10-19: I-F1192 accepted: diff read (FG 5.1.77/mixingradle 0.7.38/librarian 1.2.0 pinned, Create/Flywheel via CurseMaven compile-only, CullingUpdatePacket z fix, smoke via tools/fork/run-client-smoke.mjs because FG5 daemon exit), lead build green, committed b2f4f1d49. T-F1192 to same agent.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
