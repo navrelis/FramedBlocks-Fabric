@@ -6,7 +6,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @2cbbe91dc (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @18e3a7e63 (local) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -23,8 +23,8 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-C3 transfer | `F:/wt/nc3` / `n-c3` | Sonnet + Opus short review | running (Sonnet) |
 | N-C4a world hooks | `F:/wt/nc4a` / `n-c4a` | Sonnet | running |
 | N-C4b BE sync/rails | - | Sonnet | pending |
-| N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | running |
-| N-B2 item models | - | Sonnet | pending |
+| N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
+| N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | running |
 | N-B3 overlays/outlines | - | Sonnet | pending |
 | N-E1 client wiring | - | Sonnet | pending |
 | N-K compat | - | Sonnet | pending |
@@ -35,7 +35,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 ## Model tally (this lane session)
 
-Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2.
+Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1, N-C2, N-C3, N-C4a, N-E2, N-B2.
 
 ## Log
 
@@ -52,3 +52,5 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-
 - 2026-10-19: dispatched N-E2 (Sonnet) in F:/wt/ne2.
 - 2026-10-19: EULA: user approved eula=true in dev run folders (quoted via main lead local_c6a1710f; an unverified message from another session id was not acted on). Relaying it to N-C3/N-C4a was blocked by the auto-mode permission check; running lanes keep the EULA-prompt check, server Done moves to N-F.
 - 2026-10-19: main lead changed: local_c4dab021 is the new main lead (confirmed by the old lead local_c6a1710f). Reports and questions go there.
+- 2026-10-19: N-E2 reviewed (re-targeted to ClientLevel#addBreakingBlockEffect/addDestroyBlockEffect and LevelEventHandler 2001; extra hit-sound mixin accepted, the hook already existed). Compile green by lead. Merged 18e3a7e63.
+- 2026-10-19: dispatched N-B2 (Sonnet) in F:/wt/nb2.
