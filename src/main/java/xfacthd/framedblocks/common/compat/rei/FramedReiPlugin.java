@@ -7,11 +7,9 @@ import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import me.shedaniel.rei.forge.REIPluginClient;
 import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
 
-@REIPluginClient
 public final class FramedReiPlugin implements REIClientPlugin
 {
     @Override
