@@ -431,6 +431,11 @@ public final class FBClient implements ClientModInitializer
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH, FramedRedstoneWallTorchGeometry::new, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_FLOOR, FramedFloorBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_BOARD, FramedWallBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_HALF_BOARD, FramedHalfBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_DIVIDED_BOARD, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORNER_BOARD, FramedCornerBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_CORNER_BOARD, FramedInnerCornerBoardGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_CORNER_BOARD, NullCullPredicate.NEVER, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_SHELF, FramedRectGeometry::wallShelf, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CORNER_STRIP, FramedCornerStripGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LATTICE, FramedLatticeGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);

@@ -140,6 +140,11 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_REDSTONE_WALL_TORCH, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_FLOOR_BOARD, new FloorBoardSkipPredicate());
         put(BlockType.FRAMED_WALL_BOARD, new WallBoardSkipPredicate());
+        put(BlockType.FRAMED_HALF_BOARD, new HalfBoardSkipPredicate());
+        put(BlockType.FRAMED_DIVIDED_BOARD, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CORNER_BOARD, new CornerBoardSkipPredicate());
+        put(BlockType.FRAMED_INNER_CORNER_BOARD, new InnerCornerBoardSkipPredicate());
+        put(BlockType.FRAMED_DOUBLE_CORNER_BOARD, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_WALL_SHELF, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_CORNER_STRIP, new CornerStripSkipPredicate());
         put(BlockType.FRAMED_LATTICE_BLOCK, new LatticeSkipPredicate());
