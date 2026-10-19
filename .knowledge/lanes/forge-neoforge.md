@@ -22,7 +22,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 941/941 required (4286063b1) | Done 5.9 s | PASS 255 blocks, 0 errors | batches 1-3 (4286063b1) | - | no |
 | mc/1.18.2-forge | 8c361d427 | F:/wt/fg1182 | done 8edad77ef | green (lead, JDK 17) | 595/595 required x5 (5468d9136) | Done 25.1 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.16.5-forge | 557ff653b | F:/wt/fg1165 | running | - | n/a (no gametest API) | - | - | - | - | no |
-| mc/1.21.1-forge | from mc/1.21.1-neoforge 9661f5271 | F:/wt/fg1211 | - | - | - | - | - | - | - | no |
+| mc/1.21.1-forge | from mc/1.21.1-neoforge 4286063b1 (ff 2026-10-19 s16) | F:/wt/fg1211 | - | - | - | - | - | - | - | no |
 | mc/1.19.2-forge | f2962c3b7 | F:/wt/fg1192 | done b2f4f1d49 | green (lead, JDK 17) | 594/594 required x7 (655c2ab66) | Done 110 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.20.1-forge | 5dc540401 | F:/wt/fg1201 | done 19a590815 | green (lead) | 805/805 required (26 optional occlusion fail, upstream) | Done 18.0 s; NeoForge 47.1.106 server Done 21.3 s | PASS 206 blocks, 0 mod errors | - | - | no |
 | mc/1.21.11-neoforge | 8c38a156c | F:/wt/nf12111 | done 018b25e77 | green (lead) | 1/1 (upstream has SelfTest only) | Done 11.1 s | PASS 247 blocks, 0 errors | - | - | no |
@@ -37,7 +37,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | S1-N1211 | Shapes batch 1 (slope edge slab/panel, 8 prism corner slope panels; ref 661897f30) -> mc/1.21.1-neoforge | Sonnet | done (5c570dc0f) |
 | S2-N1211 | Shapes batch 2 S-RECT (a559b5153) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (9661f5271) |
 | S3-N1211 | Shapes batch 3 S-FUNC (9a304b803) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (4286063b1) |
-| S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | interrupted by reboot (82 files partial) -> resumed, stopped by handoff (open, interrupted) |
+| S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | in progress (session 16, resumed on the 82-file partial state) |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
 | I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | done (b2f4f1d49) |
 | T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | done (655c2ab66) |
@@ -45,8 +45,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | I-N263 | NeoForge 26.3: upstream/26.3 6b0aa6303 + merge mc/1.21.11-neoforge (1096 conflicts: resources re-taken from upstream + rename script) (`F:/wt/nf263`) | Sonnet | done (5075141f5) |
 | I-F1182 | Identity + tests, Forge 1.18.2 (`F:/wt/fg1182`, base 8c361d427 = 5.11.5) | Sonnet | done (8edad77ef) |
 | T-F1182 | 1.18.2 required gametests green | Sonnet (T-F1192 agent) | done (5468d9136) |
-| I-F1165 | Identity + tests, Forge 1.16.5 (`F:/wt/fg1165`, base 557ff653b = 2.16.3, Java 8) | Sonnet | interrupted by reboot (397 files partial) -> waits for a slot |
-| M-F1211 | Port map NeoForge->Forge 1.21.1 (docs/port/forge-map.md) | Sonnet | interrupted by reboot (nothing on disk) -> resumed, stopped by handoff (open, interrupted) |
+| I-F1165 | Identity + tests, Forge 1.16.5 (`F:/wt/fg1165`, base 557ff653b = 2.16.3, Java 8) | Sonnet | open: 397-file partial on disk (renames, build.gradle, mods.toml, NOTICE, smoke run config), waits for a subagent slot |
+| M-F1211 | Port map NeoForge->Forge 1.21.1 (docs/port/forge-map.md) | Sonnet | in progress (session 16, restarted from scratch, read-only) |
 
 ## Decisions (lane)
 - NeoForge 1.21.1 base = upstream/1.21 377748c11 (true 10.5.3, the Fabric port's base). First pick c6bfa184c was wrong (8 commits of 10.6.0 features after the 10.5.3 label); branch reset to 377748c11.
@@ -89,3 +89,4 @@ Sonnet 14 · Opus 0. Precision overrides: none.
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
 
 - 2026-10-19: session 18a47a03 handed off (context limit); S23-N12111 and M-F1211 stopped, I-F1165 open. Handoff: handoff-2026-10-19-18a47a03.md (main checkout root).
+- 2026-10-19 (session 16, 9bf4dc3a): resumed from the handoff. Verified all worktrees match the handoff (committed work intact, nf12111 82 partial files, fg1165 397 partial files, fg1211 clean). Java processes at start: 0. mc/1.21.1-forge fast-forwarded to 4286063b1 so the port map covers batch 3. S23-N12111 re-dispatched (Sonnet, resumes partial state, only Gradle user), M-F1211 re-dispatched (Sonnet, read-only). Main lead is now session local_b8208f6c ([7d5ce0]); local_03797b9f retired (read-only).
