@@ -2,11 +2,13 @@
 
 Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F:/wt/m12111/docs/port/map.md` §8, API: `docs/port/platform-api.md`, lane contracts: `docs/port/contracts/<lane>.md` (on `mc/1.21.11`).
 
+**Current lane lead: session "[2ffcd7]" (since 2026-10-19 afternoon). The previous lead `lane-new-fabric` (local_98fafdb8) is retired and told to stay idle. A new lane-lead session must announce itself to the main lead, lane-forge-neoforge, lane-old-fabric and the previous lane lead via SendMessage, and record it here.** Main lead: unconfirmed ([3271db] / [313af7] asked, see log).
+
 ## Status per version
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @597eb6e2d (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @ee6684253 (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -26,7 +28,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-E2 client effects | `F:/wt/ne2` / `n-e2` | Sonnet | done, merged 18e3a7e63 (runtime unverified) |
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
-| N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | in progress (restarted, ne1 fast-forwarded to 52717c741) |
+| N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | done 255210fbf, merged ee6684253 (runtime unverified) |
 | N-K compat | `F:/wt/nk` / `n-k` | Sonnet | in progress (restarted) |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting for `mc/1.21.11-neoforge` shapes |
 | N-T tests | - | Sonnet | pending |
@@ -67,3 +69,5 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: automatic handoff: all agents stopped. Handoff file: F:/Coding/FramedBlocksFabric/handoff-2026-10-19-2c5466b7.md
 - 2026-10-19: new lane lead session 2ffcd7 took over from handoff-2026-10-19-2c5466b7.md; repo state matches handoff; mc/1.21.11 @52717c741 compile+AW green; mc/1.21.11-neoforge still has no shapes (tip 018b25e77). Dispatched N-C3 finish, N-E1 restart, N-K restart (all Sonnet).
 - 2026-10-19: N-C3 finish reviewed (setState sets count>=1 while resetting components then final count: drain-to-empty no longer keeps fluid; plain slot order + arg checks as NeoForge 21.11.45; capacity 0 for invalid; sided WorldlyContainer index mapping instead of throwing; lang newline escaped). Lead: JSON ok, compile+AW green, throw-away gametests 24/24. Committed 6d319fda4, merged 597eb6e2d (compile green). Dispatched N-C4b (Sonnet) in F:/wt/nc4b.
+- 2026-10-19: N-E1 reviewed (HUD layer attached after PLAYER_LIST (addLast would draw over the chat screen), status bar heights from HudStatusBarHeightRegistry with 39 fallback, DISCONNECT hops to client thread, SpinningItem PiP renderer no longer reads gameRenderer in its ctor (NPE at startup on Fabric), chest/sign render bounds = accepted deviation, init timing documented). Agent: server Done. Lead compile green; committed 255210fbf, merged ee6684253 (platform-api count-line conflict resolved by lead), compile green.
+- 2026-10-19: coordination: lead [2ffcd7] announced itself to lane-forge-neoforge [30aadf] (asked for the shape commit on mc/1.21.11-neoforge), lane-old-fabric [a4cc3a], previous lane lead [69ee22] (retired, stay idle) and main-lead candidates [3271db] and [313af7] (asked who is main lead).
