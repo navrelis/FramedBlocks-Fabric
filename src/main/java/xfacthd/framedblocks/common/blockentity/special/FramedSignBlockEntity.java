@@ -247,7 +247,10 @@ public final class FramedSignBlockEntity extends FramedBlockEntity
         renderBounds = state.getShape(level, worldPosition).bounds().move(worldPosition);
     }
 
-    @Override
+    /**
+     * Was {@code IForgeBlockEntity#getRenderBoundingBox()}. Vanilla 1.20.1 and Fabric API have no equivalent, block
+     * entity renderers are culled per chunk section there
+     */
     public AABB getRenderBoundingBox()
     {
         return renderBounds;

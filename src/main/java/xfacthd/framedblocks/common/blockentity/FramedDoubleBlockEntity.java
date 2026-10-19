@@ -14,10 +14,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.model.data.*;
-import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.platform.Platform;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.model.ModelProperty;
 import xfacthd.framedblocks.platform.registry.ForgeRegistries;
+import xfacthd.framedblocks.platform.util.BlockHooks;
+import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -183,7 +185,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     @Override
     public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
-        if (camoContainer.isEmpty() || camoContainer.getState().shouldDisplayFluidOverlay(level, pos, fluid))
+        if (camoContainer.isEmpty() || BlockHooks.shouldDisplayFluidOverlay(camoContainer.getState(), level, pos, fluid))
         {
             return true;
         }
@@ -205,9 +207,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     }
 
     @Override
-    public boolean canCamoSustainPlant(Direction side, IPlantable plant)
+    public TriState canCamoSustainPlant(BlockGetter level, Direction side, BlockState plant)
     {
-        return getStateCache().getSolidityCheck(side).canSustainPlant(this, side, plant);
+        return getStateCache().getSolidityCheck(side).canSustainPlant(this, level, side, plant);
     }
 
     @Override
@@ -248,7 +250,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     {
         return Math.max(
                 super.getCamoExplosionResistance(explosion),
-                camoContainer.getState().getExplosionResistance(level, worldPosition, explosion)
+                BlockHooks.getExplosionResistance(camoContainer.getState(), level, worldPosition, explosion)
         );
     }
 
@@ -258,12 +260,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
         CamoContainer camo = getCamo(face);
         if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty()))
         {
-            return (getCamo().isEmpty() || getCamo().getState().isFlammable(level, worldPosition, face)) &&
-                   (camoContainer.isEmpty() || camoContainer.getState().isFlammable(level, worldPosition, face));
+            return (getCamo().isEmpty() || BlockHooks.isFlammable(getCamo().getState(), level, worldPosition, face)) &&
+                   (camoContainer.isEmpty() || BlockHooks.isFlammable(camoContainer.getState(), level, worldPosition, face));
         }
         else if (!camo.isEmpty())
         {
-            return camo.getState().isFlammable(level, worldPosition, face);
+            return BlockHooks.isFlammable(camo.getState(), level, worldPosition, face);
         }
         return true;
     }
@@ -272,7 +274,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     public int getCamoFlammability(Direction face)
     {
         int flammabilityOne = super.getCamoFlammability(face);
-        int flammabilityTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level, worldPosition, face);
+        int flammabilityTwo = camoContainer.isEmpty() ? -1 : BlockHooks.getFlammability(camoContainer.getState(), level, worldPosition, face);
 
         if (flammabilityOne == -1)
         {
@@ -289,7 +291,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     public int getCamoFireSpreadSpeed(Direction face)
     {
         int spreadSpeedOne = super.getCamoFireSpreadSpeed(face);
-        int spreadSpeedTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
+        int spreadSpeedTwo = camoContainer.isEmpty() ? -1 : BlockHooks.getFireSpreadSpeed(camoContainer.getState(), level, worldPosition, face);
 
         if (spreadSpeedOne == -1)
         {
@@ -362,7 +364,10 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
      * Debug rendering
      */
 
-    @Override
+    /**
+     * Debug only: was {@code IForgeBlockEntity#hasCustomOutlineRendering()}, has no vanilla/Fabric hook. The debug
+     * renderer ({@code FBClient}) is only registered when {@link #ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER} is set
+     */
     public boolean hasCustomOutlineRendering(Player player)
     {
         return !Platform.isProduction() && ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER;
