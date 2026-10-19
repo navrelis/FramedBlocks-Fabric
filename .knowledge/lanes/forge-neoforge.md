@@ -19,7 +19,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 ## Branch status
 | Branch | Base | Worktree | Identity | Build | Gametests | Server Done | Client smoke | Shapes | Uploaded | Pushed |
 |---|---|---|---|---|---|---|---|---|---|---|
-| mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 927/927 required (9661f5271) | Done 7.3 s | PASS 252 blocks, 0 errors | batches 1-2 (9661f5271) | - | no |
+| mc/1.21.1-neoforge | 377748c11 | F:/wt/nf1211 | done cd11a23b0 | green (lead) | 941/941 required (4286063b1) | Done 5.9 s | PASS 255 blocks, 0 errors | batches 1-3 (4286063b1) | - | no |
 | mc/1.18.2-forge | 8c361d427 | F:/wt/fg1182 | done 8edad77ef | green (lead, JDK 17) | not green: 12-104 required fail per run (baseline 12-19; 7 deterministic also upstream) | Done 25.1 s | PASS 144 blocks, 0 errors | - | - | no |
 | mc/1.21.1-forge | from mc/1.21.1-neoforge 9661f5271 | F:/wt/fg1211 | - | - | - | - | - | - | - | no |
 | mc/1.19.2-forge | f2962c3b7 | F:/wt/fg1192 | done b2f4f1d49 | green (lead, JDK 17) | 575/594 (19 required fail, flaky light + 3 prism; baseline 41 fail) | Done 110 s | PASS 144 blocks, 0 errors | - | - | no |
@@ -35,7 +35,8 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 | T-N1211 | Fix 15 remaining required gametests on mc/1.21.1-neoforge (port Fabric port fixes) | Sonnet (same agent) | done (a9d2f219a) |
 | S1-N1211 | Shapes batch 1 (slope edge slab/panel, 8 prism corner slope panels; ref 661897f30) -> mc/1.21.1-neoforge | Sonnet | done (5c570dc0f) |
 | S2-N1211 | Shapes batch 2 S-RECT (a559b5153) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (9661f5271) |
-| S3-N1211 | Shapes batch 3 S-FUNC (9a304b803) -> mc/1.21.1-neoforge | Sonnet (same agent) | running |
+| S3-N1211 | Shapes batch 3 S-FUNC (9a304b803) -> mc/1.21.1-neoforge | Sonnet (same agent) | done (4286063b1) |
+| S23-N12111 | Shapes batches 2+3 (S-RECT, S-FUNC) -> mc/1.21.11-neoforge (from 9661f5271, 4286063b1) | Sonnet | running |
 | I-F1201 | Identity + tests, Forge 1.20.1 (`F:/wt/fg1201`, base 5dc540401 = 9.4.3), + NeoForge 47.1.106 server check | Sonnet | done (19a590815) |
 | I-F1192 | Identity + tests, Forge 1.19.2 (`F:/wt/fg1192`, base f2962c3b7 = 6.8.6), pin FG5 / JDK 17 | Sonnet | done (b2f4f1d49) |
 | T-F1192 | 1.19.2 required gametests deterministic green (backport upstream 1.20 test hardening) | Sonnet (same agent) | running |
@@ -54,7 +55,7 @@ Total 10 builds (7 Forge, 3 NeoForge); 3 Forge ones are real ports. Known build 
 - Client smoke test on forks: dev-only harness outside the release jar, modelled on mc/1.21.1's clienttest.
 
 ## Model tally
-Sonnet 12 · Opus 0. Precision overrides: none.
+Sonnet 13 · Opus 0. Precision overrides: none.
 
 ## Log
 - 2026-10-19: lane started; shapes/1.21.1 has no shapes merged yet. R1 dispatched.
@@ -74,6 +75,7 @@ Sonnet 12 · Opus 0. Precision overrides: none.
 - 2026-10-19: S2-N1211 accepted: diff applied 1:1, no platform mapping, runData byte-identical to reference, generator rect entries restored, 927 required, smoke 252, lead build green, committed 9661f5271. S3-N1211 to same agent.
 - 2026-10-19: main lead is now session local_03797b9f ([3271db]).
 - 2026-10-19: I-F1182 accepted: diff read (same pattern as 1.19.2, OverlayRegistry ids in FBClient, culling z fix, forceExit false for smoke), lead build green, committed 8edad77ef. Gametests flaky under CPU load (other sessions at 100 %) -> T-F1182 after T-F1192. mc/1.21.1-forge branched from mc/1.21.1-neoforge 9661f5271, M-F1211 dispatched.
+- 2026-10-19: S3-N1211 accepted: diff read (barrel item handler via RegisterCapabilitiesEvent, close(Player) default keeps chest behaviour, Tags.* c: tags, 5 new FunctionalBlockTests incl. save/load), 941 required, smoke 255, lead build green, committed 4286063b1. S23-N12111 dispatched.
 
 ## Manual checklist (per uploaded build)
 To fill per branch: camo rendering (solid/cutout/translucent/tinted/emissive), new shapes placed + rotated + camo applied, JEI/Jade GUIs, framing saw screens.
