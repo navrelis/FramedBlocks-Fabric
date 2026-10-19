@@ -101,7 +101,8 @@ public class BeaconTintTests implements FabricGameTest
             BlockType.FRAMED_CHAIN,
             BlockType.FRAMED_LANTERN,
             BlockType.FRAMED_SOUL_LANTERN,
-            BlockType.FRAMED_LIGHTNING_ROD
+            BlockType.FRAMED_LIGHTNING_ROD,
+            BlockType.FRAMED_WALL_BANNER
     );
 
     @GameTestGenerator

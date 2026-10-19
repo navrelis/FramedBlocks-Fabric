@@ -42,6 +42,8 @@ public final class ModelPerformanceTest
     private static final RandomSource RANDOM = RandomSource.create();
     private static final ModelData MODEL_DATA_EMPTY = makeModelData(EmptyCamoContent.EMPTY);
     private static final ModelData MODEL_DATA_CAMO = makeModelData(new BlockCamoContent(Blocks.STONE.defaultBlockState()));
+    // Exclude banners, they use empty models, poisoning the data
+    private static final Set<BlockType> EXCLUDED = Set.of(BlockType.FRAMED_BANNER, BlockType.FRAMED_WALL_BANNER);
 
     public static void testModelPerformance(
             @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
@@ -53,6 +55,11 @@ public final class ModelPerformanceTest
         testStates.put(stoneName, Blocks.STONE.defaultBlockState());
         for (BlockType type : BlockType.values())
         {
+            if (EXCLUDED.contains(type))
+            {
+                continue;
+            }
+
             BlockState state = FBContent.byType(type).defaultBlockState();
             String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             testStates.put(blockName, state);

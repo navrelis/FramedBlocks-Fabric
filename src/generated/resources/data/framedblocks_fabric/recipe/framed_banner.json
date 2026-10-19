@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "W",
+    "W",
+    "F"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_banner"
+  }
+}
