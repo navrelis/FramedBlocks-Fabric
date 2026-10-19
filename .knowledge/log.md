@@ -162,3 +162,5 @@
 - S19: S-GEO-B accepted (agent fixed the generator entry order; lead review + generator zero-diff). Lead gate on 5d2193e22: 996/996 req, 27 optional, runClientTest PASS, 0 missing mapping. Merged into shapes/1.21.1 73cf68ca9, generator zero-diff after merge, pushed. All 18 shapes now on shapes/1.21.1. P-B1 (Opus, override) dispatched in F:/wt/pb1.
 - S19: N-K merged into mc/1.21.11 0ff48456d. S-F (Sonnet) dispatched in F:/wt/sf (branch s-f @73cf68ca9).
 - S19: P-B1 merged into mc/1.19.2 a8281d57b; I-F1165 (Sonnet) dispatched in F:/wt/fg1165.
+- S19 automatic handoff (context limit): S-F (F:/wt/sf, partial docs) and I-F1165 (F:/wt/fg1165) stopped, uncommitted; stale lock possible. State: handoff-2026-10-19-5c903302-b.md.
+S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 none ours); first report sent to team lead. Dispatched S-F (Sonnet long, F:/wt/sf, review partial docs + gates + changelog) and I-F1165 (Sonnet long, F:/wt/fg1165, identity resume, full brief). Upload yes for 1.1.0+mc1.21.1 to be asked after S-F gates.
