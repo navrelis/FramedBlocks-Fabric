@@ -2414,6 +2414,38 @@ public class OcclusionTests implements FabricGameTest
     }
 
     @GameTest(template = STRUCTURE_PREFIX + "box_top", batch = "occlusion", setupTicks = SETUP_TICKS)
+    @TestedType(type = BlockType.FRAMED_DIVIDED_BOARD)
+    public static void testTop_DividedBoard(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_DIVIDED_BOARD.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = STRUCTURE_PREFIX + "box_bottom", batch = "occlusion", setupTicks = SETUP_TICKS)
+    @TestedType(type = BlockType.FRAMED_DIVIDED_BOARD)
+    public static void testBottom_DividedBoard(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_DIVIDED_BOARD.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightAbove(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = STRUCTURE_PREFIX + "box_top", batch = "occlusion", setupTicks = SETUP_TICKS)
+    @TestedType(type = BlockType.FRAMED_DOUBLE_CORNER_BOARD)
+    public static void testTop_DoubleCornerBoard(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_CORNER_BOARD.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
+    @GameTest(template = STRUCTURE_PREFIX + "box_bottom", batch = "occlusion", setupTicks = SETUP_TICKS)
+    @TestedType(type = BlockType.FRAMED_DOUBLE_CORNER_BOARD)
+    public static void testBottom_DoubleCornerBoard(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_CORNER_BOARD.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightAbove(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
+    @GameTest(template = STRUCTURE_PREFIX + "box_top", batch = "occlusion", setupTicks = SETUP_TICKS)
     @TestedType(type = BlockType.FRAMED_GLOWING_CUBE)
     public static void test_GlowingCube(GameTestHelper helper)
     {
