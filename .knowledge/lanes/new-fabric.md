@@ -18,8 +18,8 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-0B skeleton | - | Sonnet + Opus review | done 840e866d8 |
 | N-B1 rendering core | `F:/wt/nb1` / `n-b1` | Opus (override) | running (resume) |
 | N-C5 light | `F:/wt/nc5` / `n-c5` | Opus (override) | running (restart) |
-| N-C1 registration | `F:/wt/nc1` / `n-c1` | Sonnet | running (restart) |
-| N-C2 config/net/datamaps | - | Sonnet | pending |
+| N-C1 registration | `F:/wt/nc1` / `n-c1` | Sonnet | done e99be1c09, merged 7af4544cd |
+| N-C2 config/net/datamaps | `F:/wt/nc2` / `n-c2` | Sonnet | running |
 | N-C3 transfer | - | Sonnet + Opus short review | pending |
 | N-C4a world hooks | - | Sonnet | pending |
 | N-C4b BE sync/rails | - | Sonnet | pending |
@@ -35,9 +35,11 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 ## Model tally (this lane session)
 
-Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1.
+Opus: N-B1 (override, rendering core), N-C5 (override, light engine). Sonnet: N-C1, N-C2.
 
 ## Log
 
 - 2026-10-19: handoff checked against repo (worktrees nb1/nc1/nc5 on 840e866d8 as described; nc1 had debug TMPCHECK lines + TempMixinRailCtor probe). Board created.
 - 2026-10-19: dispatched N-B1 (Opus, resume), N-C5 (Opus, restart), N-C1 (Sonnet, restart).
+- 2026-10-19: N-C1 reviewed (diff read, compile+AW green by lead; agent: server Done, no mod errors). Cause of rail crash: vanilla ctor/createBlockStateDefinition hard-code SHAPE -> MixinRailBlockConstruction. Creative tab position not restorable on Fabric (accepted). Committed e99be1c09, merged 7af4544cd.
+- 2026-10-19: dispatched N-C2 (Sonnet) in F:/wt/nc2.
