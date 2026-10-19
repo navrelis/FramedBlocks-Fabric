@@ -167,3 +167,4 @@ S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 n
 - S20: S-F (Sonnet long) reviewed by lead, committed s-f e1655673b, merged shapes/1.21.1 0275d67fc (generator zero-diff), pushed. Gates (agent): build 996 req/27 opt, runClientTest Indigo + Sodium PASS, runServer Done. Counts 269 blocks / 232 with item / 28 new. Changelog 1.1.0 written. Upload yes requested via team lead.
 - S20: I-F1165 (Sonnet long) reported done (build, server Done, smoke 63/63); lead diff review OK, lead build gate running in F:/wt/fg1165.
 - S20: I-F1165 accepted: lead build green, committed mc/1.16.5-forge 5e3ef3d99 (local only). Next: wait upload yes (S-R), then Q8.
+- S20: dispatched O-F3 (Sonnet long, F:/wt/m1201, client smoke Indigo + Sodium/Indium) and Q9 (Sonnet long, F:/wt/nf12111, S-GEO + S-GEO-B into NeoForge 1.21.11). Upload yes still pending (asked via team lead).
