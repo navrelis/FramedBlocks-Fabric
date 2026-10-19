@@ -16,13 +16,6 @@ java {
     withSourcesJar()
 }
 
-// Set showcase=true to make the clientTest run build the showcase scenes and save screenshots for the project page
-// instead of running the smoke test. Optional: showcase_only=hero_cottage,glow_night limits the shots, showcase_variants=true
-// additionally saves alternative camera angles of every shot to a debug folder
-var showcaseRun = findProperty('showcase')?.toString()?.toLowerCase() == 'true'
-var showcaseOnly = findProperty('showcase_only')?.toString() ?: ''
-var showcaseVariants = findProperty('showcase_variants')?.toString()?.toLowerCase() == 'true'
-
 loom {
     accessWidenerPath = file('src/main/resources/framedblocks_fabric.accesswidener')
 
@@ -41,22 +34,10 @@ loom {
             source 'gametest'
             runDir 'run/clienttest'
             vmArg '-Dframedblocks.clienttest=true'
-            if (showcaseRun)
-            {
-                vmArg '-Dframedblocks.clienttest.showcase=true'
-                if (!showcaseOnly.isEmpty())
-                {
-                    vmArg "-Dframedblocks.clienttest.showcase.only=${showcaseOnly}"
-                }
-                if (showcaseVariants)
-                {
-                    vmArg '-Dframedblocks.clienttest.showcase.variants=true'
-                }
-            }
             programArg '--width'
-            programArg showcaseRun ? '1920' : '1600'
+            programArg '1600'
             programArg '--height'
-            programArg showcaseRun ? '1080' : '900'
+            programArg '900'
             ideConfigGenerated false
         }
     }

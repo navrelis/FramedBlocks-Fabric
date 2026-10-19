@@ -17,8 +17,8 @@ import xfacthd.framedblocks.common.util.EntityAwareEnergyStorage;
  * The saw does not add energy on its own (the debug energy insertion is disabled), but all checks on a real saw run
  * synchronously within the test method anyway.
  * <p>
- * The test sources have not been compiled yet: the gametest wiring (task T1) and the other lanes of the port are
- * required for that. The tests need Team Reborn Energy at runtime (see the gametest dependencies in build.gradle)
+ * Registered through the {@code fabric-gametest} entrypoint of the test mod (src/gametest/resources/fabric.mod.json).
+ * The tests need Team Reborn Energy at runtime (see the gametest dependencies in build.gradle)
  */
 public class EnergyTests implements FabricGameTest
 {
