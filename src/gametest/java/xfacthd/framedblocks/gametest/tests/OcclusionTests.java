@@ -1054,6 +1054,14 @@ public class OcclusionTests implements FabricGameTest
     }
 
     @GameTest(template = STRUCTURE_PREFIX + "box_top", batch = "occlusion", setupTicks = SETUP_TICKS)
+    @TestedType(type = BlockType.FRAMED_CRAFTING_TABLE)
+    public static void test_CraftingTable(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CRAFTING_TABLE.value().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = STRUCTURE_PREFIX + "box_top", batch = "occlusion", setupTicks = SETUP_TICKS)
     @TestedType(type = BlockType.FRAMED_PRISM)
     public static void testTop_Prism_Bottom(GameTestHelper helper)
     {
@@ -2410,6 +2418,14 @@ public class OcclusionTests implements FabricGameTest
     public static void test_GlowingCube(GameTestHelper helper)
     {
         BlockState state = FBContent.BLOCK_FRAMED_GLOWING_CUBE.value().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = STRUCTURE_PREFIX + "box_top", batch = "occlusion", setupTicks = SETUP_TICKS)
+    @TestedType(type = BlockType.FRAMED_REDSTONE_LAMP)
+    public static void test_RedstoneLamp(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_REDSTONE_LAMP.value().defaultBlockState();
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 

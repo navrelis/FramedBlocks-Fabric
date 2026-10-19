@@ -372,6 +372,8 @@ final class SkipPredicateGeneratorData
                     .dirs(new TestDir("boolean", "Pillar", null, "pillar_hor", "pillar_vert")),
             entry("FRAMED_CHEST", "misc"),
             entry("FRAMED_SECRET_STORAGE", IGNORED_PKG),
+            entry("FRAMED_BARREL", IGNORED_PKG),
+            entry("FRAMED_CRAFTING_TABLE", IGNORED_PKG),
             entry("FRAMED_TANK", IGNORED_PKG),
             entry("FRAMED_BARS", "pane"),
             entry("FRAMED_PANE", "pane"),
@@ -738,6 +740,7 @@ final class SkipPredicateGeneratorData
                             new TestDir("TriangleDir", "FrontTri", null, "slope_tri_xz")
                     ),
             entry("FRAMED_GLOWING_CUBE", "cube"),
+            entry("FRAMED_REDSTONE_LAMP", IGNORED_PKG),
             entry("FRAMED_PYRAMID", "slope")
                     .props(
                             Property.vanilla("Direction", "dir", "FACING", PropType.PRIMITIVE)

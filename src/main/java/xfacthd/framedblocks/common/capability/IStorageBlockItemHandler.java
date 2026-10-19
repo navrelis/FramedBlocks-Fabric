@@ -14,4 +14,12 @@ public interface IStorageBlockItemHandler extends IItemHandlerModifiable
     void open();
 
     void close();
+
+    /**
+     * Called when a menu on this handler is closed by the given player, defaults to {@link #close()}
+     */
+    default void close(Player player)
+    {
+        close();
+    }
 }
