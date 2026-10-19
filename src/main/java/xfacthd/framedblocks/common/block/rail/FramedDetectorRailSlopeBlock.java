@@ -18,10 +18,8 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
@@ -34,7 +32,6 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock
@@ -60,9 +57,6 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
         );
     }
-
-    @Override
-    protected void registerDefaultState() { }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -245,12 +239,6 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     public IBlockType getBlockType()
     {
         return type;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
 

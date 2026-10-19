@@ -16,17 +16,13 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
@@ -127,12 +123,6 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
-    {
-        return canCamoSustainPlant(state, level, pos, side, plant);
-    }
-
-    @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         return true;
@@ -142,11 +132,5 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     public IBlockType getBlockType()
     {
         return BlockType.FRAMED_BOUNCY_CUBE;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 }

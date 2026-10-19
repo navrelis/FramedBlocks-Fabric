@@ -20,7 +20,7 @@ public class VerticalAndWallBlockItem extends BlockItem
     }
 
     @Override
-    protected BlockState getPlacementState(BlockPlaceContext context)
+    public BlockState getPlacementState(BlockPlaceContext context)
     {
         if (Utils.isY(context.getClickedFace()))
         {
@@ -37,12 +37,5 @@ public class VerticalAndWallBlockItem extends BlockItem
     {
         super.registerBlocks(blockToItemMap, item);
         blockToItemMap.put(wallBlock, item);
-    }
-
-    @Override
-    public void removeFromBlockToItemMap(Map<Block, Item> blockToItemMap, Item item)
-    {
-        super.removeFromBlockToItemMap(blockToItemMap, item);
-        blockToItemMap.remove(wallBlock);
     }
 }

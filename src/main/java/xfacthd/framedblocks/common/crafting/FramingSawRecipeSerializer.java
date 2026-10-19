@@ -41,7 +41,7 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
             {
                 JsonObject additiveObj = additiveElem.getAsJsonObject();
                 Ingredient additive = Ingredient.fromJson(additiveObj.get("ingredient"));
-                if (!additive.isSimple())
+                if (additive.getCustomIngredient() != null)
                 {
                     throw new JsonSyntaxException("Custom ingredients are not supported");
                 }

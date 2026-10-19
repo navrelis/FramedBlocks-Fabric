@@ -18,10 +18,8 @@ import net.minecraft.world.level.block.state.properties.WallSide;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.platform.Platform;
@@ -29,7 +27,6 @@ import xfacthd.framedblocks.platform.Platform;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedWallBlock extends WallBlock implements IFramedBlock
@@ -141,13 +138,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     }
 
     @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
-    }
-
-    @Override
-    protected Map<BlockState, VoxelShape> makeShapes(float pWidth, float pDepth, float pWallPostHeight, float pWallMinY, float pWallLowHeight, float pWallTallHeight)
+    public Map<BlockState, VoxelShape> makeShapes(float pWidth, float pDepth, float pWallPostHeight, float pWallMinY, float pWallLowHeight, float pWallTallHeight)
     {
         // Effectively NO-OP to conserve memory, the shape building is taken over below
         return Map.of();

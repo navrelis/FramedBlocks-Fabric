@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 
 /**
@@ -203,7 +204,7 @@ public final class CullingHelper
         {
             return true;
         }
-        if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (InternalAPI.INSTANCE.getExistingBlockEntity(level, pos) instanceof FramedBlockEntity be)
         {
             return be.isSolidSide(side) && !be.isIntangible(null);
         }

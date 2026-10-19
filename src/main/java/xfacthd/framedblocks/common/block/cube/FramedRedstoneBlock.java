@@ -15,16 +15,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
@@ -128,21 +124,9 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
-    {
-        return canCamoSustainPlant(state, level, pos, side, plant);
-    }
-
-    @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         return true;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
     @Override

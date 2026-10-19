@@ -18,10 +18,8 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
@@ -34,20 +32,21 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock
+public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock, IPoweredRailBlock
 {
     private final BlockType type;
+    private final boolean poweredRail;
     private final ShapeProvider shapes;
     private final ShapeProvider occlusionShapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
     protected FramedPoweredRailSlopeBlock(BlockType type, boolean isPoweredRail, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
-        super(IFramedBlock.createProperties(type), isPoweredRail);
+        super(IFramedBlock.createProperties(type));
         this.type = type;
+        this.poweredRail = isPoweredRail;
         this.shapes = type.generateShapes(getStateDefinition().getPossibleStates());
         this.occlusionShapes = type.generateOcclusionShapes(getStateDefinition().getPossibleStates(), shapes);
         this.beFactory = beFactory;
@@ -62,7 +61,10 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    protected void registerDefaultState() { }
+    public boolean isPoweredRail()
+    {
+        return poweredRail;
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -260,12 +262,6 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     public IBlockType getBlockType()
     {
         return type;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
 

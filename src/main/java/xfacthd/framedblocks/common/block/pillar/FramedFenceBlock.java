@@ -14,15 +14,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedFenceBlock extends FenceBlock implements IFramedBlock
@@ -113,11 +110,5 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     public BlockType getBlockType()
     {
         return BlockType.FRAMED_FENCE;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 }

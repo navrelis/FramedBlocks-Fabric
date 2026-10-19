@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.block.interactive;
 
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -19,12 +18,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -32,7 +28,6 @@ import xfacthd.framedblocks.common.blockentity.special.FramedItemFrameBlockEntit
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedItemFrameBlock extends FramedBlock
@@ -165,13 +160,13 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state)
     {
         if (level.getBlockEntity(pos) instanceof FramedItemFrameBlockEntity be && be.hasItem())
         {
             return be.getCloneItem();
         }
-        return super.getCloneItemStack(state, target, level, pos, player);
+        return super.getCloneItemStack(level, pos, state);
     }
 
     @Override
@@ -212,25 +207,5 @@ public class FramedItemFrameBlock extends FramedBlock
             );
         }
         return null;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
-    {
-        //Suppress hit and destroy particles
-        consumer.accept(new FramedBlockRenderProperties()
-        {
-            @Override
-            public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine manager)
-            {
-                return true;
-            }
-
-            @Override
-            public boolean addDestroyEffects(BlockState state, Level Level, BlockPos pos, ParticleEngine manager)
-            {
-                return true;
-            }
-        });
     }
 }

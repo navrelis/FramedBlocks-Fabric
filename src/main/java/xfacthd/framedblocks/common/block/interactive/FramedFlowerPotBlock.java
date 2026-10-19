@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,18 +18,19 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
-import xfacthd.framedblocks.platform.registry.ForgeRegistries;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class FramedFlowerPotBlock extends FramedBlock
 {
+    private static volatile Map<Block, Block> fullPots = null;
+
     public FramedFlowerPotBlock()
     {
         super(BlockType.FRAMED_FLOWER_POT);
@@ -166,10 +167,26 @@ public class FramedFlowerPotBlock extends FramedBlock
 
     public static BlockState getFlowerPotState(Block flower)
     {
-        Map<ResourceLocation, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
-        return fullPots.getOrDefault(
-                ForgeRegistries.BLOCKS.getKey(flower),
-                ForgeRegistries.BLOCKS.getDelegateOrThrow(Blocks.AIR)
-        ).get().defaultBlockState();
+        return getFullPots().getOrDefault(flower, Blocks.AIR).defaultBlockState();
+    }
+
+    // Replacement for the Forge-added FlowerPotBlock#getFullPotsView() (vanilla keeps its map private): the map is
+    // lazily built from all registered flower pots once the registries are populated
+    private static Map<Block, Block> getFullPots()
+    {
+        Map<Block, Block> pots = fullPots;
+        if (pots == null)
+        {
+            pots = new IdentityHashMap<>();
+            for (Block block : BuiltInRegistries.BLOCK)
+            {
+                if (block instanceof FlowerPotBlock pot && pot.getContent() != Blocks.AIR)
+                {
+                    pots.put(pot.getContent(), pot);
+                }
+            }
+            fullPots = pots;
+        }
+        return pots;
     }
 }

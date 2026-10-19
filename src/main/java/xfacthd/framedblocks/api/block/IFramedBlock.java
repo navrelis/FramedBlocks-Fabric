@@ -27,9 +27,10 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.fabricmc.fabric.api.block.v1.FabricBlock;
+import xfacthd.framedblocks.platform.model.ModelData;
+import xfacthd.framedblocks.platform.util.BlockHooks;
+import xfacthd.framedblocks.platform.util.TriState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
@@ -49,7 +50,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @SuppressWarnings({ "deprecation", "unused" })
-public interface IFramedBlock extends EntityBlock, IForgeBlock
+public interface IFramedBlock extends EntityBlock, FabricBlock
 {
     String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
     Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
@@ -169,7 +170,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return InteractionResult.FAIL;
     }
 
-    @Override
     default int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
         if (!state.getValue(FramedProperties.GLOWING))
@@ -210,7 +210,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         level.playLocalSound(pos, sound, SoundSource.BLOCKS, (type.getVolume() + 1F) / 2F, type.getPitch() * 0.8F, false);
     }
 
-    @Override
     default SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -318,7 +317,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
-    @Override
     default float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -328,7 +326,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.getBlock().getFriction();
     }
 
-    @Override
     default float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -342,7 +339,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.getBlock().getExplosionResistance();
     }
 
-    @Override
     default boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
         if (FramedBlocksAPI.getInstance().areBlocksFireproof())
@@ -357,7 +353,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return true;
     }
 
-    @Override
     default int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
         if (FramedBlocksAPI.getInstance().areBlocksFireproof())
@@ -376,7 +371,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return 20;
     }
 
-    @Override
     default int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
         if (FramedBlocksAPI.getInstance().areBlocksFireproof())
@@ -393,6 +387,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             }
         }
         return 5;
+    }
+
+    default boolean isFireSource(BlockState state, LevelReader level, BlockPos pos, Direction side)
+    {
+        return false;
     }
 
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
@@ -481,7 +480,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return ownShade;
     }
 
-    @Override
     default boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -492,7 +490,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
-    @Override
     default boolean addLandingEffects(
             BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
     )
@@ -505,7 +502,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
-    @Override
     default boolean hidesNeighborFace(
             BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     )
@@ -513,7 +509,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return CullingHelper.hidesNeighborFace(this, level, pos, state, adjState, side);
     }
 
-    @Override
     default void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         if (level.isClientSide())
@@ -611,7 +606,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.rotate(rot);
     }
 
-    @Override
     default MapColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MapColor defaultColor)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -625,7 +619,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return defaultColor;
     }
 
-    @Override
     default float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         if (!doesBlockOccludeBeaconBeam(state, level, pos))
@@ -644,19 +637,15 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
-    // Can't be replaced with an override for the IForgeBlock method due to that being overridden in a Block patch
-    default boolean canCamoSustainPlant(
-            BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant
-    )
+    default TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, BlockState plant)
     {
         if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return be.canCamoSustainPlant(side, plant);
+            return be.canCamoSustainPlant(level, side, plant);
         }
-        return false;
+        return TriState.DEFAULT;
     }
 
-    @Override
     default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
         if (!getBlockType().canOccludeWithSolidCamo())
@@ -670,7 +659,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
-    @Override
     default boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -680,7 +668,23 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
                 return false;
             }
         }
-        return IForgeBlock.super.canEntityDestroy(state, level, pos, entity);
+        return BlockHooks.defaultCanEntityDestroy(state, entity);
+    }
+
+    /**
+     * {@return whether the given entity can climb this block like a ladder}
+     */
+    default boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
+    {
+        return false;
+    }
+
+    /**
+     * {@return whether an open trapdoor above this block can be climbed like a ladder}
+     */
+    default boolean makesOpenTrapdoorAboveClimbable(BlockState state, LevelReader level, BlockPos pos, BlockState trapdoorState)
+    {
+        return false;
     }
 
     @Override
