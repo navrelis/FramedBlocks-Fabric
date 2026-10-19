@@ -142,6 +142,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_THICK_LATTICE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CHEST, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SECRET_STORAGE, FullFacePredicate.TRUE);
+        put(BlockType.FRAMED_BARREL, FullFacePredicate.NOT_DIR);
+        put(BlockType.FRAMED_CRAFTING_TABLE, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_TANK, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_BARS, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_PANE, FullFacePredicate.FALSE);
@@ -248,6 +250,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, InnerPrismSlopePanelCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, InnerPrismSlopePanelCornerWallFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_GLOWING_CUBE, FullFacePredicate.TRUE);
+        put(BlockType.FRAMED_REDSTONE_LAMP, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_PYRAMID, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, FullFacePredicate.DIR_OPPOSITE);

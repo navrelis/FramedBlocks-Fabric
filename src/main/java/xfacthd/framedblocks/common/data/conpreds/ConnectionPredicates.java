@@ -144,6 +144,8 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_THICK_LATTICE, LatticeConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_CHEST, new ChestConnectionPredicate());
         put(BlockType.FRAMED_SECRET_STORAGE, ConnectionPredicate.FULL_EDGE);
+        put(BlockType.FRAMED_BARREL, ConnectionPredicate.FULL_FACE);
+        put(BlockType.FRAMED_CRAFTING_TABLE, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_TANK, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_BARS, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_PANE, PaneConnectionPredicate.INSTANCE);
@@ -250,6 +252,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL, new LargeInnerPrismSlopePanelCornerConnectionPredicate());
         put(BlockType.FRAMED_LARGE_INNER_PRISM_CORNER_SLOPE_PANEL_W, new LargeInnerPrismSlopePanelCornerWallConnectionPredicate());
         put(BlockType.FRAMED_GLOWING_CUBE, ConnectionPredicate.FULL_EDGE);
+        put(BlockType.FRAMED_REDSTONE_LAMP, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_PYRAMID, new PyramidConnectionPredicate());
         put(BlockType.FRAMED_PYRAMID_SLAB, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_ELEVATED_PYRAMID_SLAB, new ElevatedPyramidSlabConnectionPredicate());
