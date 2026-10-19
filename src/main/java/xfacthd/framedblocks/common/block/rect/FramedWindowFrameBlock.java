@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.block.rect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -22,8 +23,8 @@ import xfacthd.framedblocks.common.data.shapes.rect.WindowFrameShapes;
 import java.util.function.UnaryOperator;
 
 /**
- * A thin frame which sits flush against the block face opposite of its {@link #FACING}. Neighbouring frames with the same
- * facing in the plane of the frame are connected into one large frame with a single continuous opening
+ * A thin frame which sits against the side of the block indicated by its {@link #FACING}, like a panel. Neighbouring
+ * frames with the same facing in the plane of the frame are connected into one large frame with a single continuous opening
  */
 public class FramedWindowFrameBlock extends FramedBlock
 {
@@ -59,7 +60,7 @@ public class FramedWindowFrameBlock extends FramedBlock
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
         return PlacementStateBuilder.of(this, ctx)
-                .withTargetFacing(true)
+                .withTargetFacing()
                 .withWater()
                 .withCustom((state, placeCtx) -> updateAllConnections(state, placeCtx.getLevel(), placeCtx.getClickedPos()))
                 .build();
@@ -83,6 +84,22 @@ public class FramedWindowFrameBlock extends FramedBlock
         return super.updateShape(state, side, adjState, level, pos, adjPos);
     }
 
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston)
+    {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+
+        // The connections are relative to the facing and therefore stale after the facing was changed in-place
+        if (!level.isClientSide() && oldState.is(this) && oldState.getValue(FACING) != state.getValue(FACING))
+        {
+            BlockState newState = updateAllConnections(state, level, pos);
+            if (newState != state)
+            {
+                level.setBlock(pos, newState, Block.UPDATE_ALL);
+            }
+        }
+    }
+
     private BlockState updateAllConnections(BlockState state, LevelReader level, BlockPos pos)
     {
         Direction facing = state.getValue(FACING);
@@ -103,15 +120,29 @@ public class FramedWindowFrameBlock extends FramedBlock
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         // The frame has an open center and therefore never fully covers the beam, the bounding box based
-        // check of the super implementation would report a vertical frame as covering it
+        // check of the super implementation would report a horizontal frame as covering it
         return false;
     }
 
     @Override
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
-        // Connections are derived from the neighbours and cannot be recomputed without level access here
-        return state;
+        Direction facing = state.getValue(FACING);
+        Direction.Axis axis = face.getAxis();
+        if (axis == facing.getAxis())
+        {
+            // Rotating around the facing axis does not change the frame, tilt it instead
+            axis = facing.getAxis() == Direction.Axis.Y ? Direction.Axis.X : Direction.Axis.Y;
+        }
+
+        Direction newFacing = switch (rot)
+        {
+            case CLOCKWISE_90 -> facing.getClockWise(axis);
+            case COUNTERCLOCKWISE_90 -> facing.getCounterClockWise(axis);
+            default -> facing;
+        };
+        // The connections are recomputed in onPlace() as they cannot be derived without level access
+        return state.setValue(FACING, newFacing);
     }
 
     @Override

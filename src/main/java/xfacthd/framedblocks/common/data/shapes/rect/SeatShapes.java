@@ -10,10 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Shapes of the framed stool and chair
+ * Shapes of the framed stool and chair. Both share the same seat (14x14 px, inset by 1 px, y 7 - 9) and the four
+ * 2x2 px legs below it, the chair additionally has a backrest on the back edge of the seat
  */
 public final class SeatShapes
 {
+    private static final float SEAT_MIN = 1F;
+    private static final float SEAT_MAX = 15F;
+    private static final float LEG_SIZE = 2F;
+    private static final float SEAT_BOTTOM = 7F;
+    private static final float SEAT_TOP = 9F;
+    private static final float BACKREST_THICKNESS = 2F;
+
     public static ShapeProvider generateStool(ImmutableList<BlockState> states)
     {
         return RectShapes.generate(states, state -> stool());
@@ -41,18 +49,23 @@ public final class SeatShapes
         Direction back = facing.getOpposite();
         addStool(boxes, back);
         // Local coordinates: r runs along the seat, u upwards and d from the front towards the back
-        boxes.add(PxBox.local(back.getClockWise(), Direction.UP, back, 2, 9, 12, 14, 16, 14));
+        boxes.add(PxBox.local(
+                back.getClockWise(), Direction.UP, back,
+                SEAT_MIN, SEAT_TOP, SEAT_MAX - BACKREST_THICKNESS, SEAT_MAX, 16F, SEAT_MAX
+        ));
         return List.copyOf(boxes);
     }
 
     private static void addStool(List<PxBox> boxes, Direction back)
     {
         Direction right = back.getClockWise();
-        boxes.add(PxBox.local(right, Direction.UP, back, 2, 7, 2, 14, 9, 14));
-        boxes.add(PxBox.local(right, Direction.UP, back, 2, 0, 2, 4, 7, 4));
-        boxes.add(PxBox.local(right, Direction.UP, back, 12, 0, 2, 14, 7, 4));
-        boxes.add(PxBox.local(right, Direction.UP, back, 12, 0, 12, 14, 7, 14));
-        boxes.add(PxBox.local(right, Direction.UP, back, 2, 0, 12, 4, 7, 14));
+        boxes.add(PxBox.local(right, Direction.UP, back, SEAT_MIN, SEAT_BOTTOM, SEAT_MIN, SEAT_MAX, SEAT_TOP, SEAT_MAX));
+        float legMax = SEAT_MAX - LEG_SIZE;
+        float legMin = SEAT_MIN + LEG_SIZE;
+        boxes.add(PxBox.local(right, Direction.UP, back, SEAT_MIN, 0, SEAT_MIN, legMin, SEAT_BOTTOM, legMin));
+        boxes.add(PxBox.local(right, Direction.UP, back, legMax, 0, SEAT_MIN, SEAT_MAX, SEAT_BOTTOM, legMin));
+        boxes.add(PxBox.local(right, Direction.UP, back, legMax, 0, legMax, SEAT_MAX, SEAT_BOTTOM, SEAT_MAX));
+        boxes.add(PxBox.local(right, Direction.UP, back, SEAT_MIN, 0, legMax, legMin, SEAT_BOTTOM, SEAT_MAX));
     }
 
 

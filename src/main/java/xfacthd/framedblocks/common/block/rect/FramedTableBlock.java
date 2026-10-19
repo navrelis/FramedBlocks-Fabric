@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.common.block.rect;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,6 +19,8 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 /**
@@ -27,6 +29,14 @@ import java.util.function.UnaryOperator;
  */
 public class FramedTableBlock extends FramedBlock
 {
+    private static final Map<Direction, BooleanProperty> CONNECTIONS = Util.make(new EnumMap<>(Direction.class), map ->
+    {
+        map.put(Direction.NORTH, BlockStateProperties.NORTH);
+        map.put(Direction.EAST, BlockStateProperties.EAST);
+        map.put(Direction.SOUTH, BlockStateProperties.SOUTH);
+        map.put(Direction.WEST, BlockStateProperties.WEST);
+    });
+
     public FramedTableBlock()
     {
         super(BlockType.FRAMED_TABLE);
@@ -73,7 +83,7 @@ public class FramedTableBlock extends FramedBlock
     {
         if (!Utils.isY(side))
         {
-            state = state.setValue(CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(side), adjState.is(this));
+            state = state.setValue(CONNECTIONS.get(side), adjState.is(this));
         }
         return super.updateShape(state, side, adjState, level, pos, adjPos);
     }
@@ -82,9 +92,16 @@ public class FramedTableBlock extends FramedBlock
     {
         for (Direction side : Direction.Plane.HORIZONTAL)
         {
-            BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(side);
+            BooleanProperty prop = CONNECTIONS.get(side);
             state = state.setValue(prop, level.getBlockState(pos.relative(side)).is(this));
         }
+        return state;
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        // The table is rotationally symmetric, rotating the connections without level access would only desync them
         return state;
     }
 
@@ -105,8 +122,8 @@ public class FramedTableBlock extends FramedBlock
         BlockState newState = state;
         for (Direction side : Direction.Plane.HORIZONTAL)
         {
-            BooleanProperty from = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(side);
-            BooleanProperty to = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(mapper.apply(side));
+            BooleanProperty from = CONNECTIONS.get(side);
+            BooleanProperty to = CONNECTIONS.get(mapper.apply(side));
             newState = newState.setValue(to, state.getValue(from));
         }
         return newState;

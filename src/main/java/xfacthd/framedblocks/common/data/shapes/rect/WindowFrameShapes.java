@@ -32,7 +32,8 @@ public final class WindowFrameShapes
 
     /**
      * Builds the boxes of the frame in its local coordinate system: {@code r} runs to the right when looking at the
-     * front of the frame, {@code u} runs upwards and {@code d} runs from the wall the frame sits on towards the front.
+     * front of the frame, {@code u} runs upwards and {@code d} runs from the block side the frame sits on (the side indicated by
+     * the facing) towards the opposite side.
      * A side that is connected has no border bar. Each corner square exists if at least one of its two adjacent sides
      * is not connected, which is achieved by merging corner squares into the adjacent bars wherever possible
      */
@@ -40,6 +41,7 @@ public final class WindowFrameShapes
     {
         Direction rightDir = rightDir(facing);
         Direction upDir = upDir(facing);
+        Direction depthDir = facing.getOpposite();
         float inner0 = BORDER;
         float inner1 = 16F - BORDER;
 
@@ -47,22 +49,22 @@ public final class WindowFrameShapes
         // Top and bottom strips span the full width and include both corners
         if (!up)
         {
-            boxes.add(PxBox.local(rightDir, upDir, facing, 0, inner1, 0, 16, 16, DEPTH));
+            boxes.add(PxBox.local(rightDir, upDir, depthDir, 0, inner1, 0, 16, 16, DEPTH));
         }
         if (!down)
         {
-            boxes.add(PxBox.local(rightDir, upDir, facing, 0, 0, 0, 16, inner0, DEPTH));
+            boxes.add(PxBox.local(rightDir, upDir, depthDir, 0, 0, 0, 16, inner0, DEPTH));
         }
         // Left and right bars span the open height and include the corners which are not part of a top/bottom strip
         float barMin = down ? 0F : inner0;
         float barMax = up ? 16F : inner1;
         if (!left)
         {
-            boxes.add(PxBox.local(rightDir, upDir, facing, 0, barMin, 0, inner0, barMax, DEPTH));
+            boxes.add(PxBox.local(rightDir, upDir, depthDir, 0, barMin, 0, inner0, barMax, DEPTH));
         }
         if (!right)
         {
-            boxes.add(PxBox.local(rightDir, upDir, facing, inner1, barMin, 0, 16, barMax, DEPTH));
+            boxes.add(PxBox.local(rightDir, upDir, depthDir, inner1, barMin, 0, 16, barMax, DEPTH));
         }
         return List.copyOf(boxes);
     }
