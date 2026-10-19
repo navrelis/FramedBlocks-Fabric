@@ -182,7 +182,7 @@ Phase 2: finish 1.21.1 shapes.
 | Q6 | DONE 0275d67fc (S20): S-F: full build, gametests, runClientTest Indigo + `-Pcompat_runtime=sodium`, block counts in README/listing/CF template, changelog 1.1.0, manual checklist | F:/wt/shp | all green, docs updated | Sonnet short + lead |
 | Q7 | DONE (S20, file 9257703) S-R: `mod_version` 1.1.0+mc1.21.1, build, upload (USER YES needed), merge shapes/1.21.1 into mc/1.21.1, push | F:/wt/shp, main | uploaded, pushed | lead |
 Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take shapes from `mc/<ver>-(neo)forge`).
-| Q8 | 1.20.1 Fabric O-F3 client smoke Indigo + Sodium/Indium; release 1.0.0+mc1.20.1 (USER YES), push mc/1.20.1 | F:/wt/m1201 | PASS, uploaded, pushed | lead / Sonnet |
+| Q8 | DONE (S20, file 9257720) 1.20.1 Fabric O-F3 client smoke Indigo + Sodium/Indium; release 1.0.0+mc1.20.1 (USER YES), push mc/1.20.1 | F:/wt/m1201 | PASS, uploaded, pushed | lead / Sonnet |
 | Q9 | NeoForge 1.21.11: S-GEO (253a024f4) then S-GEO-B into mc/1.21.11-neoforge; merge into mc/26.3-neoforge (rename script), verify 26.3 | nf12111, nf263 | builds + smoke green, committed | Sonnet |
 | Q10 | Fabric 1.21.11: N-T gametests (n-t onto d1fe7c853), N-S 13 shapes from mc/1.21.11-neoforge, N-F integration (build, gametests, server, client Indigo + Sodium 0.8.15), N-R 1.1.0+mc1.21.11 Beta (USER YES), push | m12111, nt | per new-fabric board | Sonnet + lead |
 | Q11 | NeoForge 1.21.1 batches 4 S-BPB, 5 S-GEO, 6 S-BAN, 7 S-GEO-B; release 1.1.0 (USER YES), push | nf1211 | per forge board | Sonnet |
