@@ -21,7 +21,7 @@ Lead: old-Fabric lane session (S15). Rules: lead plans/reviews/merges, subagents
 | O-C4b | block classes per hooks-contract §4 | F:/wt/oc4b / o-c4b | Sonnet long | done (917bee4f1, merged 88dd56e00) |
 | O-L | light | F:/wt/ol / o-l | Opus short (planned override: light-thread races corrupt worlds) | done (aa19a83c7, merged 77b986a56) |
 | O-F1/F2 | G2 compile (+ light-contract §2 IFramedBlock, FBContent RecipeType), build, 3 green gametest runs, server Done | F:/wt/of1 / o-f1 | Sonnet long | done (e30d55a3b, merged 4ce1b2746) |
-| O-F3 | client smoke Indigo + Sodium 0.5.13 + Indium | - | Sonnet + lead | open |
+| O-F3 | client smoke Indigo + Sodium 0.5.13 + Indium | - | Sonnet long | done (S20, committed on mc/1.20.1; Indigo+Sodium PASS 900 cells, build 822 req/26 opt; Supplementaries rope model untested) |
 | O-S | 18 shapes from mc/1.20.1-forge via codemod | - | Sonnet | waiting for fork shapes |
 | O-R | release, upload, push | - | lead | open |
 
@@ -78,3 +78,4 @@ Sonnet 25, Opus 3 (Opus share 13 %). Precision overrides: O-L (done), P-B1 (FRAP
 - 2026-10-19 (S19): the user stopped all FramedBlocks sessions after the overload; one single FramedBlocks lead session (started by team lead local_df490f5d) now owns this lane, the other lanes and the main-lead role. Old lane sessions stay idle. Disk verified against the handoffs. Order of work: .knowledge/plan.md § Session 19.
 - 2026-10-19 (S19): P-B1 resumed (Opus, override) in F:/wt/pb1 on the 24-file partial.
 - 2026-10-19 (S19): P-B1 accepted (kept partial + fixes: ModelReplaceHelper, DUMMY_TEXTURE framedblocks_fabric:block/white, EmptyBlockAndTintGetter implements RenderAttachedBlockView; 2 javap-verified mixins MixinModelManager/MixinItemRenderer). Lead compile: 560 total, 0 in B1 files. Committed f91f64616, merged into mc/1.19.2 a8281d57b. In-game risks listed in docs/port/model-contract.md (cutout registration in P-E1, glowing AO, captured FRAPI camos, Sodium without Indium = frame only).
+- S20 O-F3 done: client smoke PASS Indigo + Sodium 0.5.13/Indium 1.0.36 (900/900 cells, 0 mod log events), build 822 req / 26 opt, jar clean. Needed -Dsodium.checks.issue2561=false (LWJGL check) + 2 benign filters in ClientTestReport. Supplementaries rope model not tested (compileOnly). Release 1.0.0+mc1.20.1 awaits user yes.
