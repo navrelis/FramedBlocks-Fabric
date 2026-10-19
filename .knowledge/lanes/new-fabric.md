@@ -12,7 +12,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 
 | Version | Branch | Worktree | State | Release |
 |---|---|---|---|---|
-| 1.21.11 | `mc/1.21.11` @d1fe7c853 (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
+| 1.21.11 | `mc/1.21.11` @0ff48456d (local, compile+AW green) | `F:/wt/m12111` | Stage 1 lanes running | - |
 | 26.3 | `mc/26.3` (not created) | `F:/wt/m263` (not created) | waiting for 1.21.11 | - |
 
 ## Tasks 1.21.11
@@ -33,7 +33,7 @@ Lead: session `lane-new-fabric` (started 2026-10-19 from the main lead). Map: `F
 | N-B2 item models | `F:/wt/nb2` / `n-b2` | Sonnet | done, merged a0d971fbf (runtime unverified) |
 | N-B3 overlays/outlines | `F:/wt/nb3` / `n-b3` | Sonnet | done, merged 52717c741 (runtime unverified) |
 | N-E1 client wiring | `F:/wt/ne1` / `n-e1` | Sonnet | done 255210fbf, merged ee6684253 (runtime unverified) |
-| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | resumed (alone) |
+| N-K compat | `F:/wt/nk` / `n-k` | Sonnet | done ea705b032, merged 0ff48456d (compile+AW green; server Done plain + with diagonalblocks,additionalplacements + all compat; client behaviour unverified until N-F) |
 | N-S shapes (13 non-upstream) | - | Sonnet | waiting: Forge lane porting batches 2+3 (S-RECT, S-FUNC) to mc/1.21.11-neoforge (task S23-N12111), sends hash per batch; later S-GEO, pillar/brace, boards, banner |
 | N-T tests | `F:/wt/nt` / `n-t` | Sonnet | killed by reboot, no edits; restart after N-K (owns src/gametest) |
 | N-F integration | - | Sonnet + lead | pending |
@@ -88,3 +88,4 @@ Opus: N-B1 (override, rendering core), N-C5 (override, light engine), N-C3 revie
 - 2026-10-19: Forge/NeoForge lane lead now local_90a515ff-a418-4dcf-9da4-e2f78e4e2aca (confirmed by main lead; handoff-2026-10-19-18a47a03.md; local_c9a6bbd0 retired). Shape-hash request sent; S23-N12111 running there. Main lead: shapes/1.21.1 @ab0233647, S-GEO-B in progress.
 - 2026-10-19 (S19): the user stopped all FramedBlocks sessions after the overload; one single FramedBlocks lead session (started by team lead local_df490f5d) now owns this lane, the other lanes and the main-lead role. Old lane sessions stay idle. Disk verified against the handoffs. Order of work: .knowledge/plan.md § Session 19.
 - 2026-10-19 (S19): shape source ready: mc/1.21.11-neoforge a470eaac5 = batches 2+3 (window frame, table, chair, stool, corbel, wall shelf, barrel, crafting table, redstone lamp). N-S can start from it. N-K re-dispatched (Sonnet) in F:/wt/nk.
+- 2026-10-19 (S19): N-K accepted (diff read: TODOs resolved against real jars, JEI phase ordering, compat dev runtime). Committed ea705b032, merged into mc/1.21.11 0ff48456d (platform-api.md conflicts resolved by lead: N-K and N-E1 rows/count line), merged-tree compile+AW green. Next: N-T, then N-S from mc/1.21.11-neoforge a470eaac5.

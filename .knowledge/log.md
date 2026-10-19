@@ -160,3 +160,4 @@
 - S18 STOP (user order via team lead local_df490f5d): S-GEO-B Sonnet agent stopped with partial uncommitted files in F:/wt/sgeob (never compiled); no Gradle/client running; handoff-2026-10-19-dd5e648e.md written; nothing committed after 21b4a6b04.
 - S19 start: single FramedBlocks lead (started by team lead local_df490f5d) owns main lead + 3 lanes. All 4 handoffs verified on disk (sgeob 27, nf12111 85, nk 7, pb1 24, fg1165 397 dirty files; nothing else running, 0 JVMs). Merged queue in plan.md § Session 19.
 - S19: S-GEO-B accepted (agent fixed the generator entry order; lead review + generator zero-diff). Lead gate on 5d2193e22: 996/996 req, 27 optional, runClientTest PASS, 0 missing mapping. Merged into shapes/1.21.1 73cf68ca9, generator zero-diff after merge, pushed. All 18 shapes now on shapes/1.21.1. P-B1 (Opus, override) dispatched in F:/wt/pb1.
+- S19: N-K merged into mc/1.21.11 0ff48456d. S-F (Sonnet) dispatched in F:/wt/sf (branch s-f @73cf68ca9).
