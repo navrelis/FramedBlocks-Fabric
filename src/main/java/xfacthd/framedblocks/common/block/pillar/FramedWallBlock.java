@@ -274,4 +274,17 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     {
         return ((up ? 1 : 0) << 8) | (north.ordinal() << 6) | (east.ordinal() << 4) | (south.ordinal() << 2) | west.ordinal();
     }
+
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
+    }
 }

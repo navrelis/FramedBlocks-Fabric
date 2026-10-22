@@ -271,4 +271,17 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     {
         return new FramedFancyDetectorRailSlopeBlock(FramedFancyRailSlopeBlockEntity::new);
     }
+
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
+    }
 }

@@ -142,4 +142,17 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     {
         return defaultBlockState().setValue(EAST, true).setValue(WEST, true);
     }
+
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
+    }
 }
