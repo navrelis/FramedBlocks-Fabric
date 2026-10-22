@@ -181,7 +181,7 @@ dependencies {
     modGametestImplementation "teamreborn:energy:${team_reborn_energy_version}"
 
     // Set compat_runtime=true to run JEI, EMI, REI and Jade in the dev client, or a comma-separated subset (e.g. jei,jade).
-    // Sodium is not part of "true" and has to be requested explicitly (e.g. sodium or jei,sodium)
+    // Sodium and Continuity are not part of "true" and have to be requested explicitly (e.g. sodium or jei,sodium,continuity)
     var compatRuntime = findProperty('compat_runtime')?.toString()?.toLowerCase() ?: 'false'
     var compatRuntimeAll = compatRuntime == 'true'
     var compatRuntimeSet = compatRuntime.split(',').collect { it.trim() }
@@ -206,6 +206,10 @@ dependencies {
     if (compatRuntimeSet.contains('sodium'))
     {
         modLocalRuntime "maven.modrinth:sodium:${sodium_version}"
+    }
+    if (compatRuntimeSet.contains('continuity'))
+    {
+        modLocalRuntime "maven.modrinth:continuity:${continuity_version}"
     }
 }
 

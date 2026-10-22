@@ -14,6 +14,9 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
     private static final Set<String> DEV_ONLY_MIXINS = Set.of(
             "xfacthd.framedblocks.mixin.client.DevMixinLevelRenderer"
     );
+    private static final Set<String> SODIUM_ONLY_MIXINS = Set.of(
+            "xfacthd.framedblocks.mixin.client.sodium.MixinBakedModelSodiumCapture"
+    );
 
     @Override
     public void onLoad(String mixinPackage) { }
@@ -30,6 +33,10 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
         if (DEV_ONLY_MIXINS.contains(mixinClassName))
         {
             return FabricLoader.getInstance().isDevelopmentEnvironment();
+        }
+        if (SODIUM_ONLY_MIXINS.contains(mixinClassName))
+        {
+            return FabricLoader.getInstance().isModLoaded("sodium");
         }
         return true;
     }

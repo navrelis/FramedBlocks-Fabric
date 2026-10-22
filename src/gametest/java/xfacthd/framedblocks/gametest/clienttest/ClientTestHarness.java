@@ -14,10 +14,12 @@ import net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.tutorial.TutorialSteps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelSettings;
 import net.minecraft.world.level.WorldDataConfiguration;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -65,6 +68,8 @@ import java.util.stream.Stream;
 public final class ClientTestHarness
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogCapture.HARNESS_LOGGER);
+    private static final String CONTINUITY_ID = "continuity";
+    private static final String CONTINUITY_PACK_ID = "continuity:default";
     private static final long SECOND = 1_000_000_000L;
     private static final long STABLE_TIME = SECOND;
     private static final long DEFAULT_PHASE_TIMEOUT = 120 * SECOND;
@@ -113,6 +118,7 @@ public final class ClientTestHarness
     private long meshStartNs;
     private List<GridBuilder.Placed> meshExpected = List.of();
     private boolean meshAllSeen;
+    private boolean continuityPackEnabled = false;
     private long meshSeenFrame;
     private long meshSeenNs;
     private int expectedCellCount;
@@ -391,6 +397,12 @@ public final class ClientTestHarness
             return;
         }
 
+        if (!continuityPackEnabled && FabricLoader.getInstance().isModLoaded(CONTINUITY_ID))
+        {
+            enableContinuityPack();
+            return;
+        }
+
         applyOptions();
         report.environment("GL renderer", GlUtil.getRenderer());
         report.environment("GL version", GlUtil.getOpenGLVersion());
@@ -417,6 +429,47 @@ public final class ClientTestHarness
                 screen
         );
         enter(Phase.WAIT_JOIN);
+    }
+
+    /**
+     * Continuity only wraps models in its connected texture models while its built-in resource pack is active, but
+     * the pack is not enabled by default. Select it for this run only (the options file is not touched) and reload
+     * the resources
+     */
+    private void enableContinuityPack()
+    {
+        PackRepository repository = mc.getResourcePackRepository();
+        if (!repository.getAvailableIds().contains(CONTINUITY_PACK_ID))
+        {
+            fail("Continuity is loaded but its built-in pack " + CONTINUITY_PACK_ID + " is not available: " + repository.getAvailableIds());
+            return;
+        }
+        List<String> selected = new ArrayList<>(repository.getSelectedIds());
+        selected.add(CONTINUITY_PACK_ID);
+        repository.setSelected(selected);
+        continuityPackEnabled = true;
+        report.environment("Continuity pack", CONTINUITY_PACK_ID);
+        mc.reloadResourcePacks();
+    }
+
+    /**
+     * Logs whether the model of a block that Continuity wraps is a foreign Fabric Rendering API model, which is the
+     * case that makes the model bridge capture its quads with its own render context
+     */
+    private void reportContinuityModel()
+    {
+        if (!FabricLoader.getInstance().isModLoaded(CONTINUITY_ID))
+        {
+            return;
+        }
+        BakedModel model = mc.getBlockRenderer().getBlockModel(Blocks.RED_STAINED_GLASS.defaultBlockState());
+        String detail = model.getClass().getName() + ", isVanillaAdapter=" + model.isVanillaAdapter();
+        report.environment("Continuity glass camo model", detail);
+        LOGGER.info("Continuity camo model for red stained glass: {}", detail);
+        if (model.isVanillaAdapter())
+        {
+            fail("Continuity is loaded but did not wrap the red stained glass model: " + detail);
+        }
     }
 
     private void applyOptions()
@@ -495,6 +548,7 @@ public final class ClientTestHarness
         report.environment("Grid origin", grid.origin().toShortString());
         report.environment("Grid size (blocks)", grid.sizeX() + " x " + grid.sizeZ());
         report.environment("Grid cells", String.valueOf(grid.cells().size()));
+        reportContinuityModel();
         mc.options.hideGui = true;
         enter(Phase.SETUP_SETTLE);
     }

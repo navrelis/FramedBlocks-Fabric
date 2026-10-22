@@ -1,0 +1,13 @@
+{
+    "required": false,
+    "package": "xfacthd.framedblocks.mixin.client.sodium",
+    "compatibilityLevel": "JAVA_21",
+    "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
+    "client": [
+        "MixinBakedModelSodiumCapture"
+    ],
+    "injectors": {
+        "defaultRequire": 0
+    },
+    "minVersion": "0.8"
+}
