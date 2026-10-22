@@ -142,3 +142,59 @@ Delegated work (long = 2, short = 1, killed runs included): Sonnet ≈ 57, Opus 
 - Under Sodium there is no framed neighbour face hiding (since session 7).
 - Merged worktrees `F:/wt/*`, the bare `F:/wt/pub.git` and `.claude/worktrees/agent-*` can be removed (the permission policy blocked the lead).
 - **Open, user-dependent:** CurseForge project id, then upload with the `curseforge-upload` skill (jar `build/libs/FramedBlocksFabric-10.5.3-fabric.1.jar`, description from `docs/curseforge/description.template.md` after `fill-urls.mjs`, `summary.txt`, `docs/images/icon.png`). Needs the user's explicit final yes.
+
+---
+
+# Session 21 report: Nytheria crash fix, 1.1.1+mc1.21.1 (2026-10-22)
+
+Branch `fix/1.21.1-sodium-crash` (from `mc/1.21.1` @1a925e5f, 1.1.0+mc1.21.1), pushed to origin. Not merged into `mc/1.21.1` yet (waits for the user's yes). Not uploaded to CurseForge.
+
+## What was wrong (per crash in `framedblocks-crash-notes.md` and the user's crash report 2026-10-22 16:27)
+1. **`IncompatibleClassChangeError: Conflicting default methods ... getAppearance`**: `IFramedBlock` (extends `FabricBlock`) only had a default `getAppearance`. Sporran adds NeoForge `IBlockExtension` (same signature, also a default) to `Block`, so blocks without an own override had two unrelated defaults. Still present with Sporran 1.0.5 (user's 16:27 crash, via Continuity `CtmBakedModel` -> `state.getAppearance` inside our quad capture).
+2. **`ClassCastException: QuadCapturer cannot be cast to AbstractBlockRenderContext`**: Sodium 0.8.13 merges a default `emitBlockQuads` into `BakedModel` that hard-casts the context (unchanged since 2024-08, no newer Sodium fixes it). Continuity wraps models and forwards our capture context to the wrapped vanilla model, which hits the cast.
+3. **`StackOverflowError` (found while reproducing, not in the notes)**: Continuity wraps every block-state model, ours included. A framed block without camo refers to its own state, its model was no longer recognised as ours, so it captured itself endlessly. Renderer-independent; it is the path the user's 16:27 trace was on and would have been the next crash after fix 1.
+
+## What was implemented
+| Requirement | Change | Commit |
+|---|---|---|
+| Crash 1 | Concrete `getAppearance` (delegates to `IFramedBlock.super`) in all 30 root framed block classes; required gametest `ConcreteAppearanceTests` fails if any registered framed block only inherits the interface default | f2761e61 |
+| Crash 2 | Sodium-only interface mixin `MixinBakedModelSodiumCapture` (priority 1500, `framedblocks_fabric.sodium.mixins.json`, gated in `FramedMixinConfigPlugin`) emits vanilla quads into our capture context instead of Sodium's cast | 5ac1c605 |
+| Crash 3 | `ModelBridge.getQuads/getRenderTypes/getModelData` unwrap `WrapperBakedModel` chains to our own models | 5ac1c605 |
+| Safety net | `QuadCapturer.run` falls back to plain quads and warns once per model class if a foreign model throws | 5ac1c605 |
+| Testing | `compat_runtime` token `continuity` (dev-only, Continuity 3.0.0+1.21); client test enables Continuity's built-in pack and asserts the glass camo model is wrapped | 5ac1c605 |
+| Release | `mod_version=1.1.1+mc1.21.1`, "Fixed in 1.1.1" in README, listing description, CurseForge template; metadata.md version | 7d3cabf1 |
+
+## Changed files
+- 30 block classes under `api/block`, `common/block/**`, `common/compat/diagonalblocks` (override only); `src/gametest/.../ConcreteAppearanceTests.java` + gametest `fabric.mod.json` entry.
+- `platform/model/QuadCapturer.java`, `platform/model/ModelBridge.java`, `common/util/FramedMixinConfigPlugin.java`, new `mixin/client/sodium/MixinBakedModelSodiumCapture.java`, new `framedblocks_fabric.sodium.mixins.json`, `fabric.mod.json` (mixins list).
+- `build.gradle`, `gradle.properties` (Continuity dev runtime, version), `src/gametest/.../clienttest/ClientTestHarness.java`.
+- `README.md`, `docs/listing/description.md`, `docs/listing/metadata.md`, `docs/curseforge/description.template.md`.
+
+## Key decisions
+See decisions.md, Session 21: work on `mc/1.21.1`; fix getAppearance in our classes rather than rely on Sporran; mixin + fallback instead of catching only; Fix C accepted (unwrap to own model); X1 and X3 merged into one task.
+
+## Checks run
+- Baseline build `mc/1.21.1` on this machine: 996 required passed / 27 known optional failures.
+- Reproduction (agent): `runClientTest -Pcompat_runtime=sodium,continuity` on unfixed code: StackOverflowError, and with no-camo cells skipped the exact ClassCastException.
+- After fixes: `gradlew build` 997 required passed / 27 optional (lead, merged branch); `runClientTest` PASS with sodium+continuity (lead + agent), Indigo+continuity (lead), sodium only and Indigo (agent). No ClassCastException, no fallback warning, no WARN/ERROR from our code.
+- Regression check of the new gametest: removing one override makes it fail (agent).
+- Release jar `FramedBlocksFabric-1.1.1+mc1.21.1.jar` (sha256 5371f4f0...99ed1): version 1.1.1, contains the sodium mixin config, 0 Continuity classes, no Continuity in fabric.mod.json.
+- Graphify: `graphify update .` blocked by the Windows application control policy on this machine; graph (never committed) not rebuilt.
+
+## Manual test checklist (Nytheria pack, client and server both on 1.1.1)
+- [ ] Join the world of the stuck player; look at the Visual Workbench table at (1170, 71, -215) with the crafted Framed Cubes.
+- [ ] Creative search "framed": all items draw, with Sodium + Continuity + MoreCulling + Iris shaderpack.
+- [ ] Place framed blocks with and without camo; glass camo shows Continuity connected textures; no stutter or log warning `falling back to its plain quads`.
+- [ ] Test with Sporran 1.0.5 and 1.0.7 (the getAppearance conflict was only checked by reflection, Sporran is not in the dev runtime).
+- [ ] Emissive textures from a resource pack on a camo (Continuity `EmissiveBakedModel` was not exercised).
+- [ ] Lootr chest and other checks from the notes' to-do list.
+
+## Model usage (session 21)
+Sonnet 6 units (X0 research long, X1 long, X2 short, X4 short), Opus 0. Opus share 0 %. No precision overrides.
+
+## Known limitations and recommendations
+- The fallback warning means a foreign model renders without its transforms (e.g. no connected textures) instead of crashing; report such warnings.
+- Addon mods with own `IFramedBlock` classes still need their own concrete `getAppearance`.
+- `mc/1.20.1` and `shapes/1.21.1` contain the same `QuadCapturer`/`IFramedBlock` code and likely the same crashes with Sodium/Continuity/NeoForge layers; port the three fixes there (and to newer lanes when released).
+- Merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` and upload 1.1.1 to CurseForge project 1744977 when the user approves (upload script is not on this machine).
+- The default branch `1.21.1-fabric` is still the old 1.0.1 line.

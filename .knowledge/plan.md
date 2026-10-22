@@ -198,8 +198,9 @@ Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take sh
 | ID | Task | Definition of done | Depends | Model / size | Status |
 |----|------|--------------------|---------|--------------|--------|
 | X0 | Research Sodium 0.8.13 / FAPI 0.116.17 / Continuity 3.0.0 / Sporran code at the crash site | Facts with sources | - | Sonnet long | done |
-| X1 | Reproduce with dev-only Continuity runtime, then Sodium-gated interface mixin on `BakedModel.emitBlockQuads` (priority 1500) routing `QuadCapturer` to its vanilla encoder + safety-net fallback in `QuadCapturer.run` (X3 merged in) | Crash reproduced before; runClientTest sodium,continuity PASS without fallback WARN; Indigo + sodium PASS; build 996/27 | answers | Sonnet long | in progress (C:/wt/x1) |
+| X1 | Reproduce with dev-only Continuity runtime, then Sodium-gated interface mixin on `BakedModel.emitBlockQuads` (priority 1500) routing `QuadCapturer` to its vanilla encoder + safety-net fallback in `QuadCapturer.run` (X3 merged in) | Crash reproduced before; runClientTest sodium,continuity PASS without fallback WARN; Indigo + sodium PASS; build 996/27 | answers | Sonnet long | done (5ac1c605, merged 746a5904; lead Indigo+continuity runClientTest PASS) |
 | X2 | Concrete `getAppearance` in every root framed block class + required gametest asserting no framed block inherits only the interface default | build 997 req / 27 opt; test proven to catch a regression | answers | Sonnet short | done (f2761e61, merged 1c51b0da; lead build 997/27) |
-| X4 | Version 1.1.1+mc1.21.1, changelog, report, push | build green, pushed | X1-X3 | lead | open |
+| X4 | Version 1.1.1+mc1.21.1 + "Fixed in 1.1.1" notes (README, listing, CF template, metadata) | texts match the fixes | X1, X2 | Sonnet short | done (7d3cabf1) |
+| X5 | Final acceptance: merged build, runClientTest sodium,continuity, Graphify, report, push | all green, pushed | X4 | lead | done (build 997/27, runClientTest sodium,continuity PASS; Graphify blocked by OS policy) |
 
-Usage tally session 21: Sonnet 2 (X0) + 2 X1 running + 1 X2 running = 5; Opus 0.
+Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1 = 6; Opus 0. Opus share 0 %.

@@ -87,3 +87,5 @@
 - Session 21: X1/X3 merged into one Sonnet task (reproduction and fix need the same context); X1 stays Sonnet with a precise spec and an explicit stop-and-report rule if Mixin rejects the interface injection.
 - Session 21: safety net in QuadCapturer catches RuntimeException/LinkageError from foreign models and falls back to plain quads (WARN once per model class) so a foreign model can never crash item/block rendering.
 - Session 21: push via HTTPS (Git Credential Manager, user's own login); fetch and push URL both https.
+- Session 21: Fix C accepted: ModelBridge.getQuads/getRenderTypes/getModelData unwrap `WrapperBakedModel` chains to our own `IBakedModelExtension` model; restores the pre-wrap behaviour of the no-camo self reference. Framed blocks themselves still render through the foreign wrapper.
+- Session 21: Graphify not rebuilt: graphify.exe blocked by the Windows application control policy; not bypassed.
