@@ -176,3 +176,5 @@ S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 n
 - S20 STOP (user asked for handoff; Fabric 1.21.1 done, file 9257703): N-T (F:/wt/nt partial) and Q9b (F:/wt/nf263 mid-merge) stopped, uncommitted. State: handoff-2026-10-19-0f0ef77c.md.
 - S21: X0 research (Sonnet long): confirmed Sodium hard cast (no guard, unchanged since 2024-08), FAPI default uses only public RenderContext API, Continuity forwards context + pushes transforms, Sporran not involved.
 - S21: lead baseline build on mc/1.21.1 @1a925e5f (this machine): BUILD SUCCESSFUL, 996 required gametests passed, 27 known optional failures.
+- S21: dispatched X1 (Sonnet long, C:/wt/x1, repro + Sodium capture fix) and X2 (Sonnet short, C:/wt/x2, getAppearance overrides + gametest). Push auth via Git Credential Manager (user login) verified with dry-run.
+- S21: X2 reviewed (30 root classes, uniform IFramedBlock.super override, required gametest ConcreteAppearanceTests; agent proved it fails on a removed override). Lead build 997 req passed / 27 opt. Committed f2761e61, merged 1c51b0da.

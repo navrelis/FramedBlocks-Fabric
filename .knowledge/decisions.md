@@ -84,3 +84,6 @@
 - Session 21: work happens on `mc/1.21.1` (holds 1.1.0+mc1.21.1); `1.21.1-fabric` is the stale 1.0.1 line.
 - Session 21: crash cause = Sodium 0.8.13 `BakedModelMixin` merges a default `emitBlockQuads` into `BakedModel` that hard-casts the context to `AbstractBlockRenderContext`; Continuity forwards our `QuadCapturer` to the wrapped vanilla model. Sporran's `BakedModelInject` is an empty interface mixin, not involved.
 - Session 21: `getAppearance` conflict = `IFramedBlock` (extends FabricBlock) only has a default; Sporran adds NeoForge `IBlockExtension` (also a default) to `Block` -> ICCE. Fix in our classes with concrete overrides, independent of Sporran's version.
+- Session 21: X1/X3 merged into one Sonnet task (reproduction and fix need the same context); X1 stays Sonnet with a precise spec and an explicit stop-and-report rule if Mixin rejects the interface injection.
+- Session 21: safety net in QuadCapturer catches RuntimeException/LinkageError from foreign models and falls back to plain quads (WARN once per model class) so a foreign model can never crash item/block rendering.
+- Session 21: push via HTTPS (Git Credential Manager, user's own login); fetch and push URL both https.
