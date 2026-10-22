@@ -50,3 +50,10 @@ Answers (form, 2026-10-19):
 5. Parallel: one lead session per lane allowed.
 Stated defaults (not objected): order = shapes on 1.21.1 Fabric first (release `1.1.0+mc1.21.1`), then Fabric ports per handoff, Forge/NeoForge last; branches `mc/<ver>` (Fabric), `mc/<ver>-forge`, `mc/<ver>-neoforge` on `origin`; mod id `framedblocks_fabric` everywhere; builds with the new shapes are `1.1.0+mc<ver>`; 1.21.11/26.3 Beta, rest Release; auto-upload after tests (go-ahead from session 11 still applies).
 6. EULA (2026-10-19): user allows eula=true in the dev run folders (run/eula.txt) of all worktrees for the dedicated-server "Done" test. Forwarded to all three lanes.
+
+## Session 21: Nytheria crash fix (2026-10-22)
+Task: clone the repo, read `framedblocks-crash-notes.md` (user file, untracked) and fix the crash of 1.1.0+mc1.21.1 in the Nytheria pack (Sodium 0.8.13, Continuity, Sporran). Ask questions if needed.
+User answers (2026-10-22): defaults accepted: branch `fix/1.21.1-sodium-crash` off `mc/1.21.1`, merge into `mc/1.21.1` only after user yes; scope Fabric 1.21.1 only; concrete getAppearance in all framed blocks; Continuity as dev-only runtime dep for the client test; bump 1.1.1+mc1.21.1 + build, no CurseForge upload; crash-notes file untouched (results in report.md). Commit identity: DerZocker42 <100867456+DerZocker42@users.noreply.github.com> (repo-local config).
+Crash logs given by user: crash 2026-10-22 16:27 = FB 1.1.0 + Sporran 1.0.5 + Sodium 0.8.13 + Continuity 3.0.0 + MoreCulling 1.0.10 + Iris shaderpack: ICCE getAppearance via Continuity CtmBakedModel -> state.getAppearance inside QuadCapturer (item render in creative screen).
+Push: user wants pushes via their GitHub account (HTTPS + Git Credential Manager login by the user; no SSH key on this machine).
+Session 21c answers (2026-10-22): merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` (--no-ff) and push: YES. CurseForge upload of 1.1.2: user uploads by hand (lead supplies jar path, sha256, changelog). 1.20.1 port: not now (stays open).

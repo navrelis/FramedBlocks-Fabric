@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.*;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.renderer.v1.model.WrapperBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -59,6 +60,7 @@ public final class ModelBridge
             BakedModel model, @Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType
     )
     {
+        model = unwrapOwnModel(model);
         if (model instanceof IBakedModelExtension extension)
         {
             return extension.getQuads(state, side, rand, data, renderType);
@@ -72,6 +74,7 @@ public final class ModelBridge
 
     public static ChunkRenderTypeSet getRenderTypes(BakedModel model, BlockState state, RandomSource rand, ModelData data)
     {
+        model = unwrapOwnModel(model);
         if (model instanceof IBakedModelExtension extension)
         {
             return extension.getRenderTypes(state, rand, data);
@@ -94,6 +97,7 @@ public final class ModelBridge
      */
     public static ModelData getModelData(BakedModel model, BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData data)
     {
+        model = unwrapOwnModel(model);
         if (model instanceof IBakedModelExtension extension)
         {
             return extension.getModelData(level, pos, state, data);
@@ -344,6 +348,38 @@ public final class ModelBridge
             List<BakedQuad> quads = model.getQuads(state, side, randSupplier.get());
             emitQuads(emitter, quads, side, blendMode.ordinal(), ambientOcclusion, null);
         }
+    }
+
+    /**
+     * Capture hook for foreign models whose emission ends up in the default implementation of
+     * {@link BakedModel#emitBlockQuads(BlockAndTintGetter, BlockState, BlockPos, Supplier, RenderContext)}, which
+     * is replaced by renderers that expect their own render context (Sodium). If the given context is a capture
+     * context, the vanilla quads of the model are emitted into it.
+     * @return true if the quads were emitted and the default implementation must not run
+     */
+    public static boolean emitVanillaIntoCapture(BakedModel model, @Nullable BlockState state, RenderContext context)
+    {
+        if (context instanceof QuadCapturer capturer)
+        {
+            capturer.accept(model, state);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Other mods may wrap every block model in a model of their own (Continuity does so for all of them), which hides
+     * that the wrapped model is one of ours. Capturing such a wrapper would make a framed block without camo capture
+     * itself indefinitely, as its no-camo content refers to its own state. The wrapped model is therefore used directly.
+     */
+    private static BakedModel unwrapOwnModel(BakedModel model)
+    {
+        BakedModel inner = model;
+        while (inner instanceof WrapperBakedModel wrapper)
+        {
+            inner = wrapper.getWrappedModel();
+        }
+        return inner instanceof IBakedModelExtension ? inner : model;
     }
 
     static void emitQuads(

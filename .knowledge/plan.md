@@ -193,3 +193,28 @@ Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take sh
 | Q16 | Fabric 26.3: W-M map, m263 from upstream/26.3 + merge mc/1.21.11, lanes, Beta release | m263 | per new-fabric handoff §5.9 | Sonnet + lead |
 | Q17 | 1.16.5: V-M Fabric map + port; Forge 1.16.5 shapes; releases | m1165, fg1165 | per boards | Sonnet |
 | Q18 | Final acceptance: all branches pushed, uploads done, Graphify, report | all | per handoff-58422b61 §5.5 | lead |
+
+## Session 21: Nytheria crash fix on Fabric 1.21.1 (branch `mc/1.21.1` @1a925e5f, 1.1.0+mc1.21.1)
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| X0 | Research Sodium 0.8.13 / FAPI 0.116.17 / Continuity 3.0.0 / Sporran code at the crash site | Facts with sources | - | Sonnet long | done |
+| X1 | Reproduce with dev-only Continuity runtime, then Sodium-gated interface mixin on `BakedModel.emitBlockQuads` (priority 1500) routing `QuadCapturer` to its vanilla encoder + safety-net fallback in `QuadCapturer.run` (X3 merged in) | Crash reproduced before; runClientTest sodium,continuity PASS without fallback WARN; Indigo + sodium PASS; build 996/27 | answers | Sonnet long | done (5ac1c605, merged 746a5904; lead Indigo+continuity runClientTest PASS) |
+| X2 | Concrete `getAppearance` in every root framed block class + required gametest asserting no framed block inherits only the interface default | build 997 req / 27 opt; test proven to catch a regression | answers | Sonnet short | done (f2761e61, merged 1c51b0da; lead build 997/27) |
+| X4 | Version 1.1.1+mc1.21.1 + "Fixed in 1.1.1" notes (README, listing, CF template, metadata) | texts match the fixes | X1, X2 | Sonnet short | done (7d3cabf1) |
+| X5 | Final acceptance: merged build, runClientTest sodium,continuity, Graphify, report, push | all green, pushed | X4 | lead | done (build 997/27, runClientTest sodium,continuity PASS; Graphify blocked by OS policy) |
+
+Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 2 = 8; Opus Y1 2 (override). Opus share 20 %.
+
+### Session 21b: user test of 1.1.1 in "Nytheria Old" (Sporran 1.0.7): AbstractMethodError onBlockStateChange on block placement
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| Y1 | Mechanical audit (bytecode tool) of all default-method collisions between our interfaces and the NeoForge interfaces Sporran 1.0.7/1.0.5 inject into vanilla classes | Complete table per root class + reference list; positive controls (1.1.0 getAppearance, 1.1.1 onBlockStateChange) pass | - | Opus long (precision override) | done (A: 18 IFramedBlock sigs x 31 roots; B: 3 IFramedDoubleBlock sigs x 19 roots; C: isValidRailShape x 3; D: FluidModel 3 model sigs; 1.0.5 = 1.0.7 + getAppearance; no collisions without Sporran) |
+| Y2 | Concrete overrides for every collision + generalise ConcreteAppearanceTests into a reference-list gametest | Tool reports 0 collisions on the new jar; build green | Y1 | Sonnet long | done (d5a27d52 + 414f93f7, merged ed16256f; 615 delegations verified by lead; audit on 1.1.2 jar: 0 crashing collisions with Sporran 1.0.5/1.0.7/full pack; lead build 997/27) |
+| Y3 | Release 1.1.2+mc1.21.1 notes, build, report, push | green, pushed | Y2 | lead | done (merged build 997/27, runClientTest sodium,continuity PASS, report addendum, pushed) |
+
+### Session 21c: release handling
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| Z1 | Merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` (--no-ff, USER YES), build, push | build 997/27 on mc/1.21.1, jar sha matches c8d681c4, pushed | Y3 | lead | in progress |
+| Z2 | CurseForge upload 1.1.2+mc1.21.1 (project 1744977) | user uploads by hand with lead-supplied jar + changelog | Z1 | user | open |
+| Z3 | Port fixes to Fabric 1.20.1 | user deferred ("not now") | - | Sonnet + Opus audit | deferred |

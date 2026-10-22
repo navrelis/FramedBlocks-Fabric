@@ -6,6 +6,14 @@
 
 FramedBlocks adds "framed" versions of many block shapes: slabs, panels, slopes, stairs, corner pieces, pillars, double and checkered variants and more, plus functional blocks such as doors, trapdoors, gates, signs, chests, hoppers, tanks, rails and item frames. The registry holds 269 blocks (over 230 framed shapes, 232 of them with an item of their own).
 
+## Fixed in 1.1.2
+
+Placing or using framed blocks no longer crashes the game with NeoForge-on-Fabric layers such as Sporran (AbstractMethodError caused by conflicting default methods). All block hooks that NeoForge also defines now have concrete implementations.
+
+## Fixed in 1.1.1
+
+Framed blocks and items no longer crash the game in modpacks. Three crashes are fixed: Sodium 0.8 together with a mod that wraps block models (such as Continuity), Continuity on its own (a framed block without camo could recurse on its own model), and mods that add NeoForge block methods to vanilla blocks (NeoForge-on-Fabric layers such as Sporran). If another mod's model throws while its quads are read, the mod now logs one warning and uses the plain quads instead of crashing.
+
 ## New in 1.1.0
 
 28 new framed shapes. 12 are backported from newer upstream FramedBlocks versions: slope edge slab, slope edge panel, small and large prism corner slope panels (outer and inner), half board, divided board, corner board, inner corner board, double corner board and the framed banner (placed on a wall it becomes the wall banner). 16 are new in this port: arch, inner arch, crown molding with inner and outer corner, octagonal pillar, window frame, table, chair, stool, diagonal brace, corbel, wall shelf, barrel (27 slots), crafting table and redstone lamp (emits light level 15 when powered).
