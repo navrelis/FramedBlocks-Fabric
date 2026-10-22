@@ -211,3 +211,10 @@ Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 
 | Y1 | Mechanical audit (bytecode tool) of all default-method collisions between our interfaces and the NeoForge interfaces Sporran 1.0.7/1.0.5 inject into vanilla classes | Complete table per root class + reference list; positive controls (1.1.0 getAppearance, 1.1.1 onBlockStateChange) pass | - | Opus long (precision override) | done (A: 18 IFramedBlock sigs x 31 roots; B: 3 IFramedDoubleBlock sigs x 19 roots; C: isValidRailShape x 3; D: FluidModel 3 model sigs; 1.0.5 = 1.0.7 + getAppearance; no collisions without Sporran) |
 | Y2 | Concrete overrides for every collision + generalise ConcreteAppearanceTests into a reference-list gametest | Tool reports 0 collisions on the new jar; build green | Y1 | Sonnet long | done (d5a27d52 + 414f93f7, merged ed16256f; 615 delegations verified by lead; audit on 1.1.2 jar: 0 crashing collisions with Sporran 1.0.5/1.0.7/full pack; lead build 997/27) |
 | Y3 | Release 1.1.2+mc1.21.1 notes, build, report, push | green, pushed | Y2 | lead | done (merged build 997/27, runClientTest sodium,continuity PASS, report addendum, pushed) |
+
+### Session 21c: release handling
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| Z1 | Merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` (--no-ff, USER YES), build, push | build 997/27 on mc/1.21.1, jar sha matches c8d681c4, pushed | Y3 | lead | in progress |
+| Z2 | CurseForge upload 1.1.2+mc1.21.1 (project 1744977) | user uploads by hand with lead-supplied jar + changelog | Z1 | user | open |
+| Z3 | Port fixes to Fabric 1.20.1 | user deferred ("not now") | - | Sonnet + Opus audit | deferred |

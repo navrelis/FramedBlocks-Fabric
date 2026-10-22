@@ -186,3 +186,5 @@ S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 n
 - S21b: Y2 returned (Sonnet long): sets A-D implemented (A 552, B 57, C 3, D 3 delegations; lead script: every delegation is in the same-named method, B via IFramedDoubleBlock), ForeignDefaultMethodTests (regression proofs A and B), version 1.1.2. Audit tool on 1.1.2 jar: only SILENT FramedTrapDoorBlock.isLadder (intended) + harmless abstract newBlockEntity. Lead build 997/27. Committed d5a27d52, 414f93f7; merged ed16256f.
 - S21b: final lead checks on merged branch: build 997/27, runClientTest sodium,continuity PASS, jar sha c8d681c4 (reproducible). Report addendum written, pushed.
 - S21b: user in-game test of 1.1.2 (Nytheria Old, Sporran 1.0.7 + Sodium + Continuity): placed framed slope and framed half stairs, applied wood camo, searched 'framed' in creative: no crash.
+- S21: handoff written to handoff-2026-10-22-3eb791ee.md (context limit). Nothing running; open: merge into mc/1.21.1 + CurseForge upload (user decisions), optional 1.20.1 port.
+- S21c: user answers: merge into mc/1.21.1 YES, CurseForge upload by hand, 1.20.1 port deferred.
