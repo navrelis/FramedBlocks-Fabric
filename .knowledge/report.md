@@ -209,7 +209,7 @@ Sonnet 6 units (X0 research long, X1 long, X2 short, X4 short), Opus 0. Opus sha
 **Checks:** audit on the 1.1.2 jar: 0 crashing collisions with Sporran 1.0.7, 1.0.5 and the full pack (only the intended SILENT FramedTrapDoorBlock.isLadder, where Sporran's concrete TrapDoorBlock.isLadder wins as on NeoForge, and a harmless abstract newBlockEntity in an abstract class). Lead: build 997/27 (y2 and merged), runClientTest sodium,continuity PASS; agent: runClientTest Indigo PASS. Jar `FramedBlocksFabric-1.1.2+mc1.21.1.jar` sha256 c8d681c4...6c11f9.
 
 **Manual checklist additions (Nytheria Old, 1.1.2 on client and server):**
-- [ ] Place, break, walk on, burn and climb framed blocks (single, double, stairs, rails, rail slopes, trapdoor, ladder); place a framed block next to a camo-changing neighbour.
+- [x] (user, 2026-10-22: framed slope + half stairs placed with wood camo, creative search "framed": no crash) Place, break, walk on, burn and climb framed blocks (single, double, stairs, rails, rail slopes, trapdoor, ladder); place a framed block next to a camo-changing neighbour.
 - [ ] Explosion near framed blocks; beacon through framed glass; framed fluid tank item in hand/GUI (FluidModel).
 - [ ] Everything from the session 21 checklist above.
 
