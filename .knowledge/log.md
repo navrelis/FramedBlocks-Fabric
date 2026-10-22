@@ -188,3 +188,5 @@ S20 (2026-10-19): disk verified vs handoff 5c903302-b (stale lock gone, Java 7 n
 - S21b: user in-game test of 1.1.2 (Nytheria Old, Sporran 1.0.7 + Sodium + Continuity): placed framed slope and framed half stairs, applied wood camo, searched 'framed' in creative: no crash.
 - S21: handoff written to handoff-2026-10-22-3eb791ee.md (context limit). Nothing running; open: merge into mc/1.21.1 + CurseForge upload (user decisions), optional 1.20.1 port.
 - S21c: user answers: merge into mc/1.21.1 YES, CurseForge upload by hand, 1.20.1 port deferred.
+- S21c: Z1 lead merge fix/1.21.1-sodium-crash -> mc/1.21.1 (c9fa0cd2), build 997/27, jar sha c8d681c4 (unchanged), pushed.
+- S21c: user asks for runtime tests of the manual checklist (burning etc.). Delegated Z4 (Sonnet long, prod server + Sporran, scratchpad only) and Z5 (Sonnet long, Sporran dev runtime + client scene, worktree C:/wt/z-sporran).

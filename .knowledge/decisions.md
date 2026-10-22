@@ -93,3 +93,4 @@
 - Session 21b: keep upstream hook names and add concrete delegating overrides (same as getAppearance) instead of renaming our hooks: keeps NeoForge-path callers under Sporran on our camo behaviour and stays merge-compatible with upstream.
 - Session 21b: double-block roots (set B) get their own overrides calling IFramedDoubleBlock.super, else they would silently inherit the IFramedBlock-only superclass override; the regression test checks this too.
 - Session 21b: FramedTrapDoorBlock keeps no isLadder override: Sporran's concrete TrapDoorBlock.isLadder (NeoForge patch) wins, as on upstream NeoForge.
+- Manual checklist tests via a production dedicated server with Sporran (server-side hooks) plus a Sporran dev-runtime client scene (client-only hooks); a positive control with the 1.1.1 jar is required so a pass means something.
