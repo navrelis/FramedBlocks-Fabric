@@ -2,7 +2,13 @@ package xfacthd.framedblocks.common.block.stairs.vertical;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -147,5 +153,25 @@ public class FramedVerticalDividedStairsBlock extends FramedVerticalStairsBlock 
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
+
+    @Override
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
+    {
+        return IFramedDoubleBlock.super.getSoundType(state, level, pos, entity);
+    }
+
+    @Override
+    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
+    {
+        return IFramedDoubleBlock.super.addRunningEffects(state, level, pos, entity);
+    }
+
+    @Override
+    public boolean addLandingEffects(
+            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
+    )
+    {
+        return IFramedDoubleBlock.super.addLandingEffects(state, level, pos, sameState, entity, count);
     }
 }

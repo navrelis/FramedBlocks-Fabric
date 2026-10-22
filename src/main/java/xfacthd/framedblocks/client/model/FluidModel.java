@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,8 @@ import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -207,5 +210,25 @@ public final class FluidModel implements BakedModel, IBakedModelExtension
                 quad.isShade(),
                 ExtendedBakedQuad.hasAmbientOcclusion(quad)
         );
+    }
+
+    // Concrete overrides so that default methods with the same signature added to BakedModel by other mods (e.g.
+    // NeoForge's IBakedModelExtension via Sporran) cannot conflict with the defaults of IBakedModelExtension
+    @Override
+    public BakedModel applyTransform(ItemDisplayContext ctx, PoseStack poseStack, boolean leftHand)
+    {
+        return IBakedModelExtension.super.applyTransform(ctx, poseStack, leftHand);
+    }
+
+    @Override
+    public List<RenderType> getRenderTypes(ItemStack stack, boolean fabulous)
+    {
+        return IBakedModelExtension.super.getRenderTypes(stack, fabulous);
+    }
+
+    @Override
+    public List<BakedModel> getRenderPasses(ItemStack stack, boolean fabulous)
+    {
+        return IBakedModelExtension.super.getRenderPasses(stack, fabulous);
     }
 }
