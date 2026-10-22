@@ -95,3 +95,4 @@
 - Session 21b: FramedTrapDoorBlock keeps no isLadder override: Sporran's concrete TrapDoorBlock.isLadder (NeoForge patch) wins, as on upstream NeoForge.
 - Manual checklist tests via a production dedicated server with Sporran (server-side hooks) plus a Sporran dev-runtime client scene (client-only hooks); a positive control with the 1.1.1 jar is required so a pass means something.
 - Sporran dev runtime dropped: Sporran's dev-mode path lookup fails for jars (InvalidPathException); working around it means patching Sporran internals. Client hooks under Sporran stay covered by the bytecode audit + ForeignDefaultMethodTests + user in-game test; client scene runs under Sodium/Continuity only.
+- e4mc removed from test-server mod sets: it publishes any dedicated server through a public relay.
