@@ -81,3 +81,6 @@
 - S16: one main lead at a time: the successor session [313af7] owns the shape lane and .knowledge/*.md; the previous session (local_c6a1710f) only reads (user asked the sessions to coordinate).
 - S17: S-BAN moved to Opus (precision override): 26.x special-model/render-state flag must be remapped to a 1.21.1 BER with camo quads; visual errors hard to detect.
 - S17: user rule (relayed by recovery session local_df490f5d after PC reboot ~11:55Z for overload): resource rules 1-5 adopted (plan.md § Session 15); rule 4 implemented as --no-daemon instead of gradlew --stop (--stop kills every daemon of the Gradle version machine-wide, incl. other sessions' builds). Max 2 subagents per session.
+- Session 21: work happens on `mc/1.21.1` (holds 1.1.0+mc1.21.1); `1.21.1-fabric` is the stale 1.0.1 line.
+- Session 21: crash cause = Sodium 0.8.13 `BakedModelMixin` merges a default `emitBlockQuads` into `BakedModel` that hard-casts the context to `AbstractBlockRenderContext`; Continuity forwards our `QuadCapturer` to the wrapped vanilla model. Sporran's `BakedModelInject` is an empty interface mixin, not involved.
+- Session 21: `getAppearance` conflict = `IFramedBlock` (extends FabricBlock) only has a default; Sporran adds NeoForge `IBlockExtension` (also a default) to `Block` -> ICCE. Fix in our classes with concrete overrides, independent of Sporran's version.

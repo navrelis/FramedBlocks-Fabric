@@ -193,3 +193,14 @@ Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take sh
 | Q16 | Fabric 26.3: W-M map, m263 from upstream/26.3 + merge mc/1.21.11, lanes, Beta release | m263 | per new-fabric handoff §5.9 | Sonnet + lead |
 | Q17 | 1.16.5: V-M Fabric map + port; Forge 1.16.5 shapes; releases | m1165, fg1165 | per boards | Sonnet |
 | Q18 | Final acceptance: all branches pushed, uploads done, Graphify, report | all | per handoff-58422b61 §5.5 | lead |
+
+## Session 21: Nytheria crash fix on Fabric 1.21.1 (branch `mc/1.21.1` @1a925e5f, 1.1.0+mc1.21.1)
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| X0 | Research Sodium 0.8.13 / FAPI 0.116.17 / Continuity 3.0.0 / Sporran code at the crash site | Facts with sources | - | Sonnet long | done |
+| X1 | Sodium-safe capture: gated interface mixin on `BakedModel.emitBlockQuads` (after Sodium's merged default) routing `QuadCapturer` contexts to its own vanilla encoder; safety-net fallback in `QuadCapturer.run` | No ClassCastException with Sodium + Continuity; CTM transforms still applied; build green | answers | Sonnet short | open |
+| X2 | Concrete `getAppearance` in every class that directly implements `IFramedBlock` (or extends a vanilla block) | No class relies on the interface default only; build green | answers | Sonnet short | open |
+| X3 | Dev-only Continuity runtime in `compat_runtime` + client test reproduces the crash before X1 and passes after | runClientTest `-Pcompat_runtime=sodium,continuity` PASS | X1, answers | Sonnet short | open |
+| X4 | Version 1.1.1+mc1.21.1, changelog, report, push | build green, pushed | X1-X3 | lead | open |
+
+Usage tally session 21: Sonnet 2 (X0); Opus 0.
