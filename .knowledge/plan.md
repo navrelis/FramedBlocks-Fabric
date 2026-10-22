@@ -203,4 +203,11 @@ Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take sh
 | X4 | Version 1.1.1+mc1.21.1 + "Fixed in 1.1.1" notes (README, listing, CF template, metadata) | texts match the fixes | X1, X2 | Sonnet short | done (7d3cabf1) |
 | X5 | Final acceptance: merged build, runClientTest sodium,continuity, Graphify, report, push | all green, pushed | X4 | lead | done (build 997/27, runClientTest sodium,continuity PASS; Graphify blocked by OS policy) |
 
-Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1 = 6; Opus 0. Opus share 0 %.
+Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 2 = 8; Opus Y1 2 (override). Opus share 20 %.
+
+### Session 21b: user test of 1.1.1 in "Nytheria Old" (Sporran 1.0.7): AbstractMethodError onBlockStateChange on block placement
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| Y1 | Mechanical audit (bytecode tool) of all default-method collisions between our interfaces and the NeoForge interfaces Sporran 1.0.7/1.0.5 inject into vanilla classes | Complete table per root class + reference list; positive controls (1.1.0 getAppearance, 1.1.1 onBlockStateChange) pass | - | Opus long (precision override) | done (A: 18 IFramedBlock sigs x 31 roots; B: 3 IFramedDoubleBlock sigs x 19 roots; C: isValidRailShape x 3; D: FluidModel 3 model sigs; 1.0.5 = 1.0.7 + getAppearance; no collisions without Sporran) |
+| Y2 | Concrete overrides for every collision + generalise ConcreteAppearanceTests into a reference-list gametest | Tool reports 0 collisions on the new jar; build green | Y1 | Sonnet long | done (d5a27d52 + 414f93f7, merged ed16256f; 615 delegations verified by lead; audit on 1.1.2 jar: 0 crashing collisions with Sporran 1.0.5/1.0.7/full pack; lead build 997/27) |
+| Y3 | Release 1.1.2+mc1.21.1 notes, build, report, push | green, pushed | Y2 | lead | done (merged build 997/27, runClientTest sodium,continuity PASS, report addendum, pushed) |

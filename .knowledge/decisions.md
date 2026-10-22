@@ -89,3 +89,7 @@
 - Session 21: push via HTTPS (Git Credential Manager, user's own login); fetch and push URL both https.
 - Session 21: Fix C accepted: ModelBridge.getQuads/getRenderTypes/getModelData unwrap `WrapperBakedModel` chains to our own `IBakedModelExtension` model; restores the pre-wrap behaviour of the no-camo self reference. Framed blocks themselves still render through the foreign wrapper.
 - Session 21: Graphify not rebuilt: graphify.exe blocked by the Windows application control policy; not bypassed.
+- Session 21b: precision override Y1 (Opus): the getAppearance fix covered one method only; a missed collision means another in-game crash, and the JVM selection rules are subtle. The audit is computed from the real Sporran 1.0.7 jar of the user's "Nytheria Old" instance.
+- Session 21b: keep upstream hook names and add concrete delegating overrides (same as getAppearance) instead of renaming our hooks: keeps NeoForge-path callers under Sporran on our camo behaviour and stays merge-compatible with upstream.
+- Session 21b: double-block roots (set B) get their own overrides calling IFramedDoubleBlock.super, else they would silently inherit the IFramedBlock-only superclass override; the regression test checks this too.
+- Session 21b: FramedTrapDoorBlock keeps no isLadder override: Sporran's concrete TrapDoorBlock.isLadder (NeoForge patch) wins, as on upstream NeoForge.

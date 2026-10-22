@@ -198,3 +198,21 @@ Sonnet 6 units (X0 research long, X1 long, X2 short, X4 short), Opus 0. Opus sha
 - `mc/1.20.1` and `shapes/1.21.1` contain the same `QuadCapturer`/`IFramedBlock` code and likely the same crashes with Sodium/Continuity/NeoForge layers; port the three fixes there (and to newer lanes when released).
 - Merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` and upload 1.1.1 to CurseForge project 1744977 when the user approves (upload script is not on this machine).
 - The default branch `1.21.1-fabric` is still the old 1.0.1 line.
+
+## Session 21b addendum: 1.1.2+mc1.21.1 (NeoForge default method collisions)
+**Trigger:** user test of 1.1.1 in "Nytheria Old" (Sporran 1.0.7): `AbstractMethodError ... FramedSlopeBlock does not define or inherit an implementation of ... IFramedBlock.onBlockStateChange` on block placement. Same bug class as getAppearance: 1.1.1 only fixed the one method that had crashed.
+
+**Audit (Opus, precision override):** bytecode tool (`scratchpad/audit/tool`, ASM) over our jar + MC intermediary + Fabric API + Sporran 1.0.7/1.0.5 (and the full 406-mod Nytheria Old folder) applying JVMS 5.4.6 selection. The crashing jar was byte-identical to ours. Collisions: (A) 18 IFramedBlock hooks vs IBlockExtension in 31 roots; (B) 3 IFramedDoubleBlock hooks in 19 double-block roots, which would otherwise silently inherit IFramedBlock-only overrides; (C) isValidRailShape vs IBaseRailBlockExtension in 3 rail slope roots; (D) 3 model hooks in FluidModel vs NeoForge IBakedModelExtension. None on plain Fabric, none on items/block entities.
+
+**Fix (Sonnet):** delegating overrides for all sets (552 + 57 + 3 + 3; lead verified each sits in the same-named method and B uses IFramedDoubleBlock.super). `ForeignDefaultMethodTests` (required) replaces ConcreteAppearanceTests: reference list of the NeoForge Block/BaseRailBlock defaults + double-block check; proven to fail when an override is removed. Commits d5a27d52, 414f93f7, merge ed16256f.
+
+**Checks:** audit on the 1.1.2 jar: 0 crashing collisions with Sporran 1.0.7, 1.0.5 and the full pack (only the intended SILENT FramedTrapDoorBlock.isLadder, where Sporran's concrete TrapDoorBlock.isLadder wins as on NeoForge, and a harmless abstract newBlockEntity in an abstract class). Lead: build 997/27 (y2 and merged), runClientTest sodium,continuity PASS; agent: runClientTest Indigo PASS. Jar `FramedBlocksFabric-1.1.2+mc1.21.1.jar` sha256 c8d681c4...6c11f9.
+
+**Manual checklist additions (Nytheria Old, 1.1.2 on client and server):**
+- [ ] Place, break, walk on, burn and climb framed blocks (single, double, stairs, rails, rail slopes, trapdoor, ladder); place a framed block next to a camo-changing neighbour.
+- [ ] Explosion near framed blocks; beacon through framed glass; framed fluid tank item in hand/GUI (FluidModel).
+- [ ] Everything from the session 21 checklist above.
+
+**Limitations:** the audit models Sporran's class tweaker and mixins, not its runtime ASM/coremods; FluidModel's overrides are covered by the audit only (client class, not loadable in the gametest server). Any new IFramedBlock hook that NeoForge also has must get overrides too: the gametest reference list has to be extended with it.
+
+**Model usage session 21 total:** Sonnet 8 units (X0 2, X1 2, X2 1, X4 1, Y2 2), Opus 2 (Y1, precision override). Opus share ~20 %.
