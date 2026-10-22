@@ -133,6 +133,7 @@ public final class ClientTestHarness
     private boolean modelCommandsSent = false;
 
     private ShowcaseDirector showcase = null;
+    private BehaviorChecks behavior = null;
 
     public static void init()
     {
@@ -377,6 +378,7 @@ public final class ClientTestHarness
             case VIEWPOINTS -> runViewpoints(fromTick);
             case ITEMS -> items(fromTick);
             case CREATIVE -> creative(fromTick);
+            case BEHAVIOR -> behavior(fromTick);
             case MODEL_COMMANDS -> modelCommands();
             case SHOWCASE -> showcase.step(fromTick);
         }
@@ -1056,7 +1058,7 @@ public final class ClientTestHarness
         {
             screenshot("creative_framedblocks_tab");
             mc.setScreen(null);
-            enter(Phase.MODEL_COMMANDS);
+            enter(Phase.BEHAVIOR);
         }
     }
 
@@ -1066,6 +1068,17 @@ public final class ClientTestHarness
         {
             report.note("The FramedBlocks creative tab could not be selected");
         }
+    }
+    // endregion
+
+    // region behaviour
+    private void behavior(boolean fromTick)
+    {
+        if (behavior == null)
+        {
+            behavior = new BehaviorChecks(report, this::fail, this::screenshot, () -> enter(Phase.MODEL_COMMANDS));
+        }
+        behavior.step(fromTick);
     }
     // endregion
 
@@ -1252,6 +1265,7 @@ public final class ClientTestHarness
         VIEWPOINTS(300),
         ITEMS(120),
         CREATIVE(60),
+        BEHAVIOR(300),
         MODEL_COMMANDS(MODEL_COMMAND_TIMEOUT / SECOND),
         SHOWCASE(1500);
 
