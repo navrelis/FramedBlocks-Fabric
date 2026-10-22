@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block.interactive.pressureplate;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -229,5 +230,18 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                     Set.of(BlockStateProperties.WATERLOGGED, WeightedPressurePlateBlock.POWER)
             );
         }
+    }
+
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
     }
 }

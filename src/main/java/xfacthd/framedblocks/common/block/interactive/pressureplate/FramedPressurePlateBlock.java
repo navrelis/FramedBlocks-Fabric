@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block.interactive.pressureplate;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -243,5 +244,18 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                         .noCollission()
                         .strength(0.5F)
         );
+    }
+
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
     }
 }

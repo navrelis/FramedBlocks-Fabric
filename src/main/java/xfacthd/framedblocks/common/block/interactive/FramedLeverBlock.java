@@ -8,6 +8,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -132,5 +133,18 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     public boolean shouldApplyGuiTransformFromModel()
     {
         return false;
+    }
+
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
     }
 }

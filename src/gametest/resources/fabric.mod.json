@@ -27,7 +27,8 @@
       "xfacthd.framedblocks.gametest.TransferTests",
       "xfacthd.framedblocks.gametest.TestCommandTests",
       "xfacthd.framedblocks.gametest.EnergyTests",
-      "xfacthd.framedblocks.gametest.AuxLightStoreTests"
+      "xfacthd.framedblocks.gametest.AuxLightStoreTests",
+      "xfacthd.framedblocks.gametest.ConcreteAppearanceTests"
     ]
   },
   "depends": {

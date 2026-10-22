@@ -247,4 +247,18 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
         return beamColorMasking;
     }
+
+    // Concrete override so that a default getAppearance() added to Block by another mod cannot conflict with IFramedBlock's default
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
+    }
 }

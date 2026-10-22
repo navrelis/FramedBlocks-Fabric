@@ -141,4 +141,17 @@ public class FramedChainBlock extends ChainBlock implements IFramedBlock
     {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public BlockState getAppearance(
+            BlockState state,
+            BlockAndTintGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos
+    )
+    {
+        return IFramedBlock.super.getAppearance(state, level, pos, side, queryState, queryPos);
+    }
 }
