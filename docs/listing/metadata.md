@@ -7,7 +7,7 @@ Suggested values for the Modrinth and CurseForge project pages.
 | Name | FramedBlocks Fabric (Unofficial) |
 | Slug (suggested) | `framedblocks-fabric` |
 | Mod id | `framedblocks_fabric` |
-| Version | 1.1.1+mc1.21.1 |
+| Version | 1.1.2+mc1.21.1 |
 | License | LGPL-3.0-only (SPDX id `LGPL-3.0-only`) |
 | Loaders | Fabric |
 | Game version | 1.21.1 |
