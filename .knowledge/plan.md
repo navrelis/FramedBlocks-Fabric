@@ -203,7 +203,7 @@ Phase 3: ports, lane by lane (shape source = fork branches; Fabric lanes take sh
 | X4 | Version 1.1.1+mc1.21.1 + "Fixed in 1.1.1" notes (README, listing, CF template, metadata) | texts match the fixes | X1, X2 | Sonnet short | done (7d3cabf1) |
 | X5 | Final acceptance: merged build, runClientTest sodium,continuity, Graphify, report, push | all green, pushed | X4 | lead | done (build 997/27, runClientTest sodium,continuity PASS; Graphify blocked by OS policy) |
 
-Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 2 = 8; Opus Y1 2 (override). Opus share 20 %.
+Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 2, Z4 2, Z5 2 = 12; Opus Y1 2 (override). Opus share 14 %.
 
 ### Session 21b: user test of 1.1.1 in "Nytheria Old" (Sporran 1.0.7): AbstractMethodError onBlockStateChange on block placement
 | ID | Task | Definition of done | Depends | Model / size | Status |
@@ -215,6 +215,8 @@ Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 
 ### Session 21c: release handling
 | ID | Task | Definition of done | Depends | Model / size | Status |
 |----|------|--------------------|---------|--------------|--------|
-| Z1 | Merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` (--no-ff, USER YES), build, push | build 997/27 on mc/1.21.1, jar sha matches c8d681c4, pushed | Y3 | lead | in progress |
+| Z1 | Merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` (--no-ff, USER YES), build, push | build 997/27 on mc/1.21.1, jar sha matches c8d681c4, pushed | Y3 | lead | done (merge c9fa0cd2, 997/27, sha c8d681c4, pushed) |
 | Z2 | CurseForge upload 1.1.2+mc1.21.1 (project 1744977) | user uploads by hand with lead-supplied jar + changelog | Z1 | user | open |
 | Z3 | Port fixes to Fabric 1.20.1 | user deferred ("not now") | - | Sonnet + Opus audit | deferred |
+| Z4 | Runtime test of the manual checklist on a production dedicated server (scratchpad) with FAPI + Sporran 1.0.7 + 1.1.2 (Tier A) and the server-side Nytheria Old mods (Tier B): place/break all ids, fire, lava, TNT, ladders, trapdoor, rails, redstone toggles, falling mobs on double blocks, beacon through framed glass; positive control with the 1.1.1 jar | control crashes; 1.1.2 runs every item without framedblocks/Sporran exceptions | Z1 | Sonnet long | in progress |
+| Z5 | Sporran as dev-only `compat_runtime` token + client behaviour scene (break/hit/running/landing particles, ladder, trapdoor, tank in hand/GUI, Continuity glass, beacon), branch `test/1.21.1-sporran-runtime` (worktree C:/wt/z-sporran) | feasibility proven or documented; runClientTest sodium,continuity,sporran PASS; default build 997/27 | Z1 | Sonnet long | in progress |
