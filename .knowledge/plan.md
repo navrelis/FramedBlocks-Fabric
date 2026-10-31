@@ -225,4 +225,6 @@ Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 
 Finding from the log: the posted trace is secondary. NotEnoughCrashes re-enters `Minecraft.run`, CLIENT_STARTED fires twice, Kiwi clears an immutable map. The primary exception is not in the log.
 | ID | Task | Definition of done | Depends | Model / size | Status |
 |----|------|--------------------|---------|--------------|--------|
-| I1 | JEI search check in the client test: filter @framedblocks, overlay on all pages, tooltips; runs with jei and jei,sodium,continuity | Check proven to draw our stacks (screenshot + count); verdict for 1.21.1 under both runtimes; build 997/27 | - | Sonnet short | in progress |
+| I1 | JEI search check in the client test: filter @framedblocks, overlay on all pages, tooltips; runs with jei and jei,sodium,continuity | Check proven to draw our stacks (screenshot + count); verdict for 1.21.1 under both runtimes; build 997/27 | - | Sonnet short | done (d8c7585f + 1b7bfda5, merged 2ad449d2; lead build 997/27, runClientTest jei and jei,sodium,continuity PASS, 241 of 241 stacks) |
+
+Usage tally session 22: Sonnet I1 1; Opus 0.
