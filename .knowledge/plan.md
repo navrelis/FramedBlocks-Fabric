@@ -220,3 +220,9 @@ Usage tally session 21 (long = 2, short = 1): Sonnet X0 2, X1 2, X2 1, X4 1, Y2 
 | Z3 | Port fixes to Fabric 1.20.1 | user deferred ("not now") | - | Sonnet + Opus audit | deferred |
 | Z4 | Runtime test of the manual checklist on a production dedicated server (scratchpad) with FAPI + Sporran 1.0.7 + 1.1.2 (Tier A) and the server-side Nytheria Old mods (Tier B): place/break all ids, fire, lava, TNT, ladders, trapdoor, rails, redstone toggles, falling mobs on double blocks, beacon through framed glass; positive control with the 1.1.1 jar | control crashes; 1.1.2 runs every item without framedblocks/Sporran exceptions | Z1 | Sonnet long | done (control 1.1.1 crashes with AbstractMethodError; 1.1.2 Tier A + B all items pass, lead log check) |
 | Z5 | Client behaviour checks (break/hit/running/landing particles, ladder, trapdoor, tank in hand/GUI, Continuity glass, beacon); Sporran dev runtime attempted and dropped (Sporran dev-mode path bug) | 10 checks OK under Indigo and sodium,continuity; default build 997/27 | Z1 | Sonnet long | done (2ee692aa, merged d4eb9e66; lead build 997/27, jar sha unchanged, lead runClientTest sodium,continuity PASS 10/10) |
+
+### Session 22: GitHub issue #2 triage (JEI @framedblocks crash, reported on Fabric 1.20.1), does it apply to 1.21.1?
+Finding from the log: the posted trace is secondary. NotEnoughCrashes re-enters `Minecraft.run`, CLIENT_STARTED fires twice, Kiwi clears an immutable map. The primary exception is not in the log.
+| ID | Task | Definition of done | Depends | Model / size | Status |
+|----|------|--------------------|---------|--------------|--------|
+| I1 | JEI search check in the client test: filter @framedblocks, overlay on all pages, tooltips; runs with jei and jei,sodium,continuity | Check proven to draw our stacks (screenshot + count); verdict for 1.21.1 under both runtimes; build 997/27 | - | Sonnet short | in progress |
