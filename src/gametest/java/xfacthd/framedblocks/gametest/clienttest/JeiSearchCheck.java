@@ -15,14 +15,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
-import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.io.StringWriter;
-import java.nio.file.Files;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -65,6 +65,8 @@ public final class JeiSearchCheck
     private long waitUntilFrame = 0;
     private int logStart = 0;
     private boolean serverModeSet = false;
+    private int searchIndex = 0;
+    private boolean searchApplied = false;
 
     private IJeiRuntime runtime;
     private IIngredientFilter filter;
@@ -190,9 +192,6 @@ public final class JeiSearchCheck
             throw new IllegalStateException("The JEI ingredient list overlay is not displayed in the survival inventory screen");
         }
     }
-
-    private int searchIndex = 0;
-    private boolean searchApplied = false;
 
     private void search()
     {
