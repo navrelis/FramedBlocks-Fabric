@@ -14,6 +14,9 @@
     "client": [
       "xfacthd.framedblocks.gametest.FramedBlocksTestClient"
     ],
+    "jei_mod_plugin": [
+      "xfacthd.framedblocks.gametest.clienttest.JeiTestPlugin"
+    ],
     "fabric-gametest": [
       "xfacthd.framedblocks.gametest.FramedBlocksSmokeTest",
       "xfacthd.framedblocks.gametest.tests.BeaconTintTests",

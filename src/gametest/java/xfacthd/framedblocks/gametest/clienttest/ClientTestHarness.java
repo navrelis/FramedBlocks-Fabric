@@ -69,6 +69,7 @@ public final class ClientTestHarness
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogCapture.HARNESS_LOGGER);
     private static final String CONTINUITY_ID = "continuity";
+    private static final String JEI_ID = "jei";
     private static final String CONTINUITY_PACK_ID = "continuity:default";
     private static final long SECOND = 1_000_000_000L;
     private static final long STABLE_TIME = SECOND;
@@ -134,6 +135,7 @@ public final class ClientTestHarness
 
     private ShowcaseDirector showcase = null;
     private BehaviorChecks behavior = null;
+    private JeiSearchCheck jeiSearch = null;
 
     public static void init()
     {
@@ -379,6 +381,7 @@ public final class ClientTestHarness
             case ITEMS -> items(fromTick);
             case CREATIVE -> creative(fromTick);
             case BEHAVIOR -> behavior(fromTick);
+            case JEI_SEARCH -> jeiSearch(fromTick);
             case MODEL_COMMANDS -> modelCommands();
             case SHOWCASE -> showcase.step(fromTick);
         }
@@ -1076,9 +1079,23 @@ public final class ClientTestHarness
     {
         if (behavior == null)
         {
-            behavior = new BehaviorChecks(report, this::fail, this::screenshot, () -> enter(Phase.MODEL_COMMANDS));
+            behavior = new BehaviorChecks(report, this::fail, this::screenshot, this::afterBehavior);
         }
         behavior.step(fromTick);
+    }
+
+    private void afterBehavior()
+    {
+        enter(FabricLoader.getInstance().isModLoaded(JEI_ID) ? Phase.JEI_SEARCH : Phase.MODEL_COMMANDS);
+    }
+
+    private void jeiSearch(boolean fromTick)
+    {
+        if (jeiSearch == null)
+        {
+            jeiSearch = new JeiSearchCheck(report, this::fail, this::screenshot, () -> enter(Phase.MODEL_COMMANDS));
+        }
+        jeiSearch.step(fromTick);
     }
     // endregion
 
@@ -1266,6 +1283,7 @@ public final class ClientTestHarness
         ITEMS(120),
         CREATIVE(60),
         BEHAVIOR(300),
+        JEI_SEARCH(300),
         MODEL_COMMANDS(MODEL_COMMAND_TIMEOUT / SECOND),
         SHOWCASE(1500);
 
