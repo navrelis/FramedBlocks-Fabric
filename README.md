@@ -21,6 +21,7 @@ The following is taken from the original mod version this port is based on.
 - **Block upgrades:** glowstone dust makes a framed block emit light, Framed Reinforcement reinforces it, and an intangibility marker item makes it passable (server config option).
 - **Framing Saw:** converts framed blocks into other framed shapes using a material-value system, with a searchable recipe screen. A Powered Framing Saw is included.
 - **Configuration** for client rendering, overlays, server rules and developer debugging, using the bundled Forge Config API Port.
+- **Fixed in 1.0.1:** A crash (ClassCastException in QuadCapturer) when Indium and Continuity are installed and JEI or Tooltip Overhaul renders framed block items no longer occurs (GitHub #2, #3).
 
 ## Requirements
 
