@@ -16,6 +16,9 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
      * none right now (the port for 1.21.1 has {@code xfacthd.framedblocks.mixin.client.DevMixinLevelRenderer})
      */
     private static final Set<String> DEV_ONLY_MIXINS = Set.of();
+    private static final Set<String> INDIUM_ONLY_MIXINS = Set.of(
+            "xfacthd.framedblocks.mixin.client.indium.MixinBakedModelIndiumCapture"
+    );
 
     @Override
     public void onLoad(String mixinPackage) { }
@@ -32,6 +35,10 @@ public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
         if (DEV_ONLY_MIXINS.contains(mixinClassName))
         {
             return FabricLoader.getInstance().isDevelopmentEnvironment();
+        }
+        if (INDIUM_ONLY_MIXINS.contains(mixinClassName))
+        {
+            return FabricLoader.getInstance().isModLoaded("indium");
         }
         return true;
     }

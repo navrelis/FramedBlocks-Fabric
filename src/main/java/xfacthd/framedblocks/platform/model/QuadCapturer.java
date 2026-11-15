@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.platform.model;
 
+import com.mojang.logging.LogUtils;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -18,8 +19,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
@@ -33,13 +36,18 @@ import java.util.function.Supplier;
  * are processed and culled by the model requesting the capture.
  * <p>
  * All state is confined to the thread-local instance, captures may run on any thread
+ * <p>
+ * Models may rely on the context being the one of the active renderer, which can make them throw when they are
+ * handed this one. If the emission of a model throws, the capture falls back to the plain vanilla quads of the model
  */
 @SuppressWarnings("removal")
 final class QuadCapturer implements RenderContext, RenderContext.BakedModelConsumer, Supplier<RandomSource>
 {
     static final int VERTEX_DATA_SIZE = QuadView.VANILLA_QUAD_STRIDE;
     private static final ThreadLocal<QuadCapturer> INSTANCES = ThreadLocal.withInitial(QuadCapturer::new);
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final Direction[] DIRECTIONS = Direction.values();
+    private static final Set<String> FALLBACK_LOGGED = ConcurrentHashMap.newKeySet();
 
     private final MeshBuilder meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
     private final Emitter emitter = new Emitter();
@@ -77,7 +85,23 @@ final class QuadCapturer implements RenderContext, RenderContext.BakedModelConsu
         this.size = 0;
         try
         {
-            model.emitBlockQuads(level, state, pos, this, this);
+            try
+            {
+                model.emitBlockQuads(level, state, pos, this, this);
+            }
+            catch (RuntimeException | LinkageError e)
+            {
+                if (FALLBACK_LOGGED.add(model.getClass().getName()))
+                {
+                    LOGGER.warn(
+                            "Model {} threw while emitting the quads of {} into the quad capture, falling back to its plain quads",
+                            model.getClass().getName(), state, e
+                    );
+                }
+                size = 0;
+                transforms.clear();
+                accept(model, state);
+            }
             return CapturedQuads.intern(probeKey.set(model, state, buffer, size));
         }
         finally
