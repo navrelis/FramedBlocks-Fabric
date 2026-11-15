@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class StateCacheBuilder
 {
@@ -51,34 +52,27 @@ public final class StateCacheBuilder
 
         // The terminal operation only returns once every worker is done, which publishes the assigned caches to
         // the calling thread before the caller sets the volatile flag
-        CacheCounts counts = blocks.parallelStream()
-                .map(StateCacheBuilder::initializeBlockCaches)
-                .reduce(CacheCounts.ZERO, CacheCounts::add);
+        // Caches are deduplicated across all blocks
+        Map<StateCache, StateCache> cacheDedup = new ConcurrentHashMap<>();
+        cacheDedup.put(StateCache.EMPTY, StateCache.EMPTY);
+        long stateCount = blocks.parallelStream()
+                .mapToLong(block -> initializeBlockCaches(block, cacheDedup))
+                .sum();
 
         watch.stop();
-        long uniqueCount = counts.unique + 1; // +1 for the empty instance
-        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", uniqueCount, counts.states, watch);
+        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", cacheDedup.size(), stateCount, watch);
     }
 
-    private static CacheCounts initializeBlockCaches(Block block)
+    private static int initializeBlockCaches(Block block, Map<StateCache, StateCache> cacheDedup)
     {
         List<BlockState> states = block.getStateDefinition().getPossibleStates();
-        Map<StateCache, StateCache> cacheDedup = new HashMap<>();
         for (BlockState state : states)
         {
             StateCache cache = buildCache(block, state);
-            if (cache.equals(StateCache.EMPTY))
-            {
-                ((IStateCacheAccessor) state).framedblocks$initCache(StateCache.EMPTY);
-            }
-            else
-            {
-                ((IStateCacheAccessor) state).framedblocks$initCache(
-                        Objects.requireNonNullElse(cacheDedup.putIfAbsent(cache, cache), cache)
-                );
-            }
+            cache = Objects.requireNonNullElse(cacheDedup.putIfAbsent(cache, cache), cache);
+            ((IStateCacheAccessor) state).framedblocks$initCache(cache);
         }
-        return new CacheCounts(states.size(), cacheDedup.size());
+        return states.size();
     }
 
     private static StateCache buildCache(Block block, BlockState state)
@@ -95,16 +89,6 @@ public final class StateCacheBuilder
                     ),
                     e
             );
-        }
-    }
-
-    private record CacheCounts(long states, long unique)
-    {
-        static final CacheCounts ZERO = new CacheCounts(0, 0);
-
-        CacheCounts add(CacheCounts other)
-        {
-            return new CacheCounts(states + other.states, unique + other.unique);
         }
     }
 
