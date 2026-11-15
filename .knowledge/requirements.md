@@ -57,3 +57,7 @@ User answers (2026-10-22): defaults accepted: branch `fix/1.21.1-sodium-crash` o
 Crash logs given by user: crash 2026-10-22 16:27 = FB 1.1.0 + Sporran 1.0.5 + Sodium 0.8.13 + Continuity 3.0.0 + MoreCulling 1.0.10 + Iris shaderpack: ICCE getAppearance via Continuity CtmBakedModel -> state.getAppearance inside QuadCapturer (item render in creative screen).
 Push: user wants pushes via their GitHub account (HTTPS + Git Credential Manager login by the user; no SSH key on this machine).
 Session 21c answers (2026-10-22): merge `fix/1.21.1-sodium-crash` into `mc/1.21.1` (--no-ff) and push: YES. CurseForge upload of 1.1.2: user uploads by hand (lead supplies jar path, sha256, changelog). 1.20.1 port: not now (stays open).
+
+## Session 23: user bug reports (2026-11-15)
+Task: archive unused sessions; check GitHub issues; fix sideways layered-cube render/hitbox and the Framing Saw crash (1.21.1); verify in game; fix issues found along the way.
+Defaults taken without asking (answers already in .knowledge): branches mc/1.21.1 and mc/1.20.1 (worktree F:/wt/m1201) are the working branches, pushed via HTTPS; commit identity as session 21; resource rules of session 15 apply (Java < 8, one Gradle + one client per worker, `--no-daemon`, never `gradlew --stop`, shared lock F:/wt/.locks/fb-gradle.lock); 1.20.1 is in scope because issues #2/#3 are 1.20.1; CurseForge upload and GitHub issue comments only after the user's explicit yes.
