@@ -316,7 +316,7 @@ public final class ShowcaseDirector
         Viewpoint view = cameraOf(cam);
         if (pending == null)
         {
-            mc.options.hideGui = shot.kind() != ShowcaseScenes.Kind.SAW_GUI;
+            mc.options.hideGui = shot.kind() != ShowcaseScenes.Kind.SAW_GUI && shot.kind() != ShowcaseScenes.Kind.WORLD_OUTLINE;
             setGuiScale(shot.kind() == ShowcaseScenes.Kind.SAW_GUI ? 3 : DEFAULT_GUI_SCALE);
             pending = onServer(() ->
             {
