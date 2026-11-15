@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.gametest.clienttest;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -127,7 +126,7 @@ public final class GridBuilder
                 be.setCamo(blockCamo(Blocks.OAK_PLANKS), false);
                 be.setCamo(blockCamo(Blocks.LAPIS_BLOCK), true);
             }
-            case WATER -> applyBoth(be, new FluidCamoContainer(Fluids.WATER, Direction.DOWN), doubleBe);
+            case WATER -> applyBoth(be, new FluidCamoContainer(Fluids.WATER), doubleBe);
         }
     }
 

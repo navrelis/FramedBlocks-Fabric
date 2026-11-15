@@ -1,18 +1,16 @@
 package xfacthd.framedblocks.common.data.camo.fluid;
 
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.Fluid;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.common.FBContent;
 
 public final class FluidCamoContainer extends CamoContainer<FluidCamoContent, FluidCamoContainer>
 {
-    static final Direction[] DIRECTIONS = Direction.values();
-
-    public FluidCamoContainer(Fluid fluid, Direction flowDirection)
+    public FluidCamoContainer(Fluid fluid)
     {
-        super(new FluidCamoContent(fluid, flowDirection));
+        super(new FluidCamoContent(fluid));
     }
 
     public Fluid getFluid()
@@ -20,22 +18,17 @@ public final class FluidCamoContainer extends CamoContainer<FluidCamoContent, Fl
         return content.getFluid();
     }
 
-    public Direction getFlowDirection()
-    {
-        return content.getFlowDirection();
-    }
-
     @Override
     public boolean canRotateCamo()
     {
-        return true;
+        return false;
     }
 
     @Override
+    @Nullable
     public FluidCamoContainer rotateCamo()
     {
-        int nextIdx = (getFlowDirection().ordinal() + 1) % DIRECTIONS.length;
-        return new FluidCamoContainer(getFluid(), DIRECTIONS[nextIdx]);
+        return null;
     }
 
     @Override

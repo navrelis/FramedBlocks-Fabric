@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FluidCamoClientHandler extends CamoClientHandler<FluidCamoContent>
 {
     public static final CamoClientHandler<FluidCamoContent> INSTANCE = new FluidCamoClientHandler();
-    private static final Map<FluidCamoContent, BakedModel> FLUID_MODEL_CACHE = new ConcurrentHashMap<>();
+    private static final Map<Fluid, BakedModel> FLUID_MODEL_CACHE = new ConcurrentHashMap<>();
 
     private FluidCamoClientHandler() { }
 
@@ -32,7 +32,7 @@ public final class FluidCamoClientHandler extends CamoClientHandler<FluidCamoCon
     @Override
     public BakedModel getOrCreateModel(FluidCamoContent camo)
     {
-        return FLUID_MODEL_CACHE.computeIfAbsent(camo, FluidModel::create);
+        return FLUID_MODEL_CACHE.computeIfAbsent(camo.getFluid(), FluidModel::create);
     }
 
     @Override

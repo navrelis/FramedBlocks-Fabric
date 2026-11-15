@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -23,10 +22,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import xfacthd.framedblocks.platform.model.*;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContent;
 
 import java.util.*;
 
@@ -34,16 +30,7 @@ public final class FluidModel implements BakedModel, IBakedModelExtension
 {
     public static final ModelResourceLocation BARE_MODEL = ModelBridge.standalone(Utils.rl("fluid/bare"));
     public static final ModelResourceLocation BARE_MODEL_SINGLE = ModelBridge.standalone(Utils.rl("fluid/bare_single"));
-    private static final Matrix4f[] ROTATIONS = Util.make(new Matrix4f[6], arr ->
-    {
-        arr[Direction.DOWN.ordinal()] = BlockModelRotation.X0_Y0.getRotation().getMatrix();
-        arr[Direction.UP.ordinal()] = BlockModelRotation.X180_Y0.getRotation().getMatrix();
-        arr[Direction.NORTH.ordinal()] = BlockModelRotation.X270_Y0.getRotation().getMatrix();
-        arr[Direction.SOUTH.ordinal()] = BlockModelRotation.X90_Y0.getRotation().getMatrix();
-        arr[Direction.WEST.ordinal()] = BlockModelRotation.X90_Y90.getRotation().getMatrix();
-        arr[Direction.EAST.ordinal()] = BlockModelRotation.X90_Y270.getRotation().getMatrix();
-    });
-    private static final ResourceLocation WATER_STILL= ResourceLocation.withDefaultNamespace("block/water_still");
+    private static final ResourceLocation WATER_STILL = ResourceLocation.withDefaultNamespace("block/water_still");
     private static final ResourceLocation WATER_FLOWING = ResourceLocation.withDefaultNamespace("block/water_flow");
     private final RenderType fluidLayer;
     private final ChunkRenderTypeSet fluidLayerSet;
@@ -134,9 +121,8 @@ public final class FluidModel implements BakedModel, IBakedModelExtension
      * Create the model for the given fluid by transferring the quads of the bare fluid model, which is baked
      * with the textures of water, onto the textures of the given fluid
      */
-    public static FluidModel create(FluidCamoContent fluidCamo)
+    public static FluidModel create(Fluid fluid)
     {
-        Fluid fluid = fluidCamo.getFluid();
         TextureAtlasSprite stillSprite = getFluidSprite(fluid, false);
         TextureAtlasSprite flowingSprite = getFluidSprite(fluid, true);
         boolean singleTexture = flowingSprite == stillSprite;
@@ -149,11 +135,8 @@ public final class FluidModel implements BakedModel, IBakedModelExtension
         RandomSource random = RandomSource.create();
         RenderType layer = ItemBlockRenderTypes.getRenderLayer(fluid.defaultFluidState());
 
-        Matrix4f rotation = ROTATIONS[fluidCamo.getFlowDirection().ordinal()];
-
         for (Direction side : Direction.values())
         {
-            Direction rotatedSide = Direction.rotate(rotation, side);
             List<BakedQuad> bareQuads = bareModel.getQuads(null, side, random);
             List<BakedQuad> sideQuads = new ArrayList<>(bareQuads.size());
             for (BakedQuad quad : bareQuads)
@@ -167,9 +150,9 @@ public final class FluidModel implements BakedModel, IBakedModelExtension
                 {
                     quad = retexture(quad, stillSprite);
                 }
-                sideQuads.add(rotate(quad, rotation, rotatedSide));
+                sideQuads.add(quad);
             }
-            quads.put(rotatedSide, List.copyOf(sideQuads));
+            quads.put(side, List.copyOf(sideQuads));
         }
 
         return new FluidModel(layer, quads, stillSprite);
@@ -199,38 +182,6 @@ public final class FluidModel implements BakedModel, IBakedModelExtension
             }
         }
         return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(MissingTextureAtlasSprite.getLocation());
-    }
-
-    /**
-     * Rotate the given quad of the bare (full cube) model around the center of the block, the UVs move with the vertices
-     */
-    private static BakedQuad rotate(BakedQuad quad, Matrix4f rotation, Direction rotatedSide)
-    {
-        int[] srcVertices = quad.getVertices();
-        int[] vertices = Arrays.copyOf(srcVertices, srcVertices.length);
-        Vector3f pos = new Vector3f();
-        for (int vert = 0; vert < 4; vert++)
-        {
-            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
-            pos.set(
-                    Float.intBitsToFloat(vertices[offset]) - .5F,
-                    Float.intBitsToFloat(vertices[offset + 1]) - .5F,
-                    Float.intBitsToFloat(vertices[offset + 2]) - .5F
-            );
-            rotation.transformPosition(pos);
-            // Snap to the cube corners to get rid of float inaccuracies
-            vertices[offset] = Float.floatToRawIntBits(Math.round(pos.x + .5F));
-            vertices[offset + 1] = Float.floatToRawIntBits(Math.round(pos.y + .5F));
-            vertices[offset + 2] = Float.floatToRawIntBits(Math.round(pos.z + .5F));
-        }
-        return ExtendedBakedQuad.create(
-                vertices,
-                quad.getTintIndex(),
-                rotatedSide,
-                quad.getSprite(),
-                quad.isShade(),
-                ExtendedBakedQuad.hasAmbientOcclusion(quad)
-        );
     }
 
     private static BakedQuad retexture(BakedQuad quad, TextureAtlasSprite sprite)
