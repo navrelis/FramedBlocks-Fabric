@@ -67,7 +67,8 @@ public final class MiscDirs
         {
             if (side.getAxis() != dir.getAxis())
             {
-                return dir.ordinal() << 3 | (layers - 1);
+                // Offset by one to keep facing=down with one layer distinct from the 0 returned for the faces parallel to the plate
+                return (dir.ordinal() << 3 | (layers - 1)) + 1;
             }
             return 0;
         }
