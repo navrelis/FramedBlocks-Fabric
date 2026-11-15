@@ -708,8 +708,8 @@ public final class ShowcaseScenes
         String[][] props = {
                 { "top=false" }, { "facing=north", "type=bottom" }, { "facing=north" }, { "facing=south" }, { "facing=north", "type=bottom" }, {}
         };
-        CamoContainer<?, ?> water = new FluidCamoContainer(Fluids.WATER);
-        CamoContainer<?, ?> lava = new FluidCamoContainer(Fluids.LAVA);
+        CamoContainer<?, ?> water = new FluidCamoContainer(Fluids.WATER, Direction.DOWN);
+        CamoContainer<?, ?> lava = new FluidCamoContainer(Fluids.LAVA, Direction.DOWN);
         for (int i = 0; i < types.length; i++)
         {
             int x = i * 2;
