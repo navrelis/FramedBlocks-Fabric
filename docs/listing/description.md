@@ -6,6 +6,10 @@
 
 FramedBlocks adds "framed" versions of many block shapes: slabs, panels, slopes, stairs, corner pieces, pillars, double and checkered variants and more, plus functional blocks such as doors, trapdoors, gates, signs, chests, hoppers, tanks, rails and item frames. The registry holds 269 blocks (over 230 framed shapes, 232 of them with an item of their own).
 
+## Fixed in 1.1.3
+
+Putting framed blocks into the Framing Saw or the Powered Framing Saw no longer crashes the game (a recipe tooltip with a stale status, and the Powered Framing Saw receiving items before it finished loading). The Framed Layered Cube placed sideways now has the correct hitbox and collision on all sides (upstream #778) and correct face culling for a single downward layer. Ported upstream fixes: connected textures on inner prisms, hit detection on adjustable double blocks, the framed trapdoor bottom face, the iron door texture, collapsible copycat placement, camo level reader chunk access and better error context in the quad cache.
+
 ## Fixed in 1.1.2
 
 Placing or using framed blocks no longer crashes the game with NeoForge-on-Fabric layers such as Sporran (AbstractMethodError caused by conflicting default methods). All block hooks that NeoForge also defines now have concrete implementations.
