@@ -32,3 +32,6 @@ runClientTest (Indigo): PASS, "Saw checks: OK". Before fix: build 1 required fai
 - FramingSawScreen.getRecipeAt uses `idx > 0`, recipe 0 never reported to JEI/EMI (upstream too).
 - My stray `gradlew tasks` (no lock, with daemon) left an idle Gradle daemon PID 23236; kill was denied, it idles out.
 - runClientTest is ~4 min longer (SAW phase ~3.5 min).
+
+## Stop (context limit)
+Task complete at a07222e0b; nothing left for this task. Only the open points above remain.
