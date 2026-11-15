@@ -44,6 +44,8 @@ public final class ShowcaseScenes
     public enum Kind
     {
         WORLD,
+        /** Like WORLD but with the GUI shown, vanilla does not draw the block outline of the targeted block without it */
+        WORLD_OUTLINE,
         SAW_GUI,
         TOOLS
     }
@@ -68,6 +70,7 @@ public final class ShowcaseScenes
         scenes.add(doubleBlocksScene());
         scenes.add(glowScene());
         scenes.add(fluidScene());
+        scenes.add(layeredCubeScene());
         scenes.add(functionalScene());
         scenes.add(sawScene());
         scenes.add(toolsScene());
@@ -716,6 +719,59 @@ public final class ShowcaseScenes
             b.framed(x, 0, 0, types[i], water, props[i]);
             b.framed(x, 0, 2, types[i], lava, props[i]);
             b.framed(x, 0, 4, types[i], Blocks.OAK_PLANKS, props[i]);
+        }
+    }
+    // endregion
+
+    // region layered cubes
+    private static final String[] LAYERED_FACINGS = { "north", "east", "south", "west", "up", "down" };
+    private static final int[] LAYERED_LAYERS = { 1, 3, 5, 7 };
+
+    private static Scene layeredCubeScene()
+    {
+        // Facing in rows (z), layers in columns (x), oak log camo on the left and stone camo on the right. The close-ups
+        // point the crosshair at the center of a cube with 5 layers so that its block outline is drawn
+        Shot overview = new Shot(
+                "layered_cubes.png", "Framed layered cubes in all six facings (rows: north, east, south, west, up, down) with 1, 3, 5 and 7 layers (columns), "
+                + "oak log camo on the left and stone camo on the right",
+                4000, Kind.WORLD,
+                orbit(7.5, 0.3, 5.5, 11.5, 60, 0),
+                List.of(orbit(7.5, 0.3, 5.5, 13, 45, 20), orbit(7.5, 0.3, 5.5, 10.5, 65, -15)),
+                null, null
+        );
+        Shot closeEast = new Shot(
+                "layered_cube_east_oak.png", "A framed layered cube facing east with 5 layers and an oak log camo, targeted so that the block outline is visible",
+                4000, Kind.WORLD_OUTLINE,
+                orbit(4.5, 0.5, 2.5, 2.6, 35, 25),
+                List.of(orbit(4.5, 0.5, 2.5, 3.2, 28, -30)),
+                null, null
+        );
+        Shot closeNorth = new Shot(
+                "layered_cube_north_stone.png", "A framed layered cube facing north with 5 layers and a stone camo, targeted so that the block outline is visible",
+                4000, Kind.WORLD_OUTLINE,
+                orbit(13.5, 0.5, 0.5, 2.6, 35, -25),
+                List.of(orbit(13.5, 0.5, 0.5, 3.2, 28, 30)),
+                null, null
+        );
+        return new Scene("layered", 40, ShowcaseScenes::buildLayeredCubes, List.of(overview, closeEast, closeNorth));
+    }
+
+    private static void buildLayeredCubes(ShowcaseBuilder b)
+    {
+        padFloor(b, 7, 5, Blocks.LIGHT_GRAY_CONCRETE);
+        Block[] camos = { Blocks.OAK_LOG, Blocks.STONE };
+        for (int c = 0; c < camos.length; c++)
+        {
+            for (int f = 0; f < LAYERED_FACINGS.length; f++)
+            {
+                for (int l = 0; l < LAYERED_LAYERS.length; l++)
+                {
+                    b.framed(
+                            c * 9 + l * 2, 0, f * 2, BlockType.FRAMED_LAYERED_CUBE, camos[c],
+                            "facing=" + LAYERED_FACINGS[f], "layers=" + LAYERED_LAYERS[l]
+                    );
+                }
+            }
         }
     }
     // endregion
