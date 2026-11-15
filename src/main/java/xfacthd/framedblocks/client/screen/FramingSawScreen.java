@@ -313,6 +313,22 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
             components.add(matchResult.translation());
 
             ItemStack input = screen.getInputStack();
+            // The powered saw syncs its status separately from its recipe and its inputs and predicts insertions on the
+            // client, the status can therefore belong to another recipe or input for a moment. Skip the details then
+            boolean usesRecipeAdditive = switch (matchResult)
+            {
+                case MISSING_ADDITIVE_0, MISSING_ADDITIVE_1, MISSING_ADDITIVE_2,
+                     INCORRECT_ADDITIVE_0, INCORRECT_ADDITIVE_1, INCORRECT_ADDITIVE_2,
+                     INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2 -> true;
+                default -> false;
+            };
+            boolean staleAdditive = usesRecipeAdditive && matchResult.additiveSlot() >= recipe.getAdditives().size();
+            boolean invalidInput = !input.isEmpty() && cache.getMaterialValue(input.getItem()) <= 0;
+            if (staleAdditive || invalidInput)
+            {
+                return components;
+            }
+
             int listAdditives = -1;
             List<MutableComponent> detail = switch (matchResult)
             {
