@@ -32,5 +32,4 @@ Sonnet: U1 long, U1b long, U3 long, U4 short. Opus: U2 long (override: crash wit
 - Other framed BEs may have a pre-onLoad window like the powered saw (not reproduced).
 - Upstream 93732ead1 (JEI recipe transfer) not ported.
 - `docs/curseforge` iron door asset not updated to the new texture.
-- An empty folder `.claude/worktrees/optimistic-goodall-a884db` was locked by Windows at cleanup (worktree and branch already removed); delete it when nothing holds it.
 - Workers: all cleaned up (U1, U1b, U2, U3, U4 archived, worktrees and branches removed).
