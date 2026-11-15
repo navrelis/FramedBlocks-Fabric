@@ -3,7 +3,6 @@ package xfacthd.framedblocks.api.datagen.loot.objects;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -26,11 +25,6 @@ public final class NonTrivialCamoLootCondition implements LootItemCondition
     @Override
     public boolean test(LootContext ctx)
     {
-        ItemStack tool = ctx.getParamOrNull(LootContextParams.TOOL);
-        if (tool != null && tool.has(Utils.DC_TYPE_RETAIN_CAMO.value()))
-        {
-            return true;
-        }
         if (ctx.getParamOrNull(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
             return !be.canTriviallyDropAllCamos();

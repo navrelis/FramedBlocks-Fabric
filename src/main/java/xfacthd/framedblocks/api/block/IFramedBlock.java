@@ -206,10 +206,7 @@ public interface IFramedBlock extends EntityBlock, FabricBlock
     {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
-            ItemStack tool = builder.getOptionalParameter(LootContextParams.TOOL);
-            boolean dropCamo = ConfigView.Server.INSTANCE.shouldConsumeCamoItem() &&
-                    (tool == null || !tool.has(Utils.DC_TYPE_RETAIN_CAMO.value()));
-            be.addAdditionalDrops(drops, dropCamo);
+            be.addAdditionalDrops(drops, ConfigView.Server.INSTANCE.shouldConsumeCamoItem());
         }
         return drops;
     }

@@ -13,7 +13,6 @@ public enum FramedToolType
     BLUEPRINT("framed_blueprint", null),
     KEY("framed_key", null),
     SCREWDRIVER("framed_screwdriver", Utils.ACTION_WRENCH_CONFIGURE),
-    AXE("framed_axe", null),
     ;
 
     private final String name;
