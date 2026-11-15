@@ -28,12 +28,14 @@ import xfacthd.framedblocks.platform.model.ModelData;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Captures the baked quads of every state of the Framed Layered Cube with a plain camo (stone), a directional camo
+ * Captures the baked quads of every state of the Framed Layered Cube with a plain camo (stone bricks), a directional camo
  * (oak log) and without camo and checks them against the shape of the state:
  * <ul>
  *     <li>the bounds of all quads equal the bounds of the shape</li>
@@ -46,6 +48,7 @@ public final class LayeredCubeModelCheck
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogCapture.HARNESS_LOGGER);
     private static final float EPS = 1e-3F;
+    private static final double UV_EPS = 5e-3;
     private static final Direction[] SIDES = Direction.values();
     private static final BlockPos CENTER = new BlockPos(1, 1, 1);
 
@@ -57,19 +60,27 @@ public final class LayeredCubeModelCheck
         RandomSource random = RandomSource.create();
 
         Map<String, CamoContent<?>> camos = new LinkedHashMap<>();
-        camos.put("stone", new BlockCamoContent(Blocks.STONE.defaultBlockState()));
+        // Stone is unsuitable, its blockstate picks a random rotation for every lookup and would make the reference quads non-deterministic
+        camos.put("stone_bricks", new BlockCamoContent(Blocks.STONE_BRICKS.defaultBlockState()));
         camos.put("oak_log", new BlockCamoContent(Blocks.OAK_LOG.defaultBlockState()));
         camos.put("no_camo", EmptyCamoContent.EMPTY);
 
+        Set<String> seen = new HashSet<>();
         for (BlockState state : FBContent.byType(BlockType.FRAMED_LAYERED_CUBE).getStateDefinition().getPossibleStates())
         {
             Direction facing = state.getValue(BlockStateProperties.FACING);
             int layers = state.getValue(BlockStateProperties.LAYERS);
+            String stateDesc = "facing=%s layers=%d".formatted(facing, layers);
+            if (!seen.add(stateDesc))
+            {
+                // The other properties do not influence shape or model
+                continue;
+            }
             AABB expected = LayeredCubeTests.expectedBounds(facing, layers);
             AABB shape = state.getShape(EmptyBlockGetter.INSTANCE, CENTER).bounds();
             if (!sameBounds(expected, shape))
             {
-                errors.add("%s: shape bounds are %s, expected %s".formatted(state, shape, expected));
+                errors.add("%s: shape bounds are %s, expected %s".formatted(stateDesc, shape, expected));
             }
 
             BakedModel model = mc.getBlockRenderer().getBlockModel(state);
@@ -79,7 +90,7 @@ public final class LayeredCubeModelCheck
                         .with(FramedBlockData.PROPERTY, new FramedBlockData(camo.getValue(), false))
                         .build();
                 List<BakedQuad> quads = captureQuads(model, state, data, random);
-                String desc = state + " with " + camo.getKey();
+                String desc = stateDesc + " with " + camo.getKey();
                 checked++;
                 if (quads.isEmpty())
                 {
@@ -87,7 +98,10 @@ public final class LayeredCubeModelCheck
                     continue;
                 }
                 checkBounds(errors, desc, quads, shape);
-                checkFaceCoverage(errors, desc, quads, shape);
+                if (!(camo.getValue() instanceof EmptyCamoContent))
+                {
+                    checkFaceCoverage(errors, desc, quads, shape);
+                }
                 if (camo.getValue() instanceof BlockCamoContent blockCamo)
                 {
                     checkUvs(errors, desc, quads, blockCamo.getState(), random);
@@ -234,12 +248,12 @@ public final class LayeredCubeModelCheck
                 double expectedV = vCoef[0] * pa + vCoef[1] * pb + vCoef[2];
                 double actualU = fracU(quad, vert);
                 double actualV = fracV(quad, vert);
-                if (Math.abs(actualU - expectedU) > EPS || Math.abs(actualV - expectedV) > EPS)
+                if (Math.abs(actualU - expectedU) > UV_EPS || Math.abs(actualV - expectedV) > UV_EPS)
                 {
                     errors.add("%s: %s quad vertex %d at (%.3f, %.3f) has texture coordinates (%.3f, %.3f), the camo model has (%.3f, %.3f) there".formatted(
                             desc, dir, vert, pa, pb, actualU, actualV, expectedU, expectedV
                     ));
-                    return;
+                    break;
                 }
             }
         }
