@@ -135,6 +135,7 @@ public final class ClientTestHarness
 
     private ShowcaseDirector showcase = null;
     private BehaviorChecks behavior = null;
+    private SawChecks saw = null;
     private JeiSearchCheck jeiSearch = null;
 
     public static void init()
@@ -381,6 +382,7 @@ public final class ClientTestHarness
             case ITEMS -> items(fromTick);
             case CREATIVE -> creative(fromTick);
             case BEHAVIOR -> behavior(fromTick);
+            case SAW -> saw(fromTick);
             case JEI_SEARCH -> jeiSearch(fromTick);
             case LAYERED_CUBE -> layeredCube();
             case MODEL_COMMANDS -> modelCommands();
@@ -1101,6 +1103,20 @@ public final class ClientTestHarness
             LOGGER.error("Layered cube model check threw", t);
             report.failure("Layered cube model check threw " + t);
         }
+        enter(Phase.SAW);
+    }
+
+    private void saw(boolean fromTick)
+    {
+        if (saw == null)
+        {
+            saw = new SawChecks(report, this::fail, this::afterSaw);
+        }
+        saw.step(fromTick);
+    }
+
+    private void afterSaw()
+    {
         enter(FabricLoader.getInstance().isModLoaded(JEI_ID) ? Phase.JEI_SEARCH : Phase.MODEL_COMMANDS);
     }
 
@@ -1299,6 +1315,7 @@ public final class ClientTestHarness
         CREATIVE(60),
         BEHAVIOR(300),
         LAYERED_CUBE(60),
+        SAW(420),
         JEI_SEARCH(300),
         MODEL_COMMANDS(MODEL_COMMAND_TIMEOUT / SECOND),
         SHOWCASE(1500);

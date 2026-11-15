@@ -62,7 +62,6 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     );
     private final int energyConsumption;
     private final int craftingDuration;
-    private FramingSawRecipeCache cache = null;
     private ResourceLocation selectedRecipeId = null;
     private RecipeHolder<FramingSawRecipe> selectedRecipe = null;
     private boolean active = false;
@@ -201,7 +200,8 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     {
         if (slot == FramingSawMenu.SLOT_INPUT)
         {
-            return cache.getMaterialValue(stack.getItem()) > 0;
+            // Not cached, onLoad() only runs on the next level tick and items may be inserted before that
+            return FramingSawRecipeCache.get(level().isClientSide()).getMaterialValue(stack.getItem()) > 0;
         }
         else if (slot < FramingSawMenu.SLOT_RESULT)
         {
@@ -319,7 +319,6 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     @SuppressWarnings("unchecked")
     public void onLoad()
     {
-        cache = FramingSawRecipeCache.get(level().isClientSide());
         if (selectedRecipeId != null && !level().isClientSide())
         {
             RecipeHolder<FramingSawRecipe> recipe = (RecipeHolder<FramingSawRecipe>) level().getRecipeManager()
