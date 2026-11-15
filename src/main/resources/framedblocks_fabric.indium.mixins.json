@@ -1,0 +1,13 @@
+{
+    "required": false,
+    "package": "xfacthd.framedblocks.mixin.client.indium",
+    "compatibilityLevel": "JAVA_17",
+    "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
+    "client": [
+        "MixinBakedModelIndiumCapture"
+    ],
+    "injectors": {
+        "defaultRequire": 0
+    },
+    "minVersion": "0.8"
+}

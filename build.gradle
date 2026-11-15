@@ -166,7 +166,7 @@ dependencies {
     modGametestImplementation "teamreborn:energy:${team_reborn_energy_version}"
 
     // Set compat_runtime=true to run JEI, EMI, REI and Jade in the dev client, or a comma-separated subset (e.g. jei,jade).
-    // Sodium is not part of "true" and has to be requested explicitly (e.g. sodium or jei,sodium).
+    // Sodium and Continuity are not part of "true" and have to be requested explicitly (e.g. sodium or jei,sodium,continuity).
     // Sodium 0.5.x on 1.20.1 does not implement the Fabric Rendering API, so requesting sodium also adds Indium
     var compatRuntime = findProperty('compat_runtime')?.toString()?.toLowerCase() ?: 'false'
     var compatRuntimeAll = compatRuntime == 'true'
@@ -174,6 +174,8 @@ dependencies {
     if (compatRuntimeAll || compatRuntimeSet.contains('jei'))
     {
         modLocalRuntime "mezz.jei:jei-${jei_mc_version}-fabric:${jei_version}"
+        // JEI needs mezz_config at runtime, it is a separate artifact on the same maven
+        modLocalRuntime "net.mezzdev.config:mezz_config-${jei_mc_version}-fabric:${mezz_config_version}"
     }
     if (compatRuntimeAll || compatRuntimeSet.contains('emi'))
     {
@@ -193,6 +195,10 @@ dependencies {
     {
         modLocalRuntime "maven.modrinth:sodium:${sodium_version}"
         modLocalRuntime "maven.modrinth:indium:${indium_version}"
+    }
+    if (compatRuntimeSet.contains('continuity'))
+    {
+        modLocalRuntime "maven.modrinth:continuity:${continuity_version}"
     }
 }
 
