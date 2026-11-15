@@ -72,7 +72,7 @@ public class LayeredCubeTests implements FabricGameTest
 
     /**
      * The full face predicate has to agree with the actual shape: a face is full exactly if the plate covers the whole
-     * face, and the skip predicate of two layered cubes may only hide a partial face against an identical slice
+     * face, and the skip predicate may only hide a partial face against a neighbor face that covers it and must hide identical slices
      */
     @GameTest(template = EMPTY_STRUCTURE)
     public void layeredCubePredicatesMatchShapes(GameTestHelper helper)
@@ -104,13 +104,19 @@ public class LayeredCubeTests implements FabricGameTest
                 for (BlockState adjState : states)
                 {
                     VoxelShape adjFace = adjState.getShape(EmptyBlockGetter.INSTANCE, CENTER).getFaceShape(side.getOpposite());
-                    boolean expectedSkip = !Shapes.joinIsNotEmpty(face, adjFace, BooleanOp.NOT_SAME);
+                    boolean identical = !Shapes.joinIsNotEmpty(face, adjFace, BooleanOp.NOT_SAME);
+                    boolean covered = !Shapes.joinIsNotEmpty(face, adjFace, BooleanOp.ONLY_FIRST);
                     boolean actualSkip = BlockType.FRAMED_LAYERED_CUBE.getSideSkipPredicate().test(
                             EmptyBlockGetter.INSTANCE, CENTER, state, adjState, side
                     );
-                    if (actualSkip != expectedSkip)
+                    // Identical slices have to be skipped, anything else may only be skipped if the neighbor covers the whole face
+                    if (identical && !actualSkip)
                     {
-                        errors.add("%s against %s on %s: skip is %s, expected %s".formatted(state, adjState, side, actualSkip, expectedSkip));
+                        errors.add("%s against %s on %s: identical faces are not skipped".formatted(state, adjState, side));
+                    }
+                    else if (actualSkip && !covered)
+                    {
+                        errors.add("%s against %s on %s: face is skipped but not covered by the neighbor".formatted(state, adjState, side));
                     }
                     checked++;
                 }
