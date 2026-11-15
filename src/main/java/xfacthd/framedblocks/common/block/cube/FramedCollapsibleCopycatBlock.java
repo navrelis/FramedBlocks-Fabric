@@ -115,7 +115,7 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     {
         super.setPlacedBy(level, pos, state, placer, stack);
 
-        if (!level.isClientSide() && stack.has(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA))
+        if (!level.isClientSide() && stack.has(FBContent.DC_TYPE_COLLAPSIBLE_COPYCAT_BLOCK_DATA.value()))
         {
             //Properly set face solidity when placed from a stack with BE NBT data
             if (level.getBlockEntity(pos) instanceof FramedCollapsibleCopycatBlockEntity be)
