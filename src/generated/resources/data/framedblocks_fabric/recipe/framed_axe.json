@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "framedblocks_fabric:framed_cube"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "II",
+    "IC",
+    " C"
+  ],
+  "result": {
+    "count": 1,
+    "id": "framedblocks_fabric:framed_axe"
+  }
+}

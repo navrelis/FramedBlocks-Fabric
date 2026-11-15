@@ -23,6 +23,7 @@
       "xfacthd.framedblocks.gametest.tests.IntangibilityTests",
       "xfacthd.framedblocks.gametest.tests.InteractionTests",
       "xfacthd.framedblocks.gametest.tests.LightSourceTests",
+      "xfacthd.framedblocks.gametest.tests.LayeredCubeTests",
       "xfacthd.framedblocks.gametest.tests.OcclusionTests",
       "xfacthd.framedblocks.gametest.tests.PredicateMapTests",
       "xfacthd.framedblocks.gametest.FunctionalBlockTests",
