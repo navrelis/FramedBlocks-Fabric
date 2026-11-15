@@ -31,7 +31,8 @@
       "xfacthd.framedblocks.gametest.TestCommandTests",
       "xfacthd.framedblocks.gametest.EnergyTests",
       "xfacthd.framedblocks.gametest.AuxLightStoreTests",
-      "xfacthd.framedblocks.gametest.ForeignDefaultMethodTests"
+      "xfacthd.framedblocks.gametest.ForeignDefaultMethodTests",
+      "xfacthd.framedblocks.gametest.FramingSawTests"
     ]
   },
   "depends": {
